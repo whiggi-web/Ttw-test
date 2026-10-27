@@ -351,7 +351,7 @@ if(botWrestler){
  fallback.position.y=1;bot.add(fallback);
 }
 scene.add(bot);
-let playerHP=100,botHP=100,botAttackClock=1.5,botPunchTime=0,playerPunchImpact=-1;
+let playerHP=100,botHP=100,botAttackClock=1.5,botPunchTime=0,playerPunchImpact=-1,botKnockoutTime=0;
 const combatHud=document.createElement('div');
 combatHud.style.cssText='position:fixed;right:16px;top:16px;z-index:12;color:white;font:700 16px system-ui;text-shadow:0 2px 5px black;pointer-events:none;text-align:right';
 document.body.appendChild(combatHud);
@@ -375,7 +375,13 @@ function combatTick(dt){
  const dx=player.position.x-bot.position.x,dz=player.position.z-bot.position.z;
  const dist=Math.hypot(dx,dz);
  const facingAngle=Math.atan2(-dx,-dz);
- bot.rotation.y=facingAngle;
+ // Never rotate a knocked-out wrestler while the fall pose is held.
+ if(botHP>0)bot.rotation.y=facingAngle;
+ if(botHP<=0){
+  if(botKnockoutTime===0){botKnockoutTime=10;botPunchTime=0;}
+  botKnockoutTime=Math.max(0,botKnockoutTime-dt);
+  if(botKnockoutTime===0){botHP=100;botAttackClock=1.2;refreshCombatHud();}
+ }
  let botMoving=false;
  if(botHP>0&&playerHP>0){
   if(dist>1.65&&dist<15){
@@ -397,7 +403,7 @@ function combatTick(dt){
  }
  if(botWrestler){
   const state=botHP<=0?'fall':botPunchTime>0?'punch':botMoving?'run':'idle';
-  if(botWrestler._ttwState!==state){botWrestler.play(state,{fade:state==='fall'?.12:.12});botWrestler._ttwState=state;}
+  if(botWrestler._ttwState!==state){botWrestler.play(state,{fade:.12});botWrestler._ttwState=state;}
   botWrestler.update(dt);
  }
 }
@@ -536,7 +542,7 @@ renderer.setAnimationLoop(()=>{
    const towardBot=new THREE.Vector3(bot.position.x-player.position.x,0,bot.position.z-player.position.z).normalize();
    const facingDirection=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
    if(separation<=2.2&&facingDirection.dot(towardBot)>.05){
-    botHP=Math.max(0,botHP-11);showDamage(bot.position,'-11','#ffdf55');refreshCombatHud();
+    botHP=Math.max(0,botHP-11);if(botHP===0)botKnockoutTime=10;showDamage(bot.position,'-11','#ffdf55');refreshCombatHud();
    }
   }
  }
