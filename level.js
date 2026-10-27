@@ -182,7 +182,7 @@ try{
 }
 const playTTWAnimation=(w,state,fade=.2)=>{
  if(!w)return;
- const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward'}[state]||'movement.idle'):state;
+ const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||'movement.idle'):state;
  w.play(name,{fade,restart:true});
 };
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
@@ -297,9 +297,12 @@ function updateRopes(dt){
 }
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 let ropeSpeedMultiplier=1,ropeFacingTime=0;
+let ropeAnimationTime=0;
+const ropeLeanDuration=.7,ropeReboundDuration=.8;
 function registerRopeBounce(inward){
  ropeSpeedMultiplier=Math.min(1.30,Math.round((ropeSpeedMultiplier+.10)*100)/100);
  ropeFacingTime=.38;
+ if(usingBatchOne)ropeAnimationTime=ropeLeanDuration+ropeReboundDuration;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
 }
 function blockedByArena(x,z,feetY){
@@ -522,6 +525,7 @@ window.addEventListener('resize',()=>{
 renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
  ropeFacingTime=Math.max(0,ropeFacingTime-dt);
+ ropeAnimationTime=Math.max(0,ropeAnimationTime-dt);
  updateRopes(dt);
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
  let isWalking=false;
@@ -575,7 +579,7 @@ renderer.setAnimationLoop(()=>{
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
-  const nextAnimation=playerHP<=0?'fall':punchRemaining>0?'punch':isWalking?'run':'idle';
+  const nextAnimation=playerHP<=0?'fall':punchRemaining>0?'punch':ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
