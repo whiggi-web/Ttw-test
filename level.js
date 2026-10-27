@@ -465,6 +465,7 @@ renderer.setAnimationLoop(()=>{
  target.y+Math.sin(pitch)*distance,
  target.z+Math.cos(yaw)*Math.cos(pitch)*distance
  );
- camera.lookAt(target);
+ // Aim below the wrestler so the character is framed in the centre of the gameplay view.
+ camera.lookAt(target.x,target.y-2.7,target.z);
  renderer.render(scene,camera);
 });
