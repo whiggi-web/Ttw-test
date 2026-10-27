@@ -1613,11 +1613,10 @@ if(!godActor){
 }
 const godMantle=new THREE.Mesh(new THREE.BoxGeometry(1.5,.16,.5),godGold);
 godMantle.position.set(0,2.12,.18);godThrone.add(godMantle);
-const godHalo=new THREE.Mesh(new THREE.TorusGeometry(.46,.075,6,24),godGold);
-godHalo.position.set(0,2.54,0);godHalo.rotation.x=Math.PI/2;godThrone.add(godHalo);
 function stopGod(){
  if(godTime<0)return;
  godTime=-1;godLastCard=-1;godProcession.visible=false;
+ godThrone.position.set(0,3.32,0);godThrone.rotation.set(0,0,0);
  if(godResumeFeed)setActionFeed(true);
  godResumeFeed=false;godButton.textContent='👑 A GOD WAS BORN';
 }
@@ -1630,6 +1629,7 @@ godButton.addEventListener('click',()=>{
  godResumeFeed=actionFeedEnabled;
  if(actionFeedEnabled)setActionFeed(false);
  jumbotronCountdown=-1;godTime=0;godLastCard=-1;
+ godThrone.position.set(0,3.32,0);godThrone.rotation.set(0,0,0);
  entranceBot.visible=false;godProcession.visible=false;
  godButton.textContent='👑 RESTART A GOD WAS BORN';
 });
@@ -1662,7 +1662,32 @@ function updateGod(dt){
    c.arms[j].rotation.x=-.18;
   }
  }
- // Intentionally never update the king's animation: he stands perfectly still.
+ // He remains perfectly still until the carriers halt. Then he sprints
+ // toward the near end of the platform and launches over the front rope.
+ const dash=THREE.MathUtils.clamp((t-44)/2,0,1);
+ const flight=THREE.MathUtils.clamp((t-46)/2.15,0,1);
+ if(t<44){
+  godThrone.position.set(0,3.32,0);
+  godThrone.rotation.set(0,0,0);
+ }else if(t<46){
+  godThrone.position.set(0,3.32,-1.85*dash);
+  godThrone.rotation.set(0,0,0);
+ }else if(t<48.15){
+  const arc=Math.sin(Math.PI*flight)*2.4;
+  godThrone.position.set(0,THREE.MathUtils.lerp(3.32,1.14,flight)+arc,-1.85-5.3*flight);
+  godThrone.rotation.x=-Math.sin(Math.PI*flight)*.28;
+ }else{
+  godThrone.position.set(0,1.14,-7.15);
+  godThrone.rotation.set(0,0,0);
+ }
+ if(godActor){
+  const kingState=t<44?'movement.idle':t<48.15?'movement.run':'movement.idle';
+  if(godActor._godState!==kingState){
+   try{godActor.play(kingState,{fade:.12,restart:true});}catch(e){console.warn('God king leap animation',e);}
+   godActor._godState=kingState;
+  }
+  if(t>=44)godActor.update(dt);
+ }
  let eye,focus;
  if(t<10){
   const pull=THREE.MathUtils.clamp(t/8,0,1);
@@ -1679,12 +1704,16 @@ function updateGod(dt){
   eye=entranceV(6,5.2,z+9);focus=entranceV(0,y+4,z);
  }else if(t<44){
   eye=entranceV(0,2.1,4);focus=entranceV(0,y+4.3,z);
+ }else if(t<46){
+  eye=entranceV(5,4,-2);focus=entranceV(0,y+3.7,z+1.8);
+ }else if(t<49){
+  eye=entranceV(7,4,5);focus=godThrone.getWorldPosition(new THREE.Vector3()).add(new THREE.Vector3(0,1,0));
  }else{
-  eye=entranceV(-7,5,7);focus=entranceV(0,y+4,z);
+  eye=entranceV(5,3,6);focus=entranceV(0,2,-.2);
  }
  camera.position.lerp(eye,Math.min(1,dt*4));
  camera.lookAt(focus);
- if(t>=50){stopGod();}
+ if(t>=54){stopGod();}
  return true;
 }
 
