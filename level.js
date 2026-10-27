@@ -167,8 +167,10 @@ try{
 let loadedWrestler=null;
 let remoteWrestler=null;
 let usingBatchOne=false;
+let wrestlerPack=null;
 try{
  const pack=await loadPack('./assets/ttw-wrestlers/manifest.json');
+ wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
  usingBatchOne=true;
@@ -490,6 +492,77 @@ window.addEventListener('pointerdown',e=>{
  playerPunchImpact=.3; // Match Claude's 0.8-second punch animation.
 },{capture:true});
 
+// Standalone cinematic entrance test. The bot is visual-only and does not join multiplayer.
+const entranceBot=new THREE.Group();
+entranceBot.name='TTW_ENTRANCE_BOT';
+entranceBot.visible=false;
+scene.add(entranceBot);
+let entranceActor=null;
+if(wrestlerPack){
+ try{entranceActor=wrestlerPack.createWrestler('wrestler-02');entranceBot.add(entranceActor.object);}
+ catch(e){console.warn('Entrance wrestler unavailable',e);}
+}
+if(!entranceActor){
+ const placeholder=new THREE.Mesh(new THREE.CapsuleGeometry(.42,1.2,8,12),new THREE.MeshStandardMaterial({color:0xffad42}));
+ placeholder.position.y=1;entranceBot.add(placeholder);
+}
+const entranceButton=document.createElement('button');
+entranceButton.textContent='🎬 BOT ENTRANCE';
+entranceButton.style.cssText='position:fixed;top:58px;left:16px;z-index:15;padding:10px 14px;background:#9e274d;color:white;border:1px solid #f9b1c8;border-radius:8px;font:700 13px system-ui;cursor:pointer';
+document.body.appendChild(entranceButton);
+let entranceTime=-1;
+const entranceRoute=[
+ new THREE.Vector3(0,1.2,-37.5),new THREE.Vector3(0,1.2,-34),
+ new THREE.Vector3(0,1.2,-26),new THREE.Vector3(0,.65,-18),
+ new THREE.Vector3(0,.06,-9),new THREE.Vector3(0,.06,-6)
+];
+const entranceLengths=entranceRoute.slice(1).map((p,i)=>p.distanceTo(entranceRoute[i]));
+const entranceTotal=entranceLengths.reduce((a,b)=>a+b,0);
+function entrancePoint(progress){
+ let remaining=THREE.MathUtils.clamp(progress,0,1)*entranceTotal;
+ for(let i=0;i<entranceLengths.length;i++){
+  if(remaining<=entranceLengths[i])return entranceRoute[i].clone().lerp(entranceRoute[i+1],remaining/entranceLengths[i]);
+  remaining-=entranceLengths[i];
+ }
+ return entranceRoute.at(-1).clone();
+}
+entranceButton.addEventListener('click',()=>{
+ entranceTime=0;entranceBot.visible=true;
+ entranceBot.position.copy(entranceRoute[0]);entranceBot.rotation.y=Math.PI;
+ if(entranceActor){entranceActor.play('movement.run',{fade:.15,restart:true});}
+ entranceButton.textContent='🎬 RESTART ENTRANCE';
+});
+function updateEntrance(dt){
+ if(entranceTime<0)return false;
+ entranceTime+=dt;
+ const duration=10.5;
+ const p=Math.min(1,entranceTime/duration);
+ const pos=entrancePoint(p);
+ entranceBot.position.copy(pos);
+ const ahead=entrancePoint(Math.min(1,p+.002));
+ if(ahead.distanceToSquared(pos)>.00001)entranceBot.rotation.y=Math.atan2(-(ahead.x-pos.x),-(ahead.z-pos.z));
+ if(entranceActor){
+  const anim=p>=1?'movement.idle':'movement.run';
+  if(entranceActor._entranceState!==anim){entranceActor.play(anim,{fade:.18,restart:true});entranceActor._entranceState=anim;}
+  entranceActor.update(dt);
+ }
+ // Multiple broadcast-style cuts: backstage reveal, low tracking, overhead,
+ // side dolly, head-on sprint and ring-side finish.
+ const shots=[
+  {end:1.7,offset:[-5,2.1,-5],look:[0,1.1,1]},
+  {end:3.4,offset:[1.7,.9,4.2],look:[0,1.3,0]},
+  {end:5.1,offset:[-7,6,-2],look:[0,1,1]},
+  {end:6.8,offset:[6,2.4,1],look:[0,1.3,0]},
+  {end:8.7,offset:[0,1.5,7],look:[0,1.2,0]},
+  {end:12.5,offset:[-7,4,5],look:[0,1.2,0]}
+ ];
+ const shot=shots.find(s=>entranceTime<s.end)||shots.at(-1);
+ const desired=pos.clone().add(new THREE.Vector3(...shot.offset));
+ camera.position.lerp(desired,Math.min(1,dt*9));
+ camera.lookAt(pos.clone().add(new THREE.Vector3(...shot.look)));
+ if(entranceTime>=12.5){entranceTime=-1;entranceButton.textContent='🎬 BOT ENTRANCE';return false;}
+ return true;
+}
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
@@ -591,6 +664,8 @@ renderer.setAnimationLoop(()=>{
   loadedWrestler.update(dt);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
+ const cinematicActive=updateEntrance(dt);
+ if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
  target.y+Math.sin(pitch)*distance,
@@ -598,5 +673,6 @@ renderer.setAnimationLoop(()=>{
  );
  // Aim below the wrestler so the character is framed in the centre of the gameplay view.
  camera.lookAt(target.x,target.y-2.7,target.z);
+ }
  renderer.render(scene,camera);
 });
