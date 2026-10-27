@@ -211,8 +211,9 @@ if(loadedArena){
   const geom=obj.geometry.clone();obj.geometry=geom;
   const pos=geom.attributes.position;
   const original=new Float32Array(pos.array);
-  const inward=new THREE.Vector3(side==='west'?1:side==='east'?-1:0,0,side==='north'?-1:side==='south'?1:0);
-  const localInward=inward.applyQuaternion(obj.getWorldQuaternion(new THREE.Quaternion()).invert());
+  // Deform away from the ring centre on every side, including mirrored ropes.
+  const outward=new THREE.Vector3(side==='west'?-1:side==='east'?1:0,0,side==='north'?1:side==='south'?-1:0);
+  const localInward=outward.applyQuaternion(obj.getWorldQuaternion(new THREE.Quaternion()).invert());
   const halfLength=(geom.parameters?.height||7)/2;
   ropeMeshes.push({side,pos,original,localInward,halfLength,mesh:obj});
  });
