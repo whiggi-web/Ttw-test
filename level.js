@@ -1717,6 +1717,114 @@ function updateGod(dt){
  return true;
 }
 
+
+/* TTW v0.70: The Convoy, an SUV arrival with animated door and retreat. */
+const convoyButton=document.createElement('button');
+convoyButton.type='button';convoyButton.textContent='🚙 THE CONVOY';
+let convoyTime=-1;
+const convoyCar=new THREE.Group();convoyCar.name='TTW_CONVOY_SUV';convoyCar.visible=false;scene.add(convoyCar);
+const convoyPaint=new THREE.MeshStandardMaterial({color:0x39443c,metalness:.3,roughness:.63});
+const convoyDark=new THREE.MeshStandardMaterial({color:0x10171b,metalness:.12,roughness:.3});
+const convoySteel=new THREE.MeshStandardMaterial({color:0x9da4a2,metalness:.72,roughness:.3});
+const convoyLights=new THREE.MeshBasicMaterial({color:0xe8e5c8});
+function convoyBox(w,h,d,x,y,z,mat,parent=convoyCar){
+ const mesh=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+ mesh.position.set(x,y,z);parent.add(mesh);return mesh;
+}
+convoyBox(2.45,.72,4.15,0,.98,0,convoyPaint);
+convoyBox(2.16,.9,2.6,0,1.76,-.15,convoyPaint);
+convoyBox(2.2,.19,2.8,0,2.26,-.15,convoyPaint);
+convoyBox(2.19,.53,.045,0,1.82,1.17,convoyDark);
+convoyBox(2.19,.53,.045,0,1.82,-1.45,convoyDark);
+for(const side of [-1,1]){
+ convoyBox(.045,.5,1.1,side*1.11,1.82,.2,convoyDark);
+ convoyBox(.045,.5,1.05,side*1.11,1.82,-.94,convoyDark);
+ for(const z of [-1.44,1.44]){
+  const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.48,.48,.32,16),new THREE.MeshStandardMaterial({color:0x151617,roughness:.95}));
+  wheel.rotation.z=Math.PI/2;wheel.position.set(side*1.25,.54,z);convoyCar.add(wheel);
+ }
+ convoyBox(.24,.22,.18,side*.9,1.2,2.09,convoyLights);
+ convoyBox(.26,.21,.15,side*.9,1.2,-2.09,new THREE.MeshBasicMaterial({color:0xbb3030}));
+}
+convoyBox(1.9,.34,.16,0,.96,2.12,convoySteel);
+convoyBox(1.9,.34,.16,0,.96,-2.12,convoySteel);
+const convoyDoorPivot=new THREE.Group();
+convoyDoorPivot.position.set(-1.23,1.54,.75);convoyCar.add(convoyDoorPivot);
+convoyBox(.08,1.08,1.1,0,0,-.55,convoyPaint,convoyDoorPivot);
+convoyBox(.095,.39,.91,-.015,.29,-.55,convoyDark,convoyDoorPivot);
+convoyBox(.12,.075,.18,-.09,-.1,-.4,convoySteel,convoyDoorPivot);
+const convoyPassenger=new THREE.Group();convoyPassenger.visible=false;scene.add(convoyPassenger);
+let convoyActor=null;
+if(wrestlerPack){
+ try{convoyActor=wrestlerPack.createWrestler('wrestler-05');convoyPassenger.add(convoyActor.object);}
+ catch(e){console.warn('Convoy wrestler fallback',e);}
+}
+if(!convoyActor){
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.38,1.05,6,10),new THREE.MeshStandardMaterial({color:0x4a3430}));
+ body.position.y=1.02;convoyPassenger.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.28,10,8),new THREE.MeshStandardMaterial({color:0xd5a17a}));
+ head.position.y=1.96;convoyPassenger.add(head);
+}
+function stopConvoy(){
+ if(convoyTime<0)return;
+ convoyTime=-1;convoyCar.visible=false;convoyPassenger.visible=false;
+ convoyDoorPivot.rotation.y=0;convoyButton.textContent='🚙 THE CONVOY';
+}
+convoyButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();stopShowcase();stopBetter();stopGod();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopConvoy();convoyTime=0;entranceBot.visible=false;
+ convoyButton.textContent='🚙 RESTART THE CONVOY';
+ if(convoyActor)convoyActor._convoyState=null;
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton,betterButton,godButton,...showcaseButtons])b.addEventListener('click',stopConvoy);
+function updateConvoy(dt){
+ if(convoyTime<0)return false;
+ convoyTime+=dt;const t=convoyTime;
+ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
+ const smooth=p=>{p=clamp(p,0,1);return p*p*(3-2*p);};
+ // Centered on the ramp, descending from stage height to arena floor.
+ let z;
+ if(t<13)z=lerp(-35,-8.1,smooth((t-2)/11));
+ else if(t<25)z=-8.1;
+ else z=lerp(-8.1,-36,smooth((t-25)/12));
+ const y=z< -26?1.2:z< -9?lerp(1.2,.06,(z+26)/17):.06;
+ convoyCar.visible=t>=2&&t<38;
+ convoyCar.position.set(0,y,z);
+ convoyCar.rotation.y=Math.PI;
+ const doorOpen=smooth((t-14)/1.6)*(1-smooth((t-22)/1.3));
+ convoyDoorPivot.rotation.y=-doorOpen*1.35;
+ convoyPassenger.visible=t>=16.3;
+ if(convoyPassenger.visible){
+  const walk=smooth((t-16.3)/4.1);
+  const x=lerp(-.6,-3.05,walk);
+  const wz=lerp(-8.3,-5.7,walk);
+  convoyPassenger.position.set(x,.06,wz);
+  convoyPassenger.rotation.y=lerp(-Math.PI/2,Math.PI,walk);
+  if(convoyActor){
+   const state=t<20.4?'movement.walk':'movement.idle';
+   if(convoyActor._convoyState!==state){
+    try{convoyActor.play(state,{fade:.2,restart:true});}catch(e){console.warn('Convoy passenger animation',e);}
+    convoyActor._convoyState=state;
+   }
+   convoyActor.update(dt);convoyActor.object.position.set(0,0,0);
+  }
+ }
+ let eye,focus;
+ if(t<7){eye=entranceV(-6,3.5,-16);focus=entranceV(0,2,z);}
+ else if(t<13){eye=entranceV(4,2.8,z+9);focus=entranceV(0,y+1.4,z);}
+ else if(t<20){eye=entranceV(-5,2.2,-3);focus=entranceV(-1.3,1.2,-8);}
+ else if(t<25){eye=entranceV(-3,2.2,1);focus=entranceV(-2.5,1.3,-6);}
+ else if(t<33){eye=entranceV(5,4,-2);focus=entranceV(0,y+1.2,z);}
+ else{eye=entranceV(-6,2.4,-8);focus=entranceV(-2.5,1.3,-6);}
+ camera.position.lerp(eye,Math.min(1,dt*5));
+ camera.lookAt(focus);
+ if(t>=40)stopConvoy();
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -1744,6 +1852,7 @@ for(const [button,title] of [
  [tinyButton,'🐜 Tiny Invasion'],
  [betterButton,'😎 Better Than You'],
  [godButton,'👑 A God Was Born'],
+ [convoyButton,'🚙 The Convoy'],
  ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
  button.textContent=title;
@@ -1861,7 +1970,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
