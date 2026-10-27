@@ -171,7 +171,7 @@ try{
 
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
 const solidArenaBoxes=(loadedArena?.colliders||[]).filter(c=>
- (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
+ c.id==='ring_apron' || (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
 );
 const arenaWalkables=[];
 if(loadedArena){
@@ -201,6 +201,7 @@ function blockedByArena(x,z,feetY){
  const radius=.32;
  return solidArenaBoxes.some(c=>{
   const b=c.box;
+  if(c.id==='ring_apron' && feetY>=1.05)return false;
   if(feetY>b.max.y-.08||feetY+1.65<b.min.y+.08)return false;
   const cx=THREE.MathUtils.clamp(x,b.min.x,b.max.x);
   const cz=THREE.MathUtils.clamp(z,b.min.z,b.max.z);
