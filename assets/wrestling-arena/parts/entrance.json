@@ -1,0 +1,44 @@
+{
+  "id": "entrance",
+  "name": "Walkway, stage and screen",
+  "objects": [
+    { "id": "walkway", "type": "ramp", "from": [0, 1.2, -26], "to": [0, 0.04, -8.4], "width": 3.2, "thickness": 0.2, "material": "walkway", "edgeMaterial": "led_blue", "collide": true, "tags": ["walkway", "walkable"] },
+    { "id": "walkway_runner", "type": "ramp", "from": [0, 1.215, -26], "to": [0, 0.055, -8.4], "width": 1.2, "thickness": 0.02, "fill": false, "material": "led_runner", "castShadow": false, "tags": ["walkway", "led"] },
+    { "id": "walkway_barrier", "type": "box", "size": [0.15, 1.1, 16.4], "position": [2.4, 0.55, -17], "material": "barrier", "mirror": "x", "collide": true, "tags": ["barrier"] },
+    { "id": "walkway_barrier_cap", "type": "box", "size": [0.22, 0.06, 16.4], "position": [2.4, 1.13, -17], "material": "led_blue", "mirror": "x", "tags": ["barrier", "led"] },
+    { "id": "walkway_crowd_floor", "type": "box", "size": [0.48, 0.9, 0.48], "position": [3.2, 0.45, -22], "material": "seat_floor", "grid": { "counts": [8, 20], "step": [0.75, 0, 0.6] }, "mirror": "x", "tags": ["seating", "floor_seats"] },
+
+    { "id": "stage_deck", "type": "box", "size": [24, 1.2, 9], "position": [0, 0.6, -30.5], "material": "stage", "collide": true, "tags": ["stage", "walkable"] },
+    { "id": "stage_lip", "type": "box", "size": [24, 0.12, 0.05], "position": [0, 1.08, -25.99], "material": "led_white", "tags": ["stage", "led"] },
+    { "id": "stage_front_strip", "type": "box", "size": [24, 0.5, 0.05], "position": [0, 0.5, -25.99], "material": "led_blue", "tags": ["stage", "led"] },
+    { "id": "stage_floor_inlay", "type": "box", "size": [3.2, 0.02, 7.6], "position": [0, 1.21, -30.4], "material": "led_runner", "castShadow": false, "tags": ["stage", "led"] },
+
+    { "id": "pyro_cannon", "type": "cylinder", "radius": 0.22, "height": 0.45, "position": [3.2, 1.425, -26.6], "material": "steel", "array": { "count": 3, "step": [3.0, 0, 0] }, "mirror": "x", "tags": ["stage", "pyro"] },
+
+    { "id": "screen_main", "type": "screen", "size": [16, 7.5], "position": [0, 9.45, -34.6], "frameMaterial": "screen_frame", "content": { "text": "MAIN EVENT", "sub": "LIVE", "colors": ["#0a1a5c", "#c4161c"] }, "tags": ["stage", "screen"] },
+    { "id": "screen_side", "type": "screen", "size": [3.6, 9.5], "position": [10.2, 6.25, -33.6], "rotation": [0, -15, 0], "frameMaterial": "screen_frame", "content": { "text": "", "sub": "", "colors": ["#1e66ff", "#05070f"] }, "mirror": "x", "tags": ["stage", "screen"] },
+
+    { "id": "stage_curtain", "type": "box", "size": [4, 4.5, 0.1], "position": [0, 3.45, -34.9], "material": "curtain", "collide": true, "tags": ["stage", "curtain", "door"] },
+    { "id": "stage_curtain_frame", "type": "box", "size": [4.4, 0.25, 0.3], "position": [0, 5.82, -34.8], "material": "led_white", "tags": ["stage", "led"] },
+    { "id": "stage_flat", "type": "box", "size": [6, 4.5, 0.4], "position": [5, 3.45, -34.8], "material": "screen_frame", "mirror": "x", "collide": true, "tags": ["stage", "wall"] },
+    { "id": "stage_flat_trim", "type": "box", "size": [0.12, 4.5, 0.05], "position": [2.06, 3.45, -34.58], "material": "led_blue", "array": { "count": 3, "step": [2.0, 0, 0] }, "mirror": "x", "tags": ["stage", "led"] },
+    { "id": "stage_wing", "type": "box", "size": [4, 14, 0.4], "position": [10, 7, -35.2], "material": "curtain", "mirror": "x", "collide": true, "castShadow": false, "tags": ["stage", "wall"] },
+    { "id": "stage_header", "type": "box", "size": [16, 1.6, 0.4], "position": [0, 14, -35.2], "material": "curtain", "castShadow": false, "tags": ["stage"] },
+
+    { "id": "stage_truss_tower", "type": "box", "size": [0.6, 15, 0.6], "position": [12.4, 7.5, -27], "material": "truss", "mirror": "x", "collide": true, "tags": ["stage", "rig"] },
+    { "id": "stage_truss_top", "type": "box", "size": [25.4, 0.6, 0.6], "position": [0, 15.3, -27], "material": "truss", "tags": ["stage", "rig"] },
+    { "id": "stage_truss_lamp", "type": "cylinder", "radius": 0.22, "height": 0.35, "position": [-10, 14.8, -27], "material": "light_fixture", "array": { "count": 6, "step": [4, 0, 0] }, "castShadow": false, "tags": ["stage", "rig"] },
+
+    { "id": "stage_spot", "type": "light", "light": "spot", "color": "#cfe0ff", "intensity": 900, "distance": 40, "angle": 30, "penumbra": 0.6, "decay": 2, "position": [6, 15, -24], "target": [0, 1.2, -30], "mirror": "x", "tags": ["stage", "light"] },
+    { "id": "screen_glow", "type": "light", "light": "point", "color": "#4a6dff", "intensity": 300, "distance": 25, "decay": 2, "position": [0, 8, -31], "tags": ["stage", "light"] }
+  ],
+
+  "markers": {
+    "stage_curtain":  [0, 1.2, -34.3],
+    "stage_center":   [0, 1.2, -30.5],
+    "stage_front":    [0, 1.2, -26.4],
+    "walkway_start":  [0, 1.2, -25.6],
+    "walkway_end":    [0, 0.05, -8.8],
+    "ringside_entry": [0, 0, -7]
+  }
+}
