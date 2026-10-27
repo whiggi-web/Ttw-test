@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>TTW | Enter the Ring</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#10131c;color:white;font:14px system-ui,sans-serif}
+canvas{display:block;touch-action:none}
+#controllerSlot{position:fixed;inset:0;z-index:10;pointer-events:none} @media (orientation:portrait){#controllerSlot{top:auto;height:42vh;bottom:0;background:#15110e} #help{bottom:43vh!important}} #hud{position:fixed;top:16px;left:16px;pointer-events:none;text-shadow:0 2px 6px #000}
+#hud strong{display:block;font-size:21px;letter-spacing:.12em}
+#hud small{color:#a9e4c3}#help{position:fixed;bottom:14px;left:16px;color:#b9c3d6;pointer-events:none}
+#home{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:linear-gradient(140deg,rgba(8,12,22,.96),rgba(26,20,33,.94));padding:20px}#home[hidden]{display:none}#homePanel{width:min(420px,100%);padding:30px 26px;background:#1d2330;border:1px solid #48576e;border-radius:18px;text-align:center;box-shadow:0 20px 70px #0008}#homePanel h1{font-size:clamp(38px,9vw,62px);margin:0;letter-spacing:.12em}#homePanel p{color:#c3ccdc}#homePanel label{display:block;text-align:left;margin:20px 0 8px;font-weight:700}#wrestlerName{width:100%;padding:14px;border-radius:9px;background:#101620;border:1px solid #78889d;color:white;font:inherit;font-size:18px}#enterRing{width:100%;padding:15px;margin-top:16px;background:#49d5a2;color:#0b1b19;border:0;border-radius:9px;font:inherit;font-size:18px;font-weight:800;cursor:pointer}#enterRing:focus-visible,#wrestlerName:focus-visible{outline:3px solid #f6ce68;outline-offset:2px}#homeError{color:#ffaaa8;min-height:1.2em;margin:10px 0 0}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
+</head>
+<body>
+<div id="hud"><strong>TTW</strong><small>DEV: TTW Name Entry v0.4</small></div>
+<div id="help">Move with left joystick · Drag to orbit · Scroll/pinch to zoom</div>
+<div id="controllerSlot"></div>
+<div id="home"><form id="homePanel"><h1>TTW</h1><p>Enter the ring</p><p>One wrestler ready for testing</p><label for="wrestlerName">Wrestler name</label><input id="wrestlerName" name="wrestlerName" maxlength="20" autocomplete="nickname" placeholder="Enter your wrestler name" required><button id="enterRing" type="submit">ENTER THE RING</button><p id="homeError" role="alert"></p></form></div>
+<script src="./assets/controllers/game-controller.js"></script>
+<script>
+const home=document.getElementById('home');
+const nameForm=document.getElementById('homePanel');
+nameForm.addEventListener('submit',e=>{
+ e.preventDefault();
+ const name=document.getElementById('wrestlerName').value.trim().replace(/\\s+/g,' ');
+ if(!name){document.getElementById('homeError').textContent='Please enter a name.';return;}
+ window.TTWPlayerName=name;
+ window.dispatchEvent(new CustomEvent('ttw:player-name',{detail:{name}}));
+ home.hidden=true;
+});
+</script>
+<script type="module" src="./level.js"></script>
+</body>
+</html>
