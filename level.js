@@ -1324,6 +1324,160 @@ function updateTiny(dt){
  return true;
 }
 
+
+/* TTW v0.65: Five independent cinematic entrances, including the photo-shoot catwalk. */
+const showcaseNames=['📸 The Perfect Entrance','🎭 Mystery Entrance I','🌩️ Mystery Entrance II','🪩 Mystery Entrance III','🌀 Mystery Entrance IV'];
+const showcaseButtons=showcaseNames.map(name=>{const b=document.createElement('button');b.textContent=name;b.type='button';return b;});
+let showcaseMode=-1,showcaseTime=-1,showcaseFreeze=false;
+const showcaseExtras=[];
+for(let i=0;i<8;i++){
+ const g=new THREE.Group();g.visible=false;scene.add(g);
+ const mat=new THREE.MeshStandardMaterial({color:[0xe0bd5b,0x7bb9d8,0xe17ca7,0x7cdb9e][i%4],metalness:.22,roughness:.5});
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.27,.8,5,8),mat);body.position.y=1.04;g.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.24,8,6),new THREE.MeshStandardMaterial({color:0xf1c19d}));head.position.y=1.76;g.add(head);
+ showcaseExtras.push(g);
+}
+const showcaseOverlay=document.createElement('div');
+showcaseOverlay.style.cssText='position:fixed;inset:0;z-index:14;pointer-events:none;opacity:0;display:grid;place-items:center;color:#fff;font:900 clamp(24px,7vw,78px) system-ui;text-align:center;text-shadow:0 4px 20px #000;letter-spacing:.1em';
+document.body.appendChild(showcaseOverlay);
+const showcaseFlash=document.createElement('div');
+showcaseFlash.style.cssText='position:fixed;inset:0;z-index:19;pointer-events:none;background:#fff;opacity:0';
+document.body.appendChild(showcaseFlash);
+const showcaseGrayscale=document.createElement('div');
+showcaseGrayscale.style.cssText='position:fixed;inset:0;z-index:18;pointer-events:none;backdrop-filter:grayscale(1) contrast(1.35);-webkit-backdrop-filter:grayscale(1) contrast(1.35);opacity:0';
+document.body.appendChild(showcaseGrayscale);
+const showcaseParticles=[];
+for(let i=0;i<70;i++){
+ const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.09+(i%3)*.055),new THREE.MeshBasicMaterial({color:[0xffd45b,0x80e4ff,0xff69c5,0xffffff][i%4],transparent:true,opacity:.75}));
+ mesh.visible=false;scene.add(mesh);showcaseParticles.push(mesh);
+}
+function stopShowcase(){
+ showcaseMode=-1;showcaseTime=-1;showcaseFreeze=false;
+ showcaseOverlay.style.opacity='0';showcaseFlash.style.opacity='0';showcaseGrayscale.style.opacity='0';
+ for(const g of showcaseExtras)g.visible=false;
+ for(const p of showcaseParticles)p.visible=false;
+ if(entranceActor)entranceActor.object.rotation.set(0,0,0);
+ showcaseButtons.forEach((b,i)=>b.textContent=showcaseNames[i]);
+}
+showcaseButtons.forEach((b,i)=>b.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();resetStagePyro();
+ for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopShowcase();showcaseMode=i;showcaseTime=0;entranceBot.visible=true;
+ if(entranceActor)entranceActor._entranceState=null;
+ b.textContent='↻ RESTART '+showcaseNames[i];
+}));
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton])b.addEventListener('click',stopShowcase);
+function updateShowcase(dt){
+ if(showcaseMode<0)return false;
+ showcaseTime+=dt;
+ const t=showcaseTime,m=showcaseMode;
+ const clamp=THREE.MathUtils.clamp;
+ const lerp=THREE.MathUtils.lerp;
+ const rampY=z=>z< -26?1.2:z< -9?lerp(1.2,.06,(z+26)/17):.06;
+ const smooth=u=>{u=clamp(u,0,1);return u*u*(3-2*u);};
+ let z=-34,x=0,anim='movement.walk',yawFace=Math.PI,tilt=0;
+ showcaseFreeze=false;
+ if(m===0){
+  // Model entrance: deliberate stops for four still-photo poses.
+  const poses=[6.2,11.1,16.2,21.2];
+  const freeze=poses.find(v=>t>=v&&t<v+.8);
+  showcaseFreeze=freeze!==undefined;
+  const walkTime=t-poses.reduce((n,v)=>n+Math.min(.8,Math.max(0,t-v)),0);
+  z=lerp(-34,-6,smooth(walkTime/22));
+  x=Math.sin(t*.7)*.55;
+  anim=showcaseFreeze?'movement.idle':'movement.walk';
+  yawFace=showcaseFreeze?Math.PI+(poses.indexOf(freeze)-1.5)*.28:Math.PI;
+  tilt=showcaseFreeze?-.11:0;
+  const snap=poses.reduce((v,p)=>Math.max(v,Math.max(0,1-Math.abs(t-p-.15)/.16)),0);
+  showcaseFlash.style.opacity=String(Math.max(0,snap)*.92);
+  showcaseGrayscale.style.opacity=showcaseFreeze?'1':'0';
+  showcaseOverlay.textContent=showcaseFreeze?'✦ PERFECT ✦':'';
+  showcaseOverlay.style.opacity=showcaseFreeze?'.9':'0';
+ }else if(m===1){
+  z=lerp(-34,-6,smooth(Math.max(0,t-3)/21));
+  x=Math.sin(t*1.3)*.8;
+  anim=t<3?'movement.idle':t<17?'movement.walk':'movement.run';
+  yawFace=Math.PI+Math.sin(t*2)*.22;
+  showcaseOverlay.textContent=t<3?'???':t>22?'THE SHOW BEGINS':'';
+  showcaseOverlay.style.opacity=t<3||t>22?'.9':'0';
+ }else if(m===2){
+  z=lerp(-34,-6,smooth(Math.max(0,t-4)/20));
+  x=Math.sin(t*.45)*1.1;
+  anim=t<4?'movement.idle':'movement.walk';
+  showcaseOverlay.textContent=t<4?'⚡ ⚡ ⚡':'';
+  showcaseOverlay.style.opacity=t<4?'.8':'0';
+ }else if(m===3){
+  z=lerp(-34,-6,smooth(Math.max(0,t-2)/22));
+  x=Math.sin(t*2.6)*1.3;
+  anim=t<2?'movement.idle':'movement.walk';
+  yawFace=Math.PI+Math.sin(t*3)*.5;
+  showcaseOverlay.textContent=t<2?'✦ ✦ ✦':'';
+  showcaseOverlay.style.opacity=t<2?'.85':'0';
+ }else{
+  z=lerp(-34,-6,smooth(Math.max(0,t-3)/21));
+  x=Math.sin(t*.8)*.4;
+  anim=t<3?'movement.idle':t>20?'movement.run':'movement.walk';
+  yawFace=Math.PI+Math.sin(t*.9)*.15;
+  showcaseOverlay.textContent=t<3?'◉':'';
+  showcaseOverlay.style.opacity=t<3?'.8':'0';
+ }
+ const y=rampY(z);
+ entranceBot.position.set(x,y,z);
+ entranceBot.rotation.y=yawFace;
+ if(entranceActor){
+  if(entranceActor._entranceState!==anim){
+   try{entranceActor.play(anim,{fade:.22,restart:true});}catch(e){console.warn('Showcase animation',e);}
+   entranceActor._entranceState=anim;
+  }
+  entranceActor.object.rotation.x=tilt;
+  // Pause animation on still-photo beats.
+  if(!showcaseFreeze)entranceActor.update(dt);
+ }
+ // Four distinct supporting spectacles, each staying on the stage/ramp.
+ for(let i=0;i<showcaseExtras.length;i++){
+  const g=showcaseExtras[i];
+  g.visible=m!==0&&t>2&&t<26;
+  if(!g.visible)continue;
+  const side=i%2?-1:1,rank=Math.floor(i/2);
+  if(m===1)g.position.set(side*(2+rank*.65),rampY(z-2-rank*.8),z-2-rank*.8);
+  else if(m===2)g.position.set(side*(3.1+rank*.55),1.2,-28-rank*1.3);
+  else if(m===3)g.position.set(side*(1.6+rank*.6),rampY(z-2-rank*.6),z-2-rank*.6);
+  else g.position.set(side*(3+rank*.7),1.2,-30-rank);
+  g.rotation.y=m===3?t*2+rank:Math.PI;
+  g.scale.setScalar(m===4?.55: m===3?.85:1);
+ }
+ for(let i=0;i<showcaseParticles.length;i++){
+  const p=showcaseParticles[i];
+  p.visible=m!==0&&t>2&&t<25;
+  if(!p.visible)continue;
+  const a=i*2.39996,phase=t*(m===2?4:2.1)+i*.31;
+  if(m===1)p.position.set(x+Math.cos(a)*((i%7)*.4+.7),y+1.1+Math.sin(phase)*1.4,z+Math.sin(a)*3);
+  if(m===2)p.position.set(Math.cos(a)*((i%9)*.65+1),1.4+Math.abs(Math.sin(phase))*(3+i%4),-28+Math.sin(a)*5);
+  if(m===3)p.position.set(x+Math.cos(phase)*((i%6)*.4+1),y+1.2+Math.sin(phase*.7)*1.5,z+Math.sin(phase)*((i%6)*.4+1));
+  if(m===4)p.position.set(x+Math.cos(a+t)*((i%9)*.3+.4),y+1+Math.sin(a+t*1.8)*2,z+Math.sin(a+t)*((i%9)*.3+.4));
+  p.rotation.y=t*3;
+ }
+ const focus=new THREE.Vector3(x,y+1.4,z);
+ let eye;
+ if(m===0){
+  eye=showcaseFreeze?new THREE.Vector3(x+2.3, y+1.9,z+3.1):new THREE.Vector3(x+Math.sin(t*.7)*3.6,y+1.9,z+5);
+ }else if(m===1){
+  eye=t<9?new THREE.Vector3(-7,4,z+7):t<18?new THREE.Vector3(7,3.5,z+5):new THREE.Vector3(0,6,z+9);
+ }else if(m===2){
+  eye=t<7?new THREE.Vector3(0,8,-19):new THREE.Vector3(-5,2.1,z+5);
+ }else if(m===3){
+  eye=t<11?new THREE.Vector3(6,3,z+5):new THREE.Vector3(-5,6,z+8);
+ }else{
+  eye=t<9?new THREE.Vector3(0,12,z+7):t<19?new THREE.Vector3(5,2,z+5):new THREE.Vector3(-7,5,z+6);
+ }
+ camera.position.lerp(eye,Math.min(1,dt*10));
+ camera.lookAt(focus);
+ if(t>=28){stopShowcase();entranceBot.visible=false;}
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -1348,7 +1502,8 @@ for(const [button,title] of [
  [slowEntranceButton,'✨ Epic Walk Entrance'],
  [slideEntranceButton,'🏃 Run & Slide Entrance'],
  [processionButton,'👑 Royal Procession'],
- [tinyButton,'🐜 Tiny Invasion']
+ [tinyButton,'🐜 Tiny Invasion'],
+ ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
  button.textContent=title;
  button.style.cssText='position:relative;inset:auto;top:auto;left:auto;width:100%;flex:none;text-align:left;z-index:auto;padding:13px 12px;background:#30324c;color:#fff;border:1px solid #656987;border-radius:8px;font:700 13px system-ui;cursor:pointer';
@@ -1465,7 +1620,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
