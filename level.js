@@ -169,6 +169,45 @@ try{
  console.info('TTW: Claude master wrestler loaded');
 }catch(error){console.error('TTW wrestler asset failed:',error);}
 
+// Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
+const solidArenaBoxes=(loadedArena?.colliders||[]).filter(c=>
+ (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
+);
+const arenaWalkables=[];
+if(loadedArena){
+ for(const obj of loadedArena.group.children){
+  obj.traverse(child=>{
+   if(!child.isMesh)return;
+   let parent=child, walkable=false;
+   while(parent&&parent!==loadedArena.group){
+    const tags=parent.userData?.tags||[];
+    if(tags.includes('walkable')||parent.userData?.arenaId==='ring_apron')walkable=true;
+    parent=parent.parent;
+   }
+   if(walkable)arenaWalkables.push(child);
+  });
+ }
+}
+const floorRay=new THREE.Raycaster();
+function arenaFloorAt(x,z,currentY){
+ if(!loadedArena)return .97;
+ floorRay.set(new THREE.Vector3(x,30,z),new THREE.Vector3(0,-1,0));
+ const hits=floorRay.intersectObjects(arenaWalkables,false);
+ // Ignore overhead surfaces and prevent stepping directly onto tall structures.
+ const eligible=hits.filter(h=>h.point.y<=currentY+.42);
+ return eligible.length?Math.max(0,eligible[0].point.y):0;
+}
+function blockedByArena(x,z,feetY){
+ const radius=.32;
+ return solidArenaBoxes.some(c=>{
+  const b=c.box;
+  if(feetY>b.max.y-.08||feetY+1.65<b.min.y+.08)return false;
+  const cx=THREE.MathUtils.clamp(x,b.min.x,b.max.x);
+  const cz=THREE.MathUtils.clamp(z,b.min.z,b.max.z);
+  return (x-cx)**2+(z-cz)**2<radius**2;
+ });
+}
+
 // Temporary player capsule fallback. Hidden when the original wrestler is loaded.
 const player=new THREE.Group();
 player.name='TTW_TEST_PLAYER';
@@ -260,9 +299,26 @@ renderer.setAnimationLoop(()=>{
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
    isWalking=true;
-   player.position.addScaledVector(move,5*dt);
-   player.position.x=THREE.MathUtils.clamp(player.position.x,-7.65,7.65);
-   player.position.z=THREE.MathUtils.clamp(player.position.z,-7.65,7.65);
+   const step=move.multiplyScalar(5*dt);
+   if(loadedArena){
+    const tryAxis=(axis,amount)=>{
+     const nx=player.position.x+(axis==='x'?amount:0);
+     const nz=player.position.z+(axis==='z'?amount:0);
+     const floor=arenaFloorAt(nx,nz,player.position.y);
+     if(floor>=player.position.y-.65 && floor<=player.position.y+.42 && !blockedByArena(nx,nz,floor)){
+      player.position[axis]+=amount;
+      player.position.y=floor;
+     }else if(floor<player.position.y-.65 && !blockedByArena(nx,nz,player.position.y)){
+      player.position[axis]+=amount;
+      player.position.y=Math.max(floor,player.position.y-3*dt);
+     }
+    };
+    tryAxis('x',step.x);tryAxis('z',step.z);
+   }else{
+    player.position.add(step);
+    player.position.x=THREE.MathUtils.clamp(player.position.x,-7.65,7.65);
+    player.position.z=THREE.MathUtils.clamp(player.position.z,-7.65,7.65);
+   }
    player.rotation.y=Math.atan2(-move.x,-move.z);
   }
  }
