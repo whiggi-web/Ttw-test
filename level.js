@@ -595,13 +595,65 @@ let contextMessageUntil=0;
 function showContextMessage(message){contextMessage.textContent=message;contextMessage.style.display='block';contextMessageUntil=performance.now()+2000;}
 let attackSequence=0;
 function performAttack(move){
- if(punchRemaining>0||playerHP<=0||!remoteConnected||document.getElementById('home').hidden===false)return;
+ if(traversal||punchRemaining>0||playerHP<=0||!remoteConnected||document.getElementById('home').hidden===false)return;
  const attack=attackMoves[move];if(!attack)return;
  activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
 }
 function tapAttack(){
  const moves=['punch','jab','hook','kick','uppercut'];
  performAttack(moves[attackSequence++%moves.length]);
+}
+// Temporary scripted traversal until Claude's planned rope/aerial clips are supplied.
+let traversal=null;
+function beginTraversal(kind){
+ if(traversal||playerHP<=0)return;
+ const x=player.position.x,z=player.position.z;
+ if(kind==='ring'){
+  const side=Math.abs(x)>Math.abs(z)?'x':'z';
+  const sign=Math.sign(player.position[side])||1;
+  const distance=Math.abs(player.position[side]);
+  if(distance<2.6||distance>4.15)return showContextMessage('Stand beside the ropes to enter or exit');
+  const outside=distance>3.6;
+  const start=player.position.clone(),end=start.clone();
+  end[side]=sign*(outside?2.55:3.98);
+  end.y=1.2;
+  traversal={kind,start,end,time:0,duration:1.65};
+  showContextMessage(outside?'Climbing into the ring':'Climbing out of the ring');
+ }else if(kind==='climb'){
+  if(Math.abs(x)<2.15||Math.abs(z)<2.15)return showContextMessage('Move into a ring corner to climb');
+  const corner=new THREE.Vector3(Math.sign(x)*3.1,1.2,Math.sign(z)*3.1);
+  traversal={kind,start:player.position.clone(),end:corner,time:0,duration:1.8};
+  showContextMessage('Climbing the turnbuckle');
+ }else if(kind==='dive'){
+  if(!traversal||traversal.kind!=='perched')return;
+ }
+}
+function swanDive(){
+ if(!traversal||traversal.kind!=='perched')return showContextMessage('Climb a turnbuckle first');
+ traversal={kind:'dive',start:player.position.clone(),end:new THREE.Vector3(0,1.2,0),time:0,duration:1.45};
+ showContextMessage('SWAN DIVE!');
+}
+function updateTraversal(dt){
+ if(!traversal)return false;
+ if(traversal.kind==='perched'){player.position.copy(traversal.end);return true;}
+ traversal.time+=dt;
+ const p=Math.min(1,traversal.time/traversal.duration);
+ const eased=p*p*(3-2*p);
+ player.position.lerpVectors(traversal.start,traversal.end,eased);
+ if(traversal.kind==='ring'){
+  player.position.y=1.2+Math.sin(Math.PI*p)*.18;
+  if(loadedWrestler)loadedWrestler.object.rotation.x=-Math.sin(Math.PI*p)*.28;
+ }else if(traversal.kind==='climb'){
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,2.55,eased);
+ }else if(traversal.kind==='dive'){
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*1.4;
+  if(loadedWrestler)loadedWrestler.object.rotation.x=-Math.sin(Math.PI*p)*1.2;
+ }
+ if(p>=1){
+  if(traversal.kind==='climb'){traversal={kind:'perched',end:player.position.clone()};showContextMessage('Press SPECIAL (F) to swan dive');}
+  else{traversal=null;if(loadedWrestler)loadedWrestler.object.rotation.x=0;}
+ }
+ return true;
 }
 const contextActions=[
  ['GRAPPLE','KeyG',()=>{
@@ -615,8 +667,10 @@ const contextActions=[
   showContextMessage('Rope interaction: lean and rebound');
   ropeAnimationTime=1.5;
  }],
- ['ENTER / EXIT','KeyE',()=>showContextMessage('Ring entry/exit needs a dedicated traversal animation')],
+ ['ENTER / EXIT','KeyE',()=>beginTraversal('ring')],
+ ['TURNBUCKLE','KeyT',()=>beginTraversal('climb')],
  ['SPECIAL','KeyF',()=>{
+  if(traversal?.kind==='perched')return swanDive();
   if(!remoteConnected||player.position.distanceTo(remote.position)>2.2)return showContextMessage('Get closer to use a special');
   performAttack('uppercut');showContextMessage('Special test: uppercut');
  }]
@@ -1020,7 +1074,7 @@ renderer.setAnimationLoop(()=>{
  const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
  // Losing continuous movement resets all accumulated rope momentum.
  if(playerHP<=0||Math.abs(inputX)+Math.abs(inputZ)<=.001){ropeSpeedMultiplier=1;}
- if(playerHP>0&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
+ if(playerHP>0&&!traversal&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
   const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
@@ -1053,19 +1107,20 @@ renderer.setAnimationLoop(()=>{
   }
  }
 
- if(playerHP>0&&ropeBounceDelay<=0&&ropeRecoilTime>0){
+ if(playerHP>0&&!traversal&&ropeBounceDelay<=0&&ropeRecoilTime>0){
   ropeRecoilTime=Math.max(0,ropeRecoilTime-dt);
   const amount=dt*(ropeRecoilTime/.28);
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
+ updateTraversal(dt);
  if(contextMessageUntil&&performance.now()>contextMessageUntil){contextMessage.style.display='none';contextMessageUntil=0;}
  if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch',move:activeAttack,momentum:ropeSpeedMultiplier});}
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=playerHP<=0?'fall':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
+  const nextAnimation=playerHP<=0?'fall':traversal?'idle':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
