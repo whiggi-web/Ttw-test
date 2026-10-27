@@ -1558,6 +1558,136 @@ function updateBetter(dt){
  return true;
 }
 
+
+/* TTW v0.68: A God Was Born, ten synchronised carriers beneath a living throne. */
+const godButton=document.createElement('button');
+godButton.type='button';godButton.textContent='👑 A GOD WAS BORN';
+let godTime=-1,godLastCard=-1,godResumeFeed=false;
+const godProcession=new THREE.Group();godProcession.name='TTW_GOD_PROCESSION';godProcession.visible=false;scene.add(godProcession);
+const godWood=new THREE.MeshStandardMaterial({color:0x624126,roughness:.92,metalness:.04});
+const godGold=new THREE.MeshStandardMaterial({color:0xb49a55,roughness:.35,metalness:.6});
+const godPlatform=new THREE.Mesh(new THREE.BoxGeometry(2.9,.22,4.45),godWood);
+godPlatform.position.y=3.18;godProcession.add(godPlatform);
+for(const x of [-1.27,1.27]){
+ const trim=new THREE.Mesh(new THREE.BoxGeometry(.12,.18,4.55),godGold);
+ trim.position.set(x,3.22,0);godProcession.add(trim);
+}
+for(const z of [-2.12,2.12]){
+ const trim=new THREE.Mesh(new THREE.BoxGeometry(2.75,.18,.12),godGold);
+ trim.position.set(0,3.22,z);godProcession.add(trim);
+}
+const godCarriers=[];
+for(let i=0;i<10;i++){
+ const g=new THREE.Group();godProcession.add(g);
+ const col=i%2,row=Math.floor(i/2);
+ g.position.set(col===0?-.68:.68,0,(row-2)*.86);
+ const cloth=new THREE.MeshStandardMaterial({color:i%2?0x413b38:0x594b3d,roughness:.9});
+ const skin=new THREE.MeshStandardMaterial({color:[0xb57e59,0xc69a72,0x906347,0xd0a27c][i%4],roughness:.85});
+ const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.3,.8,4,8),cloth);torso.position.y=1.37;g.add(torso);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.24,10,8),skin);head.position.y=2.19;g.add(head);
+ const arms=[],legs=[];
+ for(const side of [-1,1]){
+  const arm=new THREE.Group();arm.position.set(side*.39,1.77,0);
+  const upper=new THREE.Mesh(new THREE.CapsuleGeometry(.11,.7,3,6),skin);
+  upper.position.y=.34;arm.add(upper);g.add(arm);arms.push(arm);
+  const leg=new THREE.Group();leg.position.set(side*.17,.89,0);
+  const lower=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.55,3,6),cloth);
+  lower.position.y=-.37;leg.add(lower);g.add(leg);legs.push(leg);
+ }
+ // The wooden beams visibly rest over the ten carriers' raised hands.
+ const beam=new THREE.Mesh(new THREE.BoxGeometry(.4,.13,.65),godWood);
+ beam.position.set(0,3.01,0);g.add(beam);
+ godCarriers.push({g,arms,legs});
+}
+const godThrone=new THREE.Group();godThrone.position.set(0,3.32,0);godProcession.add(godThrone);
+let godActor=null;
+if(wrestlerPack){
+ try{godActor=wrestlerPack.createWrestler('wrestler-03');godThrone.add(godActor.object);godActor.play('movement.idle',{fade:0});}
+ catch(e){console.warn('God king wrestler fallback',e);}
+}
+if(!godActor){
+ const body=new THREE.Mesh(new THREE.CapsuleGeometry(.39,1.2,6,10),new THREE.MeshStandardMaterial({color:0x202126,metalness:.4,roughness:.65}));
+ body.position.y=1.05;godThrone.add(body);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.29,12,8),new THREE.MeshStandardMaterial({color:0xd2a17d}));
+ head.position.y=2.05;godThrone.add(head);
+}
+const godMantle=new THREE.Mesh(new THREE.BoxGeometry(1.5,.16,.5),godGold);
+godMantle.position.set(0,2.12,.18);godThrone.add(godMantle);
+const godHalo=new THREE.Mesh(new THREE.TorusGeometry(.46,.075,6,24),godGold);
+godHalo.position.set(0,2.54,0);godHalo.rotation.x=Math.PI/2;godThrone.add(godHalo);
+function stopGod(){
+ if(godTime<0)return;
+ godTime=-1;godLastCard=-1;godProcession.visible=false;
+ if(godResumeFeed)setActionFeed(true);
+ godResumeFeed=false;godButton.textContent='👑 A GOD WAS BORN';
+}
+godButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();stopShowcase();stopBetter();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopGod();
+ godResumeFeed=actionFeedEnabled;
+ if(actionFeedEnabled)setActionFeed(false);
+ jumbotronCountdown=-1;godTime=0;godLastCard=-1;
+ entranceBot.visible=false;godProcession.visible=false;
+ godButton.textContent='👑 RESTART A GOD WAS BORN';
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton,betterButton,...showcaseButtons])b.addEventListener('click',stopGod);
+function updateGod(dt){
+ if(godTime<0)return false;
+ godTime+=dt;const t=godTime;
+ const card=t<3?0:t<7?1:t<10?2:3;
+ if(card!==godLastCard){
+  godLastCard=card;
+  if(card===0)setJumbotron('A GOD','WAS BORN',['#050506','#b2a07c']);
+  else if(card===1)setJumbotron('BOW','BEFORE HIM',['#0b0a09','#b99b58']);
+  else if(card===2)setJumbotron('','',['#070707','#111111']);
+  else setJumbotron('THE GOD KING','TTW',['#17120b','#d0b16b']);
+ }
+ godProcession.visible=t>=10;
+ // All ten carry the same rigid structure, so nobody slips off the ramp.
+ const u=THREE.MathUtils.clamp((t-10)/33,0,1);
+ const smooth=u*u*(3-2*u);
+ const z=THREE.MathUtils.lerp(-34,-7,smooth);
+ const y=z< -26?1.2:z< -9?THREE.MathUtils.lerp(1.2,.06,(z+26)/17):.06;
+ godProcession.position.set(0,y,z);
+ godProcession.rotation.y=Math.PI;
+ for(let i=0;i<godCarriers.length;i++){
+  const c=godCarriers[i];
+  // Marching legs are in unison; the platform and motionless king never bob.
+  const step=Math.sin((t-10)*5.4+(i%2)*Math.PI);
+  for(let j=0;j<2;j++){
+   c.legs[j].rotation.x=t>=10&&t<43?step*(j===0?1:-1)*.32:0;
+   c.arms[j].rotation.x=-.18;
+  }
+ }
+ // Intentionally never update the king's animation: he stands perfectly still.
+ let eye,focus;
+ if(t<10){
+  const pull=THREE.MathUtils.clamp(t/8,0,1);
+  eye=entranceV(THREE.MathUtils.lerp(0,6,pull),THREE.MathUtils.lerp(11,15,pull),THREE.MathUtils.lerp(-12,4,pull));
+  focus=entranceV(0,9.4,-34.6);
+ }else if(t<17){
+  // Reveal the marching feet first, then tilt up to the immobile ruler.
+  const reveal=THREE.MathUtils.clamp((t-11)/5,0,1);
+  eye=entranceV(3.3,1.05,z+6);
+  focus=entranceV(0,y+.65+reveal*4.7,z);
+ }else if(t<27){
+  eye=entranceV(-5,3.1,z+7);focus=entranceV(0,y+4.6,z);
+ }else if(t<37){
+  eye=entranceV(6,5.2,z+9);focus=entranceV(0,y+4,z);
+ }else if(t<44){
+  eye=entranceV(0,2.1,4);focus=entranceV(0,y+4.3,z);
+ }else{
+  eye=entranceV(-7,5,7);focus=entranceV(0,y+4,z);
+ }
+ camera.position.lerp(eye,Math.min(1,dt*4));
+ camera.lookAt(focus);
+ if(t>=50){stopGod();}
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -1584,6 +1714,7 @@ for(const [button,title] of [
  [processionButton,'👑 Royal Procession'],
  [tinyButton,'🐜 Tiny Invasion'],
  [betterButton,'😎 Better Than You'],
+ [godButton,'👑 A God Was Born'],
  ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
  button.textContent=title;
@@ -1701,7 +1832,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
