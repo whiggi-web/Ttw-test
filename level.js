@@ -1064,6 +1064,141 @@ function updateSlideEntrance(dt){
  }
  return true;
 }
+
+/* TTW v0.60: The Royal Procession, a four-person theatrical entrance. */
+const processionButton=document.createElement('button');
+processionButton.textContent='👑 ROYAL PROCESSION';
+processionButton.style.cssText=entranceButton.style.cssText+';top:283px;background:#68420f;border-color:#ffe18b';
+document.body.appendChild(processionButton);
+let processionTime=-1;
+const processionActors=[];
+const processionColors=[0xffd25b,0x3355aa,0x992f6b,0x336c61];
+for(let i=0;i<4;i++){
+ const group=new THREE.Group();group.visible=false;group.name='TTW_PROCESSION_'+i;scene.add(group);
+ let actor=null;
+ if(wrestlerPack){
+  try{
+   actor=wrestlerPack.createWrestler('wrestler-'+String([3,7,12,18][i]).padStart(2,'0'));
+   group.add(actor.object);
+  }catch(e){console.warn('Procession actor unavailable',i,e);}
+ }
+ if(!actor){
+  const mesh=new THREE.Mesh(new THREE.CapsuleGeometry(.38,1.15,6,10),new THREE.MeshStandardMaterial({color:processionColors[i]}));
+  mesh.position.y=1;group.add(mesh);
+ }
+ const marker=new THREE.Mesh(new THREE.TorusGeometry(.52,.065,6,24),new THREE.MeshBasicMaterial({color:processionColors[i]}));
+ marker.rotation.x=Math.PI/2;marker.position.y=.06;group.add(marker);
+ processionActors.push({group,actor,state:''});
+}
+const processionCrown=new THREE.Group();scene.add(processionCrown);
+const crownGold=new THREE.MeshStandardMaterial({color:0xffd23b,metalness:.75,roughness:.2,emissive:0x5b3500});
+const crownBase=new THREE.Mesh(new THREE.CylinderGeometry(.43,.42,.21,9,1,true),crownGold);
+processionCrown.add(crownBase);
+for(let j=0;j<9;j++){
+ const a=j*Math.PI*2/9;
+ const tip=new THREE.Mesh(new THREE.ConeGeometry(.11,.44,4),crownGold);
+ tip.position.set(Math.cos(a)*.39,.27,Math.sin(a)*.39);
+ processionCrown.add(tip);
+}
+processionCrown.visible=false;
+const processionLight=new THREE.SpotLight(0xffd989,140,38,Math.PI/6,.55,1.2);
+processionLight.position.set(0,12,-26);processionLight.target.position.set(0,0,-27);
+scene.add(processionLight,processionLight.target);
+processionLight.visible=false;
+const processionBanner=document.createElement('div');
+processionBanner.style.cssText='position:fixed;top:13%;left:50%;transform:translateX(-50%);z-index:15;pointer-events:none;text-align:center;font:900 clamp(18px,4vw,46px) system-ui;letter-spacing:.13em;color:#ffe09a;text-shadow:0 0 18px #e0a83a,0 3px 6px #000;opacity:0;transition:opacity .3s';
+processionBanner.textContent='THE ROYAL PROCESSION';
+document.body.appendChild(processionBanner);
+const processionConfetti=[];
+for(let i=0;i<110;i++){
+ const mat=new THREE.MeshBasicMaterial({color:i%3===0?0xffffff:i%2?0xffca35:0x8d4ad0,side:THREE.DoubleSide});
+ const mesh=new THREE.Mesh(new THREE.PlaneGeometry(.12,.24),mat);
+ mesh.visible=false;scene.add(mesh);
+ processionConfetti.push({mesh,seed:i*2.39996,speed:1.3+(i%7)*.19});
+}
+function stopProcession(){
+ processionTime=-1;
+ processionLight.visible=false;
+ processionCrown.visible=false;
+ processionBanner.style.opacity='0';
+ for(const p of processionActors){p.group.visible=false;p.state='';}
+ for(const c of processionConfetti)c.mesh.visible=false;
+ processionButton.textContent='👑 ROYAL PROCESSION';
+}
+processionButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ if(entranceActor)entranceActor.object.rotation.set(0,0,0);
+ entranceBot.visible=false;
+ stopProcession();
+ processionTime=0;
+ processionLight.visible=true;
+ processionButton.textContent='👑 RESTART PROCESSION';
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton]){
+ b.addEventListener('click',stopProcession);
+}
+function updateProcession(dt){
+ if(processionTime<0)return false;
+ processionTime+=dt;
+ const t=processionTime;
+ const smooth=p=>{p=THREE.MathUtils.clamp(p,0,1);return p*p*(3-2*p);};
+ // The champion enters last, flanked by two hype wrestlers and a bodyguard.
+ const reveal=smooth((t-2.8)/1.8);
+ const travel=smooth((t-7.5)/17);
+ const z=THREE.MathUtils.lerp(-33,-7,travel);
+ const y=z< -26?1.2:z< -9?THREE.MathUtils.lerp(1.2,.06,(z+26)/17):.06;
+ for(let i=0;i<processionActors.length;i++){
+  const p=processionActors[i],g=p.group;
+  g.visible=t>(i===0?3.2:i===3?2:2.6);
+  let x=0,zz=z,yy=y;
+  if(i===1){x=-2.15;zz=z+2.1;}
+  if(i===2){x=2.15;zz=z+2.1;}
+  if(i===3){x=0;zz=z+4.2;}
+  if(t<7.5){zz=-33+(i===1||i===2?2:i===3?4:0);yy=1.2;}
+  if(t>=24&&i>0){x+=(i===1?-1:i===2?1:0)*smooth((t-24)/2);zz+=smooth((t-24)/2)*1.4;}
+  g.position.set(x,yy,zz);
+  g.rotation.y=Math.PI;
+  const state=t<7.5?'movement.idle':t<24?'movement.walk':'movement.idle';
+  if(p.actor){
+   if(p.state!==state){try{p.actor.play(state,{fade:.25,restart:true});}catch(e){console.warn('Procession clip unavailable',e);}p.state=state;}
+   p.actor.update(dt);
+   p.actor.object.position.set(0,0,0);
+  }
+ }
+ // The crown descends dramatically over the champion's head.
+ const leader=processionActors[0].group;
+ processionCrown.visible=t>=4.5&&t<25;
+ processionCrown.position.set(leader.position.x,leader.position.y+2.45+(t<6?(6-t)*.8:0),leader.position.z);
+ processionCrown.rotation.y+=dt*.45;
+ processionLight.position.set(leader.position.x,12,leader.position.z+1);
+ processionLight.target.position.set(leader.position.x,leader.position.y+1,leader.position.z);
+ processionBanner.style.opacity=t>4&&t<9||t>23&&t<28?'1':'0';
+ for(let i=0;i<processionConfetti.length;i++){
+  const c=processionConfetti[i],p=c.mesh;
+  const age=t-24-(i%11)*.09;
+  p.visible=age>=0&&age<5;
+  if(p.visible){
+   const a=c.seed;
+   p.position.set(Math.sin(a)*((i%8)*.5+.5)+Math.sin(age*1.4+a)*.45,6.8-age*c.speed, -7+Math.cos(a)*((i%7)*.52+.3));
+   p.rotation.set(age*2+a,age*1.3,age*3);
+  }
+ }
+ let eye,focus;
+ if(t<3){eye=entranceV(15,11,-10);focus=entranceV(0,3,-33);}
+ else if(t<7.5){eye=entranceV(-4.5,2.1,-25.5);focus=entranceV(0,3,-32);}
+ else if(t<12){eye=entranceV(-5,3,z+8);focus=entranceV(0,y+1.5,z);}
+ else if(t<17){eye=entranceV(6,4,z+5);focus=entranceV(0,y+1.3,z);}
+ else if(t<22){eye=entranceV(0,2.4,z+7);focus=entranceV(0,y+1.6,z);}
+ else if(t<25){eye=entranceV(-9,5,-2);focus=entranceV(0,1.8,-7);}
+ else{eye=entranceV(0,2.2,1);focus=entranceV(0,1.8,-7);}
+ camera.position.lerp(eye,Math.min(1,dt*8));
+ camera.lookAt(focus);
+ if(t>=30)stopProcession();
+ return true;
+}
+
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
@@ -1170,7 +1305,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
