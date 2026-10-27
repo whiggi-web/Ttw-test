@@ -1,0 +1,44 @@
+{
+  "default":        { "color": "#888888", "roughness": 0.8 },
+
+  "canvas":         { "color": "#dfe3ea", "roughness": 0.95 },
+  "ring_skirt":     { "color": "#101116", "roughness": 0.85 },
+  "ring_post":      { "color": "#a3acb6", "roughness": 0.35, "metalness": 0.8 },
+  "rope":           { "color": "#c4161c", "roughness": 0.6 },
+  "pad_red":        { "color": "#b3121a", "roughness": 0.7 },
+  "pad_blue":       { "color": "#1d4fbf", "roughness": 0.7 },
+  "pad_neutral":    { "color": "#e6e6e6", "roughness": 0.7 },
+  "steel":          { "color": "#7d858f", "roughness": 0.4, "metalness": 0.7 },
+
+  "floor_concrete": { "color": "#24252b", "roughness": 1.0 },
+  "floor_mat":      { "color": "#14161d", "roughness": 0.95 },
+  "barrier":        { "color": "#1b1c22", "roughness": 0.7 },
+  "table":          { "color": "#2b2f3a", "roughness": 0.7 },
+  "chair":          { "color": "#30343f", "roughness": 0.8 },
+  "monitor":        { "color": "#0b0c10", "roughness": 0.4, "emissive": "#2a4fa8", "emissiveIntensity": 0.8 },
+
+  "walkway":        { "color": "#0d0e12", "roughness": 0.45, "metalness": 0.2 },
+  "stage":          { "color": "#121318", "roughness": 0.55, "metalness": 0.1 },
+  "truss":          { "color": "#8a9099", "roughness": 0.4, "metalness": 0.8 },
+  "screen_frame":   { "color": "#08090c", "roughness": 0.6 },
+  "curtain":        { "color": "#050507", "roughness": 1.0 },
+
+  "led_blue":       { "color": "#1e66ff", "emissive": "#1e66ff", "emissiveIntensity": 2.0 },
+  "led_red":        { "color": "#ff1e3c", "emissive": "#ff1e3c", "emissiveIntensity": 2.0 },
+  "led_white":      { "color": "#ffffff", "emissive": "#dfe8ff", "emissiveIntensity": 1.6 },
+  "led_runner":     { "color": "#0a1430", "emissive": "#1a3fa8", "emissiveIntensity": 0.6, "roughness": 0.3 },
+  "light_fixture":  { "color": "#222222", "emissive": "#fff4dd", "emissiveIntensity": 3.0 },
+
+  "tier_concrete":  { "color": "#363841", "roughness": 0.95 },
+  "seat":           { "color": "#7a1218", "roughness": 0.8 },
+  "seat_floor":     { "color": "#1f2533", "roughness": 0.8 },
+  "wall":           { "color": "#17181f", "roughness": 0.9 },
+
+  "backstage_floor":{ "color": "#3a3a40", "roughness": 0.9 },
+  "backstage_wall": { "color": "#4b4f5a", "roughness": 0.9 },
+  "road_case":      { "color": "#18191d", "roughness": 0.6, "metalness": 0.3 },
+  "locker":         { "color": "#4a5a6e", "roughness": 0.5, "metalness": 0.5 },
+  "wood":           { "color": "#6b4a2e", "roughness": 0.8 },
+  "couch":          { "color": "#3b2a4a", "roughness": 0.9 },
+  "tray":           { "color": "#c9c9c9", "roughness": 0.3, "metalness": 0.6 }
+}
