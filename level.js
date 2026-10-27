@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { loadArena } from './assets/wrestling-arena/arena-loader.js';
+import { loadWrestler } from './assets/ttw-master-wrestler/loader.js';
 
 // TTW level foundation. Keep the world independent of wrestling mechanics.
 // Claude's arena will be mounted at (0,0,0) when its asset is ready.
@@ -153,7 +155,21 @@ for(let i=0;i<audienceCount;i++){
 torsos.instanceMatrix.needsUpdate=true;heads.instanceMatrix.needsUpdate=true;
 stadium.add(torsos,heads);
 
-// Temporary player capsule. This is independent of the future wrestling arena asset.
+// Load Claude's authored stadium and wrestler; retain existing scene as fallback if an asset fails.
+let loadedArena=null;
+try{
+ loadedArena=await loadArena('./assets/wrestling-arena/arena.json');
+ scene.add(loadedArena.group);
+ ring.visible=false;stadium.visible=false;testFloor.visible=false;grid.visible=false;
+ console.info('TTW: Claude wrestling arena loaded');
+}catch(error){console.error('TTW arena asset failed:',error);}
+let loadedWrestler=null;
+try{
+ loadedWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
+ console.info('TTW: Claude master wrestler loaded');
+}catch(error){console.error('TTW wrestler asset failed:',error);}
+
+// Temporary player capsule fallback. Hidden when the original wrestler is loaded.
 const player=new THREE.Group();
 player.name='TTW_TEST_PLAYER';
 const capsule=new THREE.Mesh(new THREE.CapsuleGeometry(.45,1.1,6,12),new THREE.MeshStandardMaterial({color:0x4fa8ff,roughness:.55}));
@@ -166,6 +182,12 @@ facing.position.set(0,1.25,-.48);
 player.add(facing);
 player.position.set(0,.97,0);
 scene.add(player);
+if(loadedWrestler){
+ capsule.visible=false;facing.visible=false;
+ player.add(loadedWrestler.object);
+ loadedWrestler.object.position.set(0,0,0);
+ loadedWrestler.play('idle');
+}
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
 const labelCanvas=document.createElement('canvas');
 labelCanvas.width=512;labelCanvas.height=128;
@@ -229,6 +251,7 @@ window.addEventListener('resize',()=>{
 renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
+ let isWalking=false;
  if(movement.active){
   const inputX=movement.x,inputZ=movement.y;
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
@@ -236,6 +259,7 @@ renderer.setAnimationLoop(()=>{
   const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
+   isWalking=true;
    player.position.addScaledVector(move,5*dt);
    player.position.x=THREE.MathUtils.clamp(player.position.x,-7.65,7.65);
    player.position.z=THREE.MathUtils.clamp(player.position.z,-7.65,7.65);
@@ -243,6 +267,14 @@ renderer.setAnimationLoop(()=>{
   }
  }
 
+ if(loadedWrestler){
+  const nextAnimation=isWalking?'run':'idle';
+  if(loadedWrestler._ttwState!==nextAnimation){
+   loadedWrestler.play(nextAnimation,{fade:.2});
+   loadedWrestler._ttwState=nextAnimation;
+  }
+  loadedWrestler.update(dt);
+ }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
