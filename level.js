@@ -343,7 +343,9 @@ const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=fa
 if(remoteWrestler){remote.add(remoteWrestler.object);remoteWrestler.play('idle');remoteWrestler._ttwState='idle';}
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
-let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle';
+let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
+const remoteTarget=new THREE.Vector3();
+let remoteTargetRotation=0;
 const combatHud=document.createElement('div');
 combatHud.style.cssText='position:fixed;right:16px;top:16px;z-index:12;color:white;font:700 16px system-ui;text-shadow:0 2px 5px black;pointer-events:none;text-align:right';
 document.body.appendChild(combatHud);
@@ -373,12 +375,13 @@ function startMultiplayer(){
  network.onmessage=e=>{
   let m;try{m=JSON.parse(e.data);}catch{return;}
   if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot===1?-1.4:1.4,1.2,0);playerHP=m.hp??100;refreshCombatHud();}
-  if(m.type==='waiting'||m.type==='peer_left'){remoteConnected=false;remote.visible=false;remoteHP=100;networkStatus.textContent='Waiting for player 2…';refreshCombatHud();}
-  if(m.type==='joined'){remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
+  if(m.type==='waiting'||m.type==='peer_left'){remoteHasTarget=false;remoteConnected=false;remote.visible=false;remoteHP=100;networkStatus.textContent='Waiting for player 2…';refreshCombatHud();}
+  if(m.type==='joined'){remoteHasTarget=false;remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
   if(m.type==='full'){networkStatus.textContent='Ring full (2 players maximum)';}
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
    const p=m.position||{};
-   if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remote.position.set(p.x,p.y,p.z);remote.rotation.y=m.rotation;}
+   if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remoteTarget.set(p.x,p.y,p.z);remoteTargetRotation=m.rotation;
+    if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','punch','fall'].includes(m.animation)?m.animation:'idle';
   }
   if(m.type==='health'){
@@ -387,7 +390,7 @@ function startMultiplayer(){
    if(m.hit==='other')showDamage(remote.position,'-11','#ffdf55');
   }
  };
- network.onclose=()=>{network=null;playerSlot=null;remoteConnected=false;remote.visible=false;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
+ network.onclose=()=>{network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=false;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
  network.onerror=()=>{networkStatus.textContent='Cannot reach multiplayer server';};
 }
 window.addEventListener('ttw:player-name',startMultiplayer);
@@ -397,6 +400,13 @@ function combatTick(dt){
   const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
   if(p.life<=0){scene.remove(p.sprite);p.mat.dispose();p.tex.dispose();damagePopups.splice(i,1);}
  }
+ if(remoteConnected&&remoteHasTarget){
+  // Render every frame between network updates instead of teleporting at 20Hz.
+  const blend=1-Math.exp(-dt*16);
+  remote.position.lerp(remoteTarget,blend);
+  let delta=THREE.MathUtils.euclideanModulo(remoteTargetRotation-remote.rotation.y+Math.PI,Math.PI*2)-Math.PI;
+  remote.rotation.y+=delta*blend;
+ }
  if(remoteWrestler&&remoteConnected){
   const state=remoteHP<=0?'fall':remoteAnim;
   if(remoteWrestler._ttwState!==state){remoteWrestler.play(state,{fade:.12});remoteWrestler._ttwState=state;}
@@ -404,7 +414,7 @@ function combatTick(dt){
  }
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
-  sendClock=0;
+  sendClock-=.05;
   sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?'punch':heldKeys.size||movement.active?'run':'idle'});
  }
 }
