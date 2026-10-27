@@ -481,6 +481,7 @@ const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=fa
 if(remoteWrestler){remote.add(remoteWrestler.object);playTTWAnimation(remoteWrestler,'idle');remoteWrestler._ttwState='idle';}
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
+let botMode=true,botRecover=0,botMoveClock=0,botStrikeClock=2.5;
 let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
 const remoteTarget=new THREE.Vector3();
 let remoteTargetRotation=0;
@@ -490,8 +491,9 @@ document.body.appendChild(combatHud);
 const networkStatus=document.createElement('div');
 networkStatus.style.cssText='position:fixed;right:16px;top:46px;z-index:12;color:#bcd0e4;font:12px system-ui;text-shadow:0 1px 3px black;pointer-events:none';
 document.body.appendChild(networkStatus);
-function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP | '+(remoteConnected?'OPPONENT '+remoteHP+' HP':'WAITING FOR PLAYER 2');}
+function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP | '+(botMode?'SPARRING BOT '+remoteHP+' HP':remoteConnected?'OPPONENT '+remoteHP+' HP':'WAITING FOR PLAYER 2');}
 refreshCombatHud();
+remote.visible=true;remote.position.set(1.8,1.2,-.6);
 const damagePopups=[];
 function showDamage(position,value,color){
  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;
@@ -506,15 +508,15 @@ const wsUrl=params.get('server')||(['localhost','127.0.0.1'].includes(location.h
 function sendNetwork(data){if(network?.readyState===WebSocket.OPEN)network.send(JSON.stringify(data));}
 function startMultiplayer(){
  if(network)return;
- if(!wsUrl){networkStatus.textContent='Multiplayer server not configured';return;}
+ if(!wsUrl){networkStatus.textContent='Offline sparring bot active';return;}
  networkStatus.textContent='Connecting…';
  try{network=new WebSocket(wsUrl);}catch{networkStatus.textContent='Invalid server URL';return;}
  network.onopen=()=>sendNetwork({type:'join',name:window.TTWPlayerName||'Wrestler'});
  network.onmessage=e=>{
   let m;try{m=JSON.parse(e.data);}catch{return;}
   if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot===1?-1.4:1.4,1.2,0);playerHP=m.hp??100;refreshCombatHud();}
-  if(m.type==='waiting'||m.type==='peer_left'){remoteHasTarget=false;remoteConnected=false;remote.visible=false;remoteHP=100;networkStatus.textContent='Waiting for player 2…';refreshCombatHud();}
-  if(m.type==='joined'){remoteHasTarget=false;remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
+  if(m.type==='waiting'||m.type==='peer_left'){botMode=true;remote.visible=true;remote.position.set(1.8,1.2,-.6);remoteHasTarget=false;remoteConnected=false;remote.visible=true;remoteHP=100;networkStatus.textContent='Sparring bot active';refreshCombatHud();}
+  if(m.type==='joined'){botMode=false;remoteHasTarget=false;remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
   if(m.type==='full'){networkStatus.textContent='Ring full (2 players maximum)';}
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
    const p=m.position||{};
@@ -528,12 +530,51 @@ function startMultiplayer(){
    if(m.hit==='other'){showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}
   }
  };
- network.onclose=()=>{network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=false;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
+ network.onclose=()=>{botMode=true;remote.visible=true;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=true;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
  network.onerror=()=>{networkStatus.textContent='Cannot reach multiplayer server';};
 }
 window.addEventListener('ttw:player-name',startMultiplayer);
 if(document.getElementById('home').hidden)startMultiplayer();
+function hitSparringBot(move){
+ if(!botMode||remoteHP<=0)return;
+ const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
+ if(Math.hypot(dx,dz)>2.2)return;
+ const damage=Math.round(({punch:11,jab:7,hook:13,uppercut:16,kick:15,clothesline:18}[move]||11)*ropeSpeedMultiplier);
+ remoteHP=Math.max(0,remoteHP-damage);
+ remoteReaction=remoteHP<=0?'falls.fall-backward':(attackMoves[move]?.reaction||'reactions.hit-front');
+ remoteReactionTime=.8;
+ showDamage(remote.position,'-'+damage,'#ffdf55');
+ refreshCombatHud();
+ if(remoteHP<=0){botRecover=10;remoteAnim='fall';}
+}
+function updateSparringBot(dt){
+ if(!botMode||document.getElementById('home').hidden===false)return;
+ if(remoteHP<=0){
+  botRecover-=dt;
+  if(botRecover<=0){remoteHP=100;remoteAnim='idle';remoteReactionTime=0;remote.position.set(1.8,1.2,-.6);refreshCombatHud();}
+  return;
+ }
+ const dx=player.position.x-remote.position.x,dz=player.position.z-remote.position.z;
+ const dist=Math.hypot(dx,dz);
+ remote.rotation.y=Math.atan2(-dx,-dz);
+ botMoveClock-=dt;
+ if(dist>1.45&&botMoveClock<=0){
+  const step=Math.min(dist-1.45,dt*1.75);
+  const nx=remote.position.x+dx/dist*step,nz=remote.position.z+dz/dist*step;
+  if(Math.abs(nx)<3.05&&Math.abs(nz)<3.05){remote.position.x=nx;remote.position.z=nz;}
+  remoteAnim='run';
+ }else remoteAnim='idle';
+ botStrikeClock-=dt;
+ if(dist<2&&botStrikeClock<=0&&playerHP>0){
+  botStrikeClock=3.2;
+  hitReaction='reactions.hit-front';hitReactionTime=.65;
+  playerHP=Math.max(0,playerHP-2);
+  showDamage(player.position,'-2','#ff6969');
+  refreshCombatHud();
+ }
+}
 function combatTick(dt){
+ updateSparringBot(dt);
  for(let i=damagePopups.length-1;i>=0;i--){
   const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
   if(p.life<=0){scene.remove(p.sprite);p.mat.dispose();p.tex.dispose();damagePopups.splice(i,1);}
@@ -545,7 +586,7 @@ function combatTick(dt){
   let delta=THREE.MathUtils.euclideanModulo(remoteTargetRotation-remote.rotation.y+Math.PI,Math.PI*2)-Math.PI;
   remote.rotation.y+=delta*blend;
  }
- if(remoteWrestler&&remoteConnected){
+ if(remoteWrestler&&(remoteConnected||botMode)){
   remoteReactionTime=Math.max(0,remoteReactionTime-dt);
   const state=remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
   if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
@@ -595,7 +636,7 @@ let contextMessageUntil=0;
 function showContextMessage(message){contextMessage.textContent=message;contextMessage.style.display='block';contextMessageUntil=performance.now()+2000;}
 let attackSequence=0;
 function performAttack(move){
- if(traversal||punchRemaining>0||playerHP<=0||!remoteConnected||document.getElementById('home').hidden===false)return;
+ if(traversal||punchRemaining>0||playerHP<=0||!(remoteConnected||botMode)||document.getElementById('home').hidden===false)return;
  const attack=attackMoves[move];if(!attack)return;
  activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
 }
@@ -657,7 +698,7 @@ function updateTraversal(dt){
 }
 const contextActions=[
  ['GRAPPLE','KeyG',()=>{
-  if(!remoteConnected||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
+  if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
   if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
   performAttack('clothesline');showContextMessage('Grapple test: clothesline');
  }],
@@ -671,7 +712,7 @@ const contextActions=[
  ['TURNBUCKLE','KeyT',()=>beginTraversal('climb')],
  ['SPECIAL','KeyF',()=>{
   if(traversal?.kind==='perched')return swanDive();
-  if(!remoteConnected||player.position.distanceTo(remote.position)>2.2)return showContextMessage('Get closer to use a special');
+  if(!(remoteConnected||botMode)||player.position.distanceTo(remote.position)>2.2)return showContextMessage('Get closer to use a special');
   performAttack('uppercut');showContextMessage('Special test: uppercut');
  }]
 ];
@@ -1115,7 +1156,7 @@ renderer.setAnimationLoop(()=>{
  }
  updateTraversal(dt);
  if(contextMessageUntil&&performance.now()>contextMessageUntil){contextMessage.style.display='none';contextMessageUntil=0;}
- if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch',move:activeAttack,momentum:ropeSpeedMultiplier});}
+ if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&playerHP>0){if(botMode)hitSparringBot(activeAttack);else if(remoteConnected)sendNetwork({type:'punch',move:activeAttack,momentum:ropeSpeedMultiplier});}}
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
