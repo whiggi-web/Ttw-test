@@ -287,7 +287,8 @@ function buildPrimitive(o, getMat) {
 function cylinderBetween(a, b, radius, mat) {
   const dir = new THREE.Vector3().subVectors(b, a);
   const len = dir.length();
-  const geo = new THREE.CylinderGeometry(radius, radius, len, 8);
+  // Subdivide along the rope so individual sections can bend on impact.
+  const geo = new THREE.CylinderGeometry(radius, radius, len, 8, 28);
   const mesh = new THREE.Mesh(geo, mat);
   mesh.position.copy(a).addScaledVector(dir, 0.5);
   mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
