@@ -831,6 +831,81 @@ function updateEpicEntrance(dt){
  }
  return true;
 }
+// Third entrance test: sprint down the ramp, slide under the bottom rope.
+const slideEntranceButton=document.createElement('button');
+slideEntranceButton.textContent='🏃 RUN & SLIDE ENTRANCE';
+slideEntranceButton.style.cssText=entranceButton.style.cssText+';top:238px;background:#176e83;border-color:#9be6f5';
+document.body.appendChild(slideEntranceButton);
+let slideEntranceTime=-1;
+slideEntranceButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;
+ cinematicBlackout.style.opacity='0';
+ resetStagePyro();
+ for(const p of epicShards)p.mesh.visible=false;
+ slideEntranceTime=0;
+ entranceBot.visible=true;
+ entranceBot.position.set(0,1.2,-34);
+ entranceBot.rotation.set(0,Math.PI,0);
+ if(entranceActor){entranceActor.object.rotation.set(0,0,0);entranceActor._entranceState=null;}
+ slideEntranceButton.textContent='🏃 RESTART RUN & SLIDE';
+});
+entranceButton.addEventListener('click',()=>{slideEntranceTime=-1;if(entranceActor)entranceActor.object.rotation.set(0,0,0);});
+slowEntranceButton.addEventListener('click',()=>{slideEntranceTime=-1;if(entranceActor)entranceActor.object.rotation.set(0,0,0);});
+function updateSlideEntrance(dt){
+ if(slideEntranceTime<0)return false;
+ slideEntranceTime+=dt;
+ const t=slideEntranceTime;
+ let animation='movement.run';
+ let pos;
+ let tilt=0;
+ if(t<1.5){pos=entranceV(0,1.2,-34);animation='movement.idle';}
+ else if(t<7){
+  const p=(t-1.5)/5.5;
+  const z=THREE.MathUtils.lerp(-34,-6,p);
+  const y=z<-26?1.2:z<-9?THREE.MathUtils.lerp(1.2,.06,(-26-z)/17):.06;
+  pos=entranceV(0,y,z);
+ }else if(t<8.5){
+  // Dive and slide from ringside under the bottom rope.
+  const p=(t-7)/1.5;
+  pos=entranceV(0,THREE.MathUtils.lerp(.5,1.45,p),THREE.MathUtils.lerp(-6,-1.7,p));
+  tilt=-Math.PI/2*Math.min(1,p*4);
+  animation='movement.idle';
+ }else{
+  const p=Math.min(1,(t-8.5)/1.2);
+  pos=entranceV(0,1.45,-1.7);
+  tilt=-Math.PI/2*(1-p);
+  animation='movement.idle';
+ }
+ entranceBot.visible=true;
+ entranceBot.position.copy(pos);
+ entranceBot.rotation.y=Math.PI;
+ if(entranceActor){
+  if(entranceActor._entranceState!==animation){
+   entranceActor.play(animation,{fade:.15,restart:true});
+   entranceActor._entranceState=animation;
+  }
+  entranceActor.object.rotation.x=tilt;
+  entranceActor.update(dt);
+ }
+ let eye,focus;
+ if(t<1.5){eye=entranceV(-8,3,-24);focus=entranceV(0,2,-33);}
+ else if(t<5.5){
+  eye=pos.clone().add(entranceV(-3,1.15,5.5));
+  focus=pos.clone().add(entranceV(0,1.2,0));
+ }else if(t<7.2){
+  eye=entranceV(-6,2.2,-1.8);focus=pos.clone().add(entranceV(0,1.1,0));
+ }else{
+  eye=entranceV(-5,2.6,2.5);focus=pos.clone().add(entranceV(0,.5,0));
+ }
+ camera.position.lerp(eye,Math.min(1,dt*12));
+ camera.lookAt(focus);
+ if(t>=10){
+  slideEntranceTime=-1;
+  slideEntranceButton.textContent='🏃 RUN & SLIDE ENTRANCE';
+  if(entranceActor)entranceActor.object.rotation.set(0,0,0);
+ }
+ return true;
+}
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
@@ -933,7 +1008,7 @@ renderer.setAnimationLoop(()=>{
   loadedWrestler.update(dt);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
