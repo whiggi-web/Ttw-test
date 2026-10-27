@@ -80,7 +80,7 @@ async def handler(ws):
                     continue
                 if not all(math.isfinite(v) for v in (x, y, z, rotation)):
                     continue
-                if not (-4.1 <= x <= 4.1 and -4.1 <= z <= 4.1 and 0 <= y <= 3):
+                if not (-4.1 <= x <= 4.1 and -4.1 <= z <= 4.1 and 0 <= y <= 5):
                     continue
                 last_position[ws] = {"x": x, "y": y, "z": z}
                 last_rotation[ws] = rotation
