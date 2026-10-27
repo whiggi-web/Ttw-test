@@ -164,6 +164,37 @@ try{
  ring.visible=false;stadium.visible=false;testFloor.visible=false;grid.visible=false;
  console.info('TTW: Claude wrestling arena loaded');
 }catch(error){console.error('TTW arena asset failed:',error);}
+// Live jumbotron countdown. Uses Claude's existing arena screen textures.
+let jumbotronCountdown=-1;
+let jumbotronLastSecond=null;
+const jumbotronButton=document.createElement('button');
+jumbotronButton.textContent='⏱ JUMBOTRON COUNTDOWN';
+jumbotronButton.style.cssText='position:fixed;top:148px;left:16px;z-index:15;padding:10px 14px;background:#163c69;color:white;border:1px solid #83baff;border-radius:8px;font:700 13px system-ui;cursor:pointer';
+document.body.appendChild(jumbotronButton);
+function setJumbotron(text,sub,colors){
+ if(!loadedArena)return;
+ loadedArena.setScreen('screen_main',{text,sub,colors});
+ loadedArena.setScreen('screen_side',{text,sub,colors});
+}
+jumbotronButton.addEventListener('click',()=>{
+ jumbotronCountdown=10;
+ jumbotronLastSecond=null;
+ jumbotronButton.textContent='⏱ RESTART COUNTDOWN';
+});
+function updateJumbotron(dt){
+ if(jumbotronCountdown<0)return;
+ jumbotronCountdown=Math.max(0,jumbotronCountdown-dt);
+ const second=Math.ceil(jumbotronCountdown);
+ if(second!==jumbotronLastSecond){
+  jumbotronLastSecond=second;
+  if(second>0)setJumbotron(String(second),'GET READY',['#07162c','#d52943']);
+  else setJumbotron('TTW','LET\'S WRESTLE!',['#410c1e','#ffb522']);
+ }
+ if(jumbotronCountdown===0){
+  jumbotronCountdown=-1;
+  jumbotronButton.textContent='⏱ JUMBOTRON COUNTDOWN';
+ }
+}
 let loadedWrestler=null;
 let remoteWrestler=null;
 let usingBatchOne=false;
@@ -775,6 +806,7 @@ window.addEventListener('resize',()=>{
 });
 renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
+ updateJumbotron(dt);
  ropeFacingTime=Math.max(0,ropeFacingTime-dt);
  ropeBounceDelay=Math.max(0,ropeBounceDelay-dt);
  ropeMovementLock=Math.max(0,ropeMovementLock-dt);
