@@ -583,7 +583,7 @@ function updateEntrance(dt){
  else{
   const ahead=entrancePose(Math.min(entranceDuration,t+.05)).pos;
   if(ahead.distanceToSquared(pose.pos)>.00001)
-   entranceBot.rotation.y=Math.atan2(-(ahead.x-pose.pos.x),-(ahead.z-pose.pos.z))+Math.PI;
+   entranceBot.rotation.y=Math.atan2(-(ahead.x-pose.pos.x),-(ahead.z-pose.pos.z));
  }
  if(entranceActor){
   if(entranceActor._entranceState!==pose.anim){
