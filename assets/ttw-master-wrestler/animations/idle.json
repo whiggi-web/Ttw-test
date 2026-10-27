@@ -1,0 +1,123 @@
+{
+  "name": "idle",
+  "description": "Relaxed stance: breathing through the chest, slow weight shift to the right foot and back.",
+  "duration": 2.4,
+  "loop": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "skeleton": "ttw-humanoid",
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.2, 2.5, 0, 0],
+        [2.4, 0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, -3, 0],
+        [1.2, 0, 4, 0],
+        [2.4, 0, -3, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.2, 0, 0, -1.5],
+        [2.4, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.02, 0],
+        [1.2, 0.015, -0.025, 0],
+        [2.4, 0, -0.02, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [1.2, 6, 0, 4],
+        [2.4, 6, 0, 4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [1.2, 14, 0, 0],
+        [2.4, 14, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [1.2, -12, 0, 0],
+        [2.4, -12, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [1.2, 5, 0, 7],
+        [2.4, 6, 0, 10]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [1.2, 6, 0, -5],
+        [2.4, 6, 0, -4]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.2, -1.5, 0, 0],
+        [2.4, 0, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [1.2, 6, 0, -4],
+        [2.4, 6, 0, -4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [1.2, 14, 0, 0],
+        [2.4, 14, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [1.2, -12, 0, 0],
+        [2.4, -12, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [1.2, 5, 0, -7],
+        [2.4, 6, 0, -10]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [1.2, 6, 0, 3],
+        [2.4, 6, 0, 4]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.2, 0, 0, 1.5],
+        [2.4, 0, 0, 0]
+      ]
+    }
+  }
+}
