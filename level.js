@@ -164,11 +164,11 @@ try{
  console.info('TTW: Claude wrestling arena loaded');
 }catch(error){console.error('TTW arena asset failed:',error);}
 let loadedWrestler=null;
-let botWrestler=null;
+let remoteWrestler=null;
 try{
  loadedWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
  console.info('TTW: Claude master wrestler loaded');
- botWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
+ remoteWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
 }catch(error){console.error('TTW wrestler asset failed:',error);}
 
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
@@ -338,73 +338,74 @@ if(loadedWrestler){
  loadedWrestler.object.position.set(0,0,0);
  loadedWrestler.play('idle');
 }
-// Local sparring bot. Damage is applied once at the punch impact frame.
-const bot=new THREE.Group();
-bot.name='TTW_SPARRING_BOT';
-bot.position.set(2.2,1.2,-1.1);
-if(botWrestler){
- bot.add(botWrestler.object);
- botWrestler.play('idle');
- botWrestler._ttwState='idle';
-}else{
- const fallback=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xdd5533}));
- fallback.position.y=1;bot.add(fallback);
-}
-scene.add(bot);
-let playerHP=100,botHP=100,botAttackClock=1.5,botPunchTime=0,playerPunchImpact=-1,botKnockoutTime=0;
+// Two-player online test: state is relayed through the companion WebSocket server.
+const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=false;remote.position.set(1.5,1.2,0);
+if(remoteWrestler){remote.add(remoteWrestler.object);remoteWrestler.play('idle');remoteWrestler._ttwState='idle';}
+else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
+scene.add(remote);
+let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle';
 const combatHud=document.createElement('div');
 combatHud.style.cssText='position:fixed;right:16px;top:16px;z-index:12;color:white;font:700 16px system-ui;text-shadow:0 2px 5px black;pointer-events:none;text-align:right';
 document.body.appendChild(combatHud);
-function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP   |   BOT '+botHP+' HP';}
+const networkStatus=document.createElement('div');
+networkStatus.style.cssText='position:fixed;right:16px;top:46px;z-index:12;color:#bcd0e4;font:12px system-ui;text-shadow:0 1px 3px black;pointer-events:none';
+document.body.appendChild(networkStatus);
+function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP | '+(remoteConnected?'OPPONENT '+remoteHP+' HP':'WAITING FOR PLAYER 2');}
 refreshCombatHud();
 const damagePopups=[];
 function showDamage(position,value,color){
  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;
  const ctx=canvas.getContext('2d');ctx.font='bold 80px system-ui';ctx.textAlign='center';ctx.fillStyle=color;ctx.strokeStyle='#111';ctx.lineWidth=9;
  ctx.strokeText(value,128,88);ctx.fillText(value,128,88);
- const tex=new THREE.CanvasTexture(canvas);
- const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
+ const tex=new THREE.CanvasTexture(canvas),mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
  const sprite=new THREE.Sprite(mat);sprite.position.copy(position);sprite.position.y+=2.7;sprite.scale.set(1.5,.75,1);scene.add(sprite);
  damagePopups.push({sprite,mat,tex,life:.85});
 }
+const params=new URLSearchParams(location.search);
+const wsUrl=params.get('server')||(['localhost','127.0.0.1'].includes(location.hostname)?'ws://'+location.hostname+':8765':'');
+function sendNetwork(data){if(network?.readyState===WebSocket.OPEN)network.send(JSON.stringify(data));}
+function startMultiplayer(){
+ if(network)return;
+ if(!wsUrl){networkStatus.textContent='Multiplayer server not configured';return;}
+ networkStatus.textContent='Connecting…';
+ try{network=new WebSocket(wsUrl);}catch{networkStatus.textContent='Invalid server URL';return;}
+ network.onopen=()=>sendNetwork({type:'join',name:window.TTWPlayerName||'Wrestler'});
+ network.onmessage=e=>{
+  let m;try{m=JSON.parse(e.data);}catch{return;}
+  if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot===1?-1.4:1.4,1.2,0);playerHP=m.hp??100;refreshCombatHud();}
+  if(m.type==='waiting'||m.type==='peer_left'){remoteConnected=false;remote.visible=false;remoteHP=100;networkStatus.textContent='Waiting for player 2…';refreshCombatHud();}
+  if(m.type==='joined'){remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
+  if(m.type==='full'){networkStatus.textContent='Ring full (2 players maximum)';}
+  if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
+   const p=m.position||{};
+   if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remote.position.set(p.x,p.y,p.z);remote.rotation.y=m.rotation;}
+   remoteAnim=['idle','run','punch','fall'].includes(m.animation)?m.animation:'idle';
+  }
+  if(m.type==='health'){
+   playerHP=m.self;remoteHP=m.other;refreshCombatHud();
+   if(m.hit==='self')showDamage(player.position,'-11','#ff6969');
+   if(m.hit==='other')showDamage(remote.position,'-11','#ffdf55');
+  }
+ };
+ network.onclose=()=>{network=null;playerSlot=null;remoteConnected=false;remote.visible=false;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
+ network.onerror=()=>{networkStatus.textContent='Cannot reach multiplayer server';};
+}
+window.addEventListener('ttw:player-name',startMultiplayer);
+if(document.getElementById('home').hidden)startMultiplayer();
 function combatTick(dt){
  for(let i=damagePopups.length-1;i>=0;i--){
   const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
   if(p.life<=0){scene.remove(p.sprite);p.mat.dispose();p.tex.dispose();damagePopups.splice(i,1);}
  }
- const dx=player.position.x-bot.position.x,dz=player.position.z-bot.position.z;
- const dist=Math.hypot(dx,dz);
- const facingAngle=Math.atan2(-dx,-dz);
- // Never rotate a knocked-out wrestler while the fall pose is held.
- if(botHP>0)bot.rotation.y=facingAngle;
- if(botHP<=0){
-  if(botKnockoutTime===0){botKnockoutTime=10;botPunchTime=0;}
-  botKnockoutTime=Math.max(0,botKnockoutTime-dt);
-  if(botKnockoutTime===0){botHP=100;botAttackClock=1.2;refreshCombatHud();}
+ if(remoteWrestler&&remoteConnected){
+  const state=remoteHP<=0?'fall':remoteAnim;
+  if(remoteWrestler._ttwState!==state){remoteWrestler.play(state,{fade:.12});remoteWrestler._ttwState=state;}
+  remoteWrestler.update(dt);
  }
- let botMoving=false;
- if(botHP>0&&playerHP>0){
-  if(dist>1.65&&dist<15){
-   const amount=Math.min(dist-1.55,dt*2.3);
-   const nx=bot.position.x+dx/dist*amount,nz=bot.position.z+dz/dist*amount;
-   if(Math.abs(nx)<2.9&&Math.abs(nz)<2.9){bot.position.x=nx;bot.position.z=nz;botMoving=true;}
-  }
-  botAttackClock-=dt;
-  if(dist<=2.0&&botAttackClock<=0){
-   botAttackClock=1.7;
-   botPunchTime=.8;
-  }
-  if(botPunchTime>0){
-   const previous=botPunchTime;botPunchTime=Math.max(0,botPunchTime-dt);
-   if(previous>.5&&botPunchTime<=.5&&dist<=2.1){
-    playerHP=Math.max(0,playerHP-1);showDamage(player.position,'-1','#ff6969');refreshCombatHud();
-   }
-  }
- }
- if(botWrestler){
-  const state=botHP<=0?'fall':botPunchTime>0?'punch':botMoving?'run':'idle';
-  if(botWrestler._ttwState!==state){botWrestler.play(state,{fade:.12});botWrestler._ttwState=state;}
-  botWrestler.update(dt);
+ sendClock+=dt;
+ if(sendClock>=.05&&playerSlot!==null){
+  sendClock=0;
+  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?'punch':heldKeys.size||movement.active?'run':'idle'});
  }
 }
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
@@ -447,7 +448,7 @@ window.addEventListener('blur',()=>heldKeys.clear());
 window.addEventListener('pointerdown',e=>{
  if(e.button!==0||document.getElementById('home').hidden===false)return;
  if(e.target instanceof Element&&e.target.closest('button,input,textarea,select,a,#controllerSlot'))return;
- if(punchRemaining>0||playerHP<=0)return;
+ if(punchRemaining>0||playerHP<=0||!remoteConnected)return;
  punchRemaining=.8;
  playerPunchImpact=.3; // Match Claude's 0.8-second punch animation.
 },{capture:true});
@@ -535,17 +536,7 @@ renderer.setAnimationLoop(()=>{
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
- if(playerPunchImpact>=0){
-  playerPunchImpact-=dt;
-  if(playerPunchImpact<0&&botHP>0&&playerHP>0){
-   const separation=player.position.distanceTo(bot.position);
-   const towardBot=new THREE.Vector3(bot.position.x-player.position.x,0,bot.position.z-player.position.z).normalize();
-   const facingDirection=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
-   if(separation<=2.2&&facingDirection.dot(towardBot)>.05){
-    botHP=Math.max(0,botHP-11);if(botHP===0)botKnockoutTime=10;showDamage(bot.position,'-11','#ffdf55');refreshCombatHud();
-   }
-  }
- }
+ if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch'});}
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
