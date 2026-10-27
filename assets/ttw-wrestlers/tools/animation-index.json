@@ -1,0 +1,180 @@
+[
+  {
+    "id": "movement.idle",
+    "name": "Idle",
+    "category": "movement",
+    "file": "animations/movement/idle.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "idle",
+      "loop"
+    ]
+  },
+  {
+    "id": "movement.walk",
+    "name": "Walk",
+    "category": "movement",
+    "file": "animations/movement/walk.json",
+    "duration": 1.0,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop"
+    ]
+  },
+  {
+    "id": "movement.run",
+    "name": "Run",
+    "category": "movement",
+    "file": "animations/movement/run.json",
+    "duration": 0.64,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop"
+    ]
+  },
+  {
+    "id": "striking.punch",
+    "name": "Punch",
+    "category": "striking",
+    "file": "animations/striking/punch.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right"
+    ]
+  },
+  {
+    "id": "striking.kick",
+    "name": "Kick",
+    "category": "striking",
+    "file": "animations/striking/kick.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right",
+      "kick"
+    ]
+  },
+  {
+    "id": "reactions.hit-front",
+    "name": "Hit reaction, front",
+    "category": "reactions",
+    "file": "animations/reactions/hit-front.json",
+    "duration": 0.75,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "front"
+    ]
+  },
+  {
+    "id": "reactions.hit-back",
+    "name": "Hit reaction, back",
+    "category": "reactions",
+    "file": "animations/reactions/hit-back.json",
+    "duration": 0.75,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "back"
+    ]
+  },
+  {
+    "id": "falls.fall-backward",
+    "name": "Fall backwards",
+    "category": "falls",
+    "file": "animations/falls/fall-backward.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "back",
+      "ends-lying-back"
+    ]
+  },
+  {
+    "id": "falls.getup-back",
+    "name": "Get up from back",
+    "category": "falls",
+    "file": "animations/falls/getup-back.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "recover"
+    ],
+    "tags": [
+      "getup",
+      "starts-lying-back"
+    ]
+  },
+  {
+    "id": "ropes.rope-lean",
+    "name": "Rope lean",
+    "category": "ropes",
+    "file": "animations/ropes/rope-lean.json",
+    "duration": 0.7,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "rope_contact"
+    ],
+    "tags": [
+      "ropes",
+      "hold",
+      "ends-rope-lean"
+    ]
+  },
+  {
+    "id": "ropes.rope-rebound",
+    "name": "Rope rebound",
+    "category": "ropes",
+    "file": "animations/ropes/rope-rebound.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "speedCurve",
+    "events": [
+      "rope_contact",
+      "rebound",
+      "release"
+    ],
+    "tags": [
+      "ropes",
+      "starts-rope-lean",
+      "chains-to-run"
+    ]
+  }
+]

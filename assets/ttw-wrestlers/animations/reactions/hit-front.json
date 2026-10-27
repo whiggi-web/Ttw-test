@@ -1,0 +1,160 @@
+{
+  "id": "reactions.hit-front",
+  "name": "Hit reaction, front",
+  "category": "reactions",
+  "description": "Snapped back by a hit to the front, one step back, recover to stance.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 0.75,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "baked",
+    "commit": "hipsXZ",
+    "endOffset": [0, 0, 0.12]
+  },
+  "events": [
+    {
+      "time": 0.0,
+      "name": "hit_received",
+      "zone": "head"
+    },
+    {
+      "time": 0.6,
+      "name": "recover"
+    }
+  ],
+  "tags": ["reaction", "front"],
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, 10, 0, 0],
+        [0.3, 2, 0, 0],
+        [0.75, 0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, 12, 0, 4],
+        [0.3, 2, 0, 0],
+        [0.75, 0, 0, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, 5, 0, 0],
+        [0.3, 2, 0, 0],
+        [0.75, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.02, 0],
+        [0.08, 0, -0.04, 0.06],
+        [0.3, 0, -0.06, 0.13],
+        [0.75, 0, -0.02, 0.12]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.08, 6, 0, 4],
+        [0.3, 6, 0, 4],
+        [0.75, 6, 0, 4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.08, 40, 0, 0],
+        [0.3, 36, 0, 0],
+        [0.75, 14, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.08, -18, 0, 0],
+        [0.3, -18, 0, 0],
+        [0.75, -12, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.08, 24, 0, -34],
+        [0.3, 16, 0, -20],
+        [0.75, 6, 0, 10]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.08, 8, 0, -4],
+        [0.3, 20, 0, -4],
+        [0.75, 6, 0, -4]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, 26, 0, 0],
+        [0.3, 8, 0, 0],
+        [0.75, 0, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.08, 6, 0, -4],
+        [0.3, 10, 0, -4],
+        [0.75, 6, 0, -4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.08, 40, 0, 0],
+        [0.3, 36, 0, 0],
+        [0.75, 14, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.08, -18, 0, 0],
+        [0.3, -26, 0, 0],
+        [0.75, -12, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [0.08, 24, 0, 34],
+        [0.3, 16, 0, 20],
+        [0.75, 6, 0, -10]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.08, 8, 0, 4],
+        [0.3, -16, 0, 4],
+        [0.75, 6, 0, 4]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, 8, 0, 0],
+        [0.3, 2, 0, 0],
+        [0.75, 0, 0, 0]
+      ]
+    }
+  }
+}
