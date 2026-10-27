@@ -218,9 +218,36 @@ if(loadedArena){
  });
 }
 function ropeSideAt(x,z){
- const dx=Math.abs(x),dz=Math.abs(z);
- if(Math.max(dx,dz)<ropeEdge-.8||Math.max(dx,dz)>ropeEdge+1)return null;
- return dz>dx?(z>0?'north':'south'):(x>0?'east':'west');
+ const ax=Math.abs(x),az=Math.abs(z);
+ if(Math.max(ax,az)<2.6||Math.max(ax,az)>4.1)return null;
+ return az>ax?(z>0?'north':'south'):(x>0?'east':'west');
+}
+function ropeCollision(x,z,dt){
+ if(player.position.y<.7||player.position.y>1.7)return {x,z};
+ const edge=3.5, radius=.38, give=.24;
+ const side=ropeSideAt(x,z);
+ if(!side)return {x,z};
+ const axis=side==='east'||side==='west'?'x':'z';
+ const sign=side==='east'||side==='north'?1:-1;
+ const current=player.position[axis]*sign;
+ const proposed=(axis==='x'?x:z)*sign;
+ // Wrestlers on the ring side compress the ropes before springing backward.
+ if(current<edge+radius&&proposed>edge-radius){
+  const spring=ropeSprings[side];
+  const compression=Math.max(0,proposed-(edge-radius));
+  spring.bend=Math.max(spring.bend,Math.min(give,compression));
+  if(proposed>=edge-radius+give){
+   if(spring.impact<=0){
+    spring.velocity+=3;
+    spring.impact=.45;
+    ropeRecoil.set(axis==='x'?-sign*5:0,0,axis==='z'?-sign*5:0);
+    ropeRecoilTime=.38;
+   }
+   if(axis==='x')x=sign*(edge-radius+give);
+   else z=sign*(edge-radius+give);
+  }
+ }
+ return {x,z};
 }
 function updateRopes(dt){
  for(const side of ropeSides){
@@ -378,11 +405,13 @@ renderer.setAnimationLoop(()=>{
     const tryAxis=(axis,amount)=>{
      const nx=player.position.x+(axis==='x'?amount:0);
      const nz=player.position.z+(axis==='z'?amount:0);
-     const floor=arenaFloorAt(nx,nz,player.position.y);
-     if(floor>=player.position.y-.65 && floor<=player.position.y+.42 && !blockedByArena(nx,nz,floor)){
-      player.position[axis]+=amount;
+     const adjusted=ropeCollision(nx,nz,dt);
+     const tx=adjusted.x,tz=adjusted.z;
+     const floor=arenaFloorAt(tx,tz,player.position.y);
+     if(floor>=player.position.y-.65 && floor<=player.position.y+.42 && !blockedByArena(tx,tz,floor)){
+      player.position[axis]=axis==='x'?tx:tz;
       player.position.y=floor;
-     }else if(floor<player.position.y-.65 && !blockedByArena(nx,nz,player.position.y)){
+     }else if(floor<player.position.y-.65 && !blockedByArena(tx,tz,player.position.y)){
       player.position[axis]+=amount;
       player.position.y=Math.max(floor,player.position.y-3*dt);
      }
