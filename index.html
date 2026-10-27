@@ -11,13 +11,16 @@ canvas{display:block;touch-action:none}
 #hud small{color:#a9e4c3}#help{position:fixed;bottom:14px;left:16px;color:#b9c3d6;pointer-events:none}
 #home{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:linear-gradient(140deg,rgba(8,12,22,.96),rgba(26,20,33,.94));padding:20px}#home[hidden]{display:none}#homePanel{width:min(420px,100%);padding:30px 26px;background:#1d2330;border:1px solid #48576e;border-radius:18px;text-align:center;box-shadow:0 20px 70px #0008}#homePanel h1{font-size:clamp(38px,9vw,62px);margin:0;letter-spacing:.12em}#homePanel p{color:#c3ccdc}#homePanel label{display:block;text-align:left;margin:20px 0 8px;font-weight:700}#wrestlerName{width:100%;padding:14px;border-radius:9px;background:#101620;border:1px solid #78889d;color:white;font:inherit;font-size:18px}#enterRing{width:100%;padding:15px;margin-top:16px;background:#49d5a2;color:#0b1b19;border:0;border-radius:9px;font:inherit;font-size:18px;font-weight:800;cursor:pointer}#enterRing:focus-visible,#wrestlerName:focus-visible{outline:3px solid #f6ce68;outline-offset:2px}#homeError{color:#ffaaa8;min-height:1.2em;margin:10px 0 0}
 body.ttw-clean > :not(canvas):not(#home):not(#viewToggle):not(script){visibility:hidden!important}
+body.ttw-clean #controllerSlot,body.ttw-clean #controllerSlot *{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+body.ttw-clean #controllerSlot{display:none!important;background:transparent!important}
+body.ttw-clean #hud,body.ttw-clean #help{display:none!important}
 #viewToggle{position:fixed;top:12px;right:12px;z-index:50;border:1px solid #ffe1a3;background:#1d2636e8;color:#fff;border-radius:9px;padding:10px 12px;font:700 12px system-ui;cursor:pointer;box-shadow:0 3px 12px #0008}
 #viewToggle[hidden]{display:none}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
 </head>
 <body>
-<div id="hud"><strong>TTW</strong><small>DEV: Tiny Invasion v0.63</small></div>
+<div id="hud"><strong>TTW</strong><small>DEV: Controller Hide Fix v0.64</small></div>
 <div id="help">WASD move · Shift sprint · Click punch · Drag to orbit · Scroll/pinch zoom</div>
 <div id="controllerSlot"></div>
 <button id="viewToggle" type="button" hidden aria-pressed="false">👁 HIDE INTERFACE</button>
