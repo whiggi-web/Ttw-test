@@ -1200,6 +1200,130 @@ function updateProcession(dt){
 }
 
 
+
+/* v0.63: Tiny Invasion. Fifteen lightweight half-sized wrestlers chase a full-sized star. */
+const tinyButton=document.createElement('button');
+tinyButton.textContent='🐜 TINY INVASION';
+tinyButton.type='button';
+let tinyTime=-1;
+const tinyMob=[];
+const tinyMatColors=[0xed455c,0x47b8e8,0xf4b33b,0x80d66d,0x9c76e8];
+for(let i=0;i<15;i++){
+ const group=new THREE.Group();group.name='TTW_TINY_'+(i+1);group.scale.setScalar(.5);group.visible=false;scene.add(group);
+ const suit=new THREE.MeshStandardMaterial({color:tinyMatColors[i%5],roughness:.72});
+ const skin=new THREE.MeshStandardMaterial({color:0xe8b58b,roughness:.8});
+ const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.35,.68,4,8),suit);torso.position.y=1.1;group.add(torso);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.29,8,6),skin);head.position.y=1.94;group.add(head);
+ const limbs=[];
+ for(const side of [-1,1]){
+  const arm=new THREE.Group();arm.position.set(side*.4,1.46,0);
+  const armMesh=new THREE.Mesh(new THREE.CapsuleGeometry(.105,.52,3,6),skin);armMesh.position.y=-.3;arm.add(armMesh);group.add(arm);limbs.push(arm);
+  const leg=new THREE.Group();leg.position.set(side*.19,.75,0);
+  const legMesh=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.57,3,6),suit);legMesh.position.y=-.32;leg.add(legMesh);group.add(leg);limbs.push(leg);
+ }
+ tinyMob.push({group,limbs,position:new THREE.Vector3(0,0,-40),last:new THREE.Vector3(0,0,-40)});
+}
+function tinyFloor(z){return z< -26?1.2:z< -9?THREE.MathUtils.lerp(1.2,.06,(z+26)/17):z> -4.4&&z<4.4?1.2:.06;}
+function tinyPath(points,p){
+ const u=THREE.MathUtils.clamp(p,0,1)*(points.length-1),i=Math.min(points.length-2,Math.floor(u));
+ return new THREE.Vector3().lerpVectors(new THREE.Vector3(...points[i]),new THREE.Vector3(...points[i+1]),u-i);
+}
+function stopTiny(){
+ tinyTime=-1;
+ for(const m of tinyMob)m.group.visible=false;
+ tinyButton.textContent='🐜 TINY INVASION';
+ if(entranceActor)entranceActor.object.rotation.set(0,0,0);
+}
+tinyButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ if(typeof stopProcession==='function')stopProcession();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ entranceBot.visible=true;
+ if(entranceActor){entranceActor.object.rotation.set(0,0,0);entranceActor._entranceState=null;}
+ stopTiny();tinyTime=0;tinyButton.textContent='🐜 RESTART TINY INVASION';
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton])b.addEventListener('click',stopTiny);
+function updateTiny(dt){
+ if(tinyTime<0)return false;
+ tinyTime+=dt;
+ const t=tinyTime;
+ // Star: stroll down ramp, spot the mob, flee around right side of ring, slide into ring.
+ let hero,anim='movement.walk',tilt=0;
+ if(t<8){
+  const z=THREE.MathUtils.lerp(-34,-18,THREE.MathUtils.clamp(t/8,0,1));
+  hero=new THREE.Vector3(0,tinyFloor(z),z);
+ }else if(t<9.4){
+  hero=new THREE.Vector3(0,tinyFloor(-18),-18);anim='movement.idle';
+ }else if(t<16){
+  const p=(t-9.4)/6.6;
+  hero=tinyPath([[0,0,-18],[0,0,-7],[6,0,-6],[7,0,0],[6,0,5],[3.8,0,6]],p);
+  hero.y=tinyFloor(hero.z);anim='movement.run';
+ }else if(t<19.2){
+  const p=(t-16)/3.2;
+  hero=tinyPath([[3.8,0,6],[2,0,5],[0,0,4.2],[0,0,2.2]],p);
+  hero.y=THREE.MathUtils.lerp(.06,1.2,THREE.MathUtils.clamp((p-.34)*3,0,1));
+  tilt=-Math.sin(Math.PI*THREE.MathUtils.clamp((p-.28)*1.5,0,1))*1.05;
+  anim='movement.idle';
+ }else{hero=new THREE.Vector3(0,1.2,2.2);anim='movement.idle';}
+ entranceBot.visible=true;
+ const prev=entranceBot.position.clone();
+ entranceBot.position.copy(hero);
+ if(hero.distanceToSquared(prev)>.00002)entranceBot.rotation.y=Math.atan2(-(hero.x-prev.x),-(hero.z-prev.z));
+ if(entranceActor){
+  if(entranceActor._entranceState!==anim){
+   try{entranceActor.play(anim,{fade:.18,restart:true});}catch(e){console.warn('Tiny Invasion hero clip',e);}
+   entranceActor._entranceState=anim;
+  }
+  entranceActor.object.rotation.x=tilt;
+  entranceActor.update(dt);
+ }
+ // Mob: delayed wave, seven circle the left, eight circle the right.
+ // They stay on the arena floor, never cut across the ring or its ropes.
+ for(let i=0;i<tinyMob.length;i++){
+  const m=tinyMob[i],g=m.group,delay=(i%5)*.23+Math.floor(i/5)*.17;
+  const age=t-7.2-delay;
+  g.visible=age>=0&&age<27;
+  if(!g.visible)continue;
+  let pos;
+  const lane=(i%5-2)*.32;
+  const side=i<7?-1:1;
+  const ringRoute=[
+   [lane,0,-30],[lane,0,-18],[side*(2.3+Math.abs(lane)),0,-8],
+   [side*6.5,0,-6],[side*7.1,0,0],[side*6.4,0,5.6],
+   [side*3.4,0,6.6],[side*1.4,0,5.3]
+  ];
+  if(age<12.7){
+   pos=tinyPath(ringRoute,age/12.7);
+  }else if(age<15.1){
+   pos=tinyPath(ringRoute,1);
+  }else{
+   // Comically flee in reverse, back to the curtain.
+   pos=tinyPath([...ringRoute].reverse(),(age-15.1)/11.9);
+  }
+  pos.y=tinyFloor(pos.z);
+  m.last.copy(m.position);m.position.copy(pos);
+  g.position.copy(pos);
+  const delta=pos.clone().sub(m.last);
+  if(delta.lengthSq()>.000001)g.rotation.y=Math.atan2(-delta.x,-delta.z);
+  const running=age<12.7||age>=15.1;
+  for(let j=0;j<m.limbs.length;j++)m.limbs[j].rotation.x=running?Math.sin(t*14+i*1.2+(j%2)*Math.PI)*.75:0;
+ }
+ // Broadcast coverage: reveal, shock, chase tracking, split-screen-style overhead, ring escape.
+ let eye,focus;
+ if(t<7){eye=entranceV(-5,3.1,hero.z+6);focus=hero.clone().add(entranceV(0,1.2,0));}
+ else if(t<10){eye=entranceV(6,5,-12);focus=entranceV(0,1,-20);}
+ else if(t<13){eye=hero.clone().add(entranceV(5,3,6));focus=hero.clone().add(entranceV(0,1,0));}
+ else if(t<16){eye=entranceV(0,17,12);focus=entranceV(0,0,0);}
+ else if(t<20){eye=entranceV(9,4,10);focus=hero.clone().add(entranceV(0,.8,0));}
+ else if(t<25){eye=entranceV(0,13,12);focus=entranceV(0,1,2);}
+ else{eye=entranceV(-7,6,-5);focus=entranceV(0,1,-15);}
+ camera.position.lerp(eye,Math.min(1,dt*9));
+ camera.lookAt(focus);
+ if(t>=36){stopTiny();entranceBot.visible=false;}
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -1223,7 +1347,8 @@ for(const [button,title] of [
  [entranceButton,'🎬 Bot Entrance'],
  [slowEntranceButton,'✨ Epic Walk Entrance'],
  [slideEntranceButton,'🏃 Run & Slide Entrance'],
- [processionButton,'👑 Royal Procession']
+ [processionButton,'👑 Royal Procession'],
+ [tinyButton,'🐜 Tiny Invasion']
 ]){
  button.textContent=title;
  button.style.cssText='position:relative;inset:auto;top:auto;left:auto;width:100%;flex:none;text-align:left;z-index:auto;padding:13px 12px;background:#30324c;color:#fff;border:1px solid #656987;border-radius:8px;font:700 13px system-ui;cursor:pointer';
@@ -1340,7 +1465,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
