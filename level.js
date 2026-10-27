@@ -297,12 +297,13 @@ function updateRopes(dt){
 }
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 let ropeSpeedMultiplier=1,ropeFacingTime=0;
-let ropeAnimationTime=0,ropeBounceDelay=0;
+let ropeAnimationTime=0,ropeBounceDelay=0,ropeMovementLock=0;
 const ropeLeanDuration=.7,ropeReboundDuration=.8;
 function registerRopeBounce(inward){
  ropeSpeedMultiplier=Math.min(1.30,Math.round((ropeSpeedMultiplier+.10)*100)/100);
  ropeFacingTime=1;
  ropeBounceDelay=1;
+ ropeMovementLock=1.5;
  if(usingBatchOne)ropeAnimationTime=ropeLeanDuration+ropeReboundDuration;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
 }
@@ -527,6 +528,7 @@ renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
  ropeFacingTime=Math.max(0,ropeFacingTime-dt);
  ropeBounceDelay=Math.max(0,ropeBounceDelay-dt);
+ ropeMovementLock=Math.max(0,ropeMovementLock-dt);
  ropeAnimationTime=Math.max(0,ropeAnimationTime-dt);
  updateRopes(dt);
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
@@ -538,7 +540,7 @@ renderer.setAnimationLoop(()=>{
  const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
  // Losing continuous movement resets all accumulated rope momentum.
  if(playerHP<=0||Math.abs(inputX)+Math.abs(inputZ)<=.001){ropeSpeedMultiplier=1;}
- if(playerHP>0&&ropeBounceDelay<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
+ if(playerHP>0&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
   const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
