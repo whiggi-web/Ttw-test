@@ -196,7 +196,7 @@ function updateJumbotron(dt){
  if(second!==jumbotronLastSecond){
   jumbotronLastSecond=second;
   if(second>0)setJumbotron(String(second),'GET READY',['#07162c','#d52943']);
-  else setJumbotron('TTW','LET\\'S WRESTLE!',['#410c1e','#ffb522']);
+  else setJumbotron('TTW','LET\'S WRESTLE!',['#410c1e','#ffb522']);
  }
  if(jumbotronCountdown===0){
   jumbotronCountdown=-1;
