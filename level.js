@@ -284,7 +284,7 @@ function updateRopes(dt){
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 let ropeSpeedMultiplier=1,ropeFacingTime=0;
 function registerRopeBounce(inward){
- ropeSpeedMultiplier*=1.10;
+ ropeSpeedMultiplier=Math.min(1.30,Math.round((ropeSpeedMultiplier+.10)*100)/100);
  ropeFacingTime=.38;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
 }
@@ -516,6 +516,8 @@ renderer.setAnimationLoop(()=>{
  const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
  const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
  const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
+ // Losing continuous movement resets all accumulated rope momentum.
+ if(playerHP<=0||Math.abs(inputX)+Math.abs(inputZ)<=.001){ropeSpeedMultiplier=1;}
  if(playerHP>0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
@@ -555,7 +557,7 @@ renderer.setAnimationLoop(()=>{
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
- if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch'});}
+ if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch',momentum:ropeSpeedMultiplier});}
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
