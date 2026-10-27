@@ -1448,6 +1448,116 @@ function updateShowcase(dt){
  return true;
 }
 
+
+/* v0.67: Arrogant jumbotron entrance with two towering close-formation bodyguards. */
+const betterButton=document.createElement('button');
+betterButton.textContent='😎 BETTER THAN YOU';
+betterButton.type='button';
+let betterTime=-1,betterPreviousFeed=false,betterLastCard=-1;
+const betterGuards=[];
+for(let i=0;i<2;i++){
+ const group=new THREE.Group();group.name='TTW_BODYGUARD_'+i;group.visible=false;group.scale.setScalar(1.5);scene.add(group);
+ let actor=null;
+ if(wrestlerPack){
+  try{actor=wrestlerPack.createWrestler('wrestler-'+(i===0?'07':'12'));group.add(actor.object);}
+  catch(e){console.warn('Bodyguard wrestler unavailable',e);}
+ }
+ if(!actor){
+  const mesh=new THREE.Mesh(new THREE.CapsuleGeometry(.42,1.2,8,10),new THREE.MeshStandardMaterial({color:i?0x222b3a:0x292a2d,roughness:.65}));
+  mesh.position.y=1;group.add(mesh);
+ }
+ betterGuards.push({group,actor,state:''});
+}
+function stopBetter(){
+ if(betterTime<0)return;
+ betterTime=-1;betterLastCard=-1;
+ for(const g of betterGuards){g.group.visible=false;g.state='';}
+ if(entranceActor)entranceActor.object.rotation.set(0,0,0);
+ if(betterPreviousFeed)setActionFeed(true);
+ betterPreviousFeed=false;
+ betterButton.textContent='😎 BETTER THAN YOU';
+}
+betterButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();stopShowcase();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopBetter();
+ betterPreviousFeed=actionFeedEnabled;
+ if(actionFeedEnabled)setActionFeed(false);
+ jumbotronCountdown=-1;
+ betterTime=0;betterLastCard=-1;
+ entranceBot.visible=false;
+ if(entranceActor)entranceActor._entranceState=null;
+ betterButton.textContent='😎 RESTART BETTER THAN YOU';
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton,...showcaseButtons])b.addEventListener('click',stopBetter);
+function updateBetter(dt){
+ if(betterTime<0)return false;
+ betterTime+=dt;
+ const t=betterTime;
+ // The screen gets the opening line, then the punchline.
+ const card=t<4?0:t<8?1:t<10?2:3;
+ if(card!==betterLastCard){
+  betterLastCard=card;
+  if(card===0)setJumbotron("I'M BETTER","THAN YOU",['#07090e','#c5ced8']);
+  if(card===1)setJumbotron('AND I','KNOW IT.',['#12131b','#e7bd65']);
+  if(card===2)setJumbotron('','',['#05070b','#101722']);
+  if(card===3)setJumbotron('TTW','THE MAIN EVENT',['#12151c','#8e98a8']);
+ }
+ // No giant particles. All the drama comes from the giant men and the slow approach.
+ const u=THREE.MathUtils.clamp((t-9)/23,0,1);
+ const p=u*u*(3-2*u);
+ const z=THREE.MathUtils.lerp(-34,-7,p);
+ const y=z< -26?1.2:z< -9?THREE.MathUtils.lerp(1.2,.06,(z+26)/17):.06;
+ entranceBot.visible=t>=9;
+ entranceBot.position.set(0,y,z);
+ entranceBot.rotation.y=Math.PI;
+ const state=t<9||t>32?'movement.idle':'movement.walk';
+ if(entranceActor&&t>=9){
+  if(entranceActor._entranceState!==state){
+   try{entranceActor.play(state,{fade:.3,restart:true});}catch(e){console.warn('Main event clip',e);}
+   entranceActor._entranceState=state;
+  }
+  entranceActor.update(dt);
+ }
+ for(let i=0;i<betterGuards.length;i++){
+  const guard=betterGuards[i],g=guard.group;
+  g.visible=t>=9.4;
+  // Larger characters, shoulder-to-shoulder behind the star with only 0.9m of separation.
+  const gz=THREE.MathUtils.lerp(-34,-7,Math.max(0,Math.min(1,(t-9.45)/23))**2*(3-2*Math.max(0,Math.min(1,(t-9.45)/23))));
+  const gy=gz< -26?1.2:gz< -9?THREE.MathUtils.lerp(1.2,.06,(gz+26)/17):.06;
+  g.position.set(i===0?-1.12:1.12,gy,gz-1.25);
+  g.rotation.y=Math.PI;
+  if(guard.actor&&g.visible){
+   if(guard.state!==state){try{guard.actor.play(state,{fade:.25,restart:true});}catch(e){console.warn('Bodyguard clip',e);}guard.state=state;}
+   guard.actor.update(dt);
+   guard.actor.object.position.set(0,0,0);
+  }
+ }
+ let eye,focus;
+ if(t<8){
+  // Pull back to reveal the enormous main screen at the end of the arena.
+  const pull=THREE.MathUtils.clamp(t/7,0,1);
+  eye=entranceV(THREE.MathUtils.lerp(0,5,pull),THREE.MathUtils.lerp(11,15,pull),THREE.MathUtils.lerp(-12,6,pull));
+  focus=entranceV(0,9.4,-34.6);
+ }else if(t<12){
+  eye=entranceV(-9,4,-22);focus=entranceV(0,2,-33);
+ }else if(t<19){
+  eye=entranceV(0,2.4,z+7);focus=entranceV(0,y+1.5,z);
+ }else if(t<25){
+  eye=entranceV(5,2.2,z+4.8);focus=entranceV(0,y+1.5,z-1);
+ }else if(t<32){
+  eye=entranceV(-4,3.1,z+5.5);focus=entranceV(0,y+1.6,z);
+ }else{
+  eye=entranceV(0,2.2,0);focus=entranceV(0,1.7,-7);
+ }
+ camera.position.lerp(eye,Math.min(1,dt*6));
+ camera.lookAt(focus);
+ if(t>=37){stopBetter();entranceBot.visible=false;}
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -1473,6 +1583,7 @@ for(const [button,title] of [
  [slideEntranceButton,'🏃 Run & Slide Entrance'],
  [processionButton,'👑 Royal Procession'],
  [tinyButton,'🐜 Tiny Invasion'],
+ [betterButton,'😎 Better Than You'],
  ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
  button.textContent=title;
@@ -1590,7 +1701,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
