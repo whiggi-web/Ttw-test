@@ -1,0 +1,226 @@
+<title>Wrestling Arena</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@500;700&display=swap">
+<style>
+  /* Layout: full-bleed 3D canvas, a title tag top-left, a control strip pinned to the bottom like a broadcast lower third */
+  :root {
+    --bg: #07080c;
+    --panel: rgba(12, 14, 22, 0.82);
+    --line: #262a38;
+    --fg: #e8ebf3;
+    --muted: #8a92a8;
+    --red: #e3202f;
+    --blue: #2f6bff;
+    --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+    --body: "Barlow", "Segoe UI", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); overflow: hidden; }
+  #view { position: fixed; inset: 0; }
+  canvas { display: block; }
+
+  .tag {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: max(16px, env(safe-area-inset-left, 0px));
+    display: flex; align-items: stretch;
+    font-family: var(--display); text-transform: uppercase; letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  .tag .bar { width: 6px; background: linear-gradient(var(--red) 50%, var(--blue) 50%); }
+  .tag .name { background: var(--panel); padding: 6px 12px; font-size: 22px; line-height: 1; }
+  .tag .sub { display: block; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; color: var(--muted); margin-top: 4px; }
+
+  .controls {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(transparent, rgba(5, 6, 10, 0.9) 40%);
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+  button {
+    font: 700 13px/1 var(--body); letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--fg); background: var(--panel); border: 1px solid var(--line);
+    padding: 9px 12px; cursor: pointer;
+  }
+  button:hover { border-color: var(--muted); }
+  button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+  button[aria-pressed="true"] { border-color: var(--fg); background: #1a1e2c; }
+  button.red { border-left: 4px solid var(--red); }
+  button.blue { border-left: 4px solid var(--blue); }
+  .spacer { flex: 1; }
+  .stats { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .status { position: fixed; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 28px; letter-spacing: 0.06em; color: var(--muted); }
+  @media (max-width: 560px) { .stats { display: none; } .tag .name { font-size: 18px; } }
+</style>
+
+<div id="view"></div>
+<div class="status" id="status">Loading arena</div>
+
+<div class="tag"><div class="bar"></div><div class="name">Wrestling Arena<span class="sub">JSON scene preview</span></div></div>
+
+<div class="controls">
+  <div class="group" id="cams"><span class="label">Camera</span></div>
+  <div class="group"><span class="label">Entrance</span>
+    <button class="red" id="walk-red">Red corner</button>
+    <button class="blue" id="walk-blue">Blue corner</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="stats" id="stats"></div>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { loadArena, buildArena } from './arena-loader.js';
+
+const view = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(view.clientWidth, view.clientHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+view.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, view.clientWidth / view.clientHeight, 0.1, 400);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.49;
+
+const arena = window.ARENA_BUNDLE
+  ? buildArena(window.ARENA_BUNDLE.arena, window.ARENA_BUNDLE.materials, window.ARENA_BUNDLE.parts)
+  : await loadArena('./arena.json');
+scene.add(arena.group);
+arena.applyEnvironment(scene);
+document.getElementById('status').hidden = true;
+
+// Camera presets
+const camBox = document.getElementById('cams');
+const camButtons = {};
+let camTween = null;
+function goCam(name, instant) {
+  const c = arena.cameras[name];
+  if (!c) return;
+  walker.active = false;
+  for (const [k, b] of Object.entries(camButtons)) b.setAttribute('aria-pressed', String(k === name));
+  if (instant || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    camera.position.copy(c.position); controls.target.copy(c.target); controls.update(); return;
+  }
+  camTween = { t: 0, fromP: camera.position.clone(), fromT: controls.target.clone(), toP: c.position, toT: c.target };
+}
+for (const name of Object.keys(arena.cameras)) {
+  const b = document.createElement('button');
+  b.id = 'cam-' + name;
+  b.textContent = name;
+  b.setAttribute('aria-pressed', 'false');
+  b.onclick = () => goCam(name);
+  camBox.appendChild(b);
+  camButtons[name] = b;
+}
+
+// Stand-in wrestler that walks an entrance path
+const walker = { active: false, path: [], seg: 0, t: 0, speed: 3.2 };
+const fig = new THREE.Group();
+const torso = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.9, 0.35), new THREE.MeshStandardMaterial({ color: '#c4161c' }));
+torso.position.y = 1.15;
+const legs = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.7, 0.3), new THREE.MeshStandardMaterial({ color: '#111' }));
+legs.position.y = 0.35;
+const head = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.3, 0.28), new THREE.MeshStandardMaterial({ color: '#c08a64' }));
+head.position.y = 1.78;
+fig.add(torso, legs, head);
+fig.traverse((m) => { if (m.isMesh) m.castShadow = true; });
+fig.visible = false;
+scene.add(fig);
+
+function startWalk(side) {
+  walker.path = arena.paths['entrance_' + side];
+  if (!walker.path || walker.path.length < 2) return;
+  torso.material.color.set(side === 'red' ? '#c4161c' : '#1d4fbf');
+  arena.setScreen('screen_main', side === 'red'
+    ? { text: 'RED CORNER', sub: 'NOW ENTERING', colors: ['#3a0408', '#c4161c'] }
+    : { text: 'BLUE CORNER', sub: 'NOW ENTERING', colors: ['#04123a', '#1e66ff'] });
+  walker.seg = 0; walker.t = 0; walker.active = true;
+  fig.visible = true;
+  fig.position.copy(walker.path[0]);
+  camTween = null;
+  for (const b of Object.values(camButtons)) b.setAttribute('aria-pressed', 'false');
+}
+document.getElementById('walk-red').onclick = () => startWalk('red');
+document.getElementById('walk-blue').onclick = () => startWalk('blue');
+
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), chase = new THREE.Vector3();
+function updateWalker(dt) {
+  if (!walker.active) return;
+  const a = walker.path[walker.seg], b = walker.path[walker.seg + 1];
+  const len = a.distanceTo(b) || 0.001;
+  walker.t += (walker.speed * dt) / len;
+  if (walker.t >= 1) {
+    walker.seg++; walker.t = 0;
+    if (walker.seg >= walker.path.length - 1) { walker.active = false; return; }
+    return;
+  }
+  fig.position.lerpVectors(a, b, walker.t);
+  tmpA.set(b.x - a.x, 0, b.z - a.z);
+  if (tmpA.lengthSq() > 1e-4) fig.rotation.y = Math.atan2(tmpA.x, tmpA.z);
+  // Chase cam: behind and above the figure
+  tmpB.copy(tmpA).normalize();
+  chase.copy(fig.position).addScaledVector(tmpB, -6).add(new THREE.Vector3(1.5, 3.2, 0));
+  camera.position.lerp(chase, Math.min(1, dt * 2.5));
+  controls.target.lerp(tmpA.copy(fig.position).setY(fig.position.y + 1.3), Math.min(1, dt * 4));
+}
+
+goCam('overview', true);
+
+const stats = document.getElementById('stats');
+const clock = new THREE.Clock();
+let frame = 0;
+function tick() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (camTween) {
+    camTween.t = Math.min(1, camTween.t + dt / 1.2);
+    const e = 1 - Math.pow(1 - camTween.t, 3);
+    camera.position.lerpVectors(camTween.fromP, camTween.toP, e);
+    controls.target.lerpVectors(camTween.fromT, camTween.toT, e);
+    if (camTween.t >= 1) camTween = null;
+  }
+  updateWalker(dt);
+  controls.update();
+  renderer.render(scene, camera);
+  if (++frame % 30 === 0) {
+    const i = renderer.info.render;
+    stats.textContent = `${i.calls} draw calls · ${(i.triangles / 1000).toFixed(0)}k tris · ${arena.colliders.length} colliders`;
+  }
+  if (!window.__paused) requestAnimationFrame(tick);
+}
+tick();
+window.__arenaReady = true;
+
+addEventListener('resize', () => {
+  camera.aspect = view.clientWidth / view.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(view.clientWidth, view.clientHeight);
+});
+// Hooks for headless screenshots
+window.__goCam = (n) => goCam(n, true);
+window.__renderOnce = () => {
+  controls.update(); renderer.render(scene, camera);
+  const i = renderer.info.render;
+  return `${i.calls} draw calls, ${i.triangles} tris, ${arena.colliders.length} colliders`;
+};
+</script>

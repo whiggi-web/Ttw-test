@@ -1,0 +1,277 @@
+<meta charset="utf-8">
+<title>TTW Master Wrestler</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  /* Layout: full-bleed viewport with the rig controls docked right on desktop and as a bottom sheet on phones */
+  :root {
+    --bg: #0b0d12;
+    --panel: #12151d;
+    --line: #232837;
+    --fg: #e9ecf4;
+    --muted: #8b93a8;
+    --teal: #19b3ac;
+    --gold: #f2b632;
+    --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+    --body: "Barlow", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); overflow: hidden; }
+  .app { display: grid; grid-template-columns: 1fr 320px; height: 100%; }
+  #view { position: relative; min-width: 0; }
+  #view canvas { display: block; width: 100%; height: 100%; }
+  .panel {
+    background: var(--panel); border-left: 1px solid var(--line);
+    overflow-y: auto; padding-block: 16px calc(16px + env(safe-area-inset-bottom, 0px));
+    padding-left: 16px; padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .badge {
+    position: absolute; top: calc(env(safe-area-inset-top, 0px) + 14px); left: max(16px, env(safe-area-inset-left, 0px));
+    display: flex; gap: 10px; align-items: baseline; pointer-events: none;
+  }
+  .badge h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 26px; letter-spacing: 0.03em; text-transform: uppercase; }
+  .badge span { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+  .stats { position: absolute; bottom: 12px; left: max(16px, env(safe-area-inset-left, 0px)); font: 12px var(--mono); color: var(--muted); pointer-events: none; }
+  h2 { margin: 0 0 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; }
+  button {
+    font: 600 13px/1 var(--body); letter-spacing: 0.04em; color: var(--fg);
+    background: #1a1e29; border: 1px solid var(--line); padding: 9px 11px; cursor: pointer; border-radius: 2px;
+  }
+  button:hover { border-color: var(--muted); }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: #041312; }
+  .toggle { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  select { width: 100%; font: 600 14px var(--body); color: var(--fg); background: #1a1e29; border: 1px solid var(--line); padding: 8px; }
+  .axis { display: grid; grid-template-columns: 18px 1fr 52px; gap: 8px; align-items: center; font: 12px var(--mono); }
+  .axis b { color: var(--muted); font-weight: 500; }
+  .axis input[type=range] { width: 100%; accent-color: var(--teal); }
+  .axis output { text-align: right; font-variant-numeric: tabular-nums; }
+  .hint { font-size: 13px; color: var(--muted); line-height: 1.45; margin: 6px 0 0; }
+  .time { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+  @media (max-width: 760px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+    .panel { border-left: 0; border-top: 1px solid var(--line); max-height: 46vh; padding-left: max(16px, env(safe-area-inset-left, 0px)); }
+    .badge h1 { font-size: 20px; }
+  }
+</style>
+
+<div class="app">
+  <div id="view">
+    <div class="badge"><h1>Master Wrestler</h1><span>TTW rig v1</span></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <aside class="panel">
+    <section>
+      <h2>Animation</h2>
+      <div class="row" id="anims"></div>
+      <div class="row" style="margin-top:8px">
+        <button id="pause">Pause</button>
+        <button id="reset">Reset pose</button>
+      </div>
+      <p class="time" id="time">Neutral pose</p>
+    </section>
+    <section>
+      <h2>Display</h2>
+      <label class="toggle"><input type="checkbox" id="showSkel"> Skeleton</label>
+      <label class="toggle"><input type="checkbox" id="showAttach"> Attachment points</label>
+      <label class="toggle"><input type="checkbox" id="showMesh" checked> Mesh</label>
+    </section>
+    <section>
+      <h2>Joint test</h2>
+      <select id="bone" aria-label="Bone"></select>
+      <div style="display:grid;gap:8px;margin-top:10px">
+        <label class="axis"><b>X</b><input type="range" id="rx" min="-180" max="180" step="1" value="0"><output id="ox">0</output></label>
+        <label class="axis"><b>Y</b><input type="range" id="ry" min="-180" max="180" step="1" value="0"><output id="oy">0</output></label>
+        <label class="axis"><b>Z</b><input type="range" id="rz" min="-180" max="180" step="1" value="0"><output id="oz">0</output></label>
+      </div>
+      <div class="row" style="margin-top:8px"><button id="zeroBone">Zero this joint</button></div>
+      <p class="hint">Moving a slider stops the animation so you can pose by hand. Ranges follow the joint limits in skeleton.json. Drag to orbit, scroll or pinch to zoom.</p>
+    </section>
+  </aside>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { loadWrestler, buildWrestler } from './loader.js';
+
+const view = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+view.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0b0d12');
+const camera = new THREE.PerspectiveCamera(40, 1, 0.05, 100);
+camera.position.set(2.6, 1.9, -3.6);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.set(0, 1.0, 0);
+controls.enableDamping = true;
+controls.minDistance = 0.6;
+controls.maxDistance = 12;
+
+scene.add(new THREE.HemisphereLight('#c9d6ff', '#2a2016', 1.1));
+const key = new THREE.DirectionalLight('#fff3e4', 2.4);
+key.position.set(2.5, 4.5, -3);
+key.castShadow = true;
+key.shadow.mapSize.set(1024, 1024);
+Object.assign(key.shadow.camera, { left: -2.5, right: 2.5, top: 2.5, bottom: -2.5 });
+scene.add(key);
+const rim = new THREE.DirectionalLight('#5fd6ff', 1.2);
+rim.position.set(-3, 2.5, 3);
+scene.add(rim);
+
+const floor = new THREE.Mesh(new THREE.CircleGeometry(4, 48), new THREE.MeshStandardMaterial({ color: '#d9dde6', roughness: 0.95 }));
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
+const grid = new THREE.GridHelper(8, 16, '#8a93a8', '#b9bfcc');
+grid.position.y = 0.002;
+scene.add(grid);
+
+const B = window.TTW_BUNDLE;
+const w = B ? buildWrestler(B.wrestler, B.skeleton, B.animations) : await loadWrestler('./wrestler.json');
+scene.add(w.object);
+
+// Skeleton + attachments overlays
+const skelHelper = new THREE.SkeletonHelper(w.object);
+skelHelper.material.depthTest = false;
+skelHelper.material.linewidth = 2;
+skelHelper.visible = false;
+scene.add(skelHelper);
+const jointDots = [];
+for (const bone of Object.values(w.bones)) {
+  const d = new THREE.Mesh(new THREE.SphereGeometry(0.018, 8, 6), new THREE.MeshBasicMaterial({ color: '#19b3ac', depthTest: false }));
+  d.renderOrder = 10; d.visible = false; bone.add(d); jointDots.push(d);
+}
+const attachMarkers = [];
+for (const a of Object.values(w.attachments)) {
+  const g = new THREE.AxesHelper(0.08);
+  g.material.depthTest = false; g.renderOrder = 11; g.visible = false;
+  const s = new THREE.Mesh(new THREE.SphereGeometry(0.022, 8, 6), new THREE.MeshBasicMaterial({ color: '#f2b632', depthTest: false }));
+  s.renderOrder = 11; s.visible = false;
+  a.add(g, s); attachMarkers.push(g, s);
+}
+document.getElementById('showSkel').onchange = (e) => { skelHelper.visible = e.target.checked; jointDots.forEach((d) => d.visible = e.target.checked); };
+document.getElementById('showAttach').onchange = (e) => attachMarkers.forEach((m) => m.visible = e.target.checked);
+document.getElementById('showMesh').onchange = (e) => { w.mesh.material.visible = e.target.checked; };
+
+// Animation buttons
+const animBox = document.getElementById('anims');
+const animButtons = {};
+for (const name of Object.keys(w.actions)) {
+  const b = document.createElement('button');
+  b.id = 'anim-' + name;
+  b.textContent = name[0].toUpperCase() + name.slice(1);
+  b.setAttribute('aria-pressed', 'false');
+  b.onclick = () => playAnim(name);
+  animBox.appendChild(b);
+  animButtons[name] = b;
+}
+const pauseBtn = document.getElementById('pause');
+function markPlaying(name) {
+  for (const [k, b] of Object.entries(animButtons)) b.setAttribute('aria-pressed', String(k === name));
+}
+function playAnim(name) {
+  w.play(name, { fade: 0.25 });
+  markPlaying(name);
+  pauseBtn.textContent = 'Pause';
+}
+pauseBtn.onclick = () => {
+  if (!w.current) return;
+  w.setPaused(!w.paused);
+  pauseBtn.textContent = w.paused ? 'Resume' : 'Pause';
+};
+document.getElementById('reset').onclick = () => {
+  w.resetPose();
+  markPlaying(null);
+  pauseBtn.textContent = 'Pause';
+  syncSliders();
+};
+
+// Joint test
+const boneSel = document.getElementById('bone');
+for (const b of w.skeletonDef.bones) {
+  const o = document.createElement('option');
+  o.value = b.name; o.textContent = b.name;
+  boneSel.appendChild(o);
+}
+boneSel.value = 'rightUpperArm';
+const axes = ['x', 'y', 'z'].map((k) => ({ k, input: document.getElementById('r' + k), out: document.getElementById('o' + k) }));
+function syncSliders() {
+  const name = boneSel.value;
+  const lim = (w.skeletonDef.jointLimits || {})[name] || {};
+  const rot = w.getJointRotation(name);
+  axes.forEach((a, i) => {
+    const [mn, mx] = lim[a.k] || [-180, 180];
+    a.input.min = mn; a.input.max = mx;
+    a.input.value = Math.round(rot[i]);
+    a.out.textContent = Math.round(rot[i]);
+  });
+}
+function applySliders() {
+  if (w.current) { w.stop(); markPlaying(null); }
+  const v = axes.map((a) => Number(a.input.value));
+  axes.forEach((a, i) => a.out.textContent = v[i]);
+  w.setJointRotation(boneSel.value, v[0], v[1], v[2]);
+}
+axes.forEach((a) => a.input.addEventListener('input', applySliders));
+boneSel.onchange = syncSliders;
+document.getElementById('zeroBone').onclick = () => { axes.forEach((a) => a.input.value = 0); applySliders(); };
+syncSliders();
+
+// Stats
+const tris = w.mesh.geometry.index.count / 3;
+document.getElementById('stats').textContent = `${tris} tris · 1 material · ${w.skeleton.bones.length} bones · ${Object.keys(w.attachments).length} attachments`;
+const timeEl = document.getElementById('time');
+
+function resize() {
+  const r = view.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / Math.max(1, r.height);
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(view);
+resize();
+
+const clock = new THREE.Clock();
+function tick() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  w.update(dt);
+  if (w.current) {
+    const a = w.actions[w.current];
+    timeEl.textContent = `${w.current}  ${a.time.toFixed(2)} / ${a.getClip().duration.toFixed(2)} s`;
+  } else timeEl.textContent = 'Manual pose';
+  controls.update();
+  renderer.render(scene, camera);
+  if (!window.__paused) requestAnimationFrame(tick);
+}
+playAnim('idle');
+tick();
+
+// Hooks for automated renders
+window.__w = w;
+window.__render = (pos, target) => {
+  if (pos) camera.position.set(...pos);
+  if (target) controls.target.set(...target);
+  controls.update();
+  renderer.render(scene, camera);
+};
+window.__showSkeleton = (on) => { skelHelper.visible = on; jointDots.forEach((d) => d.visible = on); };
+window.__ready = true;
+</script>

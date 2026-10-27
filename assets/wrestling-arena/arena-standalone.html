@@ -1,0 +1,797 @@
+<title>Wrestling Arena</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@500;700&display=swap">
+<style>
+  /* Layout: full-bleed 3D canvas, a title tag top-left, a control strip pinned to the bottom like a broadcast lower third */
+  :root {
+    --bg: #07080c;
+    --panel: rgba(12, 14, 22, 0.82);
+    --line: #262a38;
+    --fg: #e8ebf3;
+    --muted: #8a92a8;
+    --red: #e3202f;
+    --blue: #2f6bff;
+    --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+    --body: "Barlow", "Segoe UI", system-ui, sans-serif;
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--body); overflow: hidden; }
+  #view { position: fixed; inset: 0; }
+  canvas { display: block; }
+
+  .tag {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 14px);
+    left: max(16px, env(safe-area-inset-left, 0px));
+    display: flex; align-items: stretch;
+    font-family: var(--display); text-transform: uppercase; letter-spacing: 0.04em;
+    pointer-events: none;
+  }
+  .tag .bar { width: 6px; background: linear-gradient(var(--red) 50%, var(--blue) 50%); }
+  .tag .name { background: var(--panel); padding: 6px 12px; font-size: 22px; line-height: 1; }
+  .tag .sub { display: block; font-family: var(--body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; color: var(--muted); margin-top: 4px; }
+
+  .controls {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 12px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(transparent, rgba(5, 6, 10, 0.9) 40%);
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  }
+  .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .label { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+  button {
+    font: 700 13px/1 var(--body); letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--fg); background: var(--panel); border: 1px solid var(--line);
+    padding: 9px 12px; cursor: pointer;
+  }
+  button:hover { border-color: var(--muted); }
+  button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+  button[aria-pressed="true"] { border-color: var(--fg); background: #1a1e2c; }
+  button.red { border-left: 4px solid var(--red); }
+  button.blue { border-left: 4px solid var(--blue); }
+  .spacer { flex: 1; }
+  .stats { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .status { position: fixed; inset: 0; display: grid; place-items: center; font-family: var(--display); font-size: 28px; letter-spacing: 0.06em; color: var(--muted); }
+  @media (max-width: 560px) { .stats { display: none; } .tag .name { font-size: 18px; } }
+</style>
+
+<div id="view"></div>
+<div class="status" id="status">Loading arena</div>
+
+<div class="tag"><div class="bar"></div><div class="name">Wrestling Arena<span class="sub">JSON scene preview</span></div></div>
+
+<div class="controls">
+  <div class="group" id="cams"><span class="label">Camera</span></div>
+  <div class="group"><span class="label">Entrance</span>
+    <button class="red" id="walk-red">Red corner</button>
+    <button class="blue" id="walk-blue">Blue corner</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="stats" id="stats"></div>
+</div>
+
+<script>window.ARENA_BUNDLE = {"arena":{"name":"Wrestling Arena","version":1,"units":"meters","up":"y","notes":"Ring centred on the origin. Entrance runs along -Z: walkway, stage, screen, backstage. Stands wrap +X, -X and +Z.","materials":"materials.json","parts":[{"id":"stadium","file":"parts/stadium.json"},{"id":"ring","file":"parts/ring.json"},{"id":"entrance","file":"parts/entrance.json"},{"id":"backstage","file":"parts/backstage.json"}],"environment":{"background":"#07080c","fog":{"color":"#07080c","near":70,"far":170},"hemisphere":{"sky":"#8fa0c8","ground":"#1a1410","intensity":0.9},"ambient":{"color":"#ffffff","intensity":0.15},"directional":{"color":"#ffffff","intensity":0.7,"position":[20,40,15],"castShadow":true}},"cameras":{"overview":{"position":[40,32,36],"target":[0,0,-8]},"entrance":{"position":[0,5,-11],"target":[0,5,-33]},"ringside":{"position":[9,3,-9],"target":[0,1.5,0]},"crowd":{"position":[0,10.5,28],"target":[0,1.5,-6]},"backstage":{"position":[0,21,-57],"target":[0,0,-45]}},"paths":{"entrance_red":["locker_room_red","locker_door_red","backstage_hall","stage_curtain_back","stage_curtain","stage_center","stage_front","walkway_start","walkway_end","ringside_entry","steps_left_bottom","steps_left_top","apron_left","ring_center"],"entrance_blue":["locker_room_blue","locker_door_blue","backstage_hall","stage_curtain_back","stage_curtain","stage_center","stage_front","walkway_start","walkway_end","ringside_entry","steps_right_bottom","steps_right_top","apron_right","ring_center"]}},"materials":{"default":{"color":"#888888","roughness":0.8},"canvas":{"color":"#dfe3ea","roughness":0.95},"ring_skirt":{"color":"#101116","roughness":0.85},"ring_post":{"color":"#a3acb6","roughness":0.35,"metalness":0.8},"rope":{"color":"#c4161c","roughness":0.6},"pad_red":{"color":"#b3121a","roughness":0.7},"pad_blue":{"color":"#1d4fbf","roughness":0.7},"pad_neutral":{"color":"#e6e6e6","roughness":0.7},"steel":{"color":"#7d858f","roughness":0.4,"metalness":0.7},"floor_concrete":{"color":"#24252b","roughness":1.0},"floor_mat":{"color":"#14161d","roughness":0.95},"barrier":{"color":"#1b1c22","roughness":0.7},"table":{"color":"#2b2f3a","roughness":0.7},"chair":{"color":"#30343f","roughness":0.8},"monitor":{"color":"#0b0c10","roughness":0.4,"emissive":"#2a4fa8","emissiveIntensity":0.8},"walkway":{"color":"#0d0e12","roughness":0.45,"metalness":0.2},"stage":{"color":"#121318","roughness":0.55,"metalness":0.1},"truss":{"color":"#8a9099","roughness":0.4,"metalness":0.8},"screen_frame":{"color":"#08090c","roughness":0.6},"curtain":{"color":"#050507","roughness":1.0},"led_blue":{"color":"#1e66ff","emissive":"#1e66ff","emissiveIntensity":2.0},"led_red":{"color":"#ff1e3c","emissive":"#ff1e3c","emissiveIntensity":2.0},"led_white":{"color":"#ffffff","emissive":"#dfe8ff","emissiveIntensity":1.6},"led_runner":{"color":"#0a1430","emissive":"#1a3fa8","emissiveIntensity":0.6,"roughness":0.3},"light_fixture":{"color":"#222222","emissive":"#fff4dd","emissiveIntensity":3.0},"tier_concrete":{"color":"#363841","roughness":0.95},"seat":{"color":"#7a1218","roughness":0.8},"seat_floor":{"color":"#1f2533","roughness":0.8},"wall":{"color":"#17181f","roughness":0.9},"backstage_floor":{"color":"#3a3a40","roughness":0.9},"backstage_wall":{"color":"#4b4f5a","roughness":0.9},"road_case":{"color":"#18191d","roughness":0.6,"metalness":0.3},"locker":{"color":"#4a5a6e","roughness":0.5,"metalness":0.5},"wood":{"color":"#6b4a2e","roughness":0.8},"couch":{"color":"#3b2a4a","roughness":0.9},"tray":{"color":"#c9c9c9","roughness":0.3,"metalness":0.6}},"parts":{"stadium":{"id":"stadium","name":"Stadium bowl","objects":[{"id":"arena_floor","type":"box","size":[64,0.1,96],"position":[0,-0.05,-3],"material":"floor_concrete","castShadow":false,"tags":["floor","walkable"]},{"id":"floor_seats_side","type":"box","size":[0.48,0.9,0.48],"position":[9.0,0.45,-6.0],"material":"seat_floor","grid":{"counts":[4,21],"step":[0.75,0,0.6]},"mirror":"x","tags":["seating","floor_seats"]},{"id":"floor_seats_end","type":"box","size":[0.48,0.9,0.48],"position":[-7.2,0.45,9.0],"material":"seat_floor","grid":{"counts":[25,4],"step":[0.6,0,0.75]},"tags":["seating","floor_seats"]},{"id":"stand_side","type":"tiers","position":[12.5,0,-5],"rotation":[0,90,0],"length":34,"rows":20,"rise":0.45,"depth":0.85,"material":"tier_concrete","seatMaterial":"seat","seatSpacing":0.6,"frontMaterial":"led_blue","crowd":{"density":0.72,"seed":11},"mirror":"x","collide":true,"tags":["seating","stand"]},{"id":"stand_end","type":"tiers","position":[0,0,12.5],"rotation":[0,0,0],"length":50,"rows":20,"rise":0.45,"depth":0.85,"material":"tier_concrete","seatMaterial":"seat","seatSpacing":0.6,"frontMaterial":"led_blue","crowd":{"density":0.72,"seed":23},"collide":true,"tags":["seating","stand"]},{"id":"stand_corner_fill","type":"box","size":[5.4,9,17.6],"position":[27.4,4.5,21.3],"material":"tier_concrete","mirror":"x","collide":true,"tags":["stand"]},{"id":"suite_block","type":"box","size":[17,6,13],"position":[21,3,-28.5],"material":"wall","mirror":"x","collide":true,"tags":["stand","suites"]},{"id":"suite_windows","type":"box","size":[0.05,1.2,12],"position":[12.48,4.4,-28.5],"material":"led_white","mirror":"x","tags":["stand","suites","led"]},{"id":"suite_ribbon","type":"box","size":[0.05,0.4,12],"position":[12.48,1.6,-28.5],"material":"led_red","mirror":"x","tags":["stand","led"]},{"id":"wall_side","type":"box","size":[0.6,15,66],"position":[30.3,7.5,-2],"material":"wall","mirror":"x","collide":true,"castShadow":false,"tags":["wall","outer_wall"]},{"id":"wall_end","type":"box","size":[61.2,15,0.6],"position":[0,7.5,30.3],"material":"wall","collide":true,"castShadow":false,"tags":["wall","outer_wall"]},{"id":"wall_entrance","type":"box","size":[18.6,15,0.6],"position":[21.3,7.5,-35.3],"material":"wall","mirror":"x","collide":true,"castShadow":false,"tags":["wall","outer_wall"]},{"id":"rim_ribbon_side","type":"box","size":[0.1,0.5,34],"position":[29.95,9.6,-5],"material":"led_red","mirror":"x","tags":["led"]},{"id":"rim_ribbon_end","type":"box","size":[50,0.5,0.1],"position":[0,9.6,29.95],"material":"led_red","tags":["led"]},{"id":"roof_truss_ew","type":"box","size":[60,0.6,0.6],"position":[0,17,-20],"material":"truss","array":{"count":5,"step":[0,0,12]},"castShadow":false,"tags":["rig"]},{"id":"roof_lamp","type":"cylinder","radius":0.35,"height":0.4,"position":[-24,16.5,-20],"material":"light_fixture","grid":{"counts":[7,5],"step":[8,0,12]},"castShadow":false,"tags":["rig"]},{"id":"crowd_wash","type":"light","light":"point","color":"#9fb4ff","intensity":900,"distance":45,"decay":2,"position":[20,15,2],"mirror":"x","tags":["light"]},{"id":"crowd_wash_end","type":"light","light":"point","color":"#9fb4ff","intensity":900,"distance":45,"decay":2,"position":[0,15,21],"tags":["light"]}],"markers":{"floor_seats_side":[10,0,0],"stand_side_front":[12.5,0.45,-5],"stand_end_front":[0,0.45,12.5]}},"ring":{"id":"ring","name":"Ring and ringside","objects":[{"id":"ringside_floor","type":"box","size":[16,0.04,16],"position":[0,0.02,0],"material":"floor_mat","tags":["floor","walkable"]},{"id":"ring_apron","type":"box","size":[8.2,1.1,8.2],"position":[0,0.55,0],"material":"ring_skirt","collide":true,"tags":["ring"]},{"id":"ring_mat","type":"box","size":[8.2,0.1,8.2],"position":[0,1.15,0],"material":"canvas","tags":["ring","walkable"]},{"id":"ring_skirt_band","type":"box","size":[8.24,0.08,8.24],"position":[0,0.95,0],"material":"led_red","tags":["ring","led"]},{"id":"ring_post","type":"cylinder","radius":0.09,"height":2.6,"position":[3.5,1.3,3.5],"material":"ring_post","mirror":"xz","collide":true,"tags":["ring","post"]},{"id":"pad_red","type":"box","size":[0.28,1.2,0.28],"position":[-3.42,2.05,-3.42],"rotation":[0,45,0],"material":"pad_red","tags":["ring","corner"]},{"id":"pad_blue","type":"box","size":[0.28,1.2,0.28],"position":[3.42,2.05,3.42],"rotation":[0,45,0],"material":"pad_blue","tags":["ring","corner"]},{"id":"pad_neutral_a","type":"box","size":[0.28,1.2,0.28],"position":[3.42,2.05,-3.42],"rotation":[0,45,0],"material":"pad_neutral","tags":["ring","corner"]},{"id":"pad_neutral_b","type":"box","size":[0.28,1.2,0.28],"position":[-3.42,2.05,3.42],"rotation":[0,45,0],"material":"pad_neutral","tags":["ring","corner"]},{"id":"rope_north","type":"rope","from":[-3.5,1.65,3.5],"to":[3.5,1.65,3.5],"radius":0.028,"material":"rope","array":{"count":3,"step":[0,0.4,0]},"mirror":"z","tags":["ring","rope"]},{"id":"rope_east","type":"rope","from":[3.5,1.65,-3.5],"to":[3.5,1.65,3.5],"radius":0.028,"material":"rope","array":{"count":3,"step":[0,0.4,0]},"mirror":"x","tags":["ring","rope"]},{"id":"steps_left","type":"stairs","width":1.1,"steps":3,"rise":0.4,"run":0.4,"position":[-5.0,0,-5.0],"rotation":[0,45,0],"material":"steel","mirror":"x","collide":true,"tags":["ring","steps","walkable"]},{"id":"barrier_north","type":"box","size":[16.15,1.1,0.15],"position":[0,0.55,8],"material":"barrier","collide":true,"tags":["barrier"]},{"id":"barrier_east","type":"box","size":[0.15,1.1,16],"position":[8,0.55,0],"material":"barrier","mirror":"x","collide":true,"tags":["barrier"]},{"id":"barrier_south","type":"box","size":[6,1.1,0.15],"position":[5,0.55,-8],"material":"barrier","mirror":"x","collide":true,"tags":["barrier"]},{"id":"barrier_cap_north","type":"box","size":[16.15,0.06,0.22],"position":[0,1.13,8],"material":"led_blue","tags":["barrier","led"]},{"id":"announce_table","type":"box","size":[4.5,0.8,0.9],"position":[0,0.4,6.6],"material":"table","collide":true,"tags":["ringside","table"]},{"id":"announce_table_front","type":"box","size":[4.5,0.4,0.02],"position":[0,0.45,6.14],"material":"led_blue","tags":["ringside","led"]},{"id":"announce_monitor","type":"box","size":[0.5,0.32,0.05],"position":[-1.4,0.98,6.75],"rotation":[-15,180,0],"material":"monitor","array":{"count":3,"step":[1.4,0,0]},"tags":["ringside"]},{"id":"announce_chair","type":"box","size":[0.5,1.0,0.5],"position":[-1.4,0.5,7.45],"material":"chair","array":{"count":3,"step":[1.4,0,0]},"collide":true,"tags":["ringside","chair"]},{"id":"rig_truss_ns","type":"box","size":[12.4,0.4,0.4],"position":[0,13,6],"material":"truss","mirror":"z","tags":["rig"]},{"id":"rig_truss_ew","type":"box","size":[0.4,0.4,12],"position":[6,13,0],"material":"truss","mirror":"x","tags":["rig"]},{"id":"rig_lamp","type":"cylinder","radius":0.25,"height":0.4,"position":[4,12.6,6],"material":"light_fixture","array":{"count":3,"step":[-4,0,0]},"mirror":"z","tags":["rig"]},{"id":"ring_spot","type":"light","light":"spot","color":"#ffffff","intensity":700,"distance":40,"angle":26,"penumbra":0.5,"decay":2,"position":[6,13,6],"target":[0,1.2,0],"mirror":"xz","tags":["rig","light"]}],"markers":{"ring_center":[0,1.2,0],"corner_red":[-3.1,1.2,-3.1],"corner_blue":[3.1,1.2,3.1],"steps_left_bottom":[-5.3,0,-5.3],"steps_left_top":[-4.2,1.2,-4.2],"apron_left":[-3.85,1.2,-3.85],"steps_right_bottom":[5.3,0,-5.3],"steps_right_top":[4.2,1.2,-4.2],"apron_right":[3.85,1.2,-3.85],"announce_table":[0,0,7.4]}},"entrance":{"id":"entrance","name":"Walkway, stage and screen","objects":[{"id":"walkway","type":"ramp","from":[0,1.2,-26],"to":[0,0.04,-8.4],"width":3.2,"thickness":0.2,"material":"walkway","edgeMaterial":"led_blue","collide":true,"tags":["walkway","walkable"]},{"id":"walkway_runner","type":"ramp","from":[0,1.215,-26],"to":[0,0.055,-8.4],"width":1.2,"thickness":0.02,"fill":false,"material":"led_runner","castShadow":false,"tags":["walkway","led"]},{"id":"walkway_barrier","type":"box","size":[0.15,1.1,16.4],"position":[2.4,0.55,-17],"material":"barrier","mirror":"x","collide":true,"tags":["barrier"]},{"id":"walkway_barrier_cap","type":"box","size":[0.22,0.06,16.4],"position":[2.4,1.13,-17],"material":"led_blue","mirror":"x","tags":["barrier","led"]},{"id":"walkway_crowd_floor","type":"box","size":[0.48,0.9,0.48],"position":[3.2,0.45,-22],"material":"seat_floor","grid":{"counts":[8,20],"step":[0.75,0,0.6]},"mirror":"x","tags":["seating","floor_seats"]},{"id":"stage_deck","type":"box","size":[24,1.2,9],"position":[0,0.6,-30.5],"material":"stage","collide":true,"tags":["stage","walkable"]},{"id":"stage_lip","type":"box","size":[24,0.12,0.05],"position":[0,1.08,-25.99],"material":"led_white","tags":["stage","led"]},{"id":"stage_front_strip","type":"box","size":[24,0.5,0.05],"position":[0,0.5,-25.99],"material":"led_blue","tags":["stage","led"]},{"id":"stage_floor_inlay","type":"box","size":[3.2,0.02,7.6],"position":[0,1.21,-30.4],"material":"led_runner","castShadow":false,"tags":["stage","led"]},{"id":"pyro_cannon","type":"cylinder","radius":0.22,"height":0.45,"position":[3.2,1.425,-26.6],"material":"steel","array":{"count":3,"step":[3.0,0,0]},"mirror":"x","tags":["stage","pyro"]},{"id":"screen_main","type":"screen","size":[16,7.5],"position":[0,9.45,-34.6],"frameMaterial":"screen_frame","content":{"text":"MAIN EVENT","sub":"LIVE","colors":["#0a1a5c","#c4161c"]},"tags":["stage","screen"]},{"id":"screen_side","type":"screen","size":[3.6,9.5],"position":[10.2,6.25,-33.6],"rotation":[0,-15,0],"frameMaterial":"screen_frame","content":{"text":"","sub":"","colors":["#1e66ff","#05070f"]},"mirror":"x","tags":["stage","screen"]},{"id":"stage_curtain","type":"box","size":[4,4.5,0.1],"position":[0,3.45,-34.9],"material":"curtain","collide":true,"tags":["stage","curtain","door"]},{"id":"stage_curtain_frame","type":"box","size":[4.4,0.25,0.3],"position":[0,5.82,-34.8],"material":"led_white","tags":["stage","led"]},{"id":"stage_flat","type":"box","size":[6,4.5,0.4],"position":[5,3.45,-34.8],"material":"screen_frame","mirror":"x","collide":true,"tags":["stage","wall"]},{"id":"stage_flat_trim","type":"box","size":[0.12,4.5,0.05],"position":[2.06,3.45,-34.58],"material":"led_blue","array":{"count":3,"step":[2.0,0,0]},"mirror":"x","tags":["stage","led"]},{"id":"stage_wing","type":"box","size":[4,14,0.4],"position":[10,7,-35.2],"material":"curtain","mirror":"x","collide":true,"castShadow":false,"tags":["stage","wall"]},{"id":"stage_header","type":"box","size":[16,1.6,0.4],"position":[0,14,-35.2],"material":"curtain","castShadow":false,"tags":["stage"]},{"id":"stage_truss_tower","type":"box","size":[0.6,15,0.6],"position":[12.4,7.5,-27],"material":"truss","mirror":"x","collide":true,"tags":["stage","rig"]},{"id":"stage_truss_top","type":"box","size":[25.4,0.6,0.6],"position":[0,15.3,-27],"material":"truss","tags":["stage","rig"]},{"id":"stage_truss_lamp","type":"cylinder","radius":0.22,"height":0.35,"position":[-10,14.8,-27],"material":"light_fixture","array":{"count":6,"step":[4,0,0]},"castShadow":false,"tags":["stage","rig"]},{"id":"stage_spot","type":"light","light":"spot","color":"#cfe0ff","intensity":900,"distance":40,"angle":30,"penumbra":0.6,"decay":2,"position":[6,15,-24],"target":[0,1.2,-30],"mirror":"x","tags":["stage","light"]},{"id":"screen_glow","type":"light","light":"point","color":"#4a6dff","intensity":300,"distance":25,"decay":2,"position":[0,8,-31],"tags":["stage","light"]}],"markers":{"stage_curtain":[0,1.2,-34.3],"stage_center":[0,1.2,-30.5],"stage_front":[0,1.2,-26.4],"walkway_start":[0,1.2,-25.6],"walkway_end":[0,0.05,-8.8],"ringside_entry":[0,0,-7]}},"backstage":{"id":"backstage","name":"Backstage area","objects":[{"id":"backstage_floor","type":"box","size":[32,0.06,25],"position":[0,0.03,-47.5],"material":"backstage_floor","castShadow":false,"tags":["backstage","floor","walkable"]},{"id":"gorilla_platform","type":"box","size":[6,1.2,3],"position":[0,0.6,-36.5],"material":"stage","collide":true,"tags":["backstage","walkable"]},{"id":"gorilla_ramp","type":"ramp","from":[0,1.2,-38],"to":[0,0.06,-44],"width":3,"thickness":0.2,"material":"steel","collide":true,"tags":["backstage","walkable"]},{"id":"gorilla_rail","type":"rope","from":[1.55,2.2,-38],"to":[1.55,1.06,-44],"radius":0.04,"material":"steel","mirror":"x","tags":["backstage"]},{"id":"gorilla_desk","type":"box","size":[2.4,0.8,0.9],"position":[5,0.4,-40],"material":"table","collide":true,"tags":["backstage","gorilla"]},{"id":"gorilla_monitor","type":"box","size":[0.6,0.38,0.05],"position":[4.4,1.0,-40.3],"material":"monitor","array":{"count":3,"step":[0.6,0,0]},"tags":["backstage","gorilla"]},{"id":"wall_back","type":"box","size":[32.4,4.5,0.3],"position":[0,2.25,-60.15],"material":"backstage_wall","collide":true,"tags":["backstage","wall"]},{"id":"wall_outer","type":"box","size":[0.3,4.5,25],"position":[16.15,2.25,-47.65],"material":"backstage_wall","mirror":"x","collide":true,"tags":["backstage","wall"]},{"id":"locker_wall_front_a","type":"box","size":[6.5,3.2,0.2],"position":[12.75,1.6,-50],"material":"backstage_wall","mirror":"x","collide":true,"tags":["backstage","wall","locker_room"]},{"id":"locker_wall_front_b","type":"box","size":[2,3.2,0.2],"position":[7,1.6,-50],"material":"backstage_wall","mirror":"x","collide":true,"tags":["backstage","wall","locker_room"]},{"id":"locker_wall_side","type":"box","size":[0.2,3.2,10],"position":[6,1.6,-55],"material":"backstage_wall","mirror":"x","collide":true,"tags":["backstage","wall","locker_room"]},{"id":"locker_door_light_red","type":"box","size":[1.5,0.12,0.25],"position":[-8.75,3.0,-49.85],"material":"led_red","tags":["backstage","led"]},{"id":"locker_door_light_blue","type":"box","size":[1.5,0.12,0.25],"position":[8.75,3.0,-49.85],"material":"led_blue","tags":["backstage","led"]},{"id":"lockers","type":"box","size":[0.6,2.0,0.55],"position":[7.2,1.0,-59.7],"material":"locker","array":{"count":13,"step":[0.65,0,0]},"mirror":"x","collide":true,"tags":["backstage","locker_room"]},{"id":"locker_bench","type":"box","size":[6,0.45,0.45],"position":[11,0.225,-57],"material":"wood","mirror":"x","collide":true,"tags":["backstage","locker_room"]},{"id":"locker_mirror","type":"box","size":[0.05,1.2,3],"position":[15.95,1.7,-54.5],"material":"led_white","mirror":"x","tags":["backstage","locker_room"]},{"id":"locker_light","type":"light","light":"point","color":"#ffe8c4","intensity":60,"distance":12,"decay":2,"position":[11,3.6,-55],"mirror":"x","tags":["backstage","light"]},{"id":"road_case_stack","type":"box","size":[1.2,0.9,0.8],"position":[-14.8,0.45,-38],"material":"road_case","array":{"count":4,"step":[0,0,-1.0]},"collide":true,"tags":["backstage","props"]},{"id":"road_case_top","type":"box","size":[1.2,0.9,0.8],"position":[-14.8,1.35,-38.5],"material":"road_case","array":{"count":2,"step":[0,0,-1.0]},"collide":true,"tags":["backstage","props"]},{"id":"road_case_loose","type":"box","size":[1.6,1.1,1.0],"position":[-10.5,0.55,-46.5],"rotation":[0,18,0],"material":"road_case","collide":true,"tags":["backstage","props"]},{"id":"couch_base","type":"box","size":[3.2,0.45,1.0],"position":[-10,0.225,-42],"material":"couch","collide":true,"tags":["backstage","lounge"]},{"id":"couch_back","type":"box","size":[3.2,0.6,0.25],"position":[-10,0.75,-42.4],"material":"couch","tags":["backstage","lounge"]},{"id":"lounge_tv","type":"box","size":[2.2,1.25,0.08],"position":[-10,2.2,-35.3],"material":"monitor","tags":["backstage","lounge"]},{"id":"coffee_table","type":"box","size":[1.4,0.4,0.7],"position":[-10,0.2,-40.5],"material":"wood","collide":true,"tags":["backstage","lounge"]},{"id":"catering_table","type":"box","size":[4,0.8,1.0],"position":[12,0.4,-40],"material":"table","collide":true,"tags":["backstage","catering"]},{"id":"catering_tray","type":"box","size":[0.6,0.06,0.4],"position":[10.6,0.83,-40],"material":"tray","array":{"count":5,"step":[0.7,0,0]},"tags":["backstage","catering"]},{"id":"catering_cooler","type":"box","size":[0.9,1.9,0.7],"position":[15.4,0.95,-43],"material":"locker","collide":true,"tags":["backstage","catering"]},{"id":"hall_light","type":"light","light":"point","color":"#fff0d8","intensity":120,"distance":22,"decay":2,"position":[0,4.2,-46],"tags":["backstage","light"]},{"id":"side_light","type":"light","light":"point","color":"#fff0d8","intensity":70,"distance":16,"decay":2,"position":[11,4.2,-41],"mirror":"x","tags":["backstage","light"]}],"markers":{"stage_curtain_back":[0,1.2,-35.8],"backstage_hall":[0,0.06,-46],"gorilla":[3.6,0.06,-40.8],"locker_door_red":[-8.75,0.06,-50],"locker_room_red":[-11,0.06,-54],"locker_door_blue":[8.75,0.06,-50],"locker_room_blue":[11,0.06,-54],"lounge":[-10,0.06,-43.5],"catering":[12,0.06,-41.5]}}}};</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// Wrestling Arena loader for Three.js r160
+// Builds the arena from arena.json + materials.json + parts/*.json
+//
+// Usage:
+//   import * as THREE from 'three';
+//   import { loadArena } from './arena-loader.js';
+//   const arena = await loadArena('assets/wrestling-arena/arena.json');
+//   scene.add(arena.group);
+//   arena.applyEnvironment(scene);           // optional: background, fog, lights
+//   arena.markers.ring_center                // THREE.Vector3
+//   arena.paths.entrance_red                 // THREE.Vector3[]
+//   arena.colliders                          // [{ id, tags, box: THREE.Box3 }]
+//   arena.byId('stage_curtain')              // [Object3D]
+//   arena.byTag('wall')                      // [Object3D] (each wall is its own object)
+//   arena.setScreen('screen_main', { text: 'WHIGGI', sub: 'ENTERS' })
+//
+// If you already have the JSON in memory (bundled), call buildArena(def, materials, parts).
+
+
+const DEG = Math.PI / 180;
+
+async function loadArena(url) {
+  const base = url.slice(0, url.lastIndexOf('/') + 1);
+  const def = await (await fetch(url)).json();
+  const materials = await (await fetch(base + def.materials)).json();
+  const parts = {};
+  await Promise.all(def.parts.map(async (p) => {
+    parts[p.id] = await (await fetch(base + p.file)).json();
+  }));
+  return buildArena(def, materials, parts);
+}
+
+function buildArena(def, materialDefs, parts) {
+  const root = new THREE.Group();
+  root.name = def.name || 'arena';
+
+  const matCache = {};
+  const getMat = (name) => {
+    const key = name || 'default';
+    if (matCache[key]) return matCache[key];
+    const m = materialDefs[key] || materialDefs.default || { color: '#888888' };
+    const mat = new THREE.MeshStandardMaterial({
+      color: m.color || '#888888',
+      roughness: m.roughness ?? 0.8,
+      metalness: m.metalness ?? 0,
+    });
+    if (m.emissive) {
+      mat.emissive = new THREE.Color(m.emissive);
+      mat.emissiveIntensity = m.emissiveIntensity ?? 1;
+    }
+    mat.name = key;
+    matCache[key] = mat;
+    return mat;
+  };
+
+  const index = new Map();       // id -> Object3D[]
+  const tagIndex = new Map();    // tag -> Object3D[]
+  const colliders = [];
+  const markers = {};
+  const screens = new Map();     // id -> { canvas, ctx, texture, def }
+
+  const register = (obj, id, tags) => {
+    obj.name = id;
+    obj.userData.arenaId = id;
+    obj.userData.tags = tags || [];
+    if (!index.has(id)) index.set(id, []);
+    index.get(id).push(obj);
+    for (const t of tags || []) {
+      if (!tagIndex.has(t)) tagIndex.set(t, []);
+      tagIndex.get(t).push(obj);
+    }
+  };
+
+  for (const p of def.parts) {
+    const part = parts[p.id];
+    if (!part) continue;
+    const partGroup = new THREE.Group();
+    partGroup.name = 'part_' + p.id;
+    root.add(partGroup);
+
+    for (const o of part.objects || []) {
+      if (o.type === 'light') {
+        buildLights(o, partGroup, register);
+        continue;
+      }
+      const copies = mirrorScales(o.mirror);
+      copies.forEach(({ scale, suffix }) => {
+        const holder = new THREE.Group();
+        holder.scale.copy(scale);
+        // Walls get their own material instance so the game can fade one wall at a time
+        const isWall = (o.tags || []).includes('wall');
+        const matFor = isWall ? (n) => getMat(n).clone() : getMat;
+        const built = buildObject(o, matFor, screens, suffix);
+        if (!built) return;
+        holder.add(built);
+        partGroup.add(holder);
+        const id = o.id + suffix;
+        register(built, id, o.tags);
+        built.userData.collide = !!o.collide;
+      });
+    }
+
+    for (const [k, v] of Object.entries(part.markers || {})) {
+      markers[k] = new THREE.Vector3(v[0], v[1], v[2]);
+    }
+  }
+
+  root.updateMatrixWorld(true);
+
+  // Colliders: one AABB per mesh instance for every object flagged collide
+  for (const [id, objs] of index) {
+    for (const obj of objs) {
+      if (!obj.userData.collide) continue;
+      obj.traverse((m) => {
+        if (!m.isMesh || m.userData.noCollide) return;
+        if (!m.geometry.boundingBox) m.geometry.computeBoundingBox();
+        if (m.isInstancedMesh) {
+          const im = new THREE.Matrix4();
+          for (let i = 0; i < m.count; i++) {
+            m.getMatrixAt(i, im);
+            im.premultiply(m.matrixWorld);
+            colliders.push({ id, tags: obj.userData.tags, box: m.geometry.boundingBox.clone().applyMatrix4(im) });
+          }
+        } else {
+          colliders.push({ id, tags: obj.userData.tags, box: m.geometry.boundingBox.clone().applyMatrix4(m.matrixWorld) });
+        }
+      });
+    }
+  }
+
+  const paths = {};
+  for (const [name, list] of Object.entries(def.paths || {})) {
+    paths[name] = list.filter((k) => markers[k]).map((k) => markers[k].clone());
+  }
+
+  const cameras = {};
+  for (const [name, c] of Object.entries(def.cameras || {})) {
+    cameras[name] = { position: new THREE.Vector3(...c.position), target: new THREE.Vector3(...c.target) };
+  }
+
+  const envLights = [];
+  function applyEnvironment(scene) {
+    const env = def.environment || {};
+    if (env.background) scene.background = new THREE.Color(env.background);
+    if (env.fog) scene.fog = new THREE.Fog(env.fog.color, env.fog.near, env.fog.far);
+    if (env.hemisphere) {
+      const h = new THREE.HemisphereLight(env.hemisphere.sky, env.hemisphere.ground, env.hemisphere.intensity);
+      scene.add(h); envLights.push(h);
+    }
+    if (env.ambient) {
+      const a = new THREE.AmbientLight(env.ambient.color, env.ambient.intensity);
+      scene.add(a); envLights.push(a);
+    }
+    if (env.directional) {
+      const d = new THREE.DirectionalLight(env.directional.color, env.directional.intensity);
+      d.position.set(...env.directional.position);
+      if (env.directional.castShadow) {
+        d.castShadow = true;
+        d.shadow.mapSize.set(2048, 2048);
+        const s = d.shadow.camera;
+        s.left = -45; s.right = 45; s.top = 45; s.bottom = -45; s.near = 1; s.far = 120;
+        d.shadow.bias = -0.0005;
+      }
+      scene.add(d); scene.add(d.target); envLights.push(d);
+    }
+    return envLights;
+  }
+
+  function setScreen(id, content) {
+    for (const [key, s] of screens) {
+      if (key === id || key.startsWith(id + '_m')) {
+        Object.assign(s.content, content);
+        drawScreen(s);
+      }
+    }
+  }
+
+  return {
+    group: root,
+    markers,
+    paths,
+    cameras,
+    colliders,
+    screens,
+    byId: (id) => index.get(id) || [],
+    byTag: (tag) => tagIndex.get(tag) || [],
+    applyEnvironment,
+    setScreen,
+    materials: matCache,
+  };
+}
+
+// ---------- helpers ----------
+
+function mirrorScales(mirror) {
+  const out = [{ scale: new THREE.Vector3(1, 1, 1), suffix: '' }];
+  if (!mirror) return out;
+  if (mirror.includes('x')) out.push({ scale: new THREE.Vector3(-1, 1, 1), suffix: '_mx' });
+  if (mirror.includes('z')) out.push({ scale: new THREE.Vector3(1, 1, -1), suffix: '_mz' });
+  if (mirror.includes('x') && mirror.includes('z')) out.push({ scale: new THREE.Vector3(-1, 1, -1), suffix: '_mxz' });
+  return out;
+}
+
+function offsetsFor(o) {
+  if (o.grid) {
+    const [nx, nz] = o.grid.counts;
+    const [sx, sy, sz] = o.grid.step;
+    const list = [];
+    for (let i = 0; i < nx; i++) for (let j = 0; j < nz; j++) list.push(new THREE.Vector3(i * sx, 0, j * sz));
+    return list;
+  }
+  if (o.array) {
+    const list = [];
+    const s = new THREE.Vector3(...o.array.step);
+    for (let i = 0; i < o.array.count; i++) list.push(s.clone().multiplyScalar(i));
+    return list;
+  }
+  return [new THREE.Vector3()];
+}
+
+function applyTransform(obj, o) {
+  if (o.position) obj.position.set(...o.position);
+  if (o.rotation) obj.rotation.set(o.rotation[0] * DEG, o.rotation[1] * DEG, o.rotation[2] * DEG);
+}
+
+function shadowFlags(mesh, o) {
+  mesh.castShadow = o.castShadow !== false;
+  mesh.receiveShadow = true;
+}
+
+function buildObject(o, getMat, screens, suffix) {
+  switch (o.type) {
+    case 'box':
+    case 'cylinder':
+      return buildPrimitive(o, getMat);
+    case 'rope':
+      return buildRope(o, getMat);
+    case 'ramp':
+      return buildRamp(o, getMat);
+    case 'stairs':
+      return buildStairs(o, getMat);
+    case 'tiers':
+      return buildTiers(o, getMat);
+    case 'screen':
+      return buildScreen(o, getMat, screens, suffix);
+    default:
+      console.warn('[arena] unknown object type', o.type, o.id);
+      return null;
+  }
+}
+
+function primitiveGeometry(o) {
+  if (o.type === 'box') return new THREE.BoxGeometry(...o.size);
+  const rt = o.radiusTop ?? o.radius ?? 0.5;
+  const rb = o.radiusBottom ?? o.radius ?? 0.5;
+  return new THREE.CylinderGeometry(rt, rb, o.height ?? 1, o.segments ?? 16);
+}
+
+function buildPrimitive(o, getMat) {
+  const geo = primitiveGeometry(o);
+  const mat = getMat(o.material);
+  const offsets = offsetsFor(o);
+
+  if (offsets.length === 1) {
+    const mesh = new THREE.Mesh(geo, mat);
+    applyTransform(mesh, o);
+    shadowFlags(mesh, o);
+    return mesh;
+  }
+
+  // Repeated objects become one InstancedMesh (one draw call)
+  const inst = new THREE.InstancedMesh(geo, mat, offsets.length);
+  const local = new THREE.Object3D();
+  offsets.forEach((off, i) => {
+    applyTransform(local, o);
+    local.position.add(off);
+    local.updateMatrix();
+    inst.setMatrixAt(i, local.matrix);
+  });
+  inst.instanceMatrix.needsUpdate = true;
+  inst.computeBoundingSphere();
+  shadowFlags(inst, o);
+  return inst;
+}
+
+function cylinderBetween(a, b, radius, mat) {
+  const dir = new THREE.Vector3().subVectors(b, a);
+  const len = dir.length();
+  const geo = new THREE.CylinderGeometry(radius, radius, len, 8);
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.position.copy(a).addScaledVector(dir, 0.5);
+  mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+  return mesh;
+}
+
+function buildRope(o, getMat) {
+  const g = new THREE.Group();
+  const a = new THREE.Vector3(...o.from);
+  const b = new THREE.Vector3(...o.to);
+  for (const off of offsetsFor(o)) {
+    const m = cylinderBetween(a.clone().add(off), b.clone().add(off), o.radius ?? 0.03, getMat(o.material));
+    shadowFlags(m, o);
+    g.add(m);
+  }
+  return g;
+}
+
+function buildRamp(o, getMat) {
+  const g = new THREE.Group();
+  const a = new THREE.Vector3(...o.from);
+  const b = new THREE.Vector3(...o.to);
+  const dir = new THREE.Vector3().subVectors(b, a);
+  const len = dir.length();
+  const t = o.thickness ?? 0.2;
+  const w = o.width ?? 3;
+
+  // Orientation: local Z along the ramp, local Y the deck normal
+  const zAxis = dir.clone().normalize();
+  const xAxis = new THREE.Vector3(0, 1, 0).cross(zAxis).normalize();
+  const yAxis = zAxis.clone().cross(xAxis).normalize();
+  const basis = new THREE.Matrix4().makeBasis(xAxis, yAxis, zAxis);
+  const quat = new THREE.Quaternion().setFromRotationMatrix(basis);
+  const mid = a.clone().addScaledVector(dir, 0.5).addScaledVector(yAxis, -t / 2);
+
+  const deck = new THREE.Mesh(new THREE.BoxGeometry(w, t, len), getMat(o.material));
+  deck.position.copy(mid);
+  deck.quaternion.copy(quat);
+  shadowFlags(deck, o);
+  g.add(deck);
+
+  // Solid fill underneath so it reads as a raised walkway, not a floating plank
+  const minY = Math.min(a.y, b.y);
+  const maxY = Math.max(a.y, b.y);
+  if (maxY - minY > 0.05 && (o.fill ?? true)) {
+    const shape = new THREE.Shape();
+    const horiz = Math.hypot(dir.x, dir.z);
+    shape.moveTo(0, 0);
+    shape.lineTo(horiz, 0);
+    shape.lineTo(horiz, Math.max(b.y - t, 0));
+    shape.lineTo(0, Math.max(a.y - t, 0));
+    shape.closePath();
+    const sg = new THREE.ExtrudeGeometry(shape, { depth: w * 0.98, bevelEnabled: false });
+    sg.translate(0, 0, -w * 0.49);
+    const side = new THREE.Mesh(sg, getMat(o.material));
+    side.rotation.y = Math.atan2(-dir.z, dir.x);
+    side.position.set(a.x, 0, a.z);
+    shadowFlags(side, o);
+    g.add(side);
+  }
+
+  if (o.edgeMaterial) {
+    for (const s of [-1, 1]) {
+      const edge = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.06, len), getMat(o.edgeMaterial));
+      edge.position.copy(mid).addScaledVector(xAxis, s * (w / 2 - 0.04)).addScaledVector(yAxis, t / 2 + 0.03);
+      edge.quaternion.copy(quat);
+      edge.castShadow = false;
+      edge.userData.noCollide = true;
+      g.add(edge);
+    }
+  }
+  return g;
+}
+
+function buildStairs(o, getMat) {
+  // Local frame: origin at bottom front centre, climbing toward +Z
+  const g = new THREE.Group();
+  const mat = getMat(o.material);
+  const n = o.steps ?? 3;
+  const rise = o.rise ?? 0.3;
+  const run = o.run ?? 0.3;
+  const w = o.width ?? 1;
+  for (let i = 0; i < n; i++) {
+    const h = rise * (i + 1);
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, run), mat);
+    m.position.set(0, h / 2, run * i + run / 2);
+    shadowFlags(m, o);
+    g.add(m);
+  }
+  applyTransform(g, o);
+  return g;
+}
+
+function seededRandom(seed) {
+  let s = seed >>> 0 || 1;
+  return () => {
+    s ^= s << 13; s ^= s >>> 17; s ^= s << 5;
+    return ((s >>> 0) % 100000) / 100000;
+  };
+}
+
+const CROWD_COLORS = ['#1b1d24', '#2b2f3a', '#5a1a1f', '#1a2d5a', '#3a3a3a', '#6b5a48', '#d8d8d8', '#8a1c22', '#1c4f8a', '#222222'];
+
+function buildTiers(o, getMat) {
+  // Local frame: rows run along X (length), stand rises toward +Z
+  const g = new THREE.Group();
+  const rows = o.rows ?? 15;
+  const rise = o.rise ?? 0.45;
+  const depth = o.depth ?? 0.85;
+  const L = o.length ?? 20;
+  const stepMat = getMat(o.material);
+
+  // Stepped profile as one extruded shape (cheap: one mesh for all rows)
+  const shape = new THREE.Shape();
+  shape.moveTo(0, 0);
+  for (let r = 0; r < rows; r++) {
+    shape.lineTo(r * depth, (r + 1) * rise);
+    shape.lineTo((r + 1) * depth, (r + 1) * rise);
+  }
+  shape.lineTo(rows * depth, 0);
+  shape.closePath();
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: L, bevelEnabled: false });
+  // shape x -> local Z (depth), shape y -> Y, extrude z -> local X (length)
+  geo.rotateY(-Math.PI / 2);
+  geo.translate(L / 2, 0, 0);
+  const steps = new THREE.Mesh(geo, stepMat);
+  shadowFlags(steps, { castShadow: false });
+  g.add(steps);
+
+  // Seats (instanced)
+  const spacing = o.seatSpacing ?? 0.6;
+  const perRow = Math.floor((L - 0.6) / spacing);
+  const seatGeo = new THREE.BoxGeometry(spacing * 0.8, 0.45, 0.45);
+  seatGeo.translate(0, 0.225, 0);
+  const seats = new THREE.InstancedMesh(seatGeo, getMat(o.seatMaterial || 'seat'), rows * perRow);
+  const tmp = new THREE.Object3D();
+  let k = 0;
+  const seatPositions = [];
+  for (let r = 0; r < rows; r++) {
+    for (let i = 0; i < perRow; i++) {
+      const x = -L / 2 + 0.3 + spacing / 2 + i * spacing;
+      const y = (r + 1) * rise;
+      const z = r * depth + depth * 0.62;
+      tmp.position.set(x, y, z);
+      tmp.updateMatrix();
+      seats.setMatrixAt(k++, tmp.matrix);
+      seatPositions.push([x, y, z]);
+    }
+  }
+  seats.instanceMatrix.needsUpdate = true;
+  seats.computeBoundingSphere();
+  seats.receiveShadow = true;
+  seats.userData.noCollide = true;
+  g.add(seats);
+
+  // Crowd: simple seated blocks with a head, random fill, per-instance colour
+  if (o.crowd && (o.crowd.density ?? 0) > 0) {
+    const rnd = seededRandom(o.crowd.seed ?? 7);
+    const colors = (o.crowd.colors || CROWD_COLORS).map((c) => new THREE.Color(c));
+    const filled = seatPositions.filter(() => rnd() < o.crowd.density);
+    const bodyGeo = new THREE.BoxGeometry(0.42, 0.62, 0.3);
+    bodyGeo.translate(0, 0.45 + 0.31, -0.02);
+    const headGeo = new THREE.BoxGeometry(0.2, 0.22, 0.2);
+    headGeo.translate(0, 0.45 + 0.62 + 0.13, -0.02);
+    const bodyMat = new THREE.MeshStandardMaterial({ roughness: 0.9 });
+    const headMat = new THREE.MeshStandardMaterial({ roughness: 0.9 });
+    const bodies = new THREE.InstancedMesh(bodyGeo, bodyMat, filled.length);
+    const heads = new THREE.InstancedMesh(headGeo, headMat, filled.length);
+    const skins = ['#e0b896', '#c08a64', '#8d5a3b', '#5a3a26', '#f0cfb0'].map((c) => new THREE.Color(c));
+    filled.forEach((p, i) => {
+      tmp.position.set(p[0] + (rnd() - 0.5) * 0.08, p[1], p[2]);
+      tmp.rotation.set(0, (rnd() - 0.5) * 0.4, 0);
+      tmp.scale.setScalar(0.9 + rnd() * 0.2);
+      tmp.updateMatrix();
+      bodies.setMatrixAt(i, tmp.matrix);
+      heads.setMatrixAt(i, tmp.matrix);
+      bodies.setColorAt(i, colors[Math.floor(rnd() * colors.length)]);
+      heads.setColorAt(i, skins[Math.floor(rnd() * skins.length)]);
+    });
+    tmp.rotation.set(0, 0, 0); tmp.scale.setScalar(1);
+    for (const im of [bodies, heads]) {
+      im.instanceMatrix.needsUpdate = true;
+      if (im.instanceColor) im.instanceColor.needsUpdate = true;
+      im.computeBoundingSphere();
+      im.name = 'crowd';
+      im.userData.noCollide = true;
+      g.add(im);
+    }
+    g.userData.crowd = { bodies, heads };
+  }
+
+  // LED ribbon along the front wall of the stand
+  if (o.frontMaterial) {
+    const rib = new THREE.Mesh(new THREE.BoxGeometry(L, 0.3, 0.04), getMat(o.frontMaterial));
+    rib.position.set(0, rise * 0.55, -0.03);
+    rib.userData.noCollide = true;
+    g.add(rib);
+  }
+
+  applyTransform(g, o);
+  return g;
+}
+
+function drawScreen(s) {
+  const { canvas, ctx, content } = s;
+  const W = canvas.width, H = canvas.height;
+  const [c1, c2] = content.colors || ['#0a1a5c', '#c4161c'];
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, c1);
+  grad.addColorStop(1, c2);
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  // LED panel grid
+  ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+  ctx.lineWidth = 2;
+  const cell = Math.max(16, Math.round(W / 32));
+  for (let x = 0; x < W; x += cell) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += cell) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = 'rgba(255,255,255,0.6)';
+  ctx.shadowBlur = 24;
+  if (content.text) {
+    ctx.font = `900 ${Math.round(H * 0.26)}px Impact, "Arial Black", sans-serif`;
+    ctx.fillText(content.text, W / 2, H * 0.45);
+  }
+  if (content.sub) {
+    ctx.font = `700 ${Math.round(H * 0.11)}px "Arial Black", sans-serif`;
+    ctx.fillText(content.sub, W / 2, H * 0.72);
+  }
+  ctx.shadowBlur = 0;
+  s.texture.needsUpdate = true;
+}
+
+function buildScreen(o, getMat, screens, suffix) {
+  const g = new THREE.Group();
+  const [w, h] = o.size;
+  const canvas = document.createElement('canvas');
+  const res = 512 / Math.max(w, h);
+  canvas.width = Math.max(64, Math.round(w * res));
+  canvas.height = Math.max(64, Math.round(h * res));
+  const ctx = canvas.getContext('2d');
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  const s = { canvas, ctx, texture, content: { ...(o.content || {}) } };
+  drawScreen(s);
+  screens.set(o.id + suffix, s);
+
+  const panel = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: texture, toneMapped: false }));
+  panel.position.z = 0.16;
+  panel.name = 'screen_surface';
+  // Mirrored copies get negative scale, so flip the surface back to keep text readable
+  if (suffix.includes('x')) panel.scale.x = -1;
+  g.add(panel);
+
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(w + 0.4, h + 0.4, 0.3), getMat(o.frameMaterial || 'screen_frame'));
+  shadowFlags(frame, o);
+  g.add(frame);
+  applyTransform(g, o);
+  return g;
+}
+
+function buildLights(o, parent, register) {
+  const copies = mirrorScales(o.mirror);
+  for (const { scale, suffix } of copies) {
+    const pos = new THREE.Vector3(...o.position).multiply(scale);
+    let light;
+    if (o.light === 'spot') {
+      light = new THREE.SpotLight(o.color || '#ffffff', o.intensity ?? 100, o.distance ?? 0, (o.angle ?? 30) * DEG, o.penumbra ?? 0.4, o.decay ?? 2);
+      const tgt = new THREE.Vector3(...(o.target || [0, 0, 0])).multiply(scale);
+      light.target.position.copy(tgt);
+      parent.add(light.target);
+    } else {
+      light = new THREE.PointLight(o.color || '#ffffff', o.intensity ?? 100, o.distance ?? 0, o.decay ?? 2);
+    }
+    light.position.copy(pos);
+    parent.add(light);
+    register(light, o.id + suffix, o.tags);
+  }
+}
+
+
+const view = document.getElementById('view');
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(view.clientWidth, view.clientHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+view.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(50, view.clientWidth / view.clientHeight, 0.1, 400);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI * 0.49;
+
+const arena = window.ARENA_BUNDLE
+  ? buildArena(window.ARENA_BUNDLE.arena, window.ARENA_BUNDLE.materials, window.ARENA_BUNDLE.parts)
+  : await loadArena('./arena.json');
+scene.add(arena.group);
+arena.applyEnvironment(scene);
+document.getElementById('status').hidden = true;
+
+// Camera presets
+const camBox = document.getElementById('cams');
+const camButtons = {};
+let camTween = null;
+function goCam(name, instant) {
+  const c = arena.cameras[name];
+  if (!c) return;
+  walker.active = false;
+  for (const [k, b] of Object.entries(camButtons)) b.setAttribute('aria-pressed', String(k === name));
+  if (instant || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    camera.position.copy(c.position); controls.target.copy(c.target); controls.update(); return;
+  }
+  camTween = { t: 0, fromP: camera.position.clone(), fromT: controls.target.clone(), toP: c.position, toT: c.target };
+}
+for (const name of Object.keys(arena.cameras)) {
+  const b = document.createElement('button');
+  b.id = 'cam-' + name;
+  b.textContent = name;
+  b.setAttribute('aria-pressed', 'false');
+  b.onclick = () => goCam(name);
+  camBox.appendChild(b);
+  camButtons[name] = b;
+}
+
+// Stand-in wrestler that walks an entrance path
+const walker = { active: false, path: [], seg: 0, t: 0, speed: 3.2 };
+const fig = new THREE.Group();
+const torso = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.9, 0.35), new THREE.MeshStandardMaterial({ color: '#c4161c' }));
+torso.position.y = 1.15;
+const legs = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.7, 0.3), new THREE.MeshStandardMaterial({ color: '#111' }));
+legs.position.y = 0.35;
+const head = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.3, 0.28), new THREE.MeshStandardMaterial({ color: '#c08a64' }));
+head.position.y = 1.78;
+fig.add(torso, legs, head);
+fig.traverse((m) => { if (m.isMesh) m.castShadow = true; });
+fig.visible = false;
+scene.add(fig);
+
+function startWalk(side) {
+  walker.path = arena.paths['entrance_' + side];
+  if (!walker.path || walker.path.length < 2) return;
+  torso.material.color.set(side === 'red' ? '#c4161c' : '#1d4fbf');
+  arena.setScreen('screen_main', side === 'red'
+    ? { text: 'RED CORNER', sub: 'NOW ENTERING', colors: ['#3a0408', '#c4161c'] }
+    : { text: 'BLUE CORNER', sub: 'NOW ENTERING', colors: ['#04123a', '#1e66ff'] });
+  walker.seg = 0; walker.t = 0; walker.active = true;
+  fig.visible = true;
+  fig.position.copy(walker.path[0]);
+  camTween = null;
+  for (const b of Object.values(camButtons)) b.setAttribute('aria-pressed', 'false');
+}
+document.getElementById('walk-red').onclick = () => startWalk('red');
+document.getElementById('walk-blue').onclick = () => startWalk('blue');
+
+const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), chase = new THREE.Vector3();
+function updateWalker(dt) {
+  if (!walker.active) return;
+  const a = walker.path[walker.seg], b = walker.path[walker.seg + 1];
+  const len = a.distanceTo(b) || 0.001;
+  walker.t += (walker.speed * dt) / len;
+  if (walker.t >= 1) {
+    walker.seg++; walker.t = 0;
+    if (walker.seg >= walker.path.length - 1) { walker.active = false; return; }
+    return;
+  }
+  fig.position.lerpVectors(a, b, walker.t);
+  tmpA.set(b.x - a.x, 0, b.z - a.z);
+  if (tmpA.lengthSq() > 1e-4) fig.rotation.y = Math.atan2(tmpA.x, tmpA.z);
+  // Chase cam: behind and above the figure
+  tmpB.copy(tmpA).normalize();
+  chase.copy(fig.position).addScaledVector(tmpB, -6).add(new THREE.Vector3(1.5, 3.2, 0));
+  camera.position.lerp(chase, Math.min(1, dt * 2.5));
+  controls.target.lerp(tmpA.copy(fig.position).setY(fig.position.y + 1.3), Math.min(1, dt * 4));
+}
+
+goCam('overview', true);
+
+const stats = document.getElementById('stats');
+const clock = new THREE.Clock();
+let frame = 0;
+function tick() {
+  const dt = Math.min(clock.getDelta(), 0.05);
+  if (camTween) {
+    camTween.t = Math.min(1, camTween.t + dt / 1.2);
+    const e = 1 - Math.pow(1 - camTween.t, 3);
+    camera.position.lerpVectors(camTween.fromP, camTween.toP, e);
+    controls.target.lerpVectors(camTween.fromT, camTween.toT, e);
+    if (camTween.t >= 1) camTween = null;
+  }
+  updateWalker(dt);
+  controls.update();
+  renderer.render(scene, camera);
+  if (++frame % 30 === 0) {
+    const i = renderer.info.render;
+    stats.textContent = `${i.calls} draw calls · ${(i.triangles / 1000).toFixed(0)}k tris · ${arena.colliders.length} colliders`;
+  }
+  if (!window.__paused) requestAnimationFrame(tick);
+}
+tick();
+window.__arenaReady = true;
+
+addEventListener('resize', () => {
+  camera.aspect = view.clientWidth / view.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(view.clientWidth, view.clientHeight);
+});
+// Hooks for headless screenshots
+window.__goCam = (n) => goCam(n, true);
+window.__renderOnce = () => {
+  controls.update(); renderer.render(scene, camera);
+  const i = renderer.info.render;
+  return `${i.calls} draw calls, ${i.triangles} tris, ${arena.colliders.length} colliders`;
+};
+</script>
