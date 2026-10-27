@@ -1865,6 +1865,7 @@ storyBlock(storyCoffin,1.45,.65,3.2,0,.6,0,storyMaterials.wood);
 const coffinLid=new THREE.Group();coffinLid.position.set(-.75,.94,0);storyCoffin.add(coffinLid);
 storyBlock(coffinLid,1.45,.15,3.2,.75,0,0,storyMaterials.wood);
 const storyCarpet=storyBlock(storyStage,2.8,.025,25,0,.045,-20,storyMaterials.red);
+const storyCane=storyBlock(storyStage,.09,1.45,.09,-.6,.74,0,storyMaterials.wood);
 const storyThrone=new THREE.Group();storyStage.add(storyThrone);
 storyBlock(storyThrone,1.6,.3,1.4,0,.8,0,storyMaterials.gold);
 storyBlock(storyThrone,1.6,1.6,.25,0,1.65,-.58,storyMaterials.gold);
@@ -1894,7 +1895,7 @@ function storyWalk(a,t,speed=6){
 function storyReset(){
  storyActors.forEach(a=>{a.g.visible=false;a.g.scale.setScalar(1);a.g.rotation.set(0,0,0);a.arms.forEach(v=>v.rotation.set(0,0,0));a.legs.forEach(v=>v.rotation.set(0,0,0));});
  storyCoffin.visible=false;coffinLid.rotation.z=0;
- storyCarpet.visible=false;storyThrone.visible=false;storySign.visible=false;
+ storyCarpet.visible=false;storyThrone.visible=false;storySign.visible=false;storyCane.visible=false;
  storyCameras.forEach(g=>g.visible=false);
 }
 function stopStory(){
@@ -1995,8 +1996,7 @@ function updateStory(dt){
   // Slow cane-assisted shuffle followed by an impossible athletic flip.
   const z=approach((t-2)/22);storyPlace(storyActors[0],0,z,rampY(z));
   if(t<25){storyActors[0].g.rotation.x=.3;storyWalk(storyActors[0],t,2.4);}
-  const cane=storyBlock(storyStage,.09,1.45,.09,-.6,rampY(z)+.74,z+.2,storyMaterials.wood);
-  cane.visible=t<25;
+  storyCane.position.set(-.6,rampY(z)+.74,z+.2);storyCane.visible=t<25;
   if(t>=25&&t<28){
    const p=ease((t-25)/3);
    storyActors[0].g.rotation.x=p*Math.PI*2;
