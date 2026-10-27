@@ -1,0 +1,1106 @@
+{
+  "name": "TTW Universal Wrestler Pack",
+  "version": "0.1.0",
+  "threeVersion": "r160",
+  "skeleton": "skeleton.json",
+  "skeletonId": "ttw-humanoid",
+  "loader": "loader.js",
+  "conventions": {
+    "units": "meters",
+    "up": "+y",
+    "forward": "-z",
+    "feetAtY": 0,
+    "heightMeters": 1.9,
+    "rotations": "degrees, Euler XYZ, local to the bone, relative to the neutral pose",
+    "positions": "offsets from the bone's rest position",
+    "animationIds": "<category>.<name>",
+    "ropes": "rope animations assume the ropes are behind the wrestler (+Z), top rope about 1.25 m up, about 0.4 m behind the feet"
+  },
+  "rootMotionModes": {
+    "none": "Animation stays on the spot.",
+    "inPlace": "Looping locomotion. The game moves the wrestler at 'speed' m/s along 'direction' (local).",
+    "speedCurve": "One-shot movement. The game moves the wrestler using 'speedCurve' [[time, m/s], ...]. Wrestler.getRootSpeed() samples it.",
+    "baked": "The hips travel inside the clip. When the next clip starts, the loader moves the wrestler by the hips' XZ offset ('endOffset' at the end of the clip)."
+  },
+  "events": {
+    "hit": "A strike reaches its target. Fields: attachment or bone (contact point), zone (head/body/legs), reach (metres in front of the attacker).",
+    "hit_received": "Start of a damage reaction. Fields: zone.",
+    "grab": "Hands close on the opponent. Fields: attachment.",
+    "release": "The opponent or prop is let go, or a clip hands over to the next one. Fields: next (suggested follow-up animation id).",
+    "rope_contact": "Body meets the ropes. Fields: attachment.",
+    "rebound": "The ropes push the wrestler back out.",
+    "jump": "Feet leave the mat.",
+    "land": "Body or feet hit the mat. Fields: zone.",
+    "recover": "From here the wrestler can be given new commands.",
+    "weapon_impact": "A held prop hits something. Fields: attachment, prop.",
+    "table_break": "The table should switch to its broken state.",
+    "finished": "Emitted by the loader when a non-looping clip ends (not stored in the animation files)."
+  },
+  "wrestlers": [
+    {
+      "id": "wrestler-01",
+      "displayName": "Rex Calloway",
+      "gender": "male",
+      "file": "roster/wrestler-01.json",
+      "style": {
+        "outfit": "trunks",
+        "hair": "mohawk",
+        "face": "goatee",
+        "extras": ["elbowpads"]
+      },
+      "status": "ready"
+    },
+    {
+      "id": "wrestler-02",
+      "displayName": "Nova Reyes",
+      "gender": "female",
+      "file": "roster/wrestler-02.json",
+      "style": {
+        "outfit": "singlet",
+        "hair": "ponytail",
+        "face": "clean",
+        "extras": []
+      },
+      "status": "ready"
+    },
+    {
+      "id": "wrestler-03",
+      "file": "roster/wrestler-03.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-04",
+      "file": "roster/wrestler-04.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-05",
+      "file": "roster/wrestler-05.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-06",
+      "file": "roster/wrestler-06.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-07",
+      "file": "roster/wrestler-07.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-08",
+      "file": "roster/wrestler-08.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-09",
+      "file": "roster/wrestler-09.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-10",
+      "file": "roster/wrestler-10.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-11",
+      "file": "roster/wrestler-11.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-12",
+      "file": "roster/wrestler-12.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-13",
+      "file": "roster/wrestler-13.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-14",
+      "file": "roster/wrestler-14.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-15",
+      "file": "roster/wrestler-15.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-16",
+      "file": "roster/wrestler-16.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-17",
+      "file": "roster/wrestler-17.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-18",
+      "file": "roster/wrestler-18.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-19",
+      "file": "roster/wrestler-19.json",
+      "status": "planned"
+    },
+    {
+      "id": "wrestler-20",
+      "file": "roster/wrestler-20.json",
+      "status": "planned"
+    }
+  ],
+  "animations": [
+    {
+      "id": "movement.idle",
+      "name": "Idle",
+      "category": "movement",
+      "file": "animations/movement/idle.json",
+      "duration": 2.4,
+      "loop": true,
+      "rootMotion": "none",
+      "events": [],
+      "tags": ["idle", "loop"],
+      "status": "ready"
+    },
+    {
+      "id": "movement.walk",
+      "name": "Walk",
+      "category": "movement",
+      "file": "animations/movement/walk.json",
+      "duration": 1.0,
+      "loop": true,
+      "rootMotion": "inPlace",
+      "events": [],
+      "tags": ["locomotion", "loop"],
+      "status": "ready"
+    },
+    {
+      "id": "movement.run",
+      "name": "Run",
+      "category": "movement",
+      "file": "animations/movement/run.json",
+      "duration": 0.64,
+      "loop": true,
+      "rootMotion": "inPlace",
+      "events": [],
+      "tags": ["locomotion", "loop"],
+      "status": "ready"
+    },
+    {
+      "id": "striking.punch",
+      "name": "Punch",
+      "category": "striking",
+      "file": "animations/striking/punch.json",
+      "duration": 0.8,
+      "loop": false,
+      "rootMotion": "none",
+      "events": ["hit"],
+      "tags": ["strike", "right"],
+      "status": "ready"
+    },
+    {
+      "id": "striking.kick",
+      "name": "Kick",
+      "category": "striking",
+      "file": "animations/striking/kick.json",
+      "duration": 0.9,
+      "loop": false,
+      "rootMotion": "none",
+      "events": ["hit"],
+      "tags": ["strike", "right", "kick"],
+      "status": "ready"
+    },
+    {
+      "id": "reactions.hit-front",
+      "name": "Hit reaction, front",
+      "category": "reactions",
+      "file": "animations/reactions/hit-front.json",
+      "duration": 0.75,
+      "loop": false,
+      "rootMotion": "baked",
+      "events": ["hit_received", "recover"],
+      "tags": ["reaction", "front"],
+      "status": "ready"
+    },
+    {
+      "id": "reactions.hit-back",
+      "name": "Hit reaction, back",
+      "category": "reactions",
+      "file": "animations/reactions/hit-back.json",
+      "duration": 0.75,
+      "loop": false,
+      "rootMotion": "baked",
+      "events": ["hit_received", "recover"],
+      "tags": ["reaction", "back"],
+      "status": "ready"
+    },
+    {
+      "id": "falls.fall-backward",
+      "name": "Fall backwards",
+      "category": "falls",
+      "file": "animations/falls/fall-backward.json",
+      "duration": 1.8,
+      "loop": false,
+      "rootMotion": "baked",
+      "events": ["land"],
+      "tags": ["fall", "back", "ends-lying-back"],
+      "status": "ready"
+    },
+    {
+      "id": "falls.getup-back",
+      "name": "Get up from back",
+      "category": "falls",
+      "file": "animations/falls/getup-back.json",
+      "duration": 2.0,
+      "loop": false,
+      "rootMotion": "baked",
+      "events": ["recover"],
+      "tags": ["getup", "starts-lying-back"],
+      "status": "ready"
+    },
+    {
+      "id": "ropes.rope-lean",
+      "name": "Rope lean",
+      "category": "ropes",
+      "file": "animations/ropes/rope-lean.json",
+      "duration": 0.7,
+      "loop": false,
+      "rootMotion": "none",
+      "events": ["rope_contact"],
+      "tags": ["ropes", "hold", "ends-rope-lean"],
+      "status": "ready"
+    },
+    {
+      "id": "ropes.rope-rebound",
+      "name": "Rope rebound",
+      "category": "ropes",
+      "file": "animations/ropes/rope-rebound.json",
+      "duration": 0.8,
+      "loop": false,
+      "rootMotion": "speedCurve",
+      "events": ["rope_contact", "rebound", "release"],
+      "tags": ["ropes", "starts-rope-lean", "chains-to-run"],
+      "status": "ready"
+    },
+    {
+      "id": "movement.idle-fight",
+      "name": "Idle, fighting stance",
+      "category": "movement",
+      "file": "animations/movement/idle-fight.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.walk-cocky",
+      "name": "Walk, cocky",
+      "category": "movement",
+      "file": "animations/movement/walk-cocky.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.walk-injured",
+      "name": "Walk, injured",
+      "category": "movement",
+      "file": "animations/movement/walk-injured.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.sprint",
+      "name": "Sprint",
+      "category": "movement",
+      "file": "animations/movement/sprint.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.backpedal",
+      "name": "Backpedal",
+      "category": "movement",
+      "file": "animations/movement/backpedal.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.sidestep-left",
+      "name": "Sidestep left",
+      "category": "movement",
+      "file": "animations/movement/sidestep-left.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.sidestep-right",
+      "name": "Sidestep right",
+      "category": "movement",
+      "file": "animations/movement/sidestep-right.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.turn-180",
+      "name": "Turn around",
+      "category": "movement",
+      "file": "animations/movement/turn-180.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.stumble-forward",
+      "name": "Stumble forward",
+      "category": "movement",
+      "file": "animations/movement/stumble-forward.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.stumble-backward",
+      "name": "Stumble backward",
+      "category": "movement",
+      "file": "animations/movement/stumble-backward.json",
+      "status": "planned"
+    },
+    {
+      "id": "movement.stagger-move",
+      "name": "Stagger while moving",
+      "category": "movement",
+      "file": "animations/movement/stagger-move.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.jab",
+      "name": "Jab",
+      "category": "striking",
+      "file": "animations/striking/jab.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.hook-left",
+      "name": "Hook punch, left",
+      "category": "striking",
+      "file": "animations/striking/hook-left.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.hook-right",
+      "name": "Hook punch, right",
+      "category": "striking",
+      "file": "animations/striking/hook-right.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.uppercut",
+      "name": "Uppercut",
+      "category": "striking",
+      "file": "animations/striking/uppercut.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.body-punch",
+      "name": "Body punch",
+      "category": "striking",
+      "file": "animations/striking/body-punch.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.low-kick",
+      "name": "Low kick",
+      "category": "striking",
+      "file": "animations/striking/low-kick.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.roundhouse",
+      "name": "Roundhouse kick",
+      "category": "striking",
+      "file": "animations/striking/roundhouse.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.knee",
+      "name": "Knee strike",
+      "category": "striking",
+      "file": "animations/striking/knee.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.elbow",
+      "name": "Elbow strike",
+      "category": "striking",
+      "file": "animations/striking/elbow.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.clothesline",
+      "name": "Clothesline",
+      "category": "striking",
+      "file": "animations/striking/clothesline.json",
+      "status": "planned"
+    },
+    {
+      "id": "striking.double-axe",
+      "name": "Double axe handle",
+      "category": "striking",
+      "file": "animations/striking/double-axe.json",
+      "status": "planned"
+    },
+    {
+      "id": "grappling.grab",
+      "name": "Grab opponent",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/grab.attacker.json",
+        "receiver": "animations/grappling/grab.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.grapple-idle",
+      "name": "Grapple idle",
+      "category": "grappling",
+      "file": "animations/grappling/grapple-idle.json",
+      "status": "planned"
+    },
+    {
+      "id": "grappling.push",
+      "name": "Push opponent",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/push.attacker.json",
+        "receiver": "animations/grappling/push.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.break-grapple",
+      "name": "Break grapple",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/break-grapple.attacker.json",
+        "receiver": "animations/grappling/break-grapple.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.spear",
+      "name": "Spear tackle",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/spear.attacker.json",
+        "receiver": "animations/grappling/spear.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.shoulder-charge",
+      "name": "Shoulder charge",
+      "category": "grappling",
+      "file": "animations/grappling/shoulder-charge.json",
+      "status": "planned"
+    },
+    {
+      "id": "grappling.body-slam",
+      "name": "Body slam",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/body-slam.attacker.json",
+        "receiver": "animations/grappling/body-slam.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.suplex",
+      "name": "Suplex",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/suplex.attacker.json",
+        "receiver": "animations/grappling/suplex.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.ddt",
+      "name": "DDT",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/ddt.attacker.json",
+        "receiver": "animations/grappling/ddt.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.headlock",
+      "name": "Headlock",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/headlock.attacker.json",
+        "receiver": "animations/grappling/headlock.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.irish-whip",
+      "name": "Irish whip",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/irish-whip.attacker.json",
+        "receiver": "animations/grappling/irish-whip.receiver.json"
+      }
+    },
+    {
+      "id": "grappling.throw-to-ropes",
+      "name": "Throw opponent towards ropes",
+      "category": "grappling",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/grappling/throw-to-ropes.attacker.json",
+        "receiver": "animations/grappling/throw-to-ropes.receiver.json"
+      }
+    },
+    {
+      "id": "ropes.run-into-ropes",
+      "name": "Run into ropes",
+      "category": "ropes",
+      "file": "animations/ropes/run-into-ropes.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.turn-from-ropes",
+      "name": "Turn to face away from ropes",
+      "category": "ropes",
+      "file": "animations/ropes/turn-from-ropes.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.rope-stretch",
+      "name": "Rope stretch and recoil",
+      "category": "ropes",
+      "file": "animations/ropes/rope-stretch.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.spring-forward",
+      "name": "Spring forward from ropes",
+      "category": "ropes",
+      "file": "animations/ropes/spring-forward.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.bounce-running",
+      "name": "Bounce off ropes while running",
+      "category": "ropes",
+      "file": "animations/ropes/bounce-running.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.jump-over-top",
+      "name": "Jump over top rope",
+      "category": "ropes",
+      "file": "animations/ropes/jump-over-top.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.climb-through",
+      "name": "Climb through ropes",
+      "category": "ropes",
+      "file": "animations/ropes/climb-through.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.slide-under",
+      "name": "Slide under bottom rope",
+      "category": "ropes",
+      "file": "animations/ropes/slide-under.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.enter-ring",
+      "name": "Enter ring through ropes",
+      "category": "ropes",
+      "file": "animations/ropes/enter-ring.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.exit-ring",
+      "name": "Exit ring through ropes",
+      "category": "ropes",
+      "file": "animations/ropes/exit-ring.json",
+      "status": "planned"
+    },
+    {
+      "id": "ropes.tangled",
+      "name": "Tangled in ropes",
+      "category": "ropes",
+      "file": "animations/ropes/tangled.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.standing-jump",
+      "name": "Standing jump",
+      "category": "aerial",
+      "file": "animations/aerial/standing-jump.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.running-jump",
+      "name": "Running jump",
+      "category": "aerial",
+      "file": "animations/aerial/running-jump.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.diving-attack",
+      "name": "Diving attack",
+      "category": "aerial",
+      "file": "animations/aerial/diving-attack.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.swan-dive",
+      "name": "Swan dive",
+      "category": "aerial",
+      "file": "animations/aerial/swan-dive.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.elbow-drop",
+      "name": "Diving elbow drop",
+      "category": "aerial",
+      "file": "animations/aerial/elbow-drop.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.body-splash",
+      "name": "Diving body splash",
+      "category": "aerial",
+      "file": "animations/aerial/body-splash.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.top-rope-jump",
+      "name": "Top-rope jump",
+      "category": "aerial",
+      "file": "animations/aerial/top-rope-jump.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.land-on-opponent",
+      "name": "Landing on opponent",
+      "category": "aerial",
+      "file": "animations/aerial/land-on-opponent.json",
+      "status": "planned"
+    },
+    {
+      "id": "aerial.missed-dive",
+      "name": "Missed dive and crash landing",
+      "category": "aerial",
+      "file": "animations/aerial/missed-dive.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-front-body",
+      "name": "Hit from front, body",
+      "category": "reactions",
+      "file": "animations/reactions/hit-front-body.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-back-body",
+      "name": "Hit from behind, body",
+      "category": "reactions",
+      "file": "animations/reactions/hit-back-body.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-left",
+      "name": "Hit from left",
+      "category": "reactions",
+      "file": "animations/reactions/hit-left.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-right",
+      "name": "Hit from right",
+      "category": "reactions",
+      "file": "animations/reactions/hit-right.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-kick",
+      "name": "Hit by kick",
+      "category": "reactions",
+      "file": "animations/reactions/hit-kick.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-clothesline",
+      "name": "Hit by clothesline",
+      "category": "reactions",
+      "file": "animations/reactions/hit-clothesline.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.hit-chair",
+      "name": "Hit by chair",
+      "category": "reactions",
+      "file": "animations/reactions/hit-chair.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.stunned",
+      "name": "Stunned",
+      "category": "reactions",
+      "file": "animations/reactions/stunned.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.dizzy",
+      "name": "Dizzy",
+      "category": "reactions",
+      "file": "animations/reactions/dizzy.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.knocked-back",
+      "name": "Knocked backwards",
+      "category": "reactions",
+      "file": "animations/reactions/knocked-back.json",
+      "status": "planned"
+    },
+    {
+      "id": "reactions.stumble-recover",
+      "name": "Stumble and recover",
+      "category": "reactions",
+      "file": "animations/reactions/stumble-recover.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.fall-forward",
+      "name": "Fall forwards",
+      "category": "falls",
+      "file": "animations/falls/fall-forward.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.fall-left",
+      "name": "Fall sideways, left",
+      "category": "falls",
+      "file": "animations/falls/fall-left.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.fall-right",
+      "name": "Fall sideways, right",
+      "category": "falls",
+      "file": "animations/falls/fall-right.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.collapse-knees",
+      "name": "Collapse to knees",
+      "category": "falls",
+      "file": "animations/falls/collapse-knees.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.fall-spear",
+      "name": "Fall after spear",
+      "category": "falls",
+      "file": "animations/falls/fall-spear.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.fall-slam",
+      "name": "Fall after body slam",
+      "category": "falls",
+      "file": "animations/falls/fall-slam.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.lie-back",
+      "name": "Lie on back",
+      "category": "falls",
+      "file": "animations/falls/lie-back.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.lie-front",
+      "name": "Lie face down",
+      "category": "falls",
+      "file": "animations/falls/lie-front.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.roll-to-back",
+      "name": "Roll onto back",
+      "category": "falls",
+      "file": "animations/falls/roll-to-back.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.roll-to-front",
+      "name": "Roll onto stomach",
+      "category": "falls",
+      "file": "animations/falls/roll-to-front.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.getup-front",
+      "name": "Get up from stomach",
+      "category": "falls",
+      "file": "animations/falls/getup-front.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.getup-injured",
+      "name": "Get up slowly, injured",
+      "category": "falls",
+      "file": "animations/falls/getup-injured.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.quick-recovery",
+      "name": "Quick recovery",
+      "category": "falls",
+      "file": "animations/falls/quick-recovery.json",
+      "status": "planned"
+    },
+    {
+      "id": "falls.knockout",
+      "name": "Knockout idle",
+      "category": "falls",
+      "file": "animations/falls/knockout.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.raise-arms",
+      "name": "Raise both arms",
+      "category": "taunts",
+      "file": "animations/taunts/raise-arms.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.flex",
+      "name": "Flex muscles",
+      "category": "taunts",
+      "file": "animations/taunts/flex.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.point",
+      "name": "Point at opponent",
+      "category": "taunts",
+      "file": "animations/taunts/point.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.beckon",
+      "name": "Beckon opponent",
+      "category": "taunts",
+      "file": "animations/taunts/beckon.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.crowd-hype",
+      "name": "Crowd hype",
+      "category": "taunts",
+      "file": "animations/taunts/crowd-hype.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.chest-beat",
+      "name": "Chest beating",
+      "category": "taunts",
+      "file": "animations/taunts/chest-beat.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.victory",
+      "name": "Victory celebration",
+      "category": "taunts",
+      "file": "animations/taunts/victory.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.cocky-laugh",
+      "name": "Cocky laugh",
+      "category": "taunts",
+      "file": "animations/taunts/cocky-laugh.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.angry-challenge",
+      "name": "Angry challenge",
+      "category": "taunts",
+      "file": "animations/taunts/angry-challenge.json",
+      "status": "planned"
+    },
+    {
+      "id": "taunts.exhausted-celebration",
+      "name": "Exhausted celebration",
+      "category": "taunts",
+      "file": "animations/taunts/exhausted-celebration.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.chair-pickup",
+      "name": "Pick up folding chair",
+      "category": "weapons",
+      "file": "animations/weapons/chair-pickup.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.chair-hold",
+      "name": "Hold chair",
+      "category": "weapons",
+      "file": "animations/weapons/chair-hold.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.chair-swing-horizontal",
+      "name": "Swing chair horizontally",
+      "category": "weapons",
+      "file": "animations/weapons/chair-swing-horizontal.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.chair-swing-overhead",
+      "name": "Swing chair overhead",
+      "category": "weapons",
+      "file": "animations/weapons/chair-swing-overhead.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.chair-hit-reaction",
+      "name": "Chair hit reaction",
+      "category": "weapons",
+      "file": "animations/weapons/chair-hit-reaction.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.chair-drop",
+      "name": "Drop chair",
+      "category": "weapons",
+      "file": "animations/weapons/chair-drop.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.table-pickup",
+      "name": "Pick up table",
+      "category": "weapons",
+      "file": "animations/weapons/table-pickup.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.table-carry",
+      "name": "Carry table",
+      "category": "weapons",
+      "file": "animations/weapons/table-carry.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.table-setup",
+      "name": "Set up table",
+      "category": "weapons",
+      "file": "animations/weapons/table-setup.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.table-push",
+      "name": "Push opponent onto table",
+      "category": "weapons",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/weapons/table-push.attacker.json",
+        "receiver": "animations/weapons/table-push.receiver.json"
+      }
+    },
+    {
+      "id": "weapons.table-slam",
+      "name": "Slam opponent through table",
+      "category": "weapons",
+      "status": "planned",
+      "paired": true,
+      "roles": {
+        "attacker": "animations/weapons/table-slam.attacker.json",
+        "receiver": "animations/weapons/table-slam.receiver.json"
+      }
+    },
+    {
+      "id": "weapons.table-break-reaction",
+      "name": "Table-breaking reaction",
+      "category": "weapons",
+      "file": "animations/weapons/table-break-reaction.json",
+      "status": "planned"
+    },
+    {
+      "id": "weapons.table-fall-through",
+      "name": "Fall through broken table",
+      "category": "weapons",
+      "file": "animations/weapons/table-fall-through.json",
+      "status": "planned"
+    }
+  ],
+  "props": [
+    {
+      "id": "folding-chair",
+      "file": "props/folding-chair.json",
+      "status": "planned",
+      "states": ["folded", "open"]
+    },
+    {
+      "id": "wrestling-table",
+      "file": "props/wrestling-table.json",
+      "status": "planned",
+      "states": ["intact", "damaged", "broken"]
+    }
+  ],
+  "pairedMoveSchema": {
+    "id": "grappling.body-slam",
+    "duration": 1.6,
+    "anchor": "attacker",
+    "receiverOffset": {
+      "position": [0, 0, -0.55],
+      "rotationY": 180
+    },
+    "contacts": [
+      {
+        "time": 0.2,
+        "attacker": "rightHandGrip",
+        "receiver": "waist"
+      }
+    ],
+    "events": [
+      {
+        "time": 0.2,
+        "name": "grab"
+      },
+      {
+        "time": 1.15,
+        "name": "land",
+        "role": "receiver"
+      },
+      {
+        "time": 1.3,
+        "name": "release"
+      }
+    ],
+    "attacker": "animations/grappling/body-slam.attacker.json",
+    "receiver": "animations/grappling/body-slam.receiver.json",
+    "notes": "Both role files are normal animation files with the same duration. The receiver is placed at receiverOffset in the attacker's local frame and both clips start on the same frame. Receiver lift/throw travel is baked in its hips/root tracks."
+  },
+  "stats": {
+    "wrestlersReady": 2,
+    "animationsReady": 11,
+    "animationsPlanned": 102
+  }
+}
