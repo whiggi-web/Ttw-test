@@ -352,6 +352,20 @@ const controllerSlot=document.getElementById('controllerSlot');
 const pad=window.GameController.mount(controllerSlot,{mode:'auto'});
 const movement=pad.state.joysticks.controlMOVEMENT;
 const clock=new THREE.Clock();
+const heldKeys=new Set();
+let punchRemaining=0;
+window.addEventListener('keydown',e=>{
+ if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(e.code)){
+  if(e.target instanceof HTMLElement&&e.target.closest('input,textarea,[contenteditable="true"]'))return;
+  heldKeys.add(e.code);
+  e.preventDefault();
+ }
+});
+window.addEventListener('keyup',e=>heldKeys.delete(e.code));
+window.addEventListener('blur',()=>heldKeys.clear());
+renderer.domElement.addEventListener('click',()=>{
+ if(!document.getElementById('home').hidden&&punchRemaining<=0)punchRemaining=.55;
+});
 
 let yaw=Math.PI/4,pitch=.22,distance=17;
 const target=new THREE.Vector3(0,1.7,0);
@@ -392,15 +406,19 @@ renderer.setAnimationLoop(()=>{
  updateRopes(dt);
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
  let isWalking=false;
- if(movement.active){
-  const inputX=movement.x,inputZ=movement.y;
+ const keyboardX=Number(heldKeys.has('KeyD'))-Number(heldKeys.has('KeyA'));
+ const keyboardZ=Number(heldKeys.has('KeyW'))-Number(heldKeys.has('KeyS'));
+ const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
+ const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
+ const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
+ if(Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
   const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
    isWalking=true;
-   const step=move.multiplyScalar(5*dt);
+   const step=move.multiplyScalar((sprint?8:5)*dt);
    if(loadedArena){
     const tryAxis=(axis,amount)=>{
      const nx=player.position.x+(axis==='x'?amount:0);
@@ -433,7 +451,8 @@ renderer.setAnimationLoop(()=>{
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
  if(loadedWrestler){
-  const nextAnimation=isWalking?'run':'idle';
+  if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
+  const nextAnimation=punchRemaining>0?'punch':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    loadedWrestler.play(nextAnimation,{fade:.2});
    loadedWrestler._ttwState=nextAnimation;
