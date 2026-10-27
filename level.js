@@ -213,7 +213,8 @@ if(loadedArena){
   const original=new Float32Array(pos.array);
   // Deform away from the ring centre on every side, including mirrored ropes.
   const outward=new THREE.Vector3(side==='west'?-1:side==='east'?1:0,0,side==='north'?1:side==='south'?-1:0);
-  const localInward=outward.applyQuaternion(obj.getWorldQuaternion(new THREE.Quaternion()).invert());
+  // Inverse world matrix includes mirrored negative scales; quaternion inversion does not.
+  const localInward=outward.transformDirection(obj.matrixWorld.clone().invert());
   const halfLength=(geom.parameters?.height||7)/2;
   ropeMeshes.push({side,pos,original,localInward,halfLength,mesh:obj});
  });
