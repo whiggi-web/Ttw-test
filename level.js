@@ -2040,6 +2040,175 @@ function updateStory(dt){
  return true;
 }
 
+
+/* TTW v0.72: The Magician, stage illusion, assistant, exploding box and ring reveal. */
+const magicianButton=document.createElement('button');
+magicianButton.type='button';magicianButton.textContent='🎩 THE MAGICIAN';
+let magicianTime=-1,magicianCard=-1,magicianResumeFeed=false;
+const magicStage=new THREE.Group();scene.add(magicStage);
+const magicBlack=new THREE.MeshStandardMaterial({color:0x171023,roughness:.72});
+const magicPurple=new THREE.MeshStandardMaterial({color:0x4e2079,roughness:.55,metalness:.25});
+const magicGold=new THREE.MeshStandardMaterial({color:0xd7ad5a,metalness:.65,roughness:.35});
+const magicSkin=new THREE.MeshStandardMaterial({color:0xd1a082,roughness:.85});
+const magicWhite=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.55,depthWrite:false});
+function magicBox(parent,w,h,d,x,y,z,mat){
+ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);o.position.set(x,y,z);parent.add(o);return o;
+}
+function magicHuman(parent,coat,hat){
+ const g=new THREE.Group();parent.add(g);
+ magicBox(g,.77,1.06,.47,0,1.34,0,coat);
+ magicBox(g,.22,.83,.25,-.5,1.35,0,coat);
+ magicBox(g,.22,.83,.25,.5,1.35,0,coat);
+ magicBox(g,.29,.81,.32,-.2,.43,0,magicBlack);
+ magicBox(g,.29,.81,.32,.2,.43,0,magicBlack);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.27,12,8),magicSkin);
+ head.position.y=2.13;g.add(head);
+ if(hat){
+  const brim=new THREE.Mesh(new THREE.CylinderGeometry(.44,.44,.055,16),magicBlack);
+  brim.position.y=2.46;g.add(brim);
+  const top=new THREE.Mesh(new THREE.CylinderGeometry(.28,.28,.55,16),magicBlack);
+  top.position.y=2.76;g.add(top);
+  magicBox(g,.82,.1,.08,0,1.92,.3,magicGold);
+ }
+ return g;
+}
+const magician=magicHuman(magicStage,magicPurple,true);
+const magicAssistant=magicHuman(magicStage,magicGold,false);
+const magicCabinet=new THREE.Group();magicStage.add(magicCabinet);
+magicBox(magicCabinet,2.0,.18,1.6,0,.17,0,magicGold);
+magicBox(magicCabinet,.13,2.5,1.6,-1,1.47,0,magicPurple);
+magicBox(magicCabinet,.13,2.5,1.6,1,1.47,0,magicPurple);
+magicBox(magicCabinet,2.0,.16,1.6,0,2.77,0,magicGold);
+magicBox(magicCabinet,2,.12,.12,0,1.65,-.8,magicGold);
+const magicDoors=[];
+for(const side of [-1,1]){
+ const hinge=new THREE.Group();hinge.position.set(side*1,1.45,.82);magicCabinet.add(hinge);
+ magicBox(hinge,.96,2.38,.09,-side*.48,0,0,magicPurple);
+ magicBox(hinge,.08,2.18,.13,-side*.88,0,.04,magicGold);
+ magicDoors.push({hinge,side});
+}
+const magicShards=[];
+for(let i=0;i<20;i++){
+ const shard=magicBox(magicStage,.25+(i%4)*.12,.12+(i%3)*.16,.12,0,0,0,i%3?magicPurple:magicGold);
+ shard.visible=false;magicShards.push(shard);
+}
+const magicSmoke=[];
+for(let i=0;i<32;i++){
+ const material=magicWhite.clone();
+ const puff=new THREE.Mesh(new THREE.SphereGeometry(.36+(i%4)*.13,8,6),material);
+ puff.visible=false;magicStage.add(puff);magicSmoke.push(puff);
+}
+const magicSparks=[];
+for(let i=0;i<28;i++){
+ const spark=new THREE.Mesh(new THREE.BoxGeometry(.035,.24,.035),new THREE.MeshBasicMaterial({color:i%2?0xffd56e:0xffffff}));
+ spark.visible=false;magicStage.add(spark);magicSparks.push(spark);
+}
+function stopMagician(){
+ if(magicianTime<0)return;
+ magicianTime=-1;magicianCard=-1;magicStage.visible=false;
+ if(magicianResumeFeed)setActionFeed(true);
+ magicianResumeFeed=false;
+}
+magicianButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();stopShowcase();stopBetter();stopGod();stopConvoy();stopStory();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopMagician();magicianTime=0;magicianCard=-1;
+ magicianResumeFeed=actionFeedEnabled;
+ if(actionFeedEnabled)setActionFeed(false);
+ jumbotronCountdown=-1;entranceBot.visible=false;magicStage.visible=true;
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton,betterButton,godButton,convoyButton,...storyButtons,...showcaseButtons])b.addEventListener('click',stopMagician);
+function updateMagician(dt){
+ if(magicianTime<0)return false;
+ magicianTime+=dt;const t=magicianTime;
+ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
+ const ease=v=>{v=clamp(v,0,1);return v*v*(3-2*v);};
+ magicStage.visible=true;
+ const card=t<6?0:t<19?1:t<26?2:3;
+ if(card!==magicianCard){
+  magicianCard=card;
+  if(card===0)setJumbotron('THE','MAGICIAN',['#1c1030','#cba3fa']);
+  else if(card===1)setJumbotron('WATCH','CLOSELY',['#160e26','#b89aeb']);
+  else if(card===2)setJumbotron('NOW YOU SEE ME','NOW YOU DON\'T',['#0c0816','#eee0ff']);
+  else setJumbotron('TA-DA!','THE MAGICIAN',['#31184d','#e4b5ff']);
+ }
+ const magZ=-30.6;
+ const walk=ease((t-2)/5);
+ const stepIn=ease((t-13)/3);
+ const inBox=t>=16&&t<26;
+ const ring=t>=26;
+ magician.visible=!inBox&&(t<22||ring);
+ if(t<13)magician.position.set(lerp(-4.8,-1.9,walk),1.2,magZ);
+ else if(t<16)magician.position.set(lerp(-1.9,0,stepIn),1.2,magZ);
+ else if(ring)magician.position.set(0,1.2,0);
+ else magician.position.set(0,1.2,magZ);
+ magician.rotation.set(0,t>=26?0:Math.PI,0);
+ if(t>=7&&t<13){
+  magician.rotation.y=Math.PI+Math.sin((t-7)*1.4)*.6;
+  magician.rotation.z=Math.sin((t-7)*2.2)*.09;
+ }else magician.rotation.z=0;
+ if(ring){
+  magician.rotation.y=Math.PI*2*ease((t-26)/2);
+  magician.rotation.z=t>29?.08:0;
+ }
+ magicAssistant.visible=t>=10&&t<26;
+ magicAssistant.position.set(t<17?2.6:lerp(2.6,1.9,ease((t-17)/2)),1.2,magZ+.3);
+ magicAssistant.rotation.y=Math.PI;
+ magicCabinet.visible=t>=9&&t<25;
+ magicCabinet.position.set(0,1.2,magZ);
+ const door=ease((t-17)/1.4);
+ for(const d of magicDoors)d.hinge.rotation.y=-d.side*(1-door)*1.4;
+ for(let i=0;i<magicShards.length;i++){
+  const o=magicShards[i];const age=t-22.7;
+  o.visible=age>=0&&age<2.2;
+  if(o.visible){
+   const angle=i*2.39996;
+   const distance=age*(2.1+(i%5)*.47);
+   o.position.set(Math.cos(angle)*distance,2.4+Math.sin(i*3.7)*distance*.6+age*1.5-age*age*1.3,magZ+Math.sin(angle)*distance);
+   o.rotation.set(age*(i%3+1)*3,age*(i%4+1)*2,age*4);
+  }
+ }
+ for(let i=0;i<magicSmoke.length;i++){
+  const o=magicSmoke[i];const inRing=i>=16;
+  const start=inRing?25.7:22.4;
+  const age=t-start-(i%4)*.06;
+  o.visible=age>=0&&age<3.2;
+  if(o.visible){
+   const angle=i*2.39996;
+   const radius=(.25+age*.68)*(1+(i%4)*.17);
+   o.position.set(Math.cos(angle)*radius,(inRing?1.2:1.2)+.5+age*.55, (inRing?0:magZ)+Math.sin(angle)*radius);
+   o.material.opacity=.65*(1-age/3.2);
+   o.scale.setScalar(.5+age*.65);
+  }
+ }
+ for(let i=0;i<magicSparks.length;i++){
+  const o=magicSparks[i];
+  const start=i<14?2:22.6;
+  const age=t-start;
+  o.visible=age>=0&&age<(i<14?5:1.7);
+  if(o.visible){
+   const angle=i*2.39996;
+   const radius=i<14?2.9:1.7;
+   o.position.set(Math.cos(angle)*radius,1.2+((age*(3+i%4)+i*.19)%3),magZ+Math.sin(angle)*radius);
+   o.rotation.z=angle;
+  }
+ }
+ let eye,look;
+ if(t<7){eye=entranceV(-7,4,-22);look=entranceV(-2,3,magZ);}
+ else if(t<13){eye=entranceV(3.5,2.7,-24);look=entranceV(-1.9,2.9,magZ);}
+ else if(t<19){eye=entranceV(-4.5,3.1,-25);look=entranceV(0,2.5,magZ);}
+ else if(t<24){eye=entranceV(4,3.3,-24);look=entranceV(0,2.5,magZ);}
+ else if(t<26){eye=entranceV(6,5,-13);look=entranceV(0,2.2,magZ);}
+ else if(t<29){eye=entranceV(7,4,7);look=entranceV(0,2,0);}
+ else{eye=entranceV(4,2.6,5);look=entranceV(0,2.5,0);}
+ camera.position.lerp(eye,Math.min(1,dt*5));
+ camera.lookAt(look);
+ if(t>=34)stopMagician();
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -2068,6 +2237,7 @@ for(const [button,title] of [
  [betterButton,'😎 Better Than You'],
  [godButton,'👑 A God Was Born'],
  [convoyButton,'🚙 The Convoy'],
+ [magicianButton,'🎩 The Magician'],
  ...storyButtons.map((button,i)=>[button,storyNames[i]]),
  ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
@@ -2186,7 +2356,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=storyMode>=0?updateStory(dt):convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=magicianTime>=0?updateMagician(dt):storyMode>=0?updateStory(dt):convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
