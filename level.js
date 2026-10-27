@@ -860,20 +860,22 @@ function updateSlideEntrance(dt){
  let tilt=0;
  if(t<1.5){pos=entranceV(0,1.2,-34);animation='movement.idle';}
  else if(t<7){
+  // The authored ramp slopes DOWN from stage z=-26 to floor z=-9.
   const p=(t-1.5)/5.5;
-  const z=THREE.MathUtils.lerp(-34,-6,p);
-  const y=z<-26?1.2:z<-9?THREE.MathUtils.lerp(1.2,.06,(-26-z)/17):.06;
+  const z=THREE.MathUtils.lerp(-34,-5.15,p);
+  const y=z<-26?1.2:z<-9?THREE.MathUtils.lerp(1.2,.06,(z+26)/17):.06;
   pos=entranceV(0,y,z);
  }else if(t<8.5){
-  // Dive and slide from ringside under the bottom rope.
+  // The ring apron begins near z=-4; climb onto the ring surface,
+  // then travel along the canvas, not through the underside of the ring.
   const p=(t-7)/1.5;
-  pos=entranceV(0,THREE.MathUtils.lerp(.5,1.45,p),THREE.MathUtils.lerp(-6,-1.7,p));
-  tilt=-Math.PI/2*Math.min(1,p*4);
+  pos=entranceV(0,THREE.MathUtils.lerp(.75,1.42,Math.min(1,p*3)),THREE.MathUtils.lerp(-5.15,-1.65,p));
+  tilt=-Math.PI*.42*Math.min(1,p*5);
   animation='movement.idle';
  }else{
   const p=Math.min(1,(t-8.5)/1.2);
-  pos=entranceV(0,1.45,-1.7);
-  tilt=-Math.PI/2*(1-p);
+  pos=entranceV(0,1.42,-1.65);
+  tilt=-Math.PI*.42*(1-p);
   animation='movement.idle';
  }
  entranceBot.visible=true;
