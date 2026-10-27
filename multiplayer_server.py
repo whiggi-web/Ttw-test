@@ -11,6 +11,7 @@ from websockets.asyncio.server import serve
 players = {}
 last_hit = {}
 last_position = {}
+last_rotation = {}
 knockout_tasks = {}
 
 async def recover_player(ws):
@@ -59,6 +60,7 @@ async def handler(ws):
                 slot = 1 if 1 not in [p["slot"] for p in players.values()] else 2
                 players[ws] = {"slot": slot, "hp": 100, "name": str(data.get("name", "Wrestler"))[:20]}
                 last_position[ws] = {"x": -1.4 if slot == 1 else 1.4, "y": 1.2, "z": 0}
+                last_rotation[ws] = 0.0
                 await send(ws, {"type": "welcome", "slot": slot, "hp": 100})
                 if len(players) == 2:
                     for client in list(players):
@@ -81,6 +83,7 @@ async def handler(ws):
                 if not (-4.1 <= x <= 4.1 and -4.1 <= z <= 4.1 and 0 <= y <= 3):
                     continue
                 last_position[ws] = {"x": x, "y": y, "z": z}
+                last_rotation[ws] = rotation
                 animation = data.get("animation")
                 if animation not in ("idle", "run", "punch", "jab", "hook", "uppercut", "kick", "clothesline", "fall"):
                     animation = "idle"
@@ -110,6 +113,12 @@ async def handler(ws):
                 if not math.isfinite(momentum):
                     momentum = 1
                 damage = round(base_damage * max(1, min(1.3, momentum)))
+                defender_angle = last_rotation.get(other_ws, 0.0)
+                toward_x = a["x"] - b["x"]
+                toward_z = a["z"] - b["z"]
+                facing_dot = -math.sin(defender_angle) * toward_x - math.cos(defender_angle) * toward_z
+                if move in ("punch", "jab", "hook"):
+                    reaction = "reactions.hit-front" if facing_dot >= 0 else "reactions.hit-back"
                 other["hp"] = max(0, other["hp"] - damage)
                 if other["hp"] == 0 and other_ws not in knockout_tasks:
                     knockout_tasks[other_ws] = asyncio.create_task(recover_player(other_ws))
@@ -120,6 +129,7 @@ async def handler(ws):
             del players[ws]
             last_hit.pop(ws, None)
             last_position.pop(ws, None)
+            last_rotation.pop(ws, None)
             task = knockout_tasks.pop(ws, None)
             if task:
                 task.cancel()
