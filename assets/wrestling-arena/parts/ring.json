@@ -2,51 +2,597 @@
   "id": "ring",
   "name": "Ring and ringside",
   "objects": [
-    { "id": "ringside_floor", "type": "box", "size": [16, 0.04, 16], "position": [0, 0.02, 0], "material": "floor_mat", "tags": ["floor", "walkable"] },
-
-    { "id": "ring_apron", "type": "box", "size": [8.2, 1.1, 8.2], "position": [0, 0.55, 0], "material": "ring_skirt", "collide": true, "tags": ["ring"] },
-    { "id": "ring_mat",   "type": "box", "size": [8.2, 0.1, 8.2], "position": [0, 1.15, 0], "material": "canvas", "tags": ["ring", "walkable"] },
-    { "id": "ring_skirt_band", "type": "box", "size": [8.24, 0.08, 8.24], "position": [0, 0.95, 0], "material": "led_red", "tags": ["ring", "led"] },
-
-    { "id": "ring_post", "type": "cylinder", "radius": 0.09, "height": 2.6, "position": [3.5, 1.3, 3.5], "material": "ring_post", "mirror": "xz", "collide": true, "tags": ["ring", "post"] },
-
-    { "id": "pad_red",       "type": "box", "size": [0.28, 1.2, 0.28], "position": [-3.42, 2.05, -3.42], "rotation": [0, 45, 0], "material": "pad_red",     "tags": ["ring", "corner"] },
-    { "id": "pad_blue",      "type": "box", "size": [0.28, 1.2, 0.28], "position": [3.42, 2.05, 3.42],   "rotation": [0, 45, 0], "material": "pad_blue",    "tags": ["ring", "corner"] },
-    { "id": "pad_neutral_a", "type": "box", "size": [0.28, 1.2, 0.28], "position": [3.42, 2.05, -3.42],  "rotation": [0, 45, 0], "material": "pad_neutral", "tags": ["ring", "corner"] },
-    { "id": "pad_neutral_b", "type": "box", "size": [0.28, 1.2, 0.28], "position": [-3.42, 2.05, 3.42],  "rotation": [0, 45, 0], "material": "pad_neutral", "tags": ["ring", "corner"] },
-
-    { "id": "rope_north", "type": "rope", "from": [-3.5, 1.65, 3.5], "to": [3.5, 1.65, 3.5], "radius": 0.028, "material": "rope", "array": { "count": 3, "step": [0, 0.4, 0] }, "mirror": "z", "tags": ["ring", "rope"] },
-    { "id": "rope_east",  "type": "rope", "from": [3.5, 1.65, -3.5], "to": [3.5, 1.65, 3.5], "radius": 0.028, "material": "rope", "array": { "count": 3, "step": [0, 0.4, 0] }, "mirror": "x", "tags": ["ring", "rope"] },
-
-    { "id": "steps_left", "type": "stairs", "width": 1.1, "steps": 3, "rise": 0.4, "run": 0.4, "position": [-5.0, 0, -5.0], "rotation": [0, 45, 0], "material": "steel", "mirror": "x", "collide": true, "tags": ["ring", "steps", "walkable"] },
-
-    { "id": "barrier_north", "type": "box", "size": [16.15, 1.1, 0.15], "position": [0, 0.55, 8],  "material": "barrier", "collide": true, "tags": ["barrier"] },
-    { "id": "barrier_east",  "type": "box", "size": [0.15, 1.1, 16],    "position": [8, 0.55, 0],  "material": "barrier", "mirror": "x", "collide": true, "tags": ["barrier"] },
-    { "id": "barrier_south", "type": "box", "size": [6, 1.1, 0.15],     "position": [5, 0.55, -8], "material": "barrier", "mirror": "x", "collide": true, "tags": ["barrier"] },
-    { "id": "barrier_cap_north", "type": "box", "size": [16.15, 0.06, 0.22], "position": [0, 1.13, 8], "material": "led_blue", "tags": ["barrier", "led"] },
-
-    { "id": "announce_table", "type": "box", "size": [4.5, 0.8, 0.9], "position": [0, 0.4, 6.6], "material": "table", "collide": true, "tags": ["ringside", "table"] },
-    { "id": "announce_table_front", "type": "box", "size": [4.5, 0.4, 0.02], "position": [0, 0.45, 6.14], "material": "led_blue", "tags": ["ringside", "led"] },
-    { "id": "announce_monitor", "type": "box", "size": [0.5, 0.32, 0.05], "position": [-1.4, 0.98, 6.75], "rotation": [-15, 180, 0], "material": "monitor", "array": { "count": 3, "step": [1.4, 0, 0] }, "tags": ["ringside"] },
-    { "id": "announce_chair", "type": "box", "size": [0.5, 1.0, 0.5], "position": [-1.4, 0.5, 7.45], "material": "chair", "array": { "count": 3, "step": [1.4, 0, 0] }, "collide": true, "tags": ["ringside", "chair"] },
-
-    { "id": "rig_truss_ns", "type": "box", "size": [12.4, 0.4, 0.4], "position": [0, 13, 6], "material": "truss", "mirror": "z", "tags": ["rig"] },
-    { "id": "rig_truss_ew", "type": "box", "size": [0.4, 0.4, 12],   "position": [6, 13, 0], "material": "truss", "mirror": "x", "tags": ["rig"] },
-    { "id": "rig_lamp", "type": "cylinder", "radius": 0.25, "height": 0.4, "position": [4, 12.6, 6], "material": "light_fixture", "array": { "count": 3, "step": [-4, 0, 0] }, "mirror": "z", "tags": ["rig"] },
-
-    { "id": "ring_spot", "type": "light", "light": "spot", "color": "#ffffff", "intensity": 700, "distance": 40, "angle": 26, "penumbra": 0.5, "decay": 2, "position": [6, 13, 6], "target": [0, 1.2, 0], "mirror": "xz", "tags": ["rig", "light"] }
+    {
+      "id": "ringside_floor",
+      "type": "box",
+      "size": [
+        16,
+        0.04,
+        16
+      ],
+      "position": [
+        0,
+        0.02,
+        0
+      ],
+      "material": "floor_mat",
+      "tags": [
+        "floor",
+        "walkable"
+      ]
+    },
+    {
+      "id": "ring_apron",
+      "type": "box",
+      "size": [
+        8.2,
+        1.1,
+        8.2
+      ],
+      "position": [
+        0,
+        0.55,
+        0
+      ],
+      "material": "ring_skirt",
+      "collide": true,
+      "tags": [
+        "ring"
+      ]
+    },
+    {
+      "id": "ring_mat",
+      "type": "box",
+      "size": [
+        8.2,
+        0.1,
+        8.2
+      ],
+      "position": [
+        0,
+        1.15,
+        0
+      ],
+      "material": "canvas",
+      "tags": [
+        "ring",
+        "walkable"
+      ]
+    },
+    {
+      "id": "ring_skirt_band",
+      "type": "box",
+      "size": [
+        8.24,
+        0.08,
+        8.24
+      ],
+      "position": [
+        0,
+        0.95,
+        0
+      ],
+      "material": "led_red",
+      "tags": [
+        "ring",
+        "led"
+      ]
+    },
+    {
+      "id": "ring_post",
+      "type": "cylinder",
+      "radius": 0.09,
+      "height": 2.6,
+      "position": [
+        3.5,
+        1.3,
+        3.5
+      ],
+      "material": "ring_post",
+      "mirror": "xz",
+      "collide": true,
+      "tags": [
+        "ring",
+        "post"
+      ]
+    },
+    {
+      "id": "pad_red",
+      "type": "box",
+      "size": [
+        0.28,
+        1.2,
+        0.28
+      ],
+      "position": [
+        -3.42,
+        2.05,
+        -3.42
+      ],
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "material": "pad_red",
+      "tags": [
+        "ring",
+        "corner"
+      ]
+    },
+    {
+      "id": "pad_blue",
+      "type": "box",
+      "size": [
+        0.28,
+        1.2,
+        0.28
+      ],
+      "position": [
+        3.42,
+        2.05,
+        3.42
+      ],
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "material": "pad_blue",
+      "tags": [
+        "ring",
+        "corner"
+      ]
+    },
+    {
+      "id": "pad_neutral_a",
+      "type": "box",
+      "size": [
+        0.28,
+        1.2,
+        0.28
+      ],
+      "position": [
+        3.42,
+        2.05,
+        -3.42
+      ],
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "material": "pad_neutral",
+      "tags": [
+        "ring",
+        "corner"
+      ]
+    },
+    {
+      "id": "pad_neutral_b",
+      "type": "box",
+      "size": [
+        0.28,
+        1.2,
+        0.28
+      ],
+      "position": [
+        -3.42,
+        2.05,
+        3.42
+      ],
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "material": "pad_neutral",
+      "tags": [
+        "ring",
+        "corner"
+      ]
+    },
+    {
+      "id": "rope_north",
+      "type": "rope",
+      "from": [
+        -3.5,
+        1.65,
+        3.5
+      ],
+      "to": [
+        3.5,
+        1.65,
+        3.5
+      ],
+      "radius": 0.028,
+      "material": "rope",
+      "array": {
+        "count": 3,
+        "step": [
+          0,
+          0.4,
+          0
+        ]
+      },
+      "mirror": "z",
+      "tags": [
+        "ring",
+        "rope"
+      ],
+      "collide": true
+    },
+    {
+      "id": "rope_east",
+      "type": "rope",
+      "from": [
+        3.5,
+        1.65,
+        -3.5
+      ],
+      "to": [
+        3.5,
+        1.65,
+        3.5
+      ],
+      "radius": 0.028,
+      "material": "rope",
+      "array": {
+        "count": 3,
+        "step": [
+          0,
+          0.4,
+          0
+        ]
+      },
+      "mirror": "x",
+      "tags": [
+        "ring",
+        "rope"
+      ],
+      "collide": true
+    },
+    {
+      "id": "steps_left",
+      "type": "stairs",
+      "width": 1.1,
+      "steps": 3,
+      "rise": 0.4,
+      "run": 0.4,
+      "position": [
+        -5,
+        0,
+        -5
+      ],
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "material": "steel",
+      "mirror": "x",
+      "collide": true,
+      "tags": [
+        "ring",
+        "steps",
+        "walkable"
+      ]
+    },
+    {
+      "id": "barrier_north",
+      "type": "box",
+      "size": [
+        16.15,
+        1.1,
+        0.15
+      ],
+      "position": [
+        0,
+        0.55,
+        8
+      ],
+      "material": "barrier",
+      "collide": true,
+      "tags": [
+        "barrier"
+      ]
+    },
+    {
+      "id": "barrier_east",
+      "type": "box",
+      "size": [
+        0.15,
+        1.1,
+        16
+      ],
+      "position": [
+        8,
+        0.55,
+        0
+      ],
+      "material": "barrier",
+      "mirror": "x",
+      "collide": true,
+      "tags": [
+        "barrier"
+      ]
+    },
+    {
+      "id": "barrier_south",
+      "type": "box",
+      "size": [
+        6,
+        1.1,
+        0.15
+      ],
+      "position": [
+        5,
+        0.55,
+        -8
+      ],
+      "material": "barrier",
+      "mirror": "x",
+      "collide": true,
+      "tags": [
+        "barrier"
+      ]
+    },
+    {
+      "id": "barrier_cap_north",
+      "type": "box",
+      "size": [
+        16.15,
+        0.06,
+        0.22
+      ],
+      "position": [
+        0,
+        1.13,
+        8
+      ],
+      "material": "led_blue",
+      "tags": [
+        "barrier",
+        "led"
+      ]
+    },
+    {
+      "id": "announce_table",
+      "type": "box",
+      "size": [
+        4.5,
+        0.8,
+        0.9
+      ],
+      "position": [
+        0,
+        0.4,
+        6.6
+      ],
+      "material": "table",
+      "collide": true,
+      "tags": [
+        "ringside",
+        "table"
+      ]
+    },
+    {
+      "id": "announce_table_front",
+      "type": "box",
+      "size": [
+        4.5,
+        0.4,
+        0.02
+      ],
+      "position": [
+        0,
+        0.45,
+        6.14
+      ],
+      "material": "led_blue",
+      "tags": [
+        "ringside",
+        "led"
+      ]
+    },
+    {
+      "id": "announce_monitor",
+      "type": "box",
+      "size": [
+        0.5,
+        0.32,
+        0.05
+      ],
+      "position": [
+        -1.4,
+        0.98,
+        6.75
+      ],
+      "rotation": [
+        -15,
+        180,
+        0
+      ],
+      "material": "monitor",
+      "array": {
+        "count": 3,
+        "step": [
+          1.4,
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "ringside"
+      ]
+    },
+    {
+      "id": "announce_chair",
+      "type": "box",
+      "size": [
+        0.5,
+        1,
+        0.5
+      ],
+      "position": [
+        -1.4,
+        0.5,
+        7.45
+      ],
+      "material": "chair",
+      "array": {
+        "count": 3,
+        "step": [
+          1.4,
+          0,
+          0
+        ]
+      },
+      "collide": true,
+      "tags": [
+        "ringside",
+        "chair"
+      ]
+    },
+    {
+      "id": "rig_truss_ns",
+      "type": "box",
+      "size": [
+        12.4,
+        0.4,
+        0.4
+      ],
+      "position": [
+        0,
+        13,
+        6
+      ],
+      "material": "truss",
+      "mirror": "z",
+      "tags": [
+        "rig"
+      ]
+    },
+    {
+      "id": "rig_truss_ew",
+      "type": "box",
+      "size": [
+        0.4,
+        0.4,
+        12
+      ],
+      "position": [
+        6,
+        13,
+        0
+      ],
+      "material": "truss",
+      "mirror": "x",
+      "tags": [
+        "rig"
+      ]
+    },
+    {
+      "id": "rig_lamp",
+      "type": "cylinder",
+      "radius": 0.25,
+      "height": 0.4,
+      "position": [
+        4,
+        12.6,
+        6
+      ],
+      "material": "light_fixture",
+      "array": {
+        "count": 3,
+        "step": [
+          -4,
+          0,
+          0
+        ]
+      },
+      "mirror": "z",
+      "tags": [
+        "rig"
+      ]
+    },
+    {
+      "id": "ring_spot",
+      "type": "light",
+      "light": "spot",
+      "color": "#ffffff",
+      "intensity": 700,
+      "distance": 40,
+      "angle": 26,
+      "penumbra": 0.5,
+      "decay": 2,
+      "position": [
+        6,
+        13,
+        6
+      ],
+      "target": [
+        0,
+        1.2,
+        0
+      ],
+      "mirror": "xz",
+      "tags": [
+        "rig",
+        "light"
+      ]
+    }
   ],
-
   "markers": {
-    "ring_center":        [0, 1.2, 0],
-    "corner_red":         [-3.1, 1.2, -3.1],
-    "corner_blue":        [3.1, 1.2, 3.1],
-    "steps_left_bottom":  [-5.3, 0, -5.3],
-    "steps_left_top":     [-4.2, 1.2, -4.2],
-    "apron_left":         [-3.85, 1.2, -3.85],
-    "steps_right_bottom": [5.3, 0, -5.3],
-    "steps_right_top":    [4.2, 1.2, -4.2],
-    "apron_right":        [3.85, 1.2, -3.85],
-    "announce_table":     [0, 0, 7.4]
+    "ring_center": [
+      0,
+      1.2,
+      0
+    ],
+    "corner_red": [
+      -3.1,
+      1.2,
+      -3.1
+    ],
+    "corner_blue": [
+      3.1,
+      1.2,
+      3.1
+    ],
+    "steps_left_bottom": [
+      -5.3,
+      0,
+      -5.3
+    ],
+    "steps_left_top": [
+      -4.2,
+      1.2,
+      -4.2
+    ],
+    "apron_left": [
+      -3.85,
+      1.2,
+      -3.85
+    ],
+    "steps_right_bottom": [
+      5.3,
+      0,
+      -5.3
+    ],
+    "steps_right_top": [
+      4.2,
+      1.2,
+      -4.2
+    ],
+    "apron_right": [
+      3.85,
+      1.2,
+      -3.85
+    ],
+    "announce_table": [
+      0,
+      0,
+      7.4
+    ]
   }
 }
