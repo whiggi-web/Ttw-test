@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { loadArena } from './assets/wrestling-arena/arena-loader.js';
 import { loadWrestler } from './assets/ttw-master-wrestler/loader.js';
+import { loadPack } from './assets/ttw-wrestlers/loader.js';
 
 // TTW level foundation. Keep the world independent of wrestling mechanics.
 // Claude's arena will be mounted at (0,0,0) when its asset is ready.
@@ -165,12 +166,25 @@ try{
 }catch(error){console.error('TTW arena asset failed:',error);}
 let loadedWrestler=null;
 let remoteWrestler=null;
+let usingBatchOne=false;
 try{
- loadedWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
- console.info('TTW: Claude master wrestler loaded');
- remoteWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
-}catch(error){console.error('TTW wrestler asset failed:',error);}
-
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest.json');
+ loadedWrestler=pack.createWrestler('wrestler-01');
+ remoteWrestler=pack.createWrestler('wrestler-02');
+ usingBatchOne=true;
+ console.info('TTW: Batch 1 loaded, Rex and Nova');
+}catch(error){
+ console.error('TTW Batch 1 failed, retaining master wrestler fallback:',error);
+ try{
+  loadedWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
+  remoteWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
+ }catch(fallbackError){console.error('TTW wrestler fallback failed:',fallbackError);}
+}
+const playTTWAnimation=(w,state,fade=.2)=>{
+ if(!w)return;
+ const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward'}[state]||'movement.idle'):state;
+ w.play(name,{fade,restart:true});
+};
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
 const solidArenaBoxes=(loadedArena?.colliders||[]).filter(c=>
  c.id==='ring_apron' || (c.tags||[]).includes('rope') || (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
@@ -344,11 +358,11 @@ if(loadedWrestler){
  capsule.visible=false;facing.visible=false;
  player.add(loadedWrestler.object);
  loadedWrestler.object.position.set(0,0,0);
- loadedWrestler.play('idle');
+ playTTWAnimation(loadedWrestler,'idle');
 }
 // Two-player online test: state is relayed through the companion WebSocket server.
 const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=false;remote.position.set(1.5,1.2,0);
-if(remoteWrestler){remote.add(remoteWrestler.object);remoteWrestler.play('idle');remoteWrestler._ttwState='idle';}
+if(remoteWrestler){remote.add(remoteWrestler.object);playTTWAnimation(remoteWrestler,'idle');remoteWrestler._ttwState='idle';}
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
 let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
@@ -417,7 +431,7 @@ function combatTick(dt){
  }
  if(remoteWrestler&&remoteConnected){
   const state=remoteHP<=0?'fall':remoteAnim;
-  if(remoteWrestler._ttwState!==state){remoteWrestler.play(state,{fade:.12});remoteWrestler._ttwState=state;}
+  if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
   remoteWrestler.update(dt);
  }
  sendClock+=dt;
@@ -563,7 +577,7 @@ renderer.setAnimationLoop(()=>{
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   const nextAnimation=playerHP<=0?'fall':punchRemaining>0?'punch':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
-   loadedWrestler.play(nextAnimation,{fade:.2});
+   playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
   }
   loadedWrestler.update(dt);
