@@ -281,6 +281,21 @@ const playTTWAnimation=(w,state,fade=.2)=>{
  const safeName=usingBatchOne&&w.library?.defs?.[name]?name:(usingBatchOne?'movement.idle':name);
  try{w.play(safeName,{fade,restart:true});}catch(error){console.warn('TTW animation unavailable:',name,error);if(safeName!=='movement.idle')try{w.play('movement.idle',{fade:0,restart:true});}catch{}}
 };
+// Gameplay position belongs to the player/remote network group, never to an animation.
+// Batch 2 baked reactions can otherwise commit hip motion into the child model,
+// leaving the visible wrestler offset from the actual hitbox.
+function lockGameplayWrestler(w){
+ if(!w)return;
+ w.autoRootMotion=false;
+ w.commitRootMotion=()=>false;
+ w.object.position.set(0,0,0);
+}
+lockGameplayWrestler(loadedWrestler);
+lockGameplayWrestler(remoteWrestler);
+function keepWrestlerAtHitbox(w){
+ if(!w)return;
+ w.object.position.set(0,0,0);
+}
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
 const solidArenaBoxes=(loadedArena?.colliders||[]).filter(c=>
  c.id==='ring_apron' || (c.tags||[]).includes('rope') || (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
@@ -535,6 +550,7 @@ function combatTick(dt){
   const state=remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
   if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
   remoteWrestler.update(dt);
+  keepWrestlerAtHitbox(remoteWrestler);
  }
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
@@ -1055,6 +1071,7 @@ renderer.setAnimationLoop(()=>{
    loadedWrestler._ttwState=nextAnimation;
   }
   loadedWrestler.update(dt);
+  keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
  const cinematicActive=slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
