@@ -396,8 +396,8 @@ function combatTick(dt){
   }
  }
  if(botWrestler){
-  const state=botPunchTime>0?'punch':botMoving?'run':'idle';
-  if(botWrestler._ttwState!==state){botWrestler.play(state,{fade:.12});botWrestler._ttwState=state;}
+  const state=botHP<=0?'fall':botPunchTime>0?'punch':botMoving?'run':'idle';
+  if(botWrestler._ttwState!==state){botWrestler.play(state,{fade:state==='fall'?.12:.12});botWrestler._ttwState=state;}
   botWrestler.update(dt);
  }
 }
@@ -490,7 +490,7 @@ renderer.setAnimationLoop(()=>{
  const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
  const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
  const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
- if(Math.abs(inputX)+Math.abs(inputZ)>.001){
+ if(playerHP>0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
   const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
@@ -523,7 +523,7 @@ renderer.setAnimationLoop(()=>{
   }
  }
 
- if(ropeRecoilTime>0){
+ if(playerHP>0&&ropeRecoilTime>0){
   ropeRecoilTime=Math.max(0,ropeRecoilTime-dt);
   const amount=dt*(ropeRecoilTime/.28);
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
@@ -543,7 +543,7 @@ renderer.setAnimationLoop(()=>{
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
-  const nextAnimation=punchRemaining>0?'punch':isWalking?'run':'idle';
+  const nextAnimation=playerHP<=0?'fall':punchRemaining>0?'punch':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    loadedWrestler.play(nextAnimation,{fade:.2});
    loadedWrestler._ttwState=nextAnimation;
