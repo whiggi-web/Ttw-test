@@ -171,7 +171,7 @@ try{
 
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
 const solidArenaBoxes=(loadedArena?.colliders||[]).filter(c=>
- c.id==='ring_apron' || (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
+ c.id==='ring_apron' || (c.tags||[]).includes('rope') || (c.tags||[]).some(t=>['wall','barrier','stand','post','table','chair','rig','suites'].includes(t))
 );
 const arenaWalkables=[];
 if(loadedArena){
