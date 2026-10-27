@@ -199,6 +199,15 @@ function arenaFloorAt(x,z,currentY){
 }
 function blockedByArena(x,z,feetY){
  const radius=.32;
+ // The ropes form a continuous solid perimeter around the ring.
+ // Use a player-width boundary, not the thin visual rope geometry.
+ if(feetY>=1.0 && feetY<=1.6){
+  const ringEdge=3.5;
+  const insideMat=Math.abs(player.position.x)<ringEdge-radius && Math.abs(player.position.z)<ringEdge-radius;
+  if(insideMat && (Math.abs(x)>ringEdge-radius || Math.abs(z)>ringEdge-radius))return true;
+  const outsideMat=Math.abs(player.position.x)>ringEdge+radius || Math.abs(player.position.z)>ringEdge+radius;
+  if(outsideMat && Math.abs(x)<ringEdge+radius && Math.abs(z)<ringEdge+radius)return true;
+ }
  return solidArenaBoxes.some(c=>{
   const b=c.box;
   if(c.id==='ring_apron' && feetY>=1.05)return false;
