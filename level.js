@@ -1825,6 +1825,221 @@ function updateConvoy(dt){
  return true;
 }
 
+
+/* TTW v0.71: Seven distinct story-driven wrestling entrances. */
+const storyNames=["⚰️ The Undertaker's Apprentice","📸 The Hollywood Superstar","👑 The King Who Refuses to Walk","👁️ The Invisible Opponent","👴 The Old Timer","👥 The Clone Army","🎬 The False Start"];
+const storyButtons=storyNames.map(name=>{const b=document.createElement('button');b.type='button';b.textContent=name;return b;});
+let storyMode=-1,storyTime=0,storyCard=-1,storySavedFeed=false;
+const storyStage=new THREE.Group();scene.add(storyStage);
+const storyMaterials={
+ black:new THREE.MeshStandardMaterial({color:0x15141b,roughness:.88}),
+ gray:new THREE.MeshStandardMaterial({color:0x68616a,roughness:.8}),
+ skin:new THREE.MeshStandardMaterial({color:0xd3a17e,roughness:.85}),
+ gold:new THREE.MeshStandardMaterial({color:0xc5a45a,metalness:.48,roughness:.4}),
+ red:new THREE.MeshStandardMaterial({color:0x982c3d,roughness:.85}),
+ wood:new THREE.MeshStandardMaterial({color:0x59402b,roughness:.9}),
+ white:new THREE.MeshStandardMaterial({color:0xe9e5d8,roughness:.85}),
+ blue:new THREE.MeshStandardMaterial({color:0x334f79,roughness:.8})
+};
+function storyBlock(parent,w,h,d,x,y,z,mat){
+ const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
+ o.position.set(x,y,z);parent.add(o);return o;
+}
+function storyPerson(parent,mat=storyMaterials.black,scale=1){
+ const g=new THREE.Group();g.scale.setScalar(scale);parent.add(g);
+ storyBlock(g,.75,1.08,.44,0,1.33,0,mat);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.27,12,9),storyMaterials.skin);
+ head.position.y=2.13;g.add(head);
+ const arms=[],legs=[];
+ for(const side of [-1,1]){
+  const arm=new THREE.Group();arm.position.set(side*.49,1.77,0);
+  storyBlock(arm,.22,.82,.24,0,-.38,0,mat);g.add(arm);arms.push(arm);
+  const leg=new THREE.Group();leg.position.set(side*.2,.8,0);
+  storyBlock(leg,.27,.78,.31,0,-.39,0,mat);g.add(leg);legs.push(leg);
+ }
+ return {g,arms,legs};
+}
+const storyActors=Array.from({length:12},(_,i)=>storyPerson(storyStage,[storyMaterials.black,storyMaterials.red,storyMaterials.gold,storyMaterials.gray,storyMaterials.blue][i%5]));
+const storyCoffin=new THREE.Group();storyStage.add(storyCoffin);
+storyBlock(storyCoffin,1.45,.65,3.2,0,.6,0,storyMaterials.wood);
+const coffinLid=new THREE.Group();coffinLid.position.set(-.75,.94,0);storyCoffin.add(coffinLid);
+storyBlock(coffinLid,1.45,.15,3.2,.75,0,0,storyMaterials.wood);
+const storyCarpet=storyBlock(storyStage,2.8,.025,25,0,.045,-20,storyMaterials.red);
+const storyThrone=new THREE.Group();storyStage.add(storyThrone);
+storyBlock(storyThrone,1.6,.3,1.4,0,.8,0,storyMaterials.gold);
+storyBlock(storyThrone,1.6,1.6,.25,0,1.65,-.58,storyMaterials.gold);
+for(const x of [-.83,.83])storyBlock(storyThrone,.19,.7,1.3,x,1.18,0,storyMaterials.wood);
+const storyCameras=[];
+for(let i=0;i<5;i++){
+ const g=new THREE.Group();storyStage.add(g);
+ storyBlock(g,.35,.27,.35,0,1.38,0,storyMaterials.gray);
+ storyBlock(g,.22,.17,.24,0,1.48,.32,storyMaterials.black);
+ storyCameras.push(g);
+}
+const storySign=storyBlock(storyStage,1.9,.78,.12,0,2.1,0,storyMaterials.white);
+const storyText=document.createElement('canvas');storyText.width=512;storyText.height=256;
+const storyCtx=storyText.getContext('2d');storyCtx.fillStyle='#f2eee0';storyCtx.fillRect(0,0,512,256);
+storyCtx.fillStyle='#222';storyCtx.font='bold 48px sans-serif';storyCtx.textAlign='center';
+storyCtx.fillText('WRONG',256,110);storyCtx.fillText('GUY!',256,172);
+const storyTex=new THREE.CanvasTexture(storyText);
+storySign.material=new THREE.MeshBasicMaterial({map:storyTex});
+function storyPlace(a,x,z,y=0,rotation=Math.PI){
+ a.g.position.set(x,y,z);a.g.rotation.y=rotation;a.g.visible=true;
+}
+function storyWalk(a,t,speed=6){
+ const phase=Math.sin(t*speed);
+ a.legs[0].rotation.x=phase*.37;a.legs[1].rotation.x=-phase*.37;
+ a.arms[0].rotation.x=-phase*.24;a.arms[1].rotation.x=phase*.24;
+}
+function storyReset(){
+ storyActors.forEach(a=>{a.g.visible=false;a.g.scale.setScalar(1);a.g.rotation.set(0,0,0);a.arms.forEach(v=>v.rotation.set(0,0,0));a.legs.forEach(v=>v.rotation.set(0,0,0));});
+ storyCoffin.visible=false;coffinLid.rotation.z=0;
+ storyCarpet.visible=false;storyThrone.visible=false;storySign.visible=false;
+ storyCameras.forEach(g=>g.visible=false);
+}
+function stopStory(){
+ if(storyMode<0)return;
+ storyMode=-1;storyTime=0;storyCard=-1;storyReset();
+ if(storySavedFeed)setActionFeed(true);
+ storySavedFeed=false;
+}
+storyButtons.forEach((b,i)=>b.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();stopShowcase();stopBetter();stopGod();stopConvoy();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopStory();storyMode=i;storyTime=0;storyCard=-1;
+ storySavedFeed=actionFeedEnabled;if(actionFeedEnabled)setActionFeed(false);
+ jumbotronCountdown=-1;entranceBot.visible=false;
+}));
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton,betterButton,godButton,convoyButton,...showcaseButtons])b.addEventListener('click',stopStory);
+function updateStory(dt){
+ if(storyMode<0)return false;
+ storyTime+=dt;const t=storyTime;
+ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
+ const ease=p=>{p=clamp(p,0,1);return p*p*(3-2*p);};
+ const rampY=z=>z< -26?1.2:z< -9?lerp(1.2,.06,(z+26)/17):.06;
+ const approach=p=>lerp(-34,-7,ease(p));
+ storyReset();
+ let eye=entranceV(5,4,-8),look=entranceV(0,2,-18);
+ const card=Math.floor(t/5);
+ if(card!==storyCard){
+  storyCard=card;
+  const title=["THE LAST RITE","THE HOLLYWOOD STAR","HIS MAJESTY","ALREADY HERE","THE OLD TIMER","WE ARE ONE","WRONG GUY"][storyMode];
+  const sub=["THE COFFIN IS EMPTY","CAMERAS READY","DO NOT MAKE HIM WALK","LOOK BEHIND YOU","NEVER JUDGE A BOOK","WHICH ONE IS REAL?","TRY AGAIN"][storyMode];
+  setJumbotron(title,sub,['#0a0a0d','#ab9973']);
+ }
+ if(storyMode===0){
+  // Four pallbearers deliver a coffin. The reveal is empty; the wrestler is already in the crowd.
+  storyCoffin.visible=true;
+  const cz=approach((t-2)/17);storyCoffin.position.set(0,rampY(cz),cz);
+  for(let i=0;i<4;i++){
+   const x=i%2?1.15:-1.15,z=cz+(i<2?-1:1)*1.05;
+   storyPlace(storyActors[i],x,z,rampY(z));if(t<19)storyWalk(storyActors[i],t);
+  }
+  if(t>=20)coffinLid.rotation.z=lerp(0,-1.5,ease((t-20)/3));
+  if(t>=25){
+   // Enter from the audience side, not the ramp.
+   const z=lerp(12,3.1,ease((t-25)/8));
+   storyPlace(storyActors[4],7,z,.06,-Math.PI/2);
+   storyWalk(storyActors[4],t,8);
+  }
+  if(t<20){eye=entranceV(5,4,cz+8);look=entranceV(0,1.5,cz);}
+  else if(t<25){eye=entranceV(2,2,-4);look=entranceV(0,1,-7);}
+  else{eye=entranceV(11,3,7);look=entranceV(7,1.5,lerp(12,3,ease((t-25)/8)));}
+ }else if(storyMode===1){
+  // Paparazzi swarm the red carpet, star poses and takes a selfie.
+  storyCarpet.visible=true;
+  const z=approach((t-2)/19);storyPlace(storyActors[0],0,z,rampY(z));
+  if(t<23)storyWalk(storyActors[0],t,5);
+  for(let i=0;i<5;i++){
+   const p=storyCameras[i];p.visible=true;
+   p.position.set((i%2?1:-1)*(2.5+i*.27),rampY(z),z+[-2,-.4,1.5,3,4][i]);
+   p.rotation.y=(i%2?-.7:.7);
+   storyPlace(storyActors[i+1],p.position.x,p.position.z,p.position.y);
+  }
+  if(t>=23){storyActors[0].arms[0].rotation.x=-1.6;storyActors[0].arms[0].rotation.z=-.8;}
+  eye=t<23?entranceV(-4,2.8,z+7):entranceV(1.4,2.5,-4);
+  look=entranceV(0,rampY(z)+1.6,z);
+ }else if(storyMode===2){
+  // Four attendants carry the throne; the king refuses to get off at the ring.
+  const z=approach((t-2)/18);storyThrone.visible=true;
+  storyThrone.position.set(0,rampY(z)+1.3,z);
+  storyPlace(storyActors[0],0,z,rampY(z)+2.18);
+  storyActors[0].arms[0].rotation.z=-.7;
+  for(let i=1;i<=4;i++){
+   const x=i%2?-.9:.9,zz=z+(i<3?-1:1)*.55;
+   storyPlace(storyActors[i],x,zz,rampY(z));
+   storyActors[i].arms[0].rotation.z=-1.2;storyActors[i].arms[1].rotation.z=1.2;
+   if(t<20)storyWalk(storyActors[i],t,5);
+  }
+  if(t>=22&&t<29){
+   const struggle=Math.sin(t*8)*.13;
+   storyThrone.position.y+=struggle;
+   storyActors[1].g.rotation.z=struggle;storyActors[2].g.rotation.z=-struggle;
+  }
+  if(t>=30){storyActors[0].arms[1].rotation.z=1.5;storyActors[0].g.rotation.y=Math.PI+.2;}
+  eye=t<22?entranceV(5,3,z+8):entranceV(-4,3,-3);
+  look=entranceV(0,rampY(z)+2.4,z);
+ }else if(storyMode===3){
+  // Search the empty ramp and ring. Reveal wrestler behind the player.
+  if(t>=18){
+   const x=player.position.x+Math.sin(player.rotation.y)*2.3;
+   const z=player.position.z+Math.cos(player.rotation.y)*2.3;
+   storyPlace(storyActors[0],x,z,player.position.y-.97,player.rotation.y+Math.PI);
+  }
+  if(t<8){eye=entranceV(2,5,-10);look=entranceV(0,2,-34);}
+  else if(t<18){eye=entranceV(8,5,7);look=entranceV(0,1.5,0);}
+  else{eye=entranceV(player.position.x+5,3,player.position.z+5);look=entranceV(player.position.x,1.5,player.position.z);}
+ }else if(storyMode===4){
+  // Slow cane-assisted shuffle followed by an impossible athletic flip.
+  const z=approach((t-2)/22);storyPlace(storyActors[0],0,z,rampY(z));
+  if(t<25){storyActors[0].g.rotation.x=.3;storyWalk(storyActors[0],t,2.4);}
+  const cane=storyBlock(storyStage,.09,1.45,.09,-.6,rampY(z)+.74,z+.2,storyMaterials.wood);
+  cane.visible=t<25;
+  if(t>=25&&t<28){
+   const p=ease((t-25)/3);
+   storyActors[0].g.rotation.x=p*Math.PI*2;
+   storyActors[0].g.position.y=rampY(z)+Math.sin(Math.PI*p)*1.5;
+  }
+  if(t>=28){storyActors[0].g.rotation.x=0;storyActors[0].g.position.y=rampY(z);}
+  eye=t<25?entranceV(3,2,z+5):entranceV(5,3,-3);look=entranceV(0,1.6,z);
+ }else if(storyMode===5){
+  // Eight identical wrestlers appear one by one, march together, turn in perfect sync.
+  const z=approach((t-4)/20);
+  for(let i=0;i<8;i++){
+   if(t<2+i*.7)continue;
+   const x=(i%4-1.5)*1.25,zz=z+Math.floor(i/4)*1.25;
+   storyPlace(storyActors[i],x,zz,rampY(zz),t>=27?0:Math.PI);
+   storyActors[i].g.scale.setScalar(1);
+   if(t<27)storyWalk(storyActors[i],t,6);
+   if(t>=27&&i===3){storyActors[i].g.rotation.y=Math.PI;storyActors[i].g.position.z=lerp(zz,1.5,ease((t-27)/7));}
+   if(t>=27&&i!==3)storyActors[i].g.position.z=lerp(zz,-23,ease((t-27)/8));
+  }
+  eye=t<27?entranceV(6,4,z+9):entranceV(-7,5,-2);look=entranceV(0,2,z);
+ }else if(storyMode===6){
+  // First performer is publicly rejected; real headliner calmly passes him.
+  const z1=t<15?approach((t-2)/12):lerp(-7,-34,ease((t-19)/9));
+  storyPlace(storyActors[0],0,z1,rampY(z1),t>=19?0:Math.PI);
+  if(t<15||t>=19)storyWalk(storyActors[0],t);
+  if(t>=15&&t<19){
+   storySign.visible=true;storySign.position.set(0,2.8,-8);
+   storyActors[0].arms[0].rotation.z=1.2;
+  }
+  if(t>=24){
+   const z2=approach((t-24)/12);
+   storyPlace(storyActors[1],.8,z2,rampY(z2));storyWalk(storyActors[1],t,5);
+  }
+  eye=t<15?entranceV(5,3,z1+7):t<24?entranceV(-3,3,-3):entranceV(5,3,-12);
+  look=t<24?entranceV(0,1.8,z1):entranceV(.8,1.8,approach((t-24)/12));
+ }
+ camera.position.lerp(eye,Math.min(1,dt*4));
+ camera.lookAt(look);
+ const duration=[38,32,36,27,33,37,40][storyMode];
+ if(t>=duration)stopStory();
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -1853,6 +2068,7 @@ for(const [button,title] of [
  [betterButton,'😎 Better Than You'],
  [godButton,'👑 A God Was Born'],
  [convoyButton,'🚙 The Convoy'],
+ ...storyButtons.map((button,i)=>[button,storyNames[i]]),
  ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
  button.textContent=title;
@@ -1970,7 +2186,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=storyMode>=0?updateStory(dt):convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
