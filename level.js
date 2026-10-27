@@ -367,7 +367,7 @@ renderer.domElement.addEventListener('click',()=>{
  if(!document.getElementById('home').hidden&&punchRemaining<=0)punchRemaining=.55;
 });
 
-let yaw=Math.PI/4,pitch=.22,distance=17;
+let yaw=Math.PI/4,pitch=.22,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
 let lastPinch=null;
