@@ -631,6 +631,114 @@ function updateEntrance(dt){
  return true;
 }
 
+// Alternative entrance #2: arena establishing shot, blackout, huge stage blasts,
+// then a deliberate low-angle walk down the full ramp.
+const slowEntranceButton=document.createElement('button');
+slowEntranceButton.textContent='🎬 EPIC WALK ENTRANCE';
+slowEntranceButton.style.cssText=entranceButton.style.cssText+';top:103px;background:#51359b;border-color:#bcb1ff';
+document.body.appendChild(slowEntranceButton);
+const cinematicBlackout=document.createElement('div');
+cinematicBlackout.style.cssText='position:fixed;inset:0;z-index:14;background:#000;pointer-events:none;opacity:0';
+document.body.appendChild(cinematicBlackout);
+const epicPyro=new THREE.Group();scene.add(epicPyro);
+const epicShards=[];
+for(const x of [-9,-5,-1,1,5,9]){
+ for(let j=0;j<28;j++){
+  const a=j*Math.PI*2/28, speed=3+(j%5)*.8;
+  const mat=new THREE.MeshBasicMaterial({color:j%4===0?0xffffff:j%3===0?0xff3b17:j%2?0xffb22b:0xffe95d,transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide});
+  const mesh=new THREE.Mesh(new THREE.ConeGeometry(.3,2.6,4),mat);
+  epicPyro.add(mesh);
+  epicShards.push({mesh,x,delay:(j%4)*.08,vx:Math.cos(a)*speed,vy:9+j%6*1.4,vz:Math.sin(a)*speed});
+ }
+}
+function updateEpicPyro(t){
+ for(const p of epicShards){
+  const age=t-4-p.delay;
+  p.mesh.visible=age>=0&&age<3;
+  if(p.mesh.visible){
+   p.mesh.position.set(p.x+p.vx*age,6+p.vy*age-5*age*age,-32+p.vz*age);
+   p.mesh.rotation.z=age*3.5;
+   p.mesh.scale.setScalar(1+age*.65);
+   p.mesh.material.opacity=Math.min(1,age*8)*Math.max(0,1-age/3);
+  }
+ }
+}
+let epicEntranceTime=-1;
+slowEntranceButton.addEventListener('click',()=>{
+ entranceTime=-1;
+ resetStagePyro();
+ epicEntranceTime=0;
+ entranceBot.visible=false;
+ slowEntranceButton.textContent='🎬 RESTART EPIC WALK';
+ if(entranceActor)entranceActor._entranceState=null;
+});
+entranceButton.addEventListener('click',()=>{
+ epicEntranceTime=-1;
+ cinematicBlackout.style.opacity='0';
+ for(const p of epicShards)p.mesh.visible=false;
+});
+function updateEpicEntrance(dt){
+ if(epicEntranceTime<0)return false;
+ epicEntranceTime+=dt;
+ const t=epicEntranceTime;
+ // Arena view for 2s, full black for the following 2s.
+ cinematicBlackout.style.opacity=t>=2&&t<4?'1':'0';
+ updateEpicPyro(t);
+ const walking=t>=7&&t<29;
+ entranceBot.visible=t>=7;
+ const p=THREE.MathUtils.clamp((t-7)/22,0,1);
+ // Walk slowly from stage curtain, across the stage and all the way down the ramp.
+ const route=[
+  entranceV(0,1.2,-34),entranceV(0,1.2,-26),
+  entranceV(0,.06,-9),entranceV(0,.06,-6)
+ ];
+ const lengths=[8,Math.hypot(17,1.14),3];
+ let remaining=p*lengths.reduce((a,b)=>a+b,0);
+ let pos=route[3].clone();
+ for(let i=0;i<3;i++){
+  if(remaining<=lengths[i]){
+   pos=route[i].clone().lerp(route[i+1],remaining/lengths[i]);
+   break;
+  }
+  remaining-=lengths[i];
+ }
+ entranceBot.position.copy(pos);
+ entranceBot.rotation.y=Math.PI;
+ if(entranceActor){
+  const anim=walking?'movement.walk':'movement.idle';
+  if(entranceActor._entranceState!==anim){entranceActor.play(anim,{fade:.25,restart:true});entranceActor._entranceState=anim;}
+  entranceActor.update(dt);
+ }
+ let eye,focus;
+ if(t<2){ // wide establishing shot of the full arena
+  eye=entranceV(18,17,22);focus=entranceV(0,3,-16);
+ }else if(t<4){ // blackout holds the establishing angle
+  eye=entranceV(18,17,22);focus=entranceV(0,3,-16);
+ }else if(t<7){ // reveal huge pyrotechnics high above the stage
+  eye=entranceV(-13,2.5,-20);focus=entranceV(0,10,-32);
+ }else if(t>=16&&t<19){ // front-facing reaction close-up of the wrestler in the ring
+  const faceDir=entranceV(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+  eye=player.position.clone().addScaledVector(faceDir,1.65).add(entranceV(0,1.65,0));
+  focus=player.position.clone().add(entranceV(0,1.55,0));
+ }else if(t<13){ // very low tracking shot looking up
+  eye=pos.clone().add(entranceV(-2.4,.5,4.3));
+  focus=pos.clone().add(entranceV(0,2.15,0));
+ }else if(t<23){ // front-on ground-level dolly
+  eye=pos.clone().add(entranceV(0,.35,5.2));
+  focus=pos.clone().add(entranceV(0,2.2,0));
+ }else{ // dramatic low side shot as the bot approaches the ring
+  eye=pos.clone().add(entranceV(3,.45,3.4));
+  focus=pos.clone().add(entranceV(0,2.1,0));
+ }
+ camera.position.lerp(eye,Math.min(1,dt*10));
+ camera.lookAt(focus);
+ if(t>=31){
+  epicEntranceTime=-1;
+  slowEntranceButton.textContent='🎬 EPIC WALK ENTRANCE';
+  cinematicBlackout.style.opacity='0';
+ }
+ return true;
+}
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
@@ -732,7 +840,7 @@ renderer.setAnimationLoop(()=>{
   loadedWrestler.update(dt);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=updateEntrance(dt);
+ const cinematicActive=epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
