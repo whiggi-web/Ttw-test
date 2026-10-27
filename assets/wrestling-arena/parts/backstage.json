@@ -1,0 +1,55 @@
+{
+  "id": "backstage",
+  "name": "Backstage area",
+  "objects": [
+    { "id": "backstage_floor", "type": "box", "size": [32, 0.06, 25], "position": [0, 0.03, -47.5], "material": "backstage_floor", "castShadow": false, "tags": ["backstage", "floor", "walkable"] },
+
+    { "id": "gorilla_platform", "type": "box", "size": [6, 1.2, 3], "position": [0, 0.6, -36.5], "material": "stage", "collide": true, "tags": ["backstage", "walkable"] },
+    { "id": "gorilla_ramp", "type": "ramp", "from": [0, 1.2, -38], "to": [0, 0.06, -44], "width": 3, "thickness": 0.2, "material": "steel", "collide": true, "tags": ["backstage", "walkable"] },
+    { "id": "gorilla_rail", "type": "rope", "from": [1.55, 2.2, -38], "to": [1.55, 1.06, -44], "radius": 0.04, "material": "steel", "mirror": "x", "tags": ["backstage"] },
+    { "id": "gorilla_desk", "type": "box", "size": [2.4, 0.8, 0.9], "position": [5, 0.4, -40], "material": "table", "collide": true, "tags": ["backstage", "gorilla"] },
+    { "id": "gorilla_monitor", "type": "box", "size": [0.6, 0.38, 0.05], "position": [4.4, 1.0, -40.3], "material": "monitor", "array": { "count": 3, "step": [0.6, 0, 0] }, "tags": ["backstage", "gorilla"] },
+
+    { "id": "wall_back",  "type": "box", "size": [32.4, 4.5, 0.3], "position": [0, 2.25, -60.15], "material": "backstage_wall", "collide": true, "tags": ["backstage", "wall"] },
+    { "id": "wall_outer", "type": "box", "size": [0.3, 4.5, 25], "position": [16.15, 2.25, -47.65], "material": "backstage_wall", "mirror": "x", "collide": true, "tags": ["backstage", "wall"] },
+
+    { "id": "locker_wall_front_a", "type": "box", "size": [6.5, 3.2, 0.2], "position": [12.75, 1.6, -50], "material": "backstage_wall", "mirror": "x", "collide": true, "tags": ["backstage", "wall", "locker_room"] },
+    { "id": "locker_wall_front_b", "type": "box", "size": [2, 3.2, 0.2], "position": [7, 1.6, -50], "material": "backstage_wall", "mirror": "x", "collide": true, "tags": ["backstage", "wall", "locker_room"] },
+    { "id": "locker_wall_side", "type": "box", "size": [0.2, 3.2, 10], "position": [6, 1.6, -55], "material": "backstage_wall", "mirror": "x", "collide": true, "tags": ["backstage", "wall", "locker_room"] },
+    { "id": "locker_door_light_red",  "type": "box", "size": [1.5, 0.12, 0.25], "position": [-8.75, 3.0, -49.85], "material": "led_red",  "tags": ["backstage", "led"] },
+    { "id": "locker_door_light_blue", "type": "box", "size": [1.5, 0.12, 0.25], "position": [8.75, 3.0, -49.85],  "material": "led_blue", "tags": ["backstage", "led"] },
+
+    { "id": "lockers", "type": "box", "size": [0.6, 2.0, 0.55], "position": [7.2, 1.0, -59.7], "material": "locker", "array": { "count": 13, "step": [0.65, 0, 0] }, "mirror": "x", "collide": true, "tags": ["backstage", "locker_room"] },
+    { "id": "locker_bench", "type": "box", "size": [6, 0.45, 0.45], "position": [11, 0.225, -57], "material": "wood", "mirror": "x", "collide": true, "tags": ["backstage", "locker_room"] },
+    { "id": "locker_mirror", "type": "box", "size": [0.05, 1.2, 3], "position": [15.95, 1.7, -54.5], "material": "led_white", "mirror": "x", "tags": ["backstage", "locker_room"] },
+    { "id": "locker_light", "type": "light", "light": "point", "color": "#ffe8c4", "intensity": 60, "distance": 12, "decay": 2, "position": [11, 3.6, -55], "mirror": "x", "tags": ["backstage", "light"] },
+
+    { "id": "road_case_stack", "type": "box", "size": [1.2, 0.9, 0.8], "position": [-14.8, 0.45, -38], "material": "road_case", "array": { "count": 4, "step": [0, 0, -1.0] }, "collide": true, "tags": ["backstage", "props"] },
+    { "id": "road_case_top", "type": "box", "size": [1.2, 0.9, 0.8], "position": [-14.8, 1.35, -38.5], "material": "road_case", "array": { "count": 2, "step": [0, 0, -1.0] }, "collide": true, "tags": ["backstage", "props"] },
+    { "id": "road_case_loose", "type": "box", "size": [1.6, 1.1, 1.0], "position": [-10.5, 0.55, -46.5], "rotation": [0, 18, 0], "material": "road_case", "collide": true, "tags": ["backstage", "props"] },
+
+    { "id": "couch_base", "type": "box", "size": [3.2, 0.45, 1.0], "position": [-10, 0.225, -42], "material": "couch", "collide": true, "tags": ["backstage", "lounge"] },
+    { "id": "couch_back", "type": "box", "size": [3.2, 0.6, 0.25], "position": [-10, 0.75, -42.4], "material": "couch", "tags": ["backstage", "lounge"] },
+    { "id": "lounge_tv", "type": "box", "size": [2.2, 1.25, 0.08], "position": [-10, 2.2, -35.3], "material": "monitor", "tags": ["backstage", "lounge"] },
+    { "id": "coffee_table", "type": "box", "size": [1.4, 0.4, 0.7], "position": [-10, 0.2, -40.5], "material": "wood", "collide": true, "tags": ["backstage", "lounge"] },
+
+    { "id": "catering_table", "type": "box", "size": [4, 0.8, 1.0], "position": [12, 0.4, -40], "material": "table", "collide": true, "tags": ["backstage", "catering"] },
+    { "id": "catering_tray", "type": "box", "size": [0.6, 0.06, 0.4], "position": [10.6, 0.83, -40], "material": "tray", "array": { "count": 5, "step": [0.7, 0, 0] }, "tags": ["backstage", "catering"] },
+    { "id": "catering_cooler", "type": "box", "size": [0.9, 1.9, 0.7], "position": [15.4, 0.95, -43], "material": "locker", "collide": true, "tags": ["backstage", "catering"] },
+
+    { "id": "hall_light", "type": "light", "light": "point", "color": "#fff0d8", "intensity": 120, "distance": 22, "decay": 2, "position": [0, 4.2, -46], "tags": ["backstage", "light"] },
+    { "id": "side_light", "type": "light", "light": "point", "color": "#fff0d8", "intensity": 70, "distance": 16, "decay": 2, "position": [11, 4.2, -41], "mirror": "x", "tags": ["backstage", "light"] }
+  ],
+
+  "markers": {
+    "stage_curtain_back": [0, 1.2, -35.8],
+    "backstage_hall":     [0, 0.06, -46],
+    "gorilla":            [3.6, 0.06, -40.8],
+    "locker_door_red":    [-8.75, 0.06, -50],
+    "locker_room_red":    [-11, 0.06, -54],
+    "locker_door_blue":   [8.75, 0.06, -50],
+    "locker_room_blue":   [11, 0.06, -54],
+    "lounge":             [-10, 0.06, -43.5],
+    "catering":           [12, 0.06, -41.5]
+  }
+}
