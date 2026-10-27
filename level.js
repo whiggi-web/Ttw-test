@@ -261,7 +261,7 @@ let remoteWrestler=null;
 let usingBatchOne=false;
 let wrestlerPack=null;
 try{
- const pack=await loadPack('./assets/ttw-wrestlers/manifest.json');
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-batch2.json');
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -278,7 +278,8 @@ const attackMoves={punch:{anim:'striking.punch',reaction:'reactions.hit-front',d
 const playTTWAnimation=(w,state,fade=.2)=>{
  if(!w)return;
  const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||(state.startsWith('reactions.')?state:'movement.idle')):state;
- w.play(name,{fade,restart:true});
+ const safeName=usingBatchOne&&w.library?.defs?.[name]?name:(usingBatchOne?'movement.idle':name);
+ try{w.play(safeName,{fade,restart:true});}catch(error){console.warn('TTW animation unavailable:',name,error);if(safeName!=='movement.idle')try{w.play('movement.idle',{fade:0,restart:true});}catch{}}
 };
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
 const solidArenaBoxes=(loadedArena?.colliders||[]).filter(c=>
