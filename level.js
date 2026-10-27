@@ -211,7 +211,7 @@ if(loadedArena){
   const geom=obj.geometry.clone();obj.geometry=geom;
   const pos=geom.attributes.position;
   const original=new Float32Array(pos.array);
-  const inward=new THREE.Vector3(side==='west'?1:side==='east'?-1:0,0,side==='north'?-1:side==='south'?1:0);
+  const inward=new THREE.Vector3(side==='west'?-1:side==='east'?1:0,0,side==='north'?1:side==='south'?-1:0);
   const localInward=inward.applyQuaternion(obj.getWorldQuaternion(new THREE.Quaternion()).invert());
   const halfLength=(geom.parameters?.height||7)/2;
   ropeMeshes.push({side,pos,original,localInward,halfLength});
@@ -246,15 +246,15 @@ function updateRopes(dt){
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 function blockedByArena(x,z,feetY){
  const radius=.32;
- if(feetY>=1.0&&feetY<=1.6){
+ if(feetY>=.75&&feetY<=1.65){
   const side=ropeSideAt(x,z);
   const inside=Math.abs(player.position.x)<ropeEdge&&Math.abs(player.position.z)<ropeEdge;
   if(side&&inside){
    const inward=side==='east'?new THREE.Vector3(-1,0,0):side==='west'?new THREE.Vector3(1,0,0):side==='north'?new THREE.Vector3(0,0,-1):new THREE.Vector3(0,0,1);
    const outwardDistance=side==='east'?x:side==='west'?-x:side==='north'?z:-z;
-   if(outwardDistance>ropeEdge-.32){
+   if(outwardDistance>ropeEdge-.44){
     const spring=ropeSprings[side];
-    spring.bend=Math.max(spring.bend,Math.min(ropeGive,outwardDistance-(ropeEdge-.32)));
+    spring.bend=Math.max(spring.bend,Math.min(ropeGive,outwardDistance-(ropeEdge-.44)));
     if(outwardDistance>=ropeEdge-.32+ropeGive){
      if(spring.impact<=0){
       spring.velocity+=2.2;
