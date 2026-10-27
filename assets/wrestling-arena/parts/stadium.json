@@ -1,0 +1,49 @@
+{
+  "id": "stadium",
+  "name": "Stadium bowl",
+  "objects": [
+    { "id": "arena_floor", "type": "box", "size": [64, 0.1, 96], "position": [0, -0.05, -3], "material": "floor_concrete", "castShadow": false, "tags": ["floor", "walkable"] },
+
+    { "id": "floor_seats_side", "type": "box", "size": [0.48, 0.9, 0.48], "position": [9.0, 0.45, -6.0], "material": "seat_floor", "grid": { "counts": [4, 21], "step": [0.75, 0, 0.6] }, "mirror": "x", "tags": ["seating", "floor_seats"] },
+    { "id": "floor_seats_end",  "type": "box", "size": [0.48, 0.9, 0.48], "position": [-7.2, 0.45, 9.0], "material": "seat_floor", "grid": { "counts": [25, 4], "step": [0.6, 0, 0.75] }, "tags": ["seating", "floor_seats"] },
+
+    {
+      "id": "stand_side", "type": "tiers", "position": [12.5, 0, -5], "rotation": [0, 90, 0],
+      "length": 34, "rows": 20, "rise": 0.45, "depth": 0.85,
+      "material": "tier_concrete", "seatMaterial": "seat", "seatSpacing": 0.6, "frontMaterial": "led_blue",
+      "crowd": { "density": 0.72, "seed": 11 },
+      "mirror": "x", "collide": true, "tags": ["seating", "stand"]
+    },
+    {
+      "id": "stand_end", "type": "tiers", "position": [0, 0, 12.5], "rotation": [0, 0, 0],
+      "length": 50, "rows": 20, "rise": 0.45, "depth": 0.85,
+      "material": "tier_concrete", "seatMaterial": "seat", "seatSpacing": 0.6, "frontMaterial": "led_blue",
+      "crowd": { "density": 0.72, "seed": 23 },
+      "collide": true, "tags": ["seating", "stand"]
+    },
+    { "id": "stand_corner_fill", "type": "box", "size": [5.4, 9, 17.6], "position": [27.4, 4.5, 21.3], "material": "tier_concrete", "mirror": "x", "collide": true, "tags": ["stand"] },
+
+    { "id": "suite_block", "type": "box", "size": [17, 6, 13], "position": [21, 3, -28.5], "material": "wall", "mirror": "x", "collide": true, "tags": ["stand", "suites"] },
+    { "id": "suite_windows", "type": "box", "size": [0.05, 1.2, 12], "position": [12.48, 4.4, -28.5], "material": "led_white", "mirror": "x", "tags": ["stand", "suites", "led"] },
+    { "id": "suite_ribbon", "type": "box", "size": [0.05, 0.4, 12], "position": [12.48, 1.6, -28.5], "material": "led_red", "mirror": "x", "tags": ["stand", "led"] },
+
+    { "id": "wall_side",  "type": "box", "size": [0.6, 15, 66], "position": [30.3, 7.5, -2],  "material": "wall", "mirror": "x", "collide": true, "castShadow": false, "tags": ["wall", "outer_wall"] },
+    { "id": "wall_end",   "type": "box", "size": [61.2, 15, 0.6], "position": [0, 7.5, 30.3], "material": "wall", "collide": true, "castShadow": false, "tags": ["wall", "outer_wall"] },
+    { "id": "wall_entrance", "type": "box", "size": [18.6, 15, 0.6], "position": [21.3, 7.5, -35.3], "material": "wall", "mirror": "x", "collide": true, "castShadow": false, "tags": ["wall", "outer_wall"] },
+
+    { "id": "rim_ribbon_side", "type": "box", "size": [0.1, 0.5, 34], "position": [29.95, 9.6, -5], "material": "led_red", "mirror": "x", "tags": ["led"] },
+    { "id": "rim_ribbon_end",  "type": "box", "size": [50, 0.5, 0.1], "position": [0, 9.6, 29.95], "material": "led_red", "tags": ["led"] },
+
+    { "id": "roof_truss_ew", "type": "box", "size": [60, 0.6, 0.6], "position": [0, 17, -20], "material": "truss", "array": { "count": 5, "step": [0, 0, 12] }, "castShadow": false, "tags": ["rig"] },
+    { "id": "roof_lamp", "type": "cylinder", "radius": 0.35, "height": 0.4, "position": [-24, 16.5, -20], "material": "light_fixture", "grid": { "counts": [7, 5], "step": [8, 0, 12] }, "castShadow": false, "tags": ["rig"] },
+
+    { "id": "crowd_wash", "type": "light", "light": "point", "color": "#9fb4ff", "intensity": 900, "distance": 45, "decay": 2, "position": [20, 15, 2], "mirror": "x", "tags": ["light"] },
+    { "id": "crowd_wash_end", "type": "light", "light": "point", "color": "#9fb4ff", "intensity": 900, "distance": 45, "decay": 2, "position": [0, 15, 21], "tags": ["light"] }
+  ],
+
+  "markers": {
+    "floor_seats_side": [10, 0, 0],
+    "stand_side_front": [12.5, 0.45, -5],
+    "stand_end_front": [0, 0.45, 12.5]
+  }
+}
