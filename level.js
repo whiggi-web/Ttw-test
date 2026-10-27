@@ -303,7 +303,7 @@ function registerRopeBounce(inward){
  ropeSpeedMultiplier=Math.min(1.30,Math.round((ropeSpeedMultiplier+.10)*100)/100);
  ropeFacingTime=1;
  ropeBounceDelay=1;
- ropeMovementLock=1.5;
+ ropeMovementLock=1.25;
  if(usingBatchOne)ropeAnimationTime=ropeLeanDuration+ropeReboundDuration;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
 }
