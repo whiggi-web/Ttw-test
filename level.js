@@ -511,58 +511,96 @@ entranceButton.textContent='🎬 BOT ENTRANCE';
 entranceButton.style.cssText='position:fixed;top:58px;left:16px;z-index:15;padding:10px 14px;background:#9e274d;color:white;border:1px solid #f9b1c8;border-radius:8px;font:700 13px system-ui;cursor:pointer';
 document.body.appendChild(entranceButton);
 let entranceTime=-1;
-const entranceRoute=[
- new THREE.Vector3(0,1.2,-37.5),new THREE.Vector3(0,1.2,-34),
- new THREE.Vector3(0,1.2,-26),new THREE.Vector3(0,.65,-18),
- new THREE.Vector3(0,.06,-9),new THREE.Vector3(0,.06,-6)
+// Timed entrance choreography: slow stage walk, crowd acknowledgements, then sprint.
+const entranceKeyframes=[
+ {t:0,x:0,y:1.2,z:-37.5,anim:'movement.walk',face:Math.PI},
+ {t:2.5,x:0,y:1.2,z:-31,anim:'movement.walk',face:Math.PI},
+ {t:5.5,x:-7,y:1.2,z:-29.5,anim:'movement.walk',face:Math.PI/2},
+ {t:7.5,x:-7,y:1.2,z:-29.5,anim:'movement.idle',face:-Math.PI/2},
+ {t:10,x:-7,y:1.2,z:-29.5,anim:'movement.idle',face:-Math.PI/2},
+ {t:13,x:7,y:1.2,z:-29.5,anim:'movement.walk',face:-Math.PI/2},
+ {t:15,x:7,y:1.2,z:-29.5,anim:'movement.idle',face:Math.PI/2},
+ {t:18,x:7,y:1.2,z:-29.5,anim:'movement.idle',face:Math.PI/2},
+ {t:20,x:0,y:1.2,z:-29,anim:'movement.walk',face:Math.PI},
+ {t:23,x:0,y:.8,z:-18,anim:'movement.run',face:Math.PI},
+ {t:26,x:0,y:.06,z:-9,anim:'movement.run',face:Math.PI},
+ {t:28,x:0,y:.06,z:-6,anim:'movement.run',face:Math.PI},
+ {t:30,x:0,y:.06,z:-6,anim:'movement.idle',face:Math.PI}
 ];
-const entranceLengths=entranceRoute.slice(1).map((p,i)=>p.distanceTo(entranceRoute[i]));
-const entranceTotal=entranceLengths.reduce((a,b)=>a+b,0);
-function entrancePoint(progress){
- let remaining=THREE.MathUtils.clamp(progress,0,1)*entranceTotal;
- for(let i=0;i<entranceLengths.length;i++){
-  if(remaining<=entranceLengths[i])return entranceRoute[i].clone().lerp(entranceRoute[i+1],remaining/entranceLengths[i]);
-  remaining-=entranceLengths[i];
- }
- return entranceRoute.at(-1).clone();
+const entranceDuration=30;
+const entranceV=(x,y,z)=>new THREE.Vector3(x,y,z);
+function entrancePose(t){
+ const i=Math.max(0,entranceKeyframes.findIndex((k,j)=>j>0&&t<=k.t)-1);
+ const a=entranceKeyframes[i],b=entranceKeyframes[Math.min(i+1,entranceKeyframes.length-1)];
+ const p=a===b?0:THREE.MathUtils.clamp((t-a.t)/(b.t-a.t),0,1);
+ const pos=entranceV(THREE.MathUtils.lerp(a.x,b.x,p),THREE.MathUtils.lerp(a.y,b.y,p),THREE.MathUtils.lerp(a.z,b.z,p));
+ // Destination keyframe specifies movement type for each segment.
+ const moving=pos.distanceToSquared(entranceV(b.x,b.y,b.z))>.00001;
+ const anim=moving?(b.anim==='movement.run'?'movement.run':'movement.walk'):'movement.idle';
+ return {pos,anim,face:b.face};
 }
 entranceButton.addEventListener('click',()=>{
  entranceTime=0;entranceBot.visible=true;
- entranceBot.position.copy(entranceRoute[0]);entranceBot.rotation.y=Math.PI;
- if(entranceActor){entranceActor.play('movement.run',{fade:.15,restart:true});}
+ entranceBot.position.set(0,1.2,-37.5);entranceBot.rotation.y=Math.PI;
+ if(entranceActor){entranceActor._entranceState=null;entranceActor.play('movement.walk',{fade:.15,restart:true});}
  entranceButton.textContent='🎬 RESTART ENTRANCE';
 });
 function updateEntrance(dt){
  if(entranceTime<0)return false;
- entranceTime+=dt;
- const duration=10.5;
- const p=Math.min(1,entranceTime/duration);
- const pos=entrancePoint(p);
- entranceBot.position.copy(pos);
- const ahead=entrancePoint(Math.min(1,p+.002));
- if(ahead.distanceToSquared(pos)>.00001)entranceBot.rotation.y=Math.atan2(-(ahead.x-pos.x),-(ahead.z-pos.z));
+ entranceTime=Math.min(entranceDuration,entranceTime+dt);
+ const t=entranceTime,pose=entrancePose(t);
+ entranceBot.position.copy(pose.pos);
+ // Look outward during each crowd acknowledgement, face the direction of travel otherwise.
+ if(t>=5.5&&t<10)entranceBot.rotation.y=-Math.PI/2;
+ else if(t>=13&&t<18)entranceBot.rotation.y=Math.PI/2;
+ else{
+  const ahead=entrancePose(Math.min(entranceDuration,t+.05)).pos;
+  if(ahead.distanceToSquared(pose.pos)>.00001)
+   entranceBot.rotation.y=Math.atan2(-(ahead.x-pose.pos.x),-(ahead.z-pose.pos.z));
+ }
  if(entranceActor){
-  const anim=p>=1?'movement.idle':'movement.run';
-  if(entranceActor._entranceState!==anim){entranceActor.play(anim,{fade:.18,restart:true});entranceActor._entranceState=anim;}
+  if(entranceActor._entranceState!==pose.anim){
+   entranceActor.play(pose.anim,{fade:.22,restart:true});
+   entranceActor._entranceState=pose.anim;
+  }
   entranceActor.update(dt);
  }
- // Multiple broadcast-style cuts: backstage reveal, low tracking, overhead,
- // side dolly, head-on sprint and ring-side finish.
- const shots=[
-  {end:1.7,offset:[-5,2.1,-5],look:[0,1.1,1]},
-  {end:3.4,offset:[1.7,.9,4.2],look:[0,1.3,0]},
-  {end:5.1,offset:[-7,6,-2],look:[0,1,1]},
-  {end:6.8,offset:[6,2.4,1],look:[0,1.3,0]},
-  {end:8.7,offset:[0,1.5,7],look:[0,1.2,0]},
-  {end:12.5,offset:[-7,4,5],look:[0,1.2,0]}
- ];
- const shot=shots.find(s=>entranceTime<s.end)||shots.at(-1);
- const desired=pos.clone().add(new THREE.Vector3(...shot.offset));
- camera.position.lerp(desired,Math.min(1,dt*9));
- camera.lookAt(pos.clone().add(new THREE.Vector3(...shot.look)));
- if(entranceTime>=12.5){entranceTime=-1;entranceButton.textContent='🎬 BOT ENTRANCE';return false;}
+ // Directed television coverage: each shot has its own camera and focal point.
+ let eye,focus;
+ if(t<2.5){ // curtain reveal
+  eye=entranceV(-5,3.2,-28);focus=pose.pos.clone().add(entranceV(0,1.1,0));
+ }else if(t<5.5){ // track left across stage
+  eye=pose.pos.clone().add(entranceV(-2.5,2.2,5.5));focus=pose.pos.clone().add(entranceV(0,1.2,0));
+ }else if(t<7.5){ // wrestler acknowledges left crowd
+  eye=entranceV(-11,3.3,-25);focus=pose.pos.clone().add(entranceV(0,1.2,0));
+ }else if(t<10){ // panoramic right-side audience, independent of wrestler
+  const p=(t-7.5)/2.5;
+  eye=entranceV(8+p*10,5.5,-16+p*3);
+  focus=entranceV(22+p*9,5,-17+p*7);
+ }else if(t<13){ // cross stage to the right
+  eye=pose.pos.clone().add(entranceV(2.8,2.4,5.2));focus=pose.pos.clone().add(entranceV(0,1.2,0));
+ }else if(t<15){ // look out over right-side crowd
+  eye=entranceV(11,3.1,-25);focus=pose.pos.clone().add(entranceV(0,1.2,0));
+ }else if(t<18){ // close-up of the human player already in the ring
+  eye=player.position.clone().add(entranceV(1.4,1.9,2.7));
+  focus=player.position.clone().add(entranceV(0,1.3,0));
+ }else if(t<20){ // dramatic low-angle stage departure
+  eye=entranceV(-3,1.5,-23);focus=pose.pos.clone().add(entranceV(0,1.1,0));
+ }else if(t<22){ // head-on tracking run
+  eye=pose.pos.clone().add(entranceV(0,1.6,5.5));focus=pose.pos.clone().add(entranceV(0,1.1,0));
+ }else if(t<24){ // sweeping side shot
+  eye=pose.pos.clone().add(entranceV(-6,3.4,1));focus=pose.pos.clone().add(entranceV(0,1.1,0));
+ }else if(t<26){ // high angle looking down the ramp
+  eye=pose.pos.clone().add(entranceV(4.5,8,4));focus=pose.pos.clone().add(entranceV(0,1,0));
+ }else{ // ringside finish
+  eye=entranceV(-6,3.6,2);focus=pose.pos.clone().add(entranceV(0,1.1,0));
+ }
+ camera.position.lerp(eye,Math.min(1,dt*12));
+ camera.lookAt(focus);
+ if(t>=entranceDuration){entranceTime=-1;entranceButton.textContent='🎬 BOT ENTRANCE';}
  return true;
 }
+
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
