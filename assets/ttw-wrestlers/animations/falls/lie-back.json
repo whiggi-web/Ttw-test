@@ -1,0 +1,126 @@
+{
+  "id": "falls.lie-back",
+  "name": "Lie on back",
+  "category": "falls",
+  "description": "Lying flat on the back, breathing. Loop.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 3.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "events": [],
+  "tags": ["fall", "loop", "starts-lying-back", "ends-lying-back"],
+  "batch": 2,
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.5, 4, 0, 0],
+        [3.0, 0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 14, 0],
+        [1.5, 0, 14, 0],
+        [3.0, 0, 14, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 90, 0, 0],
+        [1.5, 90, 0, 0],
+        [3.0, 90, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.83, 0],
+        [1.5, 0, -0.83, 0],
+        [3.0, 0, -0.83, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -20, 0, 6],
+        [1.5, -20, 0, 6],
+        [3.0, -20, 0, 6]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [1.5, 22, 0, 0],
+        [3.0, 16, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [1.5, -8, 0, 0],
+        [3.0, -8, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 10, -56],
+        [1.5, 0, 10, -56],
+        [3.0, 0, 10, -56]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -8],
+        [1.5, 0, 0, -8],
+        [3.0, 0, 0, -8]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 6, 0, 0],
+        [1.5, 4, 0, 0],
+        [3.0, 6, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -20, 0, -6],
+        [1.5, -20, 0, -6],
+        [3.0, -20, 0, -6]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [1.5, 22, 0, 0],
+        [3.0, 16, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [1.5, -8, 0, 0],
+        [3.0, -8, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, -10, 56],
+        [1.5, 0, -10, 56],
+        [3.0, 0, -10, 56]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 8],
+        [1.5, 0, 0, 8],
+        [3.0, 0, 0, 8]
+      ]
+    }
+  }
+}

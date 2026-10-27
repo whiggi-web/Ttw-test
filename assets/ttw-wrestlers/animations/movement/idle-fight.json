@@ -1,0 +1,126 @@
+{
+  "id": "movement.idle-fight",
+  "name": "Idle, fighting stance",
+  "category": "movement",
+  "description": "Guard up with a light bounce on the knees.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 1.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "events": [],
+  "tags": ["idle", "loop", "guard"],
+  "batch": 2,
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.5, 0, 4, 0],
+        [1.0, 0, 0, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.5, 0, 3, 0],
+        [1.0, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.03, 0],
+        [0.5, 0, -0.065, 0],
+        [1.0, 0, -0.03, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 8, 0, 4],
+        [0.5, 13, 0, 4],
+        [1.0, 8, 0, 4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 120, 0, 0],
+        [0.5, 120, 0, 0],
+        [1.0, 120, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -16, 0, 0],
+        [0.5, -26, 0, 0],
+        [1.0, -16, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 55, 0, 22],
+        [0.5, 58, 0, 22],
+        [1.0, 55, 0, 22]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 8, 0, -4],
+        [0.5, 13, 0, -4],
+        [1.0, 8, 0, -4]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.5, 4, 0, 0],
+        [1.0, 4, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 8, 0, -4],
+        [0.5, 13, 0, -4],
+        [1.0, 8, 0, -4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 118, 0, 0],
+        [0.5, 118, 0, 0],
+        [1.0, 118, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -16, 0, 0],
+        [0.5, -26, 0, 0],
+        [1.0, -16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 50, 0, -22],
+        [0.5, 46, 0, -22],
+        [1.0, 50, 0, -22]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 8, 0, 4],
+        [0.5, 13, 0, 4],
+        [1.0, 8, 0, 4]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.5, -4, 0, 0],
+        [1.0, -4, 0, 0]
+      ]
+    }
+  }
+}

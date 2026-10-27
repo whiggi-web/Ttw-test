@@ -1,0 +1,821 @@
+[
+  {
+    "id": "movement.idle-fight",
+    "name": "Idle, fighting stance",
+    "category": "movement",
+    "file": "animations/movement/idle-fight.json",
+    "duration": 1.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "idle",
+      "loop",
+      "guard"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.walk-cocky",
+    "name": "Walk, cocky",
+    "category": "movement",
+    "file": "animations/movement/walk-cocky.json",
+    "duration": 1.2,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.walk-injured",
+    "name": "Walk, injured",
+    "category": "movement",
+    "file": "animations/movement/walk-injured.json",
+    "duration": 1.6,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop",
+      "injured"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.sprint",
+    "name": "Sprint",
+    "category": "movement",
+    "file": "animations/movement/sprint.json",
+    "duration": 0.5,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.backpedal",
+    "name": "Backpedal",
+    "category": "movement",
+    "file": "animations/movement/backpedal.json",
+    "duration": 1.0,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop",
+      "guard"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.sidestep-left",
+    "name": "Sidestep left",
+    "category": "movement",
+    "file": "animations/movement/sidestep-left.json",
+    "duration": 0.8,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop",
+      "guard"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.sidestep-right",
+    "name": "Sidestep right",
+    "category": "movement",
+    "file": "animations/movement/sidestep-right.json",
+    "duration": 0.8,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop",
+      "guard"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.turn-180",
+    "name": "Turn around",
+    "category": "movement",
+    "file": "animations/movement/turn-180.json",
+    "duration": 0.7,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "recover"
+    ],
+    "tags": [
+      "turn"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.stumble-forward",
+    "name": "Stumble forward",
+    "category": "movement",
+    "file": "animations/movement/stumble-forward.json",
+    "duration": 0.95,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "recover"
+    ],
+    "tags": [
+      "stumble"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.stumble-backward",
+    "name": "Stumble backward",
+    "category": "movement",
+    "file": "animations/movement/stumble-backward.json",
+    "duration": 0.95,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "recover"
+    ],
+    "tags": [
+      "stumble"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "movement.stagger-move",
+    "name": "Stagger while moving",
+    "category": "movement",
+    "file": "animations/movement/stagger-move.json",
+    "duration": 1.4,
+    "loop": true,
+    "rootMotion": "inPlace",
+    "events": [],
+    "tags": [
+      "locomotion",
+      "loop",
+      "injured"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.jab",
+    "name": "Jab",
+    "category": "striking",
+    "file": "animations/striking/jab.json",
+    "duration": 0.45,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "left",
+      "fast"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.hook-right",
+    "name": "Hook punch, right",
+    "category": "striking",
+    "file": "animations/striking/hook-right.json",
+    "duration": 0.75,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.hook-left",
+    "name": "Hook punch, left",
+    "category": "striking",
+    "file": "animations/striking/hook-left.json",
+    "duration": 0.75,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "left"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.uppercut",
+    "name": "Uppercut",
+    "category": "striking",
+    "file": "animations/striking/uppercut.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.body-punch",
+    "name": "Body punch",
+    "category": "striking",
+    "file": "animations/striking/body-punch.json",
+    "duration": 0.7,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.low-kick",
+    "name": "Low kick",
+    "category": "striking",
+    "file": "animations/striking/low-kick.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right",
+      "kick"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.roundhouse",
+    "name": "Roundhouse kick",
+    "category": "striking",
+    "file": "animations/striking/roundhouse.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right",
+      "kick"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.knee",
+    "name": "Knee strike",
+    "category": "striking",
+    "file": "animations/striking/knee.json",
+    "duration": 0.7,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right",
+      "knee"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.elbow",
+    "name": "Elbow strike",
+    "category": "striking",
+    "file": "animations/striking/elbow.json",
+    "duration": 0.7,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.clothesline",
+    "name": "Clothesline",
+    "category": "striking",
+    "file": "animations/striking/clothesline.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "speedCurve",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "right"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "striking.double-axe",
+    "name": "Double axe handle",
+    "category": "striking",
+    "file": "animations/striking/double-axe.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit"
+    ],
+    "tags": [
+      "strike",
+      "two-hand"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-front-body",
+    "name": "Hit from front, body",
+    "category": "reactions",
+    "file": "animations/reactions/hit-front-body.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "front"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-back-body",
+    "name": "Hit from behind, body",
+    "category": "reactions",
+    "file": "animations/reactions/hit-back-body.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-left",
+    "name": "Hit from left",
+    "category": "reactions",
+    "file": "animations/reactions/hit-left.json",
+    "duration": 0.75,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "side",
+      "left-side"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-right",
+    "name": "Hit from right",
+    "category": "reactions",
+    "file": "animations/reactions/hit-right.json",
+    "duration": 0.75,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "side",
+      "right-side"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-kick",
+    "name": "Hit by kick",
+    "category": "reactions",
+    "file": "animations/reactions/hit-kick.json",
+    "duration": 0.95,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "front",
+      "heavy"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-clothesline",
+    "name": "Hit by clothesline",
+    "category": "reactions",
+    "file": "animations/reactions/hit-clothesline.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "land"
+    ],
+    "tags": [
+      "reaction",
+      "front",
+      "heavy",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.hit-chair",
+    "name": "Hit by chair",
+    "category": "reactions",
+    "file": "animations/reactions/hit-chair.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "front",
+      "weapon",
+      "heavy"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.stunned",
+    "name": "Stunned",
+    "category": "reactions",
+    "file": "animations/reactions/stunned.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "reaction",
+      "loop",
+      "stunned"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.dizzy",
+    "name": "Dizzy",
+    "category": "reactions",
+    "file": "animations/reactions/dizzy.json",
+    "duration": 1.6,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "reaction",
+      "loop",
+      "stunned"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.knocked-back",
+    "name": "Knocked backwards",
+    "category": "reactions",
+    "file": "animations/reactions/knocked-back.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "front",
+      "heavy"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "reactions.stumble-recover",
+    "name": "Stumble and recover",
+    "category": "reactions",
+    "file": "animations/reactions/stumble-recover.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "hit_received",
+      "recover"
+    ],
+    "tags": [
+      "reaction",
+      "front"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.fall-forward",
+    "name": "Fall forwards",
+    "category": "falls",
+    "file": "animations/falls/fall-forward.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "front",
+      "ends-lying-front"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.fall-left",
+    "name": "Fall sideways, left",
+    "category": "falls",
+    "file": "animations/falls/fall-left.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "side",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.fall-right",
+    "name": "Fall sideways, right",
+    "category": "falls",
+    "file": "animations/falls/fall-right.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "side",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.collapse-knees",
+    "name": "Collapse to knees",
+    "category": "falls",
+    "file": "animations/falls/collapse-knees.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "ends-kneeling"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.fall-spear",
+    "name": "Fall after spear",
+    "category": "falls",
+    "file": "animations/falls/fall-spear.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "heavy",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.fall-slam",
+    "name": "Fall after body slam",
+    "category": "falls",
+    "file": "animations/falls/fall-slam.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "land"
+    ],
+    "tags": [
+      "fall",
+      "heavy",
+      "starts-airborne-back",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.lie-back",
+    "name": "Lie on back",
+    "category": "falls",
+    "file": "animations/falls/lie-back.json",
+    "duration": 3.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "fall",
+      "loop",
+      "starts-lying-back",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.lie-front",
+    "name": "Lie face down",
+    "category": "falls",
+    "file": "animations/falls/lie-front.json",
+    "duration": 3.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "fall",
+      "loop",
+      "starts-lying-front",
+      "ends-lying-front"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.roll-to-back",
+    "name": "Roll onto back",
+    "category": "falls",
+    "file": "animations/falls/roll-to-back.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [],
+    "tags": [
+      "fall",
+      "roll",
+      "starts-lying-front",
+      "ends-lying-back"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.roll-to-front",
+    "name": "Roll onto stomach",
+    "category": "falls",
+    "file": "animations/falls/roll-to-front.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [],
+    "tags": [
+      "fall",
+      "roll",
+      "starts-lying-back",
+      "ends-lying-front"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.getup-front",
+    "name": "Get up from stomach",
+    "category": "falls",
+    "file": "animations/falls/getup-front.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "recover"
+    ],
+    "tags": [
+      "fall",
+      "getup",
+      "starts-lying-front"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.getup-injured",
+    "name": "Get up slowly, injured",
+    "category": "falls",
+    "file": "animations/falls/getup-injured.json",
+    "duration": 3.4,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "recover"
+    ],
+    "tags": [
+      "fall",
+      "getup",
+      "starts-lying-back",
+      "injured"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.quick-recovery",
+    "name": "Quick recovery",
+    "category": "falls",
+    "file": "animations/falls/quick-recovery.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "baked",
+    "events": [
+      "jump",
+      "land",
+      "recover"
+    ],
+    "tags": [
+      "fall",
+      "getup",
+      "starts-lying-back",
+      "fast"
+    ],
+    "batch": 2
+  },
+  {
+    "id": "falls.knockout",
+    "name": "Knockout idle",
+    "category": "falls",
+    "file": "animations/falls/knockout.json",
+    "duration": 4.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [],
+    "tags": [
+      "fall",
+      "loop",
+      "starts-lying-back",
+      "ends-lying-back",
+      "knockout"
+    ],
+    "batch": 2
+  }
+]

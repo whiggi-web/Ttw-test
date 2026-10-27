@@ -1,0 +1,142 @@
+{
+  "id": "movement.sidestep-right",
+  "name": "Sidestep right",
+  "category": "movement",
+  "description": "Shuffle step to the right with the guard up. Move the wrestler along +X.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 0.8,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "inPlace",
+    "speed": 1.0,
+    "direction": [1, 0, 0]
+  },
+  "events": [],
+  "tags": ["locomotion", "loop", "guard"],
+  "batch": 2,
+  "tracks": {
+    "hips": {
+      "position": [
+        [0, 0, -0.03, 0],
+        [0.2, 0.04, -0.03, 0],
+        [0.4, 0.08, -0.06, 0],
+        [0.6, 0.04, -0.03, 0],
+        [0.8, 0, -0.03, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 8, 0, 4],
+        [0.2, 8, 0, 8],
+        [0.4, 10, 0, 13],
+        [0.6, 16, 0, -6],
+        [0.8, 8, 0, 4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 118, 0, 0],
+        [0.2, 118, 0, 0],
+        [0.4, 118, 0, 0],
+        [0.6, 118, 0, 0],
+        [0.8, 118, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -16, 0, 0],
+        [0.2, -16, 0, 0],
+        [0.4, -22, 0, 0],
+        [0.6, -34, 0, 0],
+        [0.8, -16, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 50, 0, 22],
+        [0.2, 50, 0, 22],
+        [0.4, 50, 0, 22],
+        [0.6, 50, 0, 22],
+        [0.8, 50, 0, 22]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 8, 0, -4],
+        [0.2, 8, 0, -8],
+        [0.4, 10, 0, -13],
+        [0.6, 16, 0, 6],
+        [0.8, 8, 0, -4]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.2, 4, 0, 0],
+        [0.4, 4, 0, 0],
+        [0.6, 4, 0, 0],
+        [0.8, 4, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 8, 0, -4],
+        [0.2, 10, 0, -18],
+        [0.4, 10, 0, -13],
+        [0.6, 8, 0, -8],
+        [0.8, 8, 0, -4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 120, 0, 0],
+        [0.2, 120, 0, 0],
+        [0.4, 120, 0, 0],
+        [0.6, 120, 0, 0],
+        [0.8, 120, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -16, 0, 0],
+        [0.2, -22, 0, 0],
+        [0.4, -22, 0, 0],
+        [0.6, -16, 0, 0],
+        [0.8, -16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 55, 0, -22],
+        [0.2, 55, 0, -22],
+        [0.4, 55, 0, -22],
+        [0.6, 55, 0, -22],
+        [0.8, 55, 0, -22]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 8, 0, 4],
+        [0.2, 10, 0, 20],
+        [0.4, 10, 0, 13],
+        [0.6, 8, 0, 8],
+        [0.8, 8, 0, 4]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.2, -4, 0, 0],
+        [0.4, -4, 0, 0],
+        [0.6, -4, 0, 0],
+        [0.8, -4, 0, 0]
+      ]
+    }
+  }
+}

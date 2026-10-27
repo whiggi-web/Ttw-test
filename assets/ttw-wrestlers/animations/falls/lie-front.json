@@ -1,0 +1,126 @@
+{
+  "id": "falls.lie-front",
+  "name": "Lie face down",
+  "category": "falls",
+  "description": "Lying face down, breathing. Loop.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 3.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "events": [],
+  "tags": ["fall", "loop", "starts-lying-front", "ends-lying-front"],
+  "batch": 2,
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.5, -3, 0, 0],
+        [3.0, 0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 20, 0],
+        [1.5, 0, 20, 0],
+        [3.0, 0, 20, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, -90, 0, 0],
+        [1.5, -90, 0, 0],
+        [3.0, -90, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.84, 0],
+        [1.5, 0, -0.832, 0],
+        [3.0, 0, -0.84, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [3.0, -50, 0, 0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 0, 0, -70],
+        [1.5, 0, 0, -70],
+        [3.0, 0, 0, -70]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [1.5, -6, 0, 0],
+        [3.0, -6, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 0, -80],
+        [1.5, 0, 0, -80],
+        [3.0, 0, 0, -80]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -6],
+        [1.5, 0, 0, -6],
+        [3.0, 0, 0, -6]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 10, 40, 0],
+        [1.5, 10, 40, 0],
+        [3.0, 10, 40, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [3.0, -50, 0, 0]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 0, 0, 70],
+        [1.5, 0, 0, 70],
+        [3.0, 0, 0, 70]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [1.5, -6, 0, 0],
+        [3.0, -6, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, 0, 80],
+        [1.5, 0, 0, 80],
+        [3.0, 0, 0, 80]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 6],
+        [1.5, 0, 0, 6],
+        [3.0, 0, 0, 6]
+      ]
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "id": "falls.collapse-knees",
+  "name": "Collapse to knees",
+  "category": "falls",
+  "description": "Legs give way: drop onto the knees and slump back onto the heels. Holds kneeling.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 1.2,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "events": [
+    {
+      "time": 0.5,
+      "name": "land",
+      "zone": "knees"
+    }
+  ],
+  "tags": ["fall", "ends-kneeling"],
+  "batch": 2,
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.2, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 0, 0, 0],
+        [1.2, -10, 0, 0]
+      ]
+    },
+    "hips": {
+      "position": [
+        [0, 0, -0.02, 0],
+        [0.2, 0, -0.2, 0],
+        [0.5, 0, -0.5, 0.04],
+        [0.62, 0, -0.48, 0.05],
+        [1.2, 0, -0.62, 0.12]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.2, 30, 0, 4],
+        [0.5, -30, 0, 0],
+        [0.62, -30, 0, 0],
+        [1.2, -30, 0, 0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.2, 8, 0, 0],
+        [0.5, 8, 0, 0],
+        [0.62, 8, 0, 0],
+        [1.2, 10, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.2, -60, 0, 0],
+        [0.5, -110, 0, 0],
+        [0.62, -110, 0, 0],
+        [1.2, -134, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.2, 4, 0, 6],
+        [0.5, 4, 0, 6],
+        [0.62, 4, 0, 6],
+        [1.2, 14, 0, 8]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.2, 30, 0, -4],
+        [0.5, 20, 0, -4],
+        [0.62, 20, 0, -4],
+        [1.2, 44, 0, -6]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.2, -14, 0, 0],
+        [0.5, -16, 0, 0],
+        [0.62, -16, 0, 0],
+        [1.2, -30, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.2, 30, 0, -4],
+        [0.5, -30, 0, 0],
+        [0.62, -30, 0, 0],
+        [1.2, -30, 0, 0]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.2, 8, 0, 0],
+        [0.5, 8, 0, 0],
+        [0.62, 8, 0, 0],
+        [1.2, 10, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.2, -60, 0, 0],
+        [0.5, -110, 0, 0],
+        [0.62, -110, 0, 0],
+        [1.2, -134, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [0.2, 4, 0, -6],
+        [0.5, 4, 0, -6],
+        [0.62, 4, 0, -6],
+        [1.2, 14, 0, -8]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.2, 30, 0, 4],
+        [0.5, 20, 0, 4],
+        [0.62, 20, 0, 4],
+        [1.2, 44, 0, 6]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.2, -10, 0, 0],
+        [0.5, -6, 0, 0],
+        [0.62, -6, 0, 0],
+        [1.2, -24, 0, 0]
+      ]
+    }
+  }
+}

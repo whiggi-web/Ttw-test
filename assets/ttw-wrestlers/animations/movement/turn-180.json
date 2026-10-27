@@ -1,0 +1,141 @@
+{
+  "id": "movement.turn-180",
+  "name": "Turn around",
+  "category": "movement",
+  "description": "Step round to face the opposite way. Ends facing backwards; the wrestler is turned 180 degrees when the next clip starts (loader-ext.js).",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 0.7,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "baked",
+    "commit": "hipsXZ",
+    "endOffset": [0, 0, 0],
+    "endRotationY": 180
+  },
+  "events": [
+    {
+      "time": 0.6,
+      "name": "recover"
+    }
+  ],
+  "tags": ["turn"],
+  "batch": 2,
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.22, 0, 15, 0],
+        [0.46, 0, 12, 0],
+        [0.7, 0, 0, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.22, 0, 55, 0],
+        [0.46, 0, 125, 0],
+        [0.7, 0, 180, 0]
+      ],
+      "position": [
+        [0, 0, -0.02, 0],
+        [0.22, 0, -0.04, 0],
+        [0.46, 0, -0.04, 0],
+        [0.7, 0, -0.02, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.22, 10, 0, 0],
+        [0.46, 6, 0, 4],
+        [0.7, 6, 0, 4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.22, 14, 0, 0],
+        [0.46, 14, 0, 0],
+        [0.7, 14, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.22, -46, 0, 0],
+        [0.46, -12, 0, 0],
+        [0.7, -12, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.22, 6, 0, 10],
+        [0.46, 6, 0, 10],
+        [0.7, 6, 0, 10]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.22, 30, -10, -4],
+        [0.46, 6, -30, -4],
+        [0.7, 6, 0, -4]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.22, 0, 20, 0],
+        [0.46, 0, 12, 0],
+        [0.7, 0, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.22, 6, 0, -4],
+        [0.46, 10, 0, 0],
+        [0.7, 6, 0, -4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.22, 14, 0, 0],
+        [0.46, 14, 0, 0],
+        [0.7, 14, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.22, -12, 0, 0],
+        [0.46, -46, 0, 0],
+        [0.7, -12, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [0.22, 6, 0, -10],
+        [0.46, 6, 0, -10],
+        [0.7, 6, 0, -10]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.22, 6, -55, 4],
+        [0.46, 30, -40, 4],
+        [0.7, 6, 0, 4]
+      ]
+    }
+  }
+}

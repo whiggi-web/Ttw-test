@@ -1,0 +1,126 @@
+{
+  "id": "falls.knockout",
+  "name": "Knockout idle",
+  "category": "falls",
+  "description": "Out cold on the back, limbs splayed, head turned, slow breathing. Loop.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 4.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "events": [],
+  "tags": ["fall", "loop", "starts-lying-back", "ends-lying-back", "knockout"],
+  "batch": 2,
+  "tracks": {
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [2.0, 2, 0, 0],
+        [4.0, 0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 20, 0],
+        [2.0, 0, 20, 0],
+        [4.0, 0, 20, 0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 90, 0, 0],
+        [2.0, 90, 0, 0],
+        [4.0, 90, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.83, 0],
+        [2.0, 0, -0.83, 0],
+        [4.0, 0, -0.83, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -20, 0, 6],
+        [2.0, -20, 0, 6],
+        [4.0, -20, 0, 6]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 10, 0, 0],
+        [2.0, 10, 0, 0],
+        [4.0, 10, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -24, 0, 0],
+        [2.0, -24, 0, 0],
+        [4.0, -24, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 10, -76],
+        [2.0, 0, 10, -76],
+        [4.0, 0, 10, -76]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 8, 0, -14],
+        [2.0, 8, 0, -14],
+        [4.0, 8, 0, -14]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 30, 0],
+        [2.0, 4, 30, 0],
+        [4.0, 4, 30, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -20, 0, -6],
+        [2.0, -20, 0, -6],
+        [4.0, -20, 0, -6]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 24, 0, 0],
+        [2.0, 24, 0, 0],
+        [4.0, 24, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [2.0, -6, 0, 0],
+        [4.0, -6, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, -10, 80],
+        [2.0, 0, -10, 80],
+        [4.0, 0, -10, 80]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 12],
+        [2.0, 0, 0, 12],
+        [4.0, 0, 0, 12]
+      ]
+    }
+  }
+}

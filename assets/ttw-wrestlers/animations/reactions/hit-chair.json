@@ -1,0 +1,161 @@
+{
+  "id": "reactions.hit-chair",
+  "name": "Hit by chair",
+  "category": "reactions",
+  "description": "Chair shot to the head: knees buckle, hands to the head, stagger back.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "duration": 1.1,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "baked",
+    "commit": "hipsXZ",
+    "endOffset": [0, 0, 0.16]
+  },
+  "events": [
+    {
+      "time": 0.0,
+      "name": "hit_received",
+      "zone": "head"
+    },
+    {
+      "time": 0.9,
+      "name": "recover"
+    }
+  ],
+  "tags": ["reaction", "front", "weapon", "heavy"],
+  "batch": 2,
+  "tracks": {
+    "head": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, -10, 0, 0],
+        [0.4, -10, 0, 0],
+        [0.75, 0, 0, 0],
+        [1.1, 0, 0, 0]
+      ]
+    },
+    "hips": {
+      "position": [
+        [0, 0, -0.02, 0],
+        [0.08, 0, -0.18, 0.04],
+        [0.4, 0, -0.12, 0.12],
+        [0.75, 0, -0.06, 0.16],
+        [1.1, 0, -0.02, 0.16]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.08, 24, 0, 4],
+        [0.4, 24, 0, 4],
+        [0.75, 6, 0, 4],
+        [1.1, 6, 0, 4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.08, 120, 0, 0],
+        [0.4, 120, 0, 0],
+        [0.75, 60, 0, 0],
+        [1.1, 14, 0, 0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.08, -50, 0, 0],
+        [0.4, -34, 0, 0],
+        [0.75, -12, 0, 0],
+        [1.1, -12, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.08, 120, 0, -40],
+        [0.4, 120, 0, -40],
+        [0.75, 40, 0, -10],
+        [1.1, 6, 0, 10]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.08, 24, 0, -4],
+        [0.4, 20, 0, -4],
+        [0.75, 6, 0, -4],
+        [1.1, 6, 0, -4]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, -24, 0, 0],
+        [0.4, -14, 0, 0],
+        [0.75, -4, 0, 0],
+        [1.1, 0, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 6, 0, -4],
+        [0.08, 24, 0, -4],
+        [0.4, 24, 0, -4],
+        [0.75, 6, 0, -4],
+        [1.1, 6, 0, -4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.08, 120, 0, 0],
+        [0.4, 120, 0, 0],
+        [0.75, 60, 0, 0],
+        [1.1, 14, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -12, 0, 0],
+        [0.08, -50, 0, 0],
+        [0.4, -30, 0, 0],
+        [0.75, -12, 0, 0],
+        [1.1, -12, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [0.08, 120, 0, 40],
+        [0.4, 120, 0, 40],
+        [0.75, 40, 0, 10],
+        [1.1, 6, 0, -10]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 6, 0, 4],
+        [0.08, 24, 0, 4],
+        [0.4, -10, 0, 4],
+        [0.75, 6, 0, 4],
+        [1.1, 6, 0, 4]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.08, -10, 0, 0],
+        [0.4, -14, 0, 0],
+        [0.75, -8, 0, 0],
+        [1.1, 0, 0, 0]
+      ]
+    }
+  }
+}
