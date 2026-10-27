@@ -394,8 +394,8 @@ function startMultiplayer(){
   }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;refreshCombatHud();
-   if(m.hit==='self')showDamage(player.position,'-11','#ff6969');
-   if(m.hit==='other')showDamage(remote.position,'-11','#ffdf55');
+   if(m.hit==='self')showDamage(player.position,'-'+(m.damage??11),'#ff6969');
+   if(m.hit==='other')showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');
   }
  };
  network.onclose=()=>{network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=false;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
