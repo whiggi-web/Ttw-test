@@ -174,10 +174,17 @@ document.body.appendChild(jumbotronButton);
 function setJumbotron(text,sub,colors){
  if(!loadedArena)return;
  loadedArena.setScreen('screen_main',{text,sub,colors});
- loadedArena.setScreen('screen_side',{text,sub,colors});
 }
+function setSideAdvertising(){
+ if(!loadedArena)return;
+ loadedArena.setScreen('screen_side',{text:'FREE TO PLAY',sub:'FOLLOW FOR MORE',colors:['#11245d','#e12b4a']});
+}
+setSideAdvertising();
+let countdownResumeCamera=false;
 jumbotronButton.addEventListener('click',()=>{
- setActionFeed(false);
+ // Show the countdown on the main screen only, then resume the live action feed.
+ countdownResumeCamera=actionFeedEnabled;
+ if(actionFeedEnabled)setActionFeed(false);
  jumbotronCountdown=10;
  jumbotronLastSecond=null;
  jumbotronButton.textContent='⏱ RESTART COUNTDOWN';
@@ -189,11 +196,13 @@ function updateJumbotron(dt){
  if(second!==jumbotronLastSecond){
   jumbotronLastSecond=second;
   if(second>0)setJumbotron(String(second),'GET READY',['#07162c','#d52943']);
-  else setJumbotron('TTW','LET\'S WRESTLE!',['#410c1e','#ffb522']);
+  else setJumbotron('TTW','LET\\'S WRESTLE!',['#410c1e','#ffb522']);
  }
  if(jumbotronCountdown===0){
   jumbotronCountdown=-1;
   jumbotronButton.textContent='⏱ JUMBOTRON COUNTDOWN';
+  if(countdownResumeCamera)setActionFeed(true);
+  countdownResumeCamera=false;
  }
 }
 // Action-camera broadcast rendered directly onto the existing arena jumbotron.
@@ -202,7 +211,7 @@ const actionFeed=new THREE.WebGLRenderTarget(640,360,{depthBuffer:true});
 actionFeed.texture.colorSpace=THREE.SRGBColorSpace;
 const actionScreens=[];
 if(loadedArena){
- for(const id of ['screen_main','screen_side']){
+ for(const id of ['screen_main']){
   for(const group of loadedArena.byId(id)){
    group.traverse(obj=>{
     if(obj.isMesh&&obj.name==='screen_surface'){
@@ -225,7 +234,7 @@ function setActionFeed(enabled){
  }
  actionFeedButton.textContent=actionFeedEnabled?'📹 STOP ACTION CAM':'📹 LIVE ACTION CAM';
 }
-actionFeedButton.addEventListener('click',()=>setActionFeed(!actionFeedEnabled));
+actionFeedButton.addEventListener('click',()=>{jumbotronCountdown=-1;countdownResumeCamera=false;jumbotronButton.textContent='⏱ JUMBOTRON COUNTDOWN';setActionFeed(!actionFeedEnabled);});
 function renderActionFeed(dt){
  if(!actionFeedEnabled)return;
  actionFeedClock+=dt;
