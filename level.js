@@ -1199,6 +1199,41 @@ function updateProcession(dt){
  return true;
 }
 
+
+// Single compact, scrollable entrance selector for desktop and mobile.
+const scenesButton=document.createElement('button');
+scenesButton.textContent='🎬 SCENES ▾';
+scenesButton.type='button';
+scenesButton.setAttribute('aria-expanded','false');
+scenesButton.style.cssText='position:fixed;top:58px;left:16px;z-index:17;padding:11px 16px;background:#763c91;color:white;border:1px solid #dfb7ff;border-radius:9px;font:700 13px system-ui;cursor:pointer;box-shadow:0 4px 16px #0008';
+document.body.appendChild(scenesButton);
+const scenesMenu=document.createElement('div');
+scenesMenu.style.cssText='position:fixed;top:106px;left:16px;z-index:18;width:min(300px,calc(100vw - 32px));max-height:min(52vh,390px);overflow-y:auto;overscroll-behavior:contain;background:#151c2df5;border:1px solid #8d73a7;border-radius:11px;padding:8px;box-shadow:0 12px 30px #000b;display:none';
+document.body.appendChild(scenesMenu);
+function closeScenesMenu(){scenesMenu.style.display='none';scenesButton.setAttribute('aria-expanded','false');scenesButton.textContent='🎬 SCENES ▾';}
+scenesButton.addEventListener('click',()=>{
+ const open=scenesMenu.style.display!=='none';
+ scenesMenu.style.display=open?'none':'flex';
+ scenesMenu.style.flexDirection='column';
+ scenesMenu.style.gap='7px';
+ scenesButton.setAttribute('aria-expanded',String(!open));
+ scenesButton.textContent=open?'🎬 SCENES ▾':'🎬 SCENES ▴';
+});
+for(const [button,title] of [
+ [entranceButton,'🎬 Bot Entrance'],
+ [slowEntranceButton,'✨ Epic Walk Entrance'],
+ [slideEntranceButton,'🏃 Run & Slide Entrance'],
+ [processionButton,'👑 Royal Procession']
+]){
+ button.textContent=title;
+ button.style.cssText='position:relative;inset:auto;top:auto;left:auto;width:100%;flex:none;text-align:left;z-index:auto;padding:13px 12px;background:#30324c;color:#fff;border:1px solid #656987;border-radius:8px;font:700 13px system-ui;cursor:pointer';
+ scenesMenu.appendChild(button);
+ button.addEventListener('click',()=>{closeScenesMenu();button.textContent=title;});
+}
+document.addEventListener('pointerdown',e=>{
+ if(scenesMenu.style.display!=='none'&&!scenesMenu.contains(e.target)&&!scenesButton.contains(e.target))closeScenesMenu();
+});
+
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
