@@ -177,6 +177,7 @@ function setJumbotron(text,sub,colors){
  loadedArena.setScreen('screen_side',{text,sub,colors});
 }
 jumbotronButton.addEventListener('click',()=>{
+ setActionFeed(false);
  jumbotronCountdown=10;
  jumbotronLastSecond=null;
  jumbotronButton.textContent='⏱ RESTART COUNTDOWN';
@@ -194,6 +195,57 @@ function updateJumbotron(dt){
   jumbotronCountdown=-1;
   jumbotronButton.textContent='⏱ JUMBOTRON COUNTDOWN';
  }
+}
+// Action-camera broadcast rendered directly onto the existing arena jumbotron.
+const actionCamera=new THREE.PerspectiveCamera(48,16/9,.1,130);
+const actionFeed=new THREE.WebGLRenderTarget(640,360,{depthBuffer:true});
+actionFeed.texture.colorSpace=THREE.SRGBColorSpace;
+const actionScreens=[];
+if(loadedArena){
+ for(const id of ['screen_main','screen_side']){
+  for(const group of loadedArena.byId(id)){
+   group.traverse(obj=>{
+    if(obj.isMesh&&obj.name==='screen_surface'){
+     actionScreens.push({mesh:obj,original:obj.material.map});
+    }
+   });
+  }
+ }
+}
+let actionFeedEnabled=false,actionFeedClock=0;
+const actionFeedButton=document.createElement('button');
+actionFeedButton.textContent='📹 LIVE ACTION CAM';
+actionFeedButton.style.cssText='position:fixed;top:193px;left:16px;z-index:15;padding:10px 14px;background:#175b54;color:white;border:1px solid #86e7d5;border-radius:8px;font:700 13px system-ui;cursor:pointer';
+document.body.appendChild(actionFeedButton);
+function setActionFeed(enabled){
+ actionFeedEnabled=enabled&&actionScreens.length>0;
+ for(const s of actionScreens){
+  s.mesh.material.map=actionFeedEnabled?actionFeed.texture:s.original;
+  s.mesh.material.needsUpdate=true;
+ }
+ actionFeedButton.textContent=actionFeedEnabled?'📹 STOP ACTION CAM':'📹 LIVE ACTION CAM';
+}
+actionFeedButton.addEventListener('click',()=>setActionFeed(!actionFeedEnabled));
+function renderActionFeed(dt){
+ if(!actionFeedEnabled)return;
+ actionFeedClock+=dt;
+ if(actionFeedClock<1/15)return;
+ actionFeedClock=0;
+ // Track both wrestlers when connected, or the local wrestler when alone.
+ const centre=player.position.clone();
+ if(remoteConnected&&remote.visible)centre.lerp(remote.position,.5);
+ const separation=remoteConnected&&remote.visible?player.position.distanceTo(remote.position):0;
+ const spread=Math.min(12,Math.max(5.5,5.5+separation*.7));
+ const desired=centre.clone().add(new THREE.Vector3(spread*.7,spread*.55,spread));
+ actionCamera.position.lerp(desired,.22);
+ actionCamera.lookAt(centre.x,centre.y+1.3,centre.z);
+ // Hide screen panels while capturing to prevent recursive video feedback.
+ for(const s of actionScreens)s.mesh.visible=false;
+ renderer.setRenderTarget(actionFeed);
+ renderer.clear();
+ renderer.render(scene,actionCamera);
+ renderer.setRenderTarget(null);
+ for(const s of actionScreens)s.mesh.visible=true;
 }
 let loadedWrestler=null;
 let remoteWrestler=null;
@@ -882,5 +934,6 @@ renderer.setAnimationLoop(()=>{
  // Aim below the wrestler so the character is framed in the centre of the gameplay view.
  camera.lookAt(target.x,target.y-2.7,target.z);
  }
+ renderActionFeed(dt);
  renderer.render(scene,camera);
 });
