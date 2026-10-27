@@ -1325,18 +1325,11 @@ function updateTiny(dt){
 }
 
 
-/* TTW v0.65: Five independent cinematic entrances, including the photo-shoot catwalk. */
-const showcaseNames=['📸 The Perfect Entrance','🎭 Mystery Entrance I','🌩️ Mystery Entrance II','🪩 Mystery Entrance III','🌀 Mystery Entrance IV'];
-const showcaseButtons=showcaseNames.map(name=>{const b=document.createElement('button');b.textContent=name;b.type='button';return b;});
-let showcaseMode=-1,showcaseTime=-1,showcaseFreeze=false;
-const showcaseExtras=[];
-for(let i=0;i<8;i++){
- const g=new THREE.Group();g.visible=false;scene.add(g);
- const mat=new THREE.MeshStandardMaterial({color:[0xe0bd5b,0x7bb9d8,0xe17ca7,0x7cdb9e][i%4],metalness:.22,roughness:.5});
- const body=new THREE.Mesh(new THREE.CapsuleGeometry(.27,.8,5,8),mat);body.position.y=1.04;g.add(body);
- const head=new THREE.Mesh(new THREE.SphereGeometry(.24,8,6),new THREE.MeshStandardMaterial({color:0xf1c19d}));head.position.y=1.76;g.add(head);
- showcaseExtras.push(g);
-}
+
+/* v0.66: Model photo entrance and the slow silver-toned Omen. */
+const showcaseNames=['📸 The Perfect Entrance','🌑 The Omen'];
+const showcaseButtons=showcaseNames.map(name=>{const b=document.createElement('button');b.type='button';b.textContent=name;return b;});
+let showcaseMode=-1,showcaseTime=-1,showcaseFreeze=false,omenSlow=false;
 const showcaseOverlay=document.createElement('div');
 showcaseOverlay.style.cssText='position:fixed;inset:0;z-index:14;pointer-events:none;opacity:0;display:grid;place-items:center;color:#fff;font:900 clamp(24px,7vw,78px) system-ui;text-align:center;text-shadow:0 4px 20px #000;letter-spacing:.1em';
 document.body.appendChild(showcaseOverlay);
@@ -1346,135 +1339,112 @@ document.body.appendChild(showcaseFlash);
 const showcaseGrayscale=document.createElement('div');
 showcaseGrayscale.style.cssText='position:fixed;inset:0;z-index:18;pointer-events:none;backdrop-filter:grayscale(1) contrast(1.35);-webkit-backdrop-filter:grayscale(1) contrast(1.35);opacity:0';
 document.body.appendChild(showcaseGrayscale);
-const showcaseParticles=[];
-for(let i=0;i<70;i++){
- const mesh=new THREE.Mesh(new THREE.OctahedronGeometry(.09+(i%3)*.055),new THREE.MeshBasicMaterial({color:[0xffd45b,0x80e4ff,0xff69c5,0xffffff][i%4],transparent:true,opacity:.75}));
- mesh.visible=false;scene.add(mesh);showcaseParticles.push(mesh);
-}
+const omenVeil=document.createElement('div');
+omenVeil.style.cssText='position:fixed;inset:0;z-index:13;pointer-events:none;opacity:0;background:linear-gradient(110deg,#c2c9d022,#12182766 48%,#dce0e622);box-shadow:inset 0 0 190px 75px #05070b9c;transition:opacity .8s';
+document.body.appendChild(omenVeil);
+const omenTitle=document.createElement('div');
+omenTitle.style.cssText='position:fixed;top:18%;left:0;width:100%;text-align:center;z-index:15;pointer-events:none;color:#cbd1d7;font:300 clamp(24px,5vw,54px) Georgia,serif;letter-spacing:.55em;text-shadow:0 0 22px #b7c0cb;opacity:0;transition:opacity 1s';
+omenTitle.textContent='THE OMEN';document.body.appendChild(omenTitle);
+const omenLight=new THREE.SpotLight(0xcbd5e5,85,30,Math.PI/7,.75,1.2);
+omenLight.visible=false;scene.add(omenLight,omenLight.target);
+const omenWaypoints=[
+ [0,1.2,-34],[0,1.2,-26],[0,.06,-9],[0,.06,-6],
+ [-6,.06,-6],[-7,.06,0],[-6,.06,6],[0,.06,7],
+ [6,.06,6],[7,.06,0],[6,.06,-6],[0,.06,-7]
+];
+const omenStops=[{t:12,d:2.5},{t:23,d:3},{t:34,d:3.5},{t:47,d:4},{t:60,d:4.5}];
 function stopShowcase(){
- showcaseMode=-1;showcaseTime=-1;showcaseFreeze=false;
+ showcaseMode=-1;showcaseTime=-1;showcaseFreeze=false;omenSlow=false;
  showcaseOverlay.style.opacity='0';showcaseFlash.style.opacity='0';showcaseGrayscale.style.opacity='0';
- for(const g of showcaseExtras)g.visible=false;
- for(const p of showcaseParticles)p.visible=false;
+ omenVeil.style.opacity='0';omenTitle.style.opacity='0';omenLight.visible=false;
  if(entranceActor)entranceActor.object.rotation.set(0,0,0);
  showcaseButtons.forEach((b,i)=>b.textContent=showcaseNames[i]);
 }
-showcaseButtons.forEach((b,i)=>b.addEventListener('click',()=>{
+showcaseButtons.forEach((button,i)=>button.addEventListener('click',()=>{
  entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
  stopTiny();stopProcession();resetStagePyro();
  for(const p of epicShards)p.mesh.visible=false;
  cinematicBlackout.style.opacity='0';
  stopShowcase();showcaseMode=i;showcaseTime=0;entranceBot.visible=true;
  if(entranceActor)entranceActor._entranceState=null;
- b.textContent='↻ RESTART '+showcaseNames[i];
+ button.textContent='↻ RESTART '+showcaseNames[i];
 }));
 for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton])b.addEventListener('click',stopShowcase);
 function updateShowcase(dt){
  if(showcaseMode<0)return false;
  showcaseTime+=dt;
- const t=showcaseTime,m=showcaseMode;
- const clamp=THREE.MathUtils.clamp;
- const lerp=THREE.MathUtils.lerp;
- const rampY=z=>z< -26?1.2:z< -9?lerp(1.2,.06,(z+26)/17):.06;
+ const t=showcaseTime;
+ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
  const smooth=u=>{u=clamp(u,0,1);return u*u*(3-2*u);};
- let z=-34,x=0,anim='movement.walk',yawFace=Math.PI,tilt=0;
- showcaseFreeze=false;
- if(m===0){
-  // Model entrance: deliberate stops for four still-photo poses.
+ let pos,anim='movement.walk',face=Math.PI;
+ showcaseFreeze=false;omenSlow=false;
+ if(showcaseMode===0){
   const poses=[6.2,11.1,16.2,21.2];
   const freeze=poses.find(v=>t>=v&&t<v+.8);
   showcaseFreeze=freeze!==undefined;
   const walkTime=t-poses.reduce((n,v)=>n+Math.min(.8,Math.max(0,t-v)),0);
-  z=lerp(-34,-6,smooth(walkTime/22));
-  x=Math.sin(t*.7)*.55;
+  const z=lerp(-34,-6,smooth(walkTime/22));
+  const y=z< -26?1.2:z< -9?lerp(1.2,.06,(z+26)/17):.06;
+  pos=new THREE.Vector3(Math.sin(t*.7)*.55,y,z);
   anim=showcaseFreeze?'movement.idle':'movement.walk';
-  yawFace=showcaseFreeze?Math.PI+(poses.indexOf(freeze)-1.5)*.28:Math.PI;
-  tilt=showcaseFreeze?-.11:0;
+  face=showcaseFreeze?Math.PI+(poses.indexOf(freeze)-1.5)*.28:Math.PI;
   const snap=poses.reduce((v,p)=>Math.max(v,Math.max(0,1-Math.abs(t-p-.15)/.16)),0);
-  showcaseFlash.style.opacity=String(Math.max(0,snap)*.92);
+  showcaseFlash.style.opacity=String(snap*.92);
   showcaseGrayscale.style.opacity=showcaseFreeze?'1':'0';
   showcaseOverlay.textContent=showcaseFreeze?'✦ PERFECT ✦':'';
   showcaseOverlay.style.opacity=showcaseFreeze?'.9':'0';
- }else if(m===1){
-  z=lerp(-34,-6,smooth(Math.max(0,t-3)/21));
-  x=Math.sin(t*1.3)*.8;
-  anim=t<3?'movement.idle':t<17?'movement.walk':'movement.run';
-  yawFace=Math.PI+Math.sin(t*2)*.22;
-  showcaseOverlay.textContent=t<3?'???':t>22?'THE SHOW BEGINS':'';
-  showcaseOverlay.style.opacity=t<3||t>22?'.9':'0';
- }else if(m===2){
-  z=lerp(-34,-6,smooth(Math.max(0,t-4)/20));
-  x=Math.sin(t*.45)*1.1;
-  anim=t<4?'movement.idle':'movement.walk';
-  showcaseOverlay.textContent=t<4?'⚡ ⚡ ⚡':'';
-  showcaseOverlay.style.opacity=t<4?'.8':'0';
- }else if(m===3){
-  z=lerp(-34,-6,smooth(Math.max(0,t-2)/22));
-  x=Math.sin(t*2.6)*1.3;
-  anim=t<2?'movement.idle':'movement.walk';
-  yawFace=Math.PI+Math.sin(t*3)*.5;
-  showcaseOverlay.textContent=t<2?'✦ ✦ ✦':'';
-  showcaseOverlay.style.opacity=t<2?'.85':'0';
  }else{
-  z=lerp(-34,-6,smooth(Math.max(0,t-3)/21));
-  x=Math.sin(t*.8)*.4;
-  anim=t<3?'movement.idle':t>20?'movement.run':'movement.walk';
-  yawFace=Math.PI+Math.sin(t*.9)*.15;
-  showcaseOverlay.textContent=t<3?'◉':'';
-  showcaseOverlay.style.opacity=t<3?'.8':'0';
+  // Storytelling through restraint: a long circuit, pauses and slow-motion stares.
+  const total=76;
+  const paused=omenStops.find(stop=>t>=stop.t&&t<stop.t+stop.d);
+  showcaseFreeze=!!paused;
+  const effective=t-omenStops.reduce((sum,stop)=>sum+clamp(t-stop.t,0,stop.d),0);
+  const walk=smooth(effective/58);
+  const segments=omenWaypoints.length-1;
+  const u=walk*segments,i=Math.min(segments-1,Math.floor(u)),f=u-i;
+  pos=new THREE.Vector3(...omenWaypoints[i]).lerp(new THREE.Vector3(...omenWaypoints[i+1]),f);
+  const aheadU=Math.min(segments,u+.05),ai=Math.min(segments-1,Math.floor(aheadU));
+  const ahead=new THREE.Vector3(...omenWaypoints[ai]).lerp(new THREE.Vector3(...omenWaypoints[ai+1]),aheadU-ai);
+  const d=ahead.sub(pos);
+  if(d.lengthSq()>.000001)face=Math.atan2(-d.x,-d.z);
+  if(paused)face+=Math.sin((t-paused.t)/paused.d*Math.PI)*.48;
+  omenSlow=paused!==undefined||[9,20,32,44,57].some(v=>t>=v&&t<v+2);
+  anim=showcaseFreeze?'movement.idle':'movement.walk';
+  omenVeil.style.opacity=t<2?String(t*.36):t>total-3?String((total-t)/3*.7):'.7';
+  omenTitle.style.opacity=t>2&&t<7?'1':t>65&&t<71?'.8':'0';
+  omenLight.visible=true;
+  omenLight.position.set(pos.x-2,pos.y+8,pos.z+1);
+  omenLight.target.position.set(pos.x,pos.y+1.1,pos.z);
+  // Low silver lighting follows him rather than lighting the whole arena.
+  showcaseGrayscale.style.opacity=t>3?'.35':'0';
  }
- const y=rampY(z);
- entranceBot.position.set(x,y,z);
- entranceBot.rotation.y=yawFace;
+ entranceBot.position.copy(pos);entranceBot.rotation.y=face;
  if(entranceActor){
   if(entranceActor._entranceState!==anim){
-   try{entranceActor.play(anim,{fade:.22,restart:true});}catch(e){console.warn('Showcase animation',e);}
+   try{entranceActor.play(anim,{fade:.35,restart:true});}catch(e){console.warn('Entrance animation unavailable',e);}
    entranceActor._entranceState=anim;
   }
-  entranceActor.object.rotation.x=tilt;
-  // Pause animation on still-photo beats.
-  if(!showcaseFreeze)entranceActor.update(dt);
+  if(!showcaseFreeze)entranceActor.update(showcaseMode===1&&omenSlow?dt*.35:dt);
  }
- // Four distinct supporting spectacles, each staying on the stage/ramp.
- for(let i=0;i<showcaseExtras.length;i++){
-  const g=showcaseExtras[i];
-  g.visible=m!==0&&t>2&&t<26;
-  if(!g.visible)continue;
-  const side=i%2?-1:1,rank=Math.floor(i/2);
-  if(m===1)g.position.set(side*(2+rank*.65),rampY(z-2-rank*.8),z-2-rank*.8);
-  else if(m===2)g.position.set(side*(3.1+rank*.55),1.2,-28-rank*1.3);
-  else if(m===3)g.position.set(side*(1.6+rank*.6),rampY(z-2-rank*.6),z-2-rank*.6);
-  else g.position.set(side*(3+rank*.7),1.2,-30-rank);
-  g.rotation.y=m===3?t*2+rank:Math.PI;
-  g.scale.setScalar(m===4?.55: m===3?.85:1);
- }
- for(let i=0;i<showcaseParticles.length;i++){
-  const p=showcaseParticles[i];
-  p.visible=m!==0&&t>2&&t<25;
-  if(!p.visible)continue;
-  const a=i*2.39996,phase=t*(m===2?4:2.1)+i*.31;
-  if(m===1)p.position.set(x+Math.cos(a)*((i%7)*.4+.7),y+1.1+Math.sin(phase)*1.4,z+Math.sin(a)*3);
-  if(m===2)p.position.set(Math.cos(a)*((i%9)*.65+1),1.4+Math.abs(Math.sin(phase))*(3+i%4),-28+Math.sin(a)*5);
-  if(m===3)p.position.set(x+Math.cos(phase)*((i%6)*.4+1),y+1.2+Math.sin(phase*.7)*1.5,z+Math.sin(phase)*((i%6)*.4+1));
-  if(m===4)p.position.set(x+Math.cos(a+t)*((i%9)*.3+.4),y+1+Math.sin(a+t*1.8)*2,z+Math.sin(a+t)*((i%9)*.3+.4));
-  p.rotation.y=t*3;
- }
- const focus=new THREE.Vector3(x,y+1.4,z);
- let eye;
- if(m===0){
-  eye=showcaseFreeze?new THREE.Vector3(x+2.3, y+1.9,z+3.1):new THREE.Vector3(x+Math.sin(t*.7)*3.6,y+1.9,z+5);
- }else if(m===1){
-  eye=t<9?new THREE.Vector3(-7,4,z+7):t<18?new THREE.Vector3(7,3.5,z+5):new THREE.Vector3(0,6,z+9);
- }else if(m===2){
-  eye=t<7?new THREE.Vector3(0,8,-19):new THREE.Vector3(-5,2.1,z+5);
- }else if(m===3){
-  eye=t<11?new THREE.Vector3(6,3,z+5):new THREE.Vector3(-5,6,z+8);
+ let eye,focus=pos.clone().add(new THREE.Vector3(0,1.45,0));
+ if(showcaseMode===0){
+  eye=showcaseFreeze?pos.clone().add(new THREE.Vector3(2.3,1.9,3.1)):pos.clone().add(new THREE.Vector3(Math.sin(t*.7)*3.6,1.9,5));
+ }else if(t<10){
+  eye=pos.clone().add(new THREE.Vector3(-4,1.2,6));focus.y+=.4;
+ }else if(t<24){
+  eye=pos.clone().add(new THREE.Vector3(5,.7,3.5));
+ }else if(t<37){
+  eye=new THREE.Vector3(-12,8,11);focus=pos.clone().add(new THREE.Vector3(0,1,0));
+ }else if(t<50){
+  eye=pos.clone().add(new THREE.Vector3(-3,1,5));focus.y+=.35;
+ }else if(t<64){
+  eye=new THREE.Vector3(0,15,13);
  }else{
-  eye=t<9?new THREE.Vector3(0,12,z+7):t<19?new THREE.Vector3(5,2,z+5):new THREE.Vector3(-7,5,z+6);
+  eye=pos.clone().add(new THREE.Vector3(3,1.3,4));
  }
- camera.position.lerp(eye,Math.min(1,dt*10));
+ camera.position.lerp(eye,Math.min(1,dt*(showcaseMode===1?3.5:10)));
  camera.lookAt(focus);
- if(t>=28){stopShowcase();entranceBot.visible=false;}
+ if(t>=(showcaseMode===0?28:76)){stopShowcase();entranceBot.visible=false;}
  return true;
 }
 
