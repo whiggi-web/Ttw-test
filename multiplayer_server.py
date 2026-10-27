@@ -11,6 +11,21 @@ from websockets.asyncio.server import serve
 players = {}
 last_hit = {}
 last_position = {}
+knockout_tasks = {}
+
+async def recover_player(ws):
+    try:
+        await asyncio.sleep(10)
+        if ws not in players or players[ws]['hp'] != 0:
+            return
+        players[ws]['hp'] = 100
+        for client in list(players):
+            other = next((p for w, p in players.items() if w != client), None)
+            await send(client, {'type': 'health', 'self': players[client]['hp'], 'other': other['hp'] if other else 100, 'hit': None})
+    except asyncio.CancelledError:
+        pass
+    finally:
+        knockout_tasks.pop(ws, None)
 
 async def send(ws, payload):
     await ws.send(json.dumps(payload))
@@ -84,6 +99,8 @@ async def handler(ws):
                 if math.hypot(a["x"] - b["x"], a["z"] - b["z"]) > 2.2:
                     continue
                 other["hp"] = max(0, other["hp"] - 11)
+                if other["hp"] == 0 and other_ws not in knockout_tasks:
+                    knockout_tasks[other_ws] = asyncio.create_task(recover_player(other_ws))
                 await send(ws, {"type": "health", "self": players[ws]["hp"], "other": other["hp"], "hit": "other"})
                 await send(other_ws, {"type": "health", "self": other["hp"], "other": players[ws]["hp"], "hit": "self"})
     finally:
@@ -91,6 +108,9 @@ async def handler(ws):
             del players[ws]
             last_hit.pop(ws, None)
             last_position.pop(ws, None)
+            task = knockout_tasks.pop(ws, None)
+            if task:
+                task.cancel()
             await broadcast({"type": "peer_left"})
 
 async def main():
