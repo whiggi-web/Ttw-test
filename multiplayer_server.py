@@ -98,11 +98,18 @@ async def handler(ws):
                 a, b = last_position[ws], last_position[other_ws]
                 if math.hypot(a["x"] - b["x"], a["z"] - b["z"]) > 2.2:
                     continue
-                other["hp"] = max(0, other["hp"] - 11)
+                try:
+                    momentum = float(data.get("momentum", 1))
+                except (ValueError, TypeError):
+                    momentum = 1
+                if not math.isfinite(momentum):
+                    momentum = 1
+                damage = round(11 * max(1, min(1.3, momentum)))
+                other["hp"] = max(0, other["hp"] - damage)
                 if other["hp"] == 0 and other_ws not in knockout_tasks:
                     knockout_tasks[other_ws] = asyncio.create_task(recover_player(other_ws))
-                await send(ws, {"type": "health", "self": players[ws]["hp"], "other": other["hp"], "hit": "other"})
-                await send(other_ws, {"type": "health", "self": other["hp"], "other": players[ws]["hp"], "hit": "self"})
+                await send(ws, {"type": "health", "self": players[ws]["hp"], "other": other["hp"], "hit": "other", "damage": damage})
+                await send(other_ws, {"type": "health", "self": other["hp"], "other": players[ws]["hp"], "hit": "self", "damage": damage})
     finally:
         if ws in players:
             del players[ws]
