@@ -82,13 +82,18 @@ async def handler(ws):
                     continue
                 last_position[ws] = {"x": x, "y": y, "z": z}
                 animation = data.get("animation")
-                if animation not in ("idle", "run", "punch", "fall"):
+                if animation not in ("idle", "run", "punch", "jab", "hook", "uppercut", "kick", "clothesline", "fall"):
                     animation = "idle"
                 await broadcast({"type": "state", "slot": slot, "position": last_position[ws],
                                  "rotation": rotation, "animation": animation}, exclude=ws)
             elif kind == "punch" and len(players) == 2:
                 now = time.monotonic()
-                if now - last_hit.get(ws, 0) < 0.7 or players[ws]["hp"] <= 0:
+                move = data.get("move", "punch")
+                attacks = {"punch": (11, .7, "reactions.hit-front"), "jab": (7, .48, "reactions.hit-front"), "hook": (13, .8, "reactions.hit-left"), "uppercut": (16, .95, "reactions.knocked-back"), "kick": (15, 1.0, "reactions.hit-kick"), "clothesline": (18, 1.1, "reactions.hit-clothesline")}
+                if move not in attacks:
+                    continue
+                base_damage, cooldown, reaction = attacks[move]
+                if now - last_hit.get(ws, 0) < cooldown or players[ws]["hp"] <= 0:
                     continue
                 last_hit[ws] = now
                 other_ws = next(w for w in players if w != ws)
@@ -104,12 +109,12 @@ async def handler(ws):
                     momentum = 1
                 if not math.isfinite(momentum):
                     momentum = 1
-                damage = round(11 * max(1, min(1.3, momentum)))
+                damage = round(base_damage * max(1, min(1.3, momentum)))
                 other["hp"] = max(0, other["hp"] - damage)
                 if other["hp"] == 0 and other_ws not in knockout_tasks:
                     knockout_tasks[other_ws] = asyncio.create_task(recover_player(other_ws))
-                await send(ws, {"type": "health", "self": players[ws]["hp"], "other": other["hp"], "hit": "other", "damage": damage})
-                await send(other_ws, {"type": "health", "self": other["hp"], "other": players[ws]["hp"], "hit": "self", "damage": damage})
+                await send(ws, {"type": "health", "self": players[ws]["hp"], "other": other["hp"], "hit": "other", "damage": damage, "reaction": reaction, "move": move})
+                await send(other_ws, {"type": "health", "self": other["hp"], "other": players[ws]["hp"], "hit": "self", "damage": damage, "reaction": reaction, "move": move})
     finally:
         if ws in players:
             del players[ws]
