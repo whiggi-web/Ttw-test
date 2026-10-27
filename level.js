@@ -247,6 +247,7 @@ function ropeCollision(x,z,dt){
     spring.impact=.45;
     ropeRecoil.set(axis==='x'?-sign*5:0,0,axis==='z'?-sign*5:0);
     ropeRecoilTime=.38;
+    registerRopeBounce(new THREE.Vector3(axis==='x'?-sign:0,0,axis==='z'?-sign:0));
    }
    if(axis==='x')x=sign*(edge-radius+give);
    else z=sign*(edge-radius+give);
@@ -281,6 +282,12 @@ function updateRopes(dt){
  }
 }
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
+let ropeSpeedMultiplier=1,ropeFacingTime=0;
+function registerRopeBounce(inward){
+ ropeSpeedMultiplier*=1.10;
+ ropeFacingTime=.38;
+ player.rotation.y=Math.atan2(-inward.x,-inward.z);
+}
 function blockedByArena(x,z,feetY){
  const radius=.32;
  if(feetY>=.75&&feetY<=1.65){
@@ -299,6 +306,7 @@ function blockedByArena(x,z,feetY){
       spring.impact=.35;
       ropeRecoil.copy(inward).multiplyScalar(3.5);
       ropeRecoilTime=.28;
+      registerRopeBounce(inward);
      }
      return true;
     }
@@ -499,6 +507,7 @@ window.addEventListener('resize',()=>{
 });
 renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
+ ropeFacingTime=Math.max(0,ropeFacingTime-dt);
  updateRopes(dt);
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
  let isWalking=false;
@@ -514,7 +523,7 @@ renderer.setAnimationLoop(()=>{
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
    isWalking=true;
-   const step=move.multiplyScalar((sprint?8:5)*dt);
+   const step=move.multiplyScalar((sprint?8:5)*ropeSpeedMultiplier*dt);
    if(loadedArena){
     const tryAxis=(axis,amount)=>{
      const nx=player.position.x+(axis==='x'?amount:0);
@@ -536,7 +545,7 @@ renderer.setAnimationLoop(()=>{
     player.position.x=THREE.MathUtils.clamp(player.position.x,-7.65,7.65);
     player.position.z=THREE.MathUtils.clamp(player.position.z,-7.65,7.65);
    }
-   player.rotation.y=Math.atan2(-move.x,-move.z);
+   if(ropeFacingTime<=0)player.rotation.y=Math.atan2(-move.x,-move.z);
   }
  }
 
