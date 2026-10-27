@@ -569,17 +569,49 @@ const clock=new THREE.Clock();
 const heldKeys=new Set();
 let punchRemaining=0,activeAttack='punch',hitReactionTime=0,hitReaction='reactions.hit-front',remoteReactionTime=0,remoteReaction='reactions.hit-front';
 const attackPanel=document.createElement('div');
-attackPanel.style.cssText='position:fixed;bottom:120px;right:12px;z-index:16;display:flex;flex-wrap:wrap;gap:5px;max-width:300px;justify-content:flex-end';
+attackPanel.style.cssText='position:fixed;bottom:120px;right:12px;z-index:16;display:flex;flex-wrap:wrap;gap:5px;max-width:320px;justify-content:flex-end';
 document.body.appendChild(attackPanel);
+const contextMessage=document.createElement('div');
+contextMessage.style.cssText='position:fixed;bottom:190px;right:12px;z-index:16;color:#fff;background:#14243bd9;padding:7px 10px;border-radius:6px;font:12px system-ui;pointer-events:none;display:none';
+document.body.appendChild(contextMessage);
+let contextMessageUntil=0;
+function showContextMessage(message){contextMessage.textContent=message;contextMessage.style.display='block';contextMessageUntil=performance.now()+2000;}
+let attackSequence=0;
 function performAttack(move){
  if(punchRemaining>0||playerHP<=0||!remoteConnected||document.getElementById('home').hidden===false)return;
  const attack=attackMoves[move];if(!attack)return;
  activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
 }
-for(const [move,key] of [['punch','1'],['jab','2'],['hook','3'],['uppercut','4'],['kick','5'],['clothesline','6']]){
- const btn=document.createElement('button');btn.textContent=key+' '+move.toUpperCase();btn.style.cssText='background:#222c42;color:#fff;border:1px solid #8ca9d5;border-radius:7px;padding:8px;font:700 11px system-ui;cursor:pointer';btn.addEventListener('pointerdown',e=>e.stopPropagation());btn.addEventListener('click',()=>performAttack(move));attackPanel.appendChild(btn);
+function tapAttack(){
+ const moves=['punch','jab','hook','kick','uppercut'];
+ performAttack(moves[attackSequence++%moves.length]);
 }
-window.addEventListener('keydown',e=>{if(e.repeat||e.target instanceof HTMLElement&&e.target.closest('input,textarea,[contenteditable="true"]'))return;const move=['punch','jab','hook','uppercut','kick','clothesline'][Number(e.key)-1];if(move){performAttack(move);e.preventDefault();}});
+const contextActions=[
+ ['GRAPPLE','KeyG',()=>{
+  if(!remoteConnected||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
+  if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
+  performAttack('clothesline');showContextMessage('Grapple test: clothesline');
+ }],
+ ['ROPES','KeyR',()=>{
+  const near=Math.min(Math.abs(Math.abs(player.position.x)-3.5),Math.abs(Math.abs(player.position.z)-3.5));
+  if(near>.9)return showContextMessage('Move closer to the ropes');
+  showContextMessage('Rope interaction: lean and rebound');
+  ropeAnimationTime=1.5;
+ }],
+ ['ENTER / EXIT','KeyE',()=>showContextMessage('Ring entry/exit needs a dedicated traversal animation')],
+ ['SPECIAL','KeyF',()=>{
+  if(!remoteConnected||player.position.distanceTo(remote.position)>2.2)return showContextMessage('Get closer to use a special');
+  performAttack('uppercut');showContextMessage('Special test: uppercut');
+ }]
+];
+for(const [label,key,action] of contextActions){
+ const btn=document.createElement('button');btn.textContent=label+' ('+key.slice(3)+')';btn.style.cssText='background:#222c42;color:#fff;border:1px solid #8ca9d5;border-radius:7px;padding:9px;font:700 11px system-ui;cursor:pointer';btn.addEventListener('pointerdown',e=>e.stopPropagation());btn.addEventListener('click',action);attackPanel.appendChild(btn);
+}
+window.addEventListener('keydown',e=>{
+ if(e.repeat||e.target instanceof HTMLElement&&e.target.closest('input,textarea,[contenteditable="true"]'))return;
+ const action=contextActions.find(item=>item[1]===e.code);
+ if(action){action[2]();e.preventDefault();}
+});
 window.addEventListener('keydown',e=>{
  if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(e.code)){
   if(e.target instanceof HTMLElement&&e.target.closest('input,textarea,[contenteditable="true"]'))return;
@@ -593,7 +625,7 @@ window.addEventListener('blur',()=>heldKeys.clear());
 window.addEventListener('pointerdown',e=>{
  if(e.button!==0||document.getElementById('home').hidden===false)return;
  if(e.target instanceof Element&&e.target.closest('button,input,textarea,select,a,#controllerSlot'))return;
- performAttack('punch');
+ tapAttack();
 },{capture:true});
 
 // Standalone cinematic entrance test. The bot is visual-only and does not join multiplayer.
@@ -1010,6 +1042,7 @@ renderer.setAnimationLoop(()=>{
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
+ if(contextMessageUntil&&performance.now()>contextMessageUntil){contextMessage.style.display='none';contextMessageUntil=0;}
  if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch',move:activeAttack,momentum:ropeSpeedMultiplier});}
  combatTick(dt);
  if(loadedWrestler){
