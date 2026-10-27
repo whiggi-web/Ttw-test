@@ -200,7 +200,7 @@ function arenaFloorAt(x,z,currentY){
 // Springy ring ropes: slight give, visible bending and a short recoil burst.
 const ropeEdge=3.5, ropeGive=.38;
 const ropeSides=['north','south','east','west'];
-const ropeSprings=Object.fromEntries(ropeSides.map(side=>[side,{bend:0,velocity:0,impact:0}]));
+const ropeSprings=Object.fromEntries(ropeSides.map(side=>[side,{bend:0,velocity:0,impact:0,contact:0}]));
 const ropeMeshes=[];
 if(loadedArena){
  loadedArena.group.traverse(obj=>{
@@ -211,10 +211,10 @@ if(loadedArena){
   const geom=obj.geometry.clone();obj.geometry=geom;
   const pos=geom.attributes.position;
   const original=new Float32Array(pos.array);
-  const inward=new THREE.Vector3(side==='west'?-1:side==='east'?1:0,0,side==='north'?1:side==='south'?-1:0);
+  const inward=new THREE.Vector3(side==='west'?1:side==='east'?-1:0,0,side==='north'?-1:side==='south'?1:0);
   const localInward=inward.applyQuaternion(obj.getWorldQuaternion(new THREE.Quaternion()).invert());
   const halfLength=(geom.parameters?.height||7)/2;
-  ropeMeshes.push({side,pos,original,localInward,halfLength});
+  ropeMeshes.push({side,pos,original,localInward,halfLength,mesh:obj});
  });
 }
 function ropeSideAt(x,z){
@@ -235,7 +235,8 @@ function ropeCollision(x,z,dt){
  if(current<edge+radius&&proposed>edge-radius){
   const spring=ropeSprings[side];
   const compression=Math.max(0,proposed-(edge-radius));
-  spring.bend=Math.max(spring.bend,Math.min(give,compression));
+  spring.contact=axis==='x'?player.position.z:player.position.x;
+  spring.bend=Math.max(spring.bend,Math.min(.7,compression*2.5));
   if(proposed>=edge-radius+give){
    if(spring.impact<=0){
     spring.velocity+=3;
@@ -258,16 +259,21 @@ function updateRopes(dt){
   s.impact=Math.max(0,s.impact-dt);
  }
  for(const r of ropeMeshes){
-  const bend=ropeSprings[r.side].bend;
+  const spring=ropeSprings[r.side];
+  const bend=spring.bend;
+  const worldCenter=new THREE.Vector3();r.mesh.getWorldPosition(worldCenter);
+  const contactOffset=THREE.MathUtils.clamp(spring.contact-(r.side==='north'||r.side==='south'?worldCenter.x:worldCenter.z),-3.2,3.2);
   for(let i=0;i<r.pos.count;i++){
    const k=i*3;
-   const t=Math.max(0,1-Math.abs(r.original[k+1])/r.halfLength);
-   const offset=bend*Math.sin(t*Math.PI/2);
+   const along=r.original[k+1]/r.halfLength*3.5;
+   const proximity=Math.max(0,1-Math.abs(along-contactOffset)/3.6);
+   const offset=bend*proximity*proximity;
    r.pos.array[k]=r.original[k]+r.localInward.x*offset;
    r.pos.array[k+1]=r.original[k+1]+r.localInward.y*offset;
    r.pos.array[k+2]=r.original[k+2]+r.localInward.z*offset;
   }
   r.pos.needsUpdate=true;
+  r.mesh.geometry.computeBoundingSphere();
  }
 }
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
@@ -281,7 +287,8 @@ function blockedByArena(x,z,feetY){
    const outwardDistance=side==='east'?x:side==='west'?-x:side==='north'?z:-z;
    if(outwardDistance>ropeEdge-.44){
     const spring=ropeSprings[side];
-    spring.bend=Math.max(spring.bend,Math.min(ropeGive,outwardDistance-(ropeEdge-.44)));
+    spring.contact=side==='east'||side==='west'?player.position.z:player.position.x;
+    spring.bend=Math.max(spring.bend,Math.min(.7,(outwardDistance-(ropeEdge-.44))*2));
     if(outwardDistance>=ropeEdge-.32+ropeGive){
      if(spring.impact<=0){
       spring.velocity+=2.2;
