@@ -363,9 +363,13 @@ window.addEventListener('keydown',e=>{
 });
 window.addEventListener('keyup',e=>heldKeys.delete(e.code));
 window.addEventListener('blur',()=>heldKeys.clear());
-renderer.domElement.addEventListener('click',()=>{
- if(!document.getElementById('home').hidden&&punchRemaining<=0)punchRemaining=.55;
-});
+// Listen at window level: the game HUD can sit above the WebGL canvas.
+window.addEventListener('pointerdown',e=>{
+ if(e.button!==0||document.getElementById('home').hidden===false)return;
+ if(e.target instanceof Element&&e.target.closest('button,input,textarea,select,a,#controllerSlot'))return;
+ if(punchRemaining>0)return;
+ punchRemaining=.8; // Match Claude's 0.8-second punch animation.
+},{capture:true});
 
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
