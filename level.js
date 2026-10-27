@@ -197,20 +197,83 @@ function arenaFloorAt(x,z,currentY){
  const eligible=hits.filter(h=>h.point.y<=currentY+.42);
  return eligible.length?Math.max(0,eligible[0].point.y):0;
 }
+// Springy ring ropes: slight give, visible bending and a short recoil burst.
+const ropeEdge=3.5, ropeGive=.38;
+const ropeSides=['north','south','east','west'];
+const ropeSprings=Object.fromEntries(ropeSides.map(side=>[side,{bend:0,velocity:0,impact:0}]));
+const ropeMeshes=[];
+if(loadedArena){
+ loadedArena.group.traverse(obj=>{
+  if(!obj.isMesh||!obj.parent?.userData?.tags?.includes('rope'))return;
+  obj.updateWorldMatrix(true,false);
+  const center=new THREE.Vector3();obj.getWorldPosition(center);
+  const side=Math.abs(center.z)>Math.abs(center.x)?(center.z>0?'north':'south'):(center.x>0?'east':'west');
+  const geom=obj.geometry.clone();obj.geometry=geom;
+  const pos=geom.attributes.position;
+  const original=new Float32Array(pos.array);
+  const inward=new THREE.Vector3(side==='west'?1:side==='east'?-1:0,0,side==='north'?-1:side==='south'?1:0);
+  const localInward=inward.applyQuaternion(obj.getWorldQuaternion(new THREE.Quaternion()).invert());
+  const halfLength=(geom.parameters?.height||7)/2;
+  ropeMeshes.push({side,pos,original,localInward,halfLength});
+ });
+}
+function ropeSideAt(x,z){
+ const dx=Math.abs(x),dz=Math.abs(z);
+ if(Math.max(dx,dz)<ropeEdge-.8||Math.max(dx,dz)>ropeEdge+1)return null;
+ return dz>dx?(z>0?'north':'south'):(x>0?'east':'west');
+}
+function updateRopes(dt){
+ for(const side of ropeSides){
+  const s=ropeSprings[side];
+  s.velocity+=(-s.bend*62-s.velocity*12)*dt;
+  s.bend+=s.velocity*dt;
+  if(Math.abs(s.bend)<.0005&&Math.abs(s.velocity)<.005){s.bend=0;s.velocity=0;}
+  s.impact=Math.max(0,s.impact-dt);
+ }
+ for(const r of ropeMeshes){
+  const bend=ropeSprings[r.side].bend;
+  for(let i=0;i<r.pos.count;i++){
+   const k=i*3;
+   const t=Math.max(0,1-Math.abs(r.original[k+1])/r.halfLength);
+   const offset=bend*Math.sin(t*Math.PI/2);
+   r.pos.array[k]=r.original[k]+r.localInward.x*offset;
+   r.pos.array[k+1]=r.original[k+1]+r.localInward.y*offset;
+   r.pos.array[k+2]=r.original[k+2]+r.localInward.z*offset;
+  }
+  r.pos.needsUpdate=true;
+ }
+}
+let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 function blockedByArena(x,z,feetY){
  const radius=.32;
- // The ropes form a continuous solid perimeter around the ring.
- // Use a player-width boundary, not the thin visual rope geometry.
- if(feetY>=1.0 && feetY<=1.6){
-  const ringEdge=3.5;
-  const insideMat=Math.abs(player.position.x)<ringEdge-radius && Math.abs(player.position.z)<ringEdge-radius;
-  if(insideMat && (Math.abs(x)>ringEdge-radius || Math.abs(z)>ringEdge-radius))return true;
-  const outsideMat=Math.abs(player.position.x)>ringEdge+radius || Math.abs(player.position.z)>ringEdge+radius;
-  if(outsideMat && Math.abs(x)<ringEdge+radius && Math.abs(z)<ringEdge+radius)return true;
+ if(feetY>=1.0&&feetY<=1.6){
+  const side=ropeSideAt(x,z);
+  const inside=Math.abs(player.position.x)<ropeEdge&&Math.abs(player.position.z)<ropeEdge;
+  if(side&&inside){
+   const inward=side==='east'?new THREE.Vector3(-1,0,0):side==='west'?new THREE.Vector3(1,0,0):side==='north'?new THREE.Vector3(0,0,-1):new THREE.Vector3(0,0,1);
+   const outwardDistance=side==='east'?x:side==='west'?-x:side==='north'?z:-z;
+   if(outwardDistance>ropeEdge-.32){
+    const spring=ropeSprings[side];
+    spring.bend=Math.max(spring.bend,Math.min(ropeGive,outwardDistance-(ropeEdge-.32)));
+    if(outwardDistance>=ropeEdge-.32+ropeGive){
+     if(spring.impact<=0){
+      spring.velocity+=2.2;
+      spring.impact=.35;
+      ropeRecoil.copy(inward).multiplyScalar(3.5);
+      ropeRecoilTime=.28;
+     }
+     return true;
+    }
+   }
+  }
+  // Keep the outer side solid too.
+  const outside=Math.abs(player.position.x)>ropeEdge+.32||Math.abs(player.position.z)>ropeEdge+.32;
+  if(side&&outside&&Math.abs(x)<ropeEdge+.32&&Math.abs(z)<ropeEdge+.32)return true;
  }
  return solidArenaBoxes.some(c=>{
+  if((c.tags||[]).includes('rope'))return false; // Spring boundary replaces thin rope AABBs.
   const b=c.box;
-  if(c.id==='ring_apron' && feetY>=1.05)return false;
+  if(c.id==='ring_apron'&&feetY>=1.05)return false;
   if(feetY>b.max.y-.08||feetY+1.65<b.min.y+.08)return false;
   const cx=THREE.MathUtils.clamp(x,b.min.x,b.max.x);
   const cz=THREE.MathUtils.clamp(z,b.min.z,b.max.z);
@@ -299,6 +362,7 @@ window.addEventListener('resize',()=>{
 });
 renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
+ updateRopes(dt);
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
  let isWalking=false;
  if(movement.active){
@@ -333,6 +397,12 @@ renderer.setAnimationLoop(()=>{
   }
  }
 
+ if(ropeRecoilTime>0){
+  ropeRecoilTime=Math.max(0,ropeRecoilTime-dt);
+  const amount=dt*(ropeRecoilTime/.28);
+  const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
+  if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
+ }
  if(loadedWrestler){
   const nextAnimation=isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
