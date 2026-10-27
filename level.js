@@ -367,7 +367,7 @@ renderer.domElement.addEventListener('click',()=>{
  if(!document.getElementById('home').hidden&&punchRemaining<=0)punchRemaining=.55;
 });
 
-let yaw=Math.PI/4,pitch=.22,distance=11;
+let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
 let lastPinch=null;
@@ -381,7 +381,7 @@ renderer.domElement.addEventListener('pointermove',e=>{
  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(pointers.size===1){
   yaw-=(e.clientX-prev.x)*.006;
-  pitch=THREE.MathUtils.clamp(pitch+(e.clientY-prev.y)*.006,.15,1.35);
+  pitch=THREE.MathUtils.clamp(pitch+(e.clientY-prev.y)*.006,.02,1.35);
  }else if(pointers.size===2){
   const [a,b]=[...pointers.values()];
   const pinch=Math.hypot(a.x-b.x,a.y-b.y);
