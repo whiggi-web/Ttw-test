@@ -353,7 +353,7 @@ const pad=window.GameController.mount(controllerSlot,{mode:'auto'});
 const movement=pad.state.joysticks.controlMOVEMENT;
 const clock=new THREE.Clock();
 
-let yaw=Math.PI/4,pitch=.6,distance=31;
+let yaw=Math.PI/4,pitch=.6,distance=23;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
 let lastPinch=null;
