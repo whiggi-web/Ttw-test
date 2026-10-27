@@ -14,12 +14,16 @@ canvas{display:block;touch-action:none}
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
 </head>
 <body>
-<div id="hud"><strong>TTW</strong><small>DEV: Solid Ropes v0.10</small></div>
+<div id="hud"><strong>TTW</strong><small>DEV: Random Wrestlers v0.11</small></div>
 <div id="help">Move with left joystick · Drag to orbit · Scroll/pinch to zoom</div>
 <div id="controllerSlot"></div>
 <div id="home"><form id="homePanel"><h1>TTW</h1><p>Enter the ring</p><p>One wrestler ready for testing</p><label for="wrestlerName">Wrestler name</label><input id="wrestlerName" name="wrestlerName" maxlength="20" autocomplete="nickname" placeholder="Enter your wrestler name" required><button id="enterRing" type="submit">ENTER THE RING</button><p id="homeError" role="alert"></p></form></div>
 <script src="./assets/controllers/game-controller.js"></script>
 <script>
+const wrestlerFirst=['Iron','Thunder','Mighty','Savage','Golden','Raging','Wild','Steel','Crimson','Turbo','Titan','Shadow','Blazing','Brutal','Atomic','Big','Mad','Razor','Storm','Diesel'];
+const wrestlerLast=['Crusher','Hammer','Viper','Bulldog','Warrior','Fury','Hurricane','Destroyer','Brawler','Titan','Outlaw','Gladiator','Rumble','Rhino','Striker','Knuckles','Avalanche','Dynamo','Maverick','Reaper'];
+const randomWrestlerName=()=>wrestlerFirst[Math.floor(Math.random()*wrestlerFirst.length)]+' '+wrestlerLast[Math.floor(Math.random()*wrestlerLast.length)];
+document.getElementById('wrestlerName').value=randomWrestlerName();
 const home=document.getElementById('home');
 const nameForm=document.getElementById('homePanel');
 nameForm.addEventListener('submit',e=>{
@@ -31,6 +35,6 @@ nameForm.addEventListener('submit',e=>{
  home.hidden=true;
 });
 </script>
-<script type="module" src="./level.js?v=solid-ropes-010"></script>
+<script type="module" src="./level.js?v=random-wrestlers-011"></script>
 </body>
 </html>
