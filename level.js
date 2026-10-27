@@ -407,7 +407,7 @@ renderer.setAnimationLoop(()=>{
  if(!document.getElementById('home').hidden){camera.position.set(22,20,22);camera.lookAt(target);renderer.render(scene,camera);return;}
  let isWalking=false;
  const keyboardX=Number(heldKeys.has('KeyD'))-Number(heldKeys.has('KeyA'));
- const keyboardZ=Number(heldKeys.has('KeyW'))-Number(heldKeys.has('KeyS'));
+ const keyboardZ=Number(heldKeys.has('KeyS'))-Number(heldKeys.has('KeyW'));
  const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
  const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
  const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
