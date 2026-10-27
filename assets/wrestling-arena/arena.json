@@ -1,0 +1,45 @@
+{
+  "name": "Wrestling Arena",
+  "version": 1,
+  "units": "meters",
+  "up": "y",
+  "notes": "Ring centred on the origin. Entrance runs along -Z: walkway, stage, screen, backstage. Stands wrap +X, -X and +Z.",
+
+  "materials": "materials.json",
+
+  "parts": [
+    { "id": "stadium",   "file": "parts/stadium.json" },
+    { "id": "ring",      "file": "parts/ring.json" },
+    { "id": "entrance",  "file": "parts/entrance.json" },
+    { "id": "backstage", "file": "parts/backstage.json" }
+  ],
+
+  "environment": {
+    "background": "#07080c",
+    "fog": { "color": "#07080c", "near": 70, "far": 170 },
+    "hemisphere": { "sky": "#8fa0c8", "ground": "#1a1410", "intensity": 0.9 },
+    "ambient": { "color": "#ffffff", "intensity": 0.15 },
+    "directional": { "color": "#ffffff", "intensity": 0.7, "position": [20, 40, 15], "castShadow": true }
+  },
+
+  "cameras": {
+    "overview":  { "position": [40, 32, 36],  "target": [0, 0, -8] },
+    "entrance":  { "position": [0, 5, -11],   "target": [0, 5, -33] },
+    "ringside":  { "position": [9, 3, -9],    "target": [0, 1.5, 0] },
+    "crowd":     { "position": [0, 10.5, 28],  "target": [0, 1.5, -6] },
+    "backstage": { "position": [0, 21, -57],  "target": [0, 0, -45] }
+  },
+
+  "paths": {
+    "entrance_red": [
+      "locker_room_red", "locker_door_red", "backstage_hall", "stage_curtain_back", "stage_curtain",
+      "stage_center", "stage_front", "walkway_start", "walkway_end", "ringside_entry",
+      "steps_left_bottom", "steps_left_top", "apron_left", "ring_center"
+    ],
+    "entrance_blue": [
+      "locker_room_blue", "locker_door_blue", "backstage_hall", "stage_curtain_back", "stage_curtain",
+      "stage_center", "stage_front", "walkway_start", "walkway_end", "ringside_entry",
+      "steps_right_bottom", "steps_right_top", "apron_right", "ring_center"
+    ]
+  }
+}
