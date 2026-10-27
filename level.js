@@ -164,9 +164,11 @@ try{
  console.info('TTW: Claude wrestling arena loaded');
 }catch(error){console.error('TTW arena asset failed:',error);}
 let loadedWrestler=null;
+let botWrestler=null;
 try{
  loadedWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
  console.info('TTW: Claude master wrestler loaded');
+ botWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
 }catch(error){console.error('TTW wrestler asset failed:',error);}
 
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
@@ -336,6 +338,69 @@ if(loadedWrestler){
  loadedWrestler.object.position.set(0,0,0);
  loadedWrestler.play('idle');
 }
+// Local sparring bot. Damage is applied once at the punch impact frame.
+const bot=new THREE.Group();
+bot.name='TTW_SPARRING_BOT';
+bot.position.set(2.2,1.2,-1.1);
+if(botWrestler){
+ bot.add(botWrestler.object);
+ botWrestler.play('idle');
+ botWrestler._ttwState='idle';
+}else{
+ const fallback=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xdd5533}));
+ fallback.position.y=1;bot.add(fallback);
+}
+scene.add(bot);
+let playerHP=100,botHP=100,botAttackClock=1.5,botPunchTime=0,playerPunchImpact=-1;
+const combatHud=document.createElement('div');
+combatHud.style.cssText='position:fixed;right:16px;top:16px;z-index:12;color:white;font:700 16px system-ui;text-shadow:0 2px 5px black;pointer-events:none;text-align:right';
+document.body.appendChild(combatHud);
+function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP   |   BOT '+botHP+' HP';}
+refreshCombatHud();
+const damagePopups=[];
+function showDamage(position,value,color){
+ const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;
+ const ctx=canvas.getContext('2d');ctx.font='bold 80px system-ui';ctx.textAlign='center';ctx.fillStyle=color;ctx.strokeStyle='#111';ctx.lineWidth=9;
+ ctx.strokeText(value,128,88);ctx.fillText(value,128,88);
+ const tex=new THREE.CanvasTexture(canvas);
+ const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
+ const sprite=new THREE.Sprite(mat);sprite.position.copy(position);sprite.position.y+=2.7;sprite.scale.set(1.5,.75,1);scene.add(sprite);
+ damagePopups.push({sprite,mat,tex,life:.85});
+}
+function combatTick(dt){
+ for(let i=damagePopups.length-1;i>=0;i--){
+  const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
+  if(p.life<=0){scene.remove(p.sprite);p.mat.dispose();p.tex.dispose();damagePopups.splice(i,1);}
+ }
+ const dx=player.position.x-bot.position.x,dz=player.position.z-bot.position.z;
+ const dist=Math.hypot(dx,dz);
+ const facingAngle=Math.atan2(-dx,-dz);
+ bot.rotation.y=facingAngle;
+ let botMoving=false;
+ if(botHP>0&&playerHP>0){
+  if(dist>1.65&&dist<15){
+   const amount=Math.min(dist-1.55,dt*2.3);
+   const nx=bot.position.x+dx/dist*amount,nz=bot.position.z+dz/dist*amount;
+   if(Math.abs(nx)<2.9&&Math.abs(nz)<2.9){bot.position.x=nx;bot.position.z=nz;botMoving=true;}
+  }
+  botAttackClock-=dt;
+  if(dist<=2.0&&botAttackClock<=0){
+   botAttackClock=1.7;
+   botPunchTime=.8;
+  }
+  if(botPunchTime>0){
+   const previous=botPunchTime;botPunchTime=Math.max(0,botPunchTime-dt);
+   if(previous>.5&&botPunchTime<=.5&&dist<=2.1){
+    playerHP=Math.max(0,playerHP-1);showDamage(player.position,'-1','#ff6969');refreshCombatHud();
+   }
+  }
+ }
+ if(botWrestler){
+  const state=botPunchTime>0?'punch':botMoving?'run':'idle';
+  if(botWrestler._ttwState!==state){botWrestler.play(state,{fade:.12});botWrestler._ttwState=state;}
+  botWrestler.update(dt);
+ }
+}
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
 const labelCanvas=document.createElement('canvas');
 labelCanvas.width=512;labelCanvas.height=128;
@@ -376,8 +441,9 @@ window.addEventListener('blur',()=>heldKeys.clear());
 window.addEventListener('pointerdown',e=>{
  if(e.button!==0||document.getElementById('home').hidden===false)return;
  if(e.target instanceof Element&&e.target.closest('button,input,textarea,select,a,#controllerSlot'))return;
- if(punchRemaining>0)return;
- punchRemaining=.8; // Match Claude's 0.8-second punch animation.
+ if(punchRemaining>0||playerHP<=0)return;
+ punchRemaining=.8;
+ playerPunchImpact=.3; // Match Claude's 0.8-second punch animation.
 },{capture:true});
 
 let yaw=Math.PI/4,pitch=.06,distance=11;
@@ -463,6 +529,18 @@ renderer.setAnimationLoop(()=>{
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
+ if(playerPunchImpact>=0){
+  playerPunchImpact-=dt;
+  if(playerPunchImpact<0&&botHP>0&&playerHP>0){
+   const separation=player.position.distanceTo(bot.position);
+   const towardBot=new THREE.Vector3(bot.position.x-player.position.x,0,bot.position.z-player.position.z).normalize();
+   const facingDirection=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+   if(separation<=2.2&&facingDirection.dot(towardBot)>.05){
+    botHP=Math.max(0,botHP-11);showDamage(bot.position,'-11','#ffdf55');refreshCombatHud();
+   }
+  }
+ }
+ combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   const nextAnimation=punchRemaining>0?'punch':isWalking?'run':'idle';
