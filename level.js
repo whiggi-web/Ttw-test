@@ -274,9 +274,10 @@ try{
   remoteWrestler=await loadWrestler('./assets/ttw-master-wrestler/wrestler.json');
  }catch(fallbackError){console.error('TTW wrestler fallback failed:',fallbackError);}
 }
+const attackMoves={punch:{anim:'striking.punch',reaction:'reactions.hit-front',duration:.8,impact:.3},jab:{anim:'striking.jab',reaction:'reactions.hit-front',duration:.65,impact:.23},hook:{anim:'striking.hook-right',reaction:'reactions.hit-left',duration:.85,impact:.35},uppercut:{anim:'striking.uppercut',reaction:'reactions.knocked-back',duration:1,impact:.42},kick:{anim:'striking.roundhouse',reaction:'reactions.hit-kick',duration:1.05,impact:.48},clothesline:{anim:'striking.clothesline',reaction:'reactions.hit-clothesline',duration:1.1,impact:.5}};
 const playTTWAnimation=(w,state,fade=.2)=>{
  if(!w)return;
- const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||'movement.idle'):state;
+ const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||(state.startsWith('reactions.')?state:'movement.idle')):state;
  w.play(name,{fade,restart:true});
 };
 // Arena collision v0.8: Claude's collider data drives movement and walkable elevation.
@@ -503,12 +504,12 @@ function startMultiplayer(){
    const p=m.position||{};
    if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remoteTarget.set(p.x,p.y,p.z);remoteTargetRotation=m.rotation;
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
-   remoteAnim=['idle','run','punch','fall'].includes(m.animation)?m.animation:'idle';
+   remoteAnim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;refreshCombatHud();
-   if(m.hit==='self')showDamage(player.position,'-'+(m.damage??11),'#ff6969');
-   if(m.hit==='other')showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');
+   if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}
+   if(m.hit==='other'){showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}
   }
  };
  network.onclose=()=>{network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=false;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
@@ -529,14 +530,15 @@ function combatTick(dt){
   remote.rotation.y+=delta*blend;
  }
  if(remoteWrestler&&remoteConnected){
-  const state=remoteHP<=0?'fall':remoteAnim;
+  remoteReactionTime=Math.max(0,remoteReactionTime-dt);
+  const state=remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
   if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
   remoteWrestler.update(dt);
  }
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
   sendClock-=.05;
-  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?'punch':heldKeys.size||movement.active?'run':'idle'});
+  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?activeAttack:heldKeys.size||movement.active?'run':'idle'});
  }
 }
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
@@ -565,7 +567,19 @@ const pad=window.GameController.mount(controllerSlot,{mode:'auto'});
 const movement=pad.state.joysticks.controlMOVEMENT;
 const clock=new THREE.Clock();
 const heldKeys=new Set();
-let punchRemaining=0;
+let punchRemaining=0,activeAttack='punch',hitReactionTime=0,hitReaction='reactions.hit-front',remoteReactionTime=0,remoteReaction='reactions.hit-front';
+const attackPanel=document.createElement('div');
+attackPanel.style.cssText='position:fixed;bottom:120px;right:12px;z-index:16;display:flex;flex-wrap:wrap;gap:5px;max-width:300px;justify-content:flex-end';
+document.body.appendChild(attackPanel);
+function performAttack(move){
+ if(punchRemaining>0||playerHP<=0||!remoteConnected||document.getElementById('home').hidden===false)return;
+ const attack=attackMoves[move];if(!attack)return;
+ activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
+}
+for(const [move,key] of [['punch','1'],['jab','2'],['hook','3'],['uppercut','4'],['kick','5'],['clothesline','6']]){
+ const btn=document.createElement('button');btn.textContent=key+' '+move.toUpperCase();btn.style.cssText='background:#222c42;color:#fff;border:1px solid #8ca9d5;border-radius:7px;padding:8px;font:700 11px system-ui;cursor:pointer';btn.addEventListener('pointerdown',e=>e.stopPropagation());btn.addEventListener('click',()=>performAttack(move));attackPanel.appendChild(btn);
+}
+window.addEventListener('keydown',e=>{if(e.repeat||e.target instanceof HTMLElement&&e.target.closest('input,textarea,[contenteditable="true"]'))return;const move=['punch','jab','hook','uppercut','kick','clothesline'][Number(e.key)-1];if(move){performAttack(move);e.preventDefault();}});
 window.addEventListener('keydown',e=>{
  if(['KeyW','KeyA','KeyS','KeyD','ShiftLeft','ShiftRight'].includes(e.code)){
   if(e.target instanceof HTMLElement&&e.target.closest('input,textarea,[contenteditable="true"]'))return;
@@ -579,9 +593,7 @@ window.addEventListener('blur',()=>heldKeys.clear());
 window.addEventListener('pointerdown',e=>{
  if(e.button!==0||document.getElementById('home').hidden===false)return;
  if(e.target instanceof Element&&e.target.closest('button,input,textarea,select,a,#controllerSlot'))return;
- if(punchRemaining>0||playerHP<=0||!remoteConnected)return;
- punchRemaining=.8;
- playerPunchImpact=.3; // Match Claude's 0.8-second punch animation.
+ performAttack('punch');
 },{capture:true});
 
 // Standalone cinematic entrance test. The bot is visual-only and does not join multiplayer.
@@ -998,11 +1010,12 @@ renderer.setAnimationLoop(()=>{
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
- if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch',momentum:ropeSpeedMultiplier});}
+ if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&remoteConnected&&playerHP>0)sendNetwork({type:'punch',move:activeAttack,momentum:ropeSpeedMultiplier});}
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
-  const nextAnimation=playerHP<=0?'fall':punchRemaining>0?'punch':ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
+  hitReactionTime=Math.max(0,hitReactionTime-dt);
+  const nextAnimation=playerHP<=0?'fall':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
