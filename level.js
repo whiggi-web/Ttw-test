@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.chokeslam-attacker','throws.chokeslam-defender']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -732,21 +732,23 @@ function beginPowerbomb(){
 function updatePowerbomb(dt){
  if(!grappleMove)return;
  const g=grappleMove;
- g.time=Math.min(POWERBOMB_DURATION,g.time+dt);
+ const duration=g.kind==='chokeslam'?1.9:POWERBOMB_DURATION;
+ const impact=g.kind==='chokeslam'?1.18:POWERBOMB_IMPACT;
+ g.time=Math.min(duration,g.time+dt);
  // Freeze AI and gameplay movement, while retaining the paired asset's poses.
  const forward=new THREE.Vector3(0,0,-1).applyAxisAngle(new THREE.Vector3(0,1,0),g.yaw);
- const travel=THREE.MathUtils.smoothstep(g.time,0,POWERBOMB_DURATION)*.2;
+ const travel=THREE.MathUtils.smoothstep(g.time,0,duration)*.2;
  player.position.copy(g.origin).addScaledVector(forward,travel);
  remote.position.copy(g.origin).add(g.offset);
  remote.rotation.y=g.yaw-Math.PI;
  remote.position.y=1.2;
- if(!g.impact&&g.time>=POWERBOMB_IMPACT){
+ if(!g.impact&&g.time>=impact){
   g.impact=true;
   remoteHP=Math.max(0,remoteHP-30);
   showDamage(remote.position,'-30','#ffdf55');
   refreshCombatHud();
  }
- if(g.time>=POWERBOMB_DURATION){
+ if(g.time>=duration){
   grappleMove=null;
   remoteReaction=remoteHP<=0?'fall':'reactions.stunned';
   remoteReactionTime=remoteHP<=0?0:1.5;
@@ -756,12 +758,38 @@ function updatePowerbomb(dt){
   remoteWrestler._ttwState='';
  }
 }
+// One-at-a-time testing: powerbomb stays on G, chokeslam gets its own test key.
+function beginChokeslam(){
+ if(grappleMove||traversal||punchRemaining>0||playerHP<=0||remoteHP<=0)return;
+ if(!botMode)return showContextMessage('Chokeslam currently available against the offline bot');
+ if(!loadedWrestler?.library?.defs?.['throws.chokeslam-attacker']||!remoteWrestler?.library?.defs?.['throws.chokeslam-defender'])return showContextMessage('Chokeslam assets not loaded');
+ const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
+ if(Math.hypot(dx,dz)>2.2)return showContextMessage('Move closer to chokeslam');
+ const x=THREE.MathUtils.clamp(player.position.x,-2.3,2.3);
+ const z=THREE.MathUtils.clamp(player.position.z,-2.3,2.3);
+ player.position.set(x,1.2,z);
+ const yaw=Math.atan2(-dx,-dz);
+ player.rotation.y=yaw;
+ remote.rotation.y=yaw-Math.PI;
+ const ahead=new THREE.Vector3(0,0,-.6).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
+ remote.position.copy(player.position).add(ahead);remote.position.y=1.2;
+ botStrikeClock=99;remoteReactionTime=0;punchRemaining=0;playerPunchImpact=-1;
+ grappleMove={time:0,impact:false,origin:player.position.clone(),yaw,offset:ahead,kind:'chokeslam'};
+ try{
+  loadedWrestler.play('throws.chokeslam-attacker',{fade:0,restart:true});
+  remoteWrestler.play('throws.chokeslam-defender',{fade:0,restart:true});
+  loadedWrestler._ttwState='throws.chokeslam-attacker';
+  remoteWrestler._ttwState='throws.chokeslam-defender';
+ }catch(error){console.error('Chokeslam playback error',error);grappleMove=null;return showContextMessage('Chokeslam animation error');}
+ showContextMessage('CHOKESLAM!');
+}
 const contextActions=[
  ['GRAPPLE','KeyG',()=>{
   if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
   if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
   beginPowerbomb();
  }],
+ ['CHOKESLAM','KeyC',()=>beginChokeslam()],
  ['ROPES','KeyR',()=>{
   const near=Math.min(Math.abs(Math.abs(player.position.x)-3.5),Math.abs(Math.abs(player.position.z)-3.5));
   if(near>.9)return showContextMessage('Move closer to the ropes');
@@ -2524,7 +2552,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?'throws.powerbomb-attacker':playerHP<=0?'fall':traversal?'idle':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
+  const nextAnimation=grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?'idle':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
