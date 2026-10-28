@@ -2378,6 +2378,20 @@ function updateSwing(dt){
  return true;
 }
 
+// Retired theatrical entrance sets must never remain visible in the playable ring.
+// Keep their source for later editing, but remove their props from the scene entirely.
+stopMagician();
+storyReset();
+magicStage.visible=false;
+scene.remove(magicStage);
+scene.remove(storyStage);
+stopSwing();swingRig.visible=false;scene.remove(swingRig);
+stopGod();godProcession.visible=false;scene.remove(godProcession);
+stopConvoy();
+stopTiny();
+stopProcession();
+stopShowcase();
+stopBetter();
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
