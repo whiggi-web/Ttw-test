@@ -1,0 +1,1091 @@
+[
+ {
+  "id": "striking.chop",
+  "name": "Chop",
+  "category": "striking",
+  "file": "animations/striking/chop.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.forearm-smash",
+  "name": "Forearm smash",
+  "category": "striking",
+  "file": "animations/striking/forearm-smash.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.back-elbow",
+  "name": "Back elbow",
+  "category": "striking",
+  "file": "animations/striking/back-elbow.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.spinning-backfist",
+  "name": "Spinning backfist",
+  "category": "striking",
+  "file": "animations/striking/spinning-backfist.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.superkick",
+  "name": "Superkick",
+  "category": "striking",
+  "file": "animations/striking/superkick.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.big-boot",
+  "name": "Big boot",
+  "category": "striking",
+  "file": "animations/striking/big-boot.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.headbutt",
+  "name": "Headbutt",
+  "category": "striking",
+  "file": "animations/striking/headbutt.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.shoulder-block",
+  "name": "Shoulder block",
+  "category": "striking",
+  "file": "animations/striking/shoulder-block.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.running-knee",
+  "name": "Running knee",
+  "category": "striking",
+  "file": "animations/striking/running-knee.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.discus-clothesline",
+  "name": "Discus clothesline",
+  "category": "striking",
+  "file": "animations/striking/discus-clothesline.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.lariat",
+  "name": "Lariat",
+  "category": "striking",
+  "file": "animations/striking/lariat.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.leg-kick-combo",
+  "name": "Leg kick combo",
+  "category": "striking",
+  "file": "animations/striking/leg-kick-combo.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.stomp",
+  "name": "Stomp",
+  "category": "striking",
+  "file": "animations/striking/stomp.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.mounted-punches",
+  "name": "Mounted punches",
+  "category": "striking",
+  "file": "animations/striking/mounted-punches.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.enzuigiri",
+  "name": "Enzuigiri",
+  "category": "striking",
+  "file": "animations/striking/enzuigiri.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.dropkick",
+  "name": "Dropkick",
+  "category": "striking",
+  "file": "animations/striking/dropkick.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "striking.spinning-heel-kick",
+  "name": "Spinning heel kick",
+  "category": "striking",
+  "file": "animations/striking/spinning-heel-kick.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.chop-sell",
+  "name": "Chop sell",
+  "category": "reactions",
+  "file": "animations/reactions/chop-sell.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.head-snap-left",
+  "name": "Head snap left",
+  "category": "reactions",
+  "file": "animations/reactions/head-snap-left.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.head-snap-right",
+  "name": "Head snap right",
+  "category": "reactions",
+  "file": "animations/reactions/head-snap-right.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.doubled-over",
+  "name": "Doubled over",
+  "category": "reactions",
+  "file": "animations/reactions/doubled-over.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.spin-out-fall",
+  "name": "Spin out fall",
+  "category": "reactions",
+  "file": "animations/reactions/spin-out-fall.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.stagger-back-long",
+  "name": "Stagger back long",
+  "category": "reactions",
+  "file": "animations/reactions/stagger-back-long.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.stagger-forward-long",
+  "name": "Stagger forward long",
+  "category": "reactions",
+  "file": "animations/reactions/stagger-forward-long.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.kneeling-stunned",
+  "name": "Kneeling stunned",
+  "category": "reactions",
+  "file": "animations/reactions/kneeling-stunned.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.hit-in-corner",
+  "name": "Hit in corner",
+  "category": "reactions",
+  "file": "animations/reactions/hit-in-corner.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.superkick-drop",
+  "name": "Superkick drop",
+  "category": "reactions",
+  "file": "animations/reactions/superkick-drop.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "reactions.dropkick-fly-back",
+  "name": "Dropkick fly back",
+  "category": "reactions",
+  "file": "animations/reactions/dropkick-fly-back.json",
+  "phase": 3,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "grappling.lockup",
+  "name": "Lockup",
+  "category": "grappling",
+  "file": "animations/grappling/lockup.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.lockup-idle",
+  "name": "Lockup idle",
+  "category": "grappling",
+  "file": "animations/grappling/lockup-idle.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.lockup-break",
+  "name": "Lockup break",
+  "category": "grappling",
+  "file": "animations/grappling/lockup-break.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.side-headlock",
+  "name": "Side headlock",
+  "category": "grappling",
+  "file": "animations/grappling/side-headlock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.headlock-takeover",
+  "name": "Headlock takeover",
+  "category": "grappling",
+  "file": "animations/grappling/headlock-takeover.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.hammerlock",
+  "name": "Hammerlock",
+  "category": "grappling",
+  "file": "animations/grappling/hammerlock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.wristlock",
+  "name": "Wristlock",
+  "category": "grappling",
+  "file": "animations/grappling/wristlock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.front-facelock",
+  "name": "Front facelock",
+  "category": "grappling",
+  "file": "animations/grappling/front-facelock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.waistlock",
+  "name": "Waistlock",
+  "category": "grappling",
+  "file": "animations/grappling/waistlock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.rear-waistlock",
+  "name": "Rear waistlock",
+  "category": "grappling",
+  "file": "animations/grappling/rear-waistlock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "grappling.shove-off",
+  "name": "Shove off",
+  "category": "grappling",
+  "file": "animations/grappling/shove-off.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.body-slam",
+  "name": "Body slam",
+  "category": "throws",
+  "file": "animations/throws/body-slam.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.vertical-suplex",
+  "name": "Vertical suplex",
+  "category": "throws",
+  "file": "animations/throws/vertical-suplex.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.snap-suplex",
+  "name": "Snap suplex",
+  "category": "throws",
+  "file": "animations/throws/snap-suplex.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.belly-to-belly",
+  "name": "Belly to belly",
+  "category": "throws",
+  "file": "animations/throws/belly-to-belly.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.german-suplex",
+  "name": "German suplex",
+  "category": "throws",
+  "file": "animations/throws/german-suplex.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.ddt",
+  "name": "Ddt",
+  "category": "throws",
+  "file": "animations/throws/ddt.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.hip-toss",
+  "name": "Hip toss",
+  "category": "throws",
+  "file": "animations/throws/hip-toss.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.arm-drag",
+  "name": "Arm drag",
+  "category": "throws",
+  "file": "animations/throws/arm-drag.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.powerslam",
+  "name": "Powerslam",
+  "category": "throws",
+  "file": "animations/throws/powerslam.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.neckbreaker",
+  "name": "Neckbreaker",
+  "category": "throws",
+  "file": "animations/throws/neckbreaker.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.backbreaker",
+  "name": "Backbreaker",
+  "category": "throws",
+  "file": "animations/throws/backbreaker.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.bulldog",
+  "name": "Bulldog",
+  "category": "throws",
+  "file": "animations/throws/bulldog.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.powerbomb",
+  "name": "Powerbomb",
+  "category": "throws",
+  "file": "animations/throws/powerbomb.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.chokeslam",
+  "name": "Chokeslam",
+  "category": "throws",
+  "file": "animations/throws/chokeslam.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.fireman-carry",
+  "name": "Fireman carry",
+  "category": "throws",
+  "file": "animations/throws/fireman-carry.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "throws.spinebuster",
+  "name": "Spinebuster",
+  "category": "throws",
+  "file": "animations/throws/spinebuster.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.sleeper-hold",
+  "name": "Sleeper hold",
+  "category": "submissions",
+  "file": "animations/submissions/sleeper-hold.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.armbar",
+  "name": "Armbar",
+  "category": "submissions",
+  "file": "animations/submissions/armbar.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.crossface",
+  "name": "Crossface",
+  "category": "submissions",
+  "file": "animations/submissions/crossface.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.figure-four",
+  "name": "Figure four",
+  "category": "submissions",
+  "file": "animations/submissions/figure-four.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.boston-crab",
+  "name": "Boston crab",
+  "category": "submissions",
+  "file": "animations/submissions/boston-crab.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.ankle-lock",
+  "name": "Ankle lock",
+  "category": "submissions",
+  "file": "animations/submissions/ankle-lock.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.sharpshooter",
+  "name": "Sharpshooter",
+  "category": "submissions",
+  "file": "animations/submissions/sharpshooter.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.camel-clutch",
+  "name": "Camel clutch",
+  "category": "submissions",
+  "file": "animations/submissions/camel-clutch.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "submissions.abdominal-stretch",
+  "name": "Abdominal stretch",
+  "category": "submissions",
+  "file": "animations/submissions/abdominal-stretch.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "ground.cover",
+  "name": "Cover",
+  "category": "ground",
+  "file": "animations/ground/cover.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "ground.hook-leg-cover",
+  "name": "Hook leg cover",
+  "category": "ground",
+  "file": "animations/ground/hook-leg-cover.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "ground.kick-out",
+  "name": "Kick out",
+  "category": "ground",
+  "file": "animations/ground/kick-out.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "ground.roll-up",
+  "name": "Roll up",
+  "category": "ground",
+  "file": "animations/ground/roll-up.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "ground.small-package",
+  "name": "Small package",
+  "category": "ground",
+  "file": "animations/ground/small-package.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "ground.elbow-drop",
+  "name": "Elbow drop",
+  "category": "ground",
+  "file": "animations/ground/elbow-drop.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "ground.leg-drop",
+  "name": "Leg drop",
+  "category": "ground",
+  "file": "animations/ground/leg-drop.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "ground.ground-stomp",
+  "name": "Ground stomp",
+  "category": "ground",
+  "file": "animations/ground/ground-stomp.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "ground.pick-up-opponent",
+  "name": "Pick up opponent",
+  "category": "ground",
+  "file": "animations/ground/pick-up-opponent.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "ground.drag-opponent",
+  "name": "Drag opponent",
+  "category": "ground",
+  "file": "animations/ground/drag-opponent.json",
+  "phase": 4,
+  "status": "planned",
+  "paired": true
+ },
+ {
+  "id": "aerial.diving-elbow",
+  "name": "Diving elbow",
+  "category": "aerial",
+  "file": "animations/aerial/diving-elbow.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.diving-splash",
+  "name": "Diving splash",
+  "category": "aerial",
+  "file": "animations/aerial/diving-splash.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.moonsault",
+  "name": "Moonsault",
+  "category": "aerial",
+  "file": "animations/aerial/moonsault.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.diving-crossbody",
+  "name": "Diving crossbody",
+  "category": "aerial",
+  "file": "animations/aerial/diving-crossbody.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.missile-dropkick",
+  "name": "Missile dropkick",
+  "category": "aerial",
+  "file": "animations/aerial/missile-dropkick.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.swanton-bomb",
+  "name": "Swanton bomb",
+  "category": "aerial",
+  "file": "animations/aerial/swanton-bomb.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.top-rope-legdrop",
+  "name": "Top rope legdrop",
+  "category": "aerial",
+  "file": "animations/aerial/top-rope-legdrop.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.diving-headbutt",
+  "name": "Diving headbutt",
+  "category": "aerial",
+  "file": "animations/aerial/diving-headbutt.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.frog-splash",
+  "name": "Frog splash",
+  "category": "aerial",
+  "file": "animations/aerial/frog-splash.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.plancha",
+  "name": "Plancha",
+  "category": "aerial",
+  "file": "animations/aerial/plancha.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.suicide-dive",
+  "name": "Suicide dive",
+  "category": "aerial",
+  "file": "animations/aerial/suicide-dive.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.springboard-crossbody",
+  "name": "Springboard crossbody",
+  "category": "aerial",
+  "file": "animations/aerial/springboard-crossbody.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.springboard-moonsault",
+  "name": "Springboard moonsault",
+  "category": "aerial",
+  "file": "animations/aerial/springboard-moonsault.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.second-rope-elbow",
+  "name": "Second rope elbow",
+  "category": "aerial",
+  "file": "animations/aerial/second-rope-elbow.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "aerial.corkscrew-press",
+  "name": "Corkscrew press",
+  "category": "aerial",
+  "file": "animations/aerial/corkscrew-press.json",
+  "phase": 5,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.skin-the-cat",
+  "name": "Skin the cat",
+  "category": "eliminations",
+  "file": "animations/eliminations/skin-the-cat.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.hold-on-apron",
+  "name": "Hold on apron",
+  "category": "eliminations",
+  "file": "animations/eliminations/hold-on-apron.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.pulled-off-apron",
+  "name": "Pulled off apron",
+  "category": "eliminations",
+  "file": "animations/eliminations/pulled-off-apron.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.feet-touch-floor",
+  "name": "Feet touch floor",
+  "category": "eliminations",
+  "file": "animations/eliminations/feet-touch-floor.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.hang-on-top-rope",
+  "name": "Hang on top rope",
+  "category": "eliminations",
+  "file": "animations/eliminations/hang-on-top-rope.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.battle-royal-toss",
+  "name": "Battle royal toss",
+  "category": "eliminations",
+  "file": "animations/eliminations/battle-royal-toss.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "eliminations.save-on-ropes",
+  "name": "Save on ropes",
+  "category": "eliminations",
+  "file": "animations/eliminations/save-on-ropes.json",
+  "phase": 6,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.thrown-into-barricade",
+  "name": "Thrown into barricade",
+  "category": "environment",
+  "file": "animations/environment/thrown-into-barricade.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.climb-barricade",
+  "name": "Climb barricade",
+  "category": "environment",
+  "file": "animations/environment/climb-barricade.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.rammed-into-post",
+  "name": "Rammed into post",
+  "category": "environment",
+  "file": "animations/environment/rammed-into-post.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.thrown-into-steps",
+  "name": "Thrown into steps",
+  "category": "environment",
+  "file": "animations/environment/thrown-into-steps.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.slam-on-announce-table",
+  "name": "Slam on announce table",
+  "category": "environment",
+  "file": "animations/environment/slam-on-announce-table.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.walk-ramp",
+  "name": "Walk ramp",
+  "category": "environment",
+  "file": "animations/environment/walk-ramp.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.entrance-pose-stage",
+  "name": "Entrance pose stage",
+  "category": "environment",
+  "file": "animations/environment/entrance-pose-stage.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.sit-on-steps",
+  "name": "Sit on steps",
+  "category": "environment",
+  "file": "animations/environment/sit-on-steps.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "environment.ringside-brawl-idle",
+  "name": "Ringside brawl idle",
+  "category": "environment",
+  "file": "animations/environment/ringside-brawl-idle.json",
+  "phase": 7,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.raise-arms",
+  "name": "Raise arms",
+  "category": "taunts",
+  "file": "animations/taunts/raise-arms.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.flex",
+  "name": "Flex",
+  "category": "taunts",
+  "file": "animations/taunts/flex.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.point",
+  "name": "Point",
+  "category": "taunts",
+  "file": "animations/taunts/point.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.beckon",
+  "name": "Beckon",
+  "category": "taunts",
+  "file": "animations/taunts/beckon.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.crowd-hype",
+  "name": "Crowd hype",
+  "category": "taunts",
+  "file": "animations/taunts/crowd-hype.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.chest-beat",
+  "name": "Chest beat",
+  "category": "taunts",
+  "file": "animations/taunts/chest-beat.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.victory",
+  "name": "Victory",
+  "category": "taunts",
+  "file": "animations/taunts/victory.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.cocky-laugh",
+  "name": "Cocky laugh",
+  "category": "taunts",
+  "file": "animations/taunts/cocky-laugh.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.angry-challenge",
+  "name": "Angry challenge",
+  "category": "taunts",
+  "file": "animations/taunts/angry-challenge.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "taunts.exhausted-celebration",
+  "name": "Exhausted celebration",
+  "category": "taunts",
+  "file": "animations/taunts/exhausted-celebration.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "recovery.getup-ropes-assist",
+  "name": "Getup ropes assist",
+  "category": "recovery",
+  "file": "animations/recovery/getup-ropes-assist.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "recovery.getup-corner-assist",
+  "name": "Getup corner assist",
+  "category": "recovery",
+  "file": "animations/recovery/getup-corner-assist.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "recovery.roll-to-knees",
+  "name": "Roll to knees",
+  "category": "recovery",
+  "file": "animations/recovery/roll-to-knees.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "recovery.catch-breath",
+  "name": "Catch breath",
+  "category": "recovery",
+  "file": "animations/recovery/catch-breath.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "recovery.shake-off",
+  "name": "Shake off",
+  "category": "recovery",
+  "file": "animations/recovery/shake-off.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ },
+ {
+  "id": "recovery.ref-check-respond",
+  "name": "Ref check respond",
+  "category": "recovery",
+  "file": "animations/recovery/ref-check-respond.json",
+  "phase": 8,
+  "status": "planned",
+  "paired": false
+ }
+]

@@ -1,0 +1,97 @@
+{
+ "id": "pair.figure-four-hold",
+ "name": "Figure-four (hold loop)",
+ "category": "submissions",
+ "description": "Loop while the submission is applied. Both on the mat, legs interlocked.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 2.4,
+ "attacker": {
+  "animation": "submissions.figure-four-hold-attacker",
+  "startState": "figure-four-hold",
+  "endState": "figure-four-hold",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "submissions.figure-four-hold-defender",
+  "startState": "figure-four-locked",
+  "endState": "figure-four-locked",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -1.72
+  ],
+  "defenderFacing": -180,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0,
+    0,
+    0
+   ],
+   "yaw": 0
+  },
+  "defender": {
+   "offset": [
+    0,
+    0,
+    0
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0.42,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [],
+ "events": [
+  {
+   "time": 2.4,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [
+   [
+    0,
+    2.4
+   ]
+  ],
+  "note": "loop: cut to a break or tap-out at any time"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "loop",
+  "figure-four"
+ ]
+}

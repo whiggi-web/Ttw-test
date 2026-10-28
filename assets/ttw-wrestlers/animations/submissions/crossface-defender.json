@@ -1,0 +1,176 @@
+{
+  "id": "submissions.crossface-defender",
+  "name": "Caught in a crossface",
+  "category": "submissions",
+  "description": "Defender: face down; the left arm trapped and the face cranked back and to the side by the attacker's forearm.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "lying-front",
+  "endState": "crossface-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.25, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 1.0,
+      "name": "grab",
+      "attachment": "leftHand"
+    },
+    {
+      "time": 1.5,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.55,
+      "name": "hit_received",
+      "zone": "head"
+    },
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "crossface", "neck-work", "starts-lying-front", "ends-crossface-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -90, 0, 0],
+        [1.0, -90, 0, 0.0],
+        [1.5, -90, 0, 0.0],
+        [2.0, -90, 0, 2.4]
+      ],
+      "position": [
+        [0, 0, -0.84, 0],
+        [1.0, 0, -0.84, 0],
+        [1.5, 0, -0.84, 0],
+        [2.0, 0, -0.84, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [1.0, 2.4, 0, 0],
+        [1.5, 8.0, 0, 0],
+        [2.0, 8.0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 10, 40, 0],
+        [1.0, -7.5, -7.5, 0],
+        [1.5, -25.0, -25.0, 0],
+        [2.0, -25.0, -19.0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 20, 0],
+        [1.0, 0, 20, 0],
+        [1.5, 0, 20, 0],
+        [2.0, 0, 20, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 0, -80],
+        [1.0, -10, 0, -92.0],
+        [1.5, -10, 0, -120.0],
+        [2.0, -10, 0, -120.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 0, 0, -70],
+        [1.0, 10, 0, 0],
+        [1.5, 10, 0, 0],
+        [2.0, 10, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, 0, 80],
+        [1.0, 0, 0, 80],
+        [1.5, 0, 0, 80],
+        [2.0, 0, 0, 80]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 0, 0, 70],
+        [1.0, 0, 0, 70],
+        [1.5, 0, 0, 70],
+        [2.0, 0, 0, 70]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -6],
+        [1.0, 0, 0, -6],
+        [1.5, 0, 0, -6],
+        [2.0, 0, 0, -6]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [1.0, -6, 0, 0],
+        [1.5, -6, 0, 0],
+        [2.0, -6, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [1.0, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [2.0, -50, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 6],
+        [1.0, 0, 0, 6],
+        [1.5, 0, 0, 6],
+        [2.0, 0, 0, 6]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [1.0, -6, 0, 0],
+        [1.5, -6, 0, 0],
+        [2.0, -6, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [1.0, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [2.0, -50, 0, 0]
+      ]
+    }
+  }
+}

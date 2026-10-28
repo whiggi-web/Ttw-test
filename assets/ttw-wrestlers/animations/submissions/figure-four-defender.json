@@ -1,0 +1,194 @@
+{
+  "id": "submissions.figure-four-defender",
+  "name": "Caught in a figure-four",
+  "category": "submissions",
+  "description": "Defender: on the back; legs grabbed and twisted into the figure-four, sitting up in agony as it locks in.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "lying-back",
+  "endState": "figure-four-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.3, 180],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.6,
+      "name": "grab",
+      "attachment": "legs"
+    },
+    {
+      "time": 1.8,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.8,
+      "name": "hit_received",
+      "zone": "legs"
+    },
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "figure-four", "leg-work", "starts-lying-back", "ends-figure-four-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, 90, 0, 0],
+        [0.6, 90.0, 0, 0.0],
+        [1.2, 90.0, 0, 0.0],
+        [1.8, 72.0, 0, 4.0],
+        [2.4, 78.0, 0, 0.0]
+      ],
+      "position": [
+        [0, 0, -0.83, 0],
+        [0.6, 0, -0.83, 0],
+        [1.2, 0, -0.83, 0],
+        [1.8, 0, -0.83, 0],
+        [2.4, 0, -0.83, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.6, -0.0, 0, 0],
+        [1.2, -0.0, 0, 0],
+        [1.8, -15.0, 0, 0],
+        [2.4, -10.0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 6, 0, 0],
+        [0.6, 10.0, 0, 0],
+        [1.2, 10.0, 0, 0],
+        [1.8, 22.0, 0, 0],
+        [2.4, 18.0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 14, 0],
+        [0.6, 0, 14, 0],
+        [1.2, 0, 14, 0],
+        [1.8, 0, 14, 0],
+        [2.4, 0, 14, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 10, -56],
+        [0.6, 0.0, 0, -40],
+        [1.2, 0.0, 0, -40],
+        [1.8, 30.0, 0, -40],
+        [2.4, 20.0, 0, -40]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [0.6, 16, 0, 0],
+        [1.2, 16, 0, 0],
+        [1.8, 16, 0, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, -10, 56],
+        [0.6, 0.0, 0, 40],
+        [1.2, 0.0, 0, 40],
+        [1.8, 30.0, 0, 40],
+        [2.4, 20.0, 0, 40]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [0.6, 16, 0, 0],
+        [1.2, 16, 0, 0],
+        [1.8, 16, 0, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -8],
+        [0.6, 7.5, 0, -3.6],
+        [1.2, 25.0, 0, -12.0],
+        [1.8, 25.0, 0, -12.0],
+        [2.4, 25.0, 0, -12.0]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.6, -3.0, 0, 0],
+        [1.2, -10.0, 0, 0],
+        [1.8, -10.0, 0, 0],
+        [2.4, -10.0, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -20, 0, 6],
+        [0.6, -20, 0, 6],
+        [1.2, -20, 0, 6],
+        [1.8, -20, 0, 6],
+        [2.4, -20, 0, 6]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 8],
+        [0.6, 6.0, 0, 2],
+        [1.2, 20.0, 0, 2],
+        [1.8, 35.85, -5.05, 4.17],
+        [1.8667, 36.46, -5.04, 4.21],
+        [2.4, 26.42, -5.13, 3.55]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.6, -9.0, 0, 0],
+        [1.2, -30.0, 0, 0],
+        [1.8, -39.2, 0, 0],
+        [1.8667, -39.66, 0, 0],
+        [2.4, -32.76, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -20, 0, -6],
+        [0.6, -20, 0, -6],
+        [1.2, -20, 0, -6],
+        [1.8, -26.52, 4.34, -1.82],
+        [1.8667, -26.67, 4.34, -1.78],
+        [2.4, -23.54, 4.26, -2.41]
+      ]
+    }
+  }
+}

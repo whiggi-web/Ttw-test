@@ -1,0 +1,44 @@
+[
+  {
+    "id": "pair.irish-whip-ropes",
+    "name": "Irish whip into the ropes",
+    "category": "ropes",
+    "file": "paired/irish-whip-ropes.json",
+    "duration": 1.4,
+    "attacker": "ropes.irish-whip",
+    "defender": "ropes.whipped-into",
+    "tags": [
+      "ropes",
+      "whip",
+      "setup"
+    ]
+  },
+  {
+    "id": "pair.push-against-ropes",
+    "name": "Shove into the ropes",
+    "category": "ropes",
+    "file": "paired/push-against-ropes.json",
+    "duration": 1.0,
+    "attacker": "ropes.push-into-ropes",
+    "defender": "ropes.pushed-against",
+    "tags": [
+      "ropes",
+      "shove",
+      "setup"
+    ]
+  },
+  {
+    "id": "pair.pull-over-top-rope",
+    "name": "Pull over the top rope to the floor",
+    "category": "eliminations",
+    "file": "paired/pull-over-top-rope.json",
+    "duration": 1.4,
+    "attacker": "ropes.pull-over-top",
+    "defender": "ropes.pulled-over-top",
+    "tags": [
+      "ropes",
+      "elimination",
+      "to-floor"
+    ]
+  }
+]

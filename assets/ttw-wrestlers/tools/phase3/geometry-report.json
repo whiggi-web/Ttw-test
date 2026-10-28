@@ -1,0 +1,352 @@
+{
+  "striking.chop": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.forearm-smash": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.european-uppercut": {
+    "floorPenetration": 0.017,
+    "at": 0.3,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.back-elbow": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.spinning-backfist": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.superkick": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.big-boot": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.headbutt": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.lariat": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.leg-kick-combo": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.stomp": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.mount": {
+    "floorPenetration": 0.008,
+    "at": 0.5,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.mounted-punches": {
+    "floorPenetration": 0.001,
+    "at": 0.0,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.mount-off": {
+    "floorPenetration": 0.006,
+    "at": 0.1,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.shoulder-block": {
+    "floorPenetration": 0.019,
+    "at": 0.4,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "striking.running-knee": {
+    "floorPenetration": 0.013,
+    "at": 1.07,
+    "point": "right_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "striking.discus-clothesline": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "striking.spinning-heel-kick": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "striking.dropkick": {
+    "floorPenetration": 0.016,
+    "at": 0.1,
+    "point": "right_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "striking.enzuigiri": {
+    "floorPenetration": 0.005,
+    "at": 0.1,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 7,
+    "ropePush": 0
+  },
+  "reactions.chop-sell": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.head-snap-left": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.head-snap-right": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.doubled-over": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.bent-over-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.spin-out-fall": {
+    "floorPenetration": 0.005,
+    "at": 0.67,
+    "point": "right_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 7,
+    "ropePush": 0
+  },
+  "reactions.stagger-back-long": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.stagger-forward-long": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.arm-hurt-loop": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.kneeling-stunned": {
+    "floorPenetration": 0.029,
+    "at": 0.77,
+    "point": "left_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.hit-in-corner": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 42,
+    "ropeDepth": 0.12,
+    "ropeWorst": "torso@0.13 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.14
+  },
+  "reactions.knee-buckle-fall": {
+    "floorPenetration": 0.041,
+    "at": 0.43,
+    "point": "left_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 6,
+    "ropePush": 0
+  },
+  "reactions.flip-bump": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.superkick-drop": {
+    "floorPenetration": 0.007,
+    "at": 0.13,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "reactions.dropkick-fly-back": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  }
+}

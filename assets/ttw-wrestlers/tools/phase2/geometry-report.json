@@ -1,0 +1,872 @@
+{
+  "ropes.enter-between-ropes": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 48,
+    "ropeDepth": 0.154,
+    "ropeWorst": "torso@0.73 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.173
+  },
+  "ropes.enter-over-bottom": {
+    "floorPenetration": 0.001,
+    "at": 0.97,
+    "point": "left_toe",
+    "ropeOverlapFrames": 50,
+    "ropeDepth": 0.143,
+    "ropeWorst": "torso@0.83 rope 0.85",
+    "contactFixes": 1,
+    "ropePush": 0.166
+  },
+  "ropes.enter-duck-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 38,
+    "ropeDepth": 0.12,
+    "ropeWorst": "torso@0.47 rope 1.25",
+    "contactFixes": 1,
+    "ropePush": 0.172
+  },
+  "ropes.enter-climb-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 26,
+    "ropeDepth": 0.104,
+    "ropeWorst": "rightUpperLeg@0.77 rope 1.25",
+    "contactFixes": 3,
+    "ropePush": 0.123
+  },
+  "ropes.exit-between-ropes": {
+    "floorPenetration": 0.013,
+    "at": 1.1,
+    "point": "right_heel",
+    "ropeOverlapFrames": 29,
+    "ropeDepth": 0.139,
+    "ropeWorst": "torso@0.80 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.174
+  },
+  "ropes.exit-duck-through": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 33,
+    "ropeDepth": 0.122,
+    "ropeWorst": "torso@0.60 rope 1.25",
+    "contactFixes": 1,
+    "ropePush": 0.163
+  },
+  "ropes.exit-climb-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 16,
+    "ropeDepth": 0.099,
+    "ropeWorst": "leftUpperLeg@0.70 rope 1.25",
+    "contactFixes": 3,
+    "ropePush": 0.112
+  },
+  "ropes.exit-under-middle": {
+    "floorPenetration": 0.011,
+    "at": 1.33,
+    "point": "right_toe",
+    "ropeOverlapFrames": 30,
+    "ropeDepth": 0.15,
+    "ropeWorst": "torso@0.90 rope 0.85",
+    "contactFixes": 0,
+    "ropePush": 0.168
+  },
+  "ropes.enter-jump-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 35,
+    "ropeDepth": 0.114,
+    "ropeWorst": "torso@0.30 rope 1.25",
+    "contactFixes": 4,
+    "ropePush": 0.134
+  },
+  "ropes.exit-jump-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 8,
+    "ropeDepth": 0.087,
+    "ropeWorst": "leftUpperLeg@0.53 rope 0.85",
+    "contactFixes": 4,
+    "ropePush": 0.102
+  },
+  "ropes.enter-slide-under": {
+    "floorPenetration": 0.118,
+    "at": 0.67,
+    "point": "left_elbow",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 44,
+    "ropePush": 0
+  },
+  "ropes.enter-dive-under": {
+    "floorPenetration": 0.006,
+    "at": 0.1,
+    "point": "right_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "ropes.enter-from-corner": {
+    "floorPenetration": 0.014,
+    "at": 1.43,
+    "point": "right_toe",
+    "ropeOverlapFrames": 26,
+    "ropeDepth": 0.088,
+    "ropeWorst": "leftUpperLeg@1.13 rope 1.25",
+    "contactFixes": 3,
+    "ropePush": 0.122
+  },
+  "ropes.enter-injured": {
+    "floorPenetration": 0.094,
+    "at": 2.47,
+    "point": "right_elbow",
+    "ropeOverlapFrames": 44,
+    "ropeDepth": 0.154,
+    "ropeWorst": "torso@1.37 rope 0.45",
+    "contactFixes": 32,
+    "ropePush": 0.176
+  },
+  "ropes.exit-slide-under": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 12,
+    "ropeDepth": 0.117,
+    "ropeWorst": "torso@0.97 rope 0.45",
+    "contactFixes": 6,
+    "ropePush": 0.15
+  },
+  "ropes.exit-roll-under": {
+    "floorPenetration": 0.044,
+    "at": 1.43,
+    "point": "left_elbow",
+    "ropeOverlapFrames": 1,
+    "ropeDepth": 0.036,
+    "ropeWorst": "leftUpperArm@1.63 rope 0.45",
+    "contactFixes": 17,
+    "ropePush": 0.044
+  },
+  "ropes.exit-crawl-out": {
+    "floorPenetration": 0.025,
+    "at": 3.83,
+    "point": "left_knee",
+    "ropeOverlapFrames": 16,
+    "ropeDepth": 0.078,
+    "ropeWorst": "leftUpperLeg@2.73 rope 0.45",
+    "contactFixes": 26,
+    "ropePush": 0.121
+  },
+  "ropes.apron-climb-up": {
+    "floorPenetration": 0.011,
+    "at": 0.2,
+    "point": "right_heel",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.08,
+    "ropeWorst": "rightUpperLeg@1.40 rope 0.45",
+    "contactFixes": 4,
+    "ropePush": 0.093
+  },
+  "ropes.apron-drop-down": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.067,
+    "ropeWorst": "leftUpperArm@0.37 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.081
+  },
+  "ropes.apron-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.031
+  },
+  "ropes.apron-shuffle-left": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.033
+  },
+  "ropes.apron-shuffle-right": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.033
+  },
+  "ropes.apron-hang-on": {
+    "floorPenetration": 0.001,
+    "at": 0.77,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.03
+  },
+  "eliminations.apron-fall-back": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "eliminations.apron-fall-forward": {
+    "floorPenetration": 0.019,
+    "at": 0.47,
+    "point": "right_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "eliminations.fall-through-ropes": {
+    "floorPenetration": 0.013,
+    "at": 1.2,
+    "point": "head_top",
+    "ropeOverlapFrames": 20,
+    "ropeDepth": 0.146,
+    "ropeWorst": "torso@0.37 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.165
+  },
+  "eliminations.knocked-through-ropes": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.148,
+    "ropeWorst": "torso@0.27 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.17
+  },
+  "eliminations.thrown-over-top": {
+    "floorPenetration": 0.013,
+    "at": 0.1,
+    "point": "right_heel",
+    "ropeOverlapFrames": 2,
+    "ropeDepth": 0.067,
+    "ropeWorst": "torso@0.23 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.098
+  },
+  "eliminations.thrown-through-middle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 5,
+    "ropeDepth": 0.137,
+    "ropeWorst": "torso@0.37 rope 1.25",
+    "contactFixes": 3,
+    "ropePush": 0.155
+  },
+  "ropes.grab-ropes": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 6,
+    "ropeDepth": 0.062,
+    "ropeWorst": "leftForearm@0.20 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.076
+  },
+  "ropes.hold-ropes": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.036
+  },
+  "ropes.turn-from-ropes": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 1,
+    "ropeDepth": 0.058,
+    "ropeWorst": "leftForearm@0.03 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.073
+  },
+  "ropes.grab-hold": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 6,
+    "ropeDepth": 0.037,
+    "ropeWorst": "rightUpperArm@0.70 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.045
+  },
+  "ropes.stretch": {
+    "floorPenetration": 0.008,
+    "at": 1.67,
+    "point": "right_toe",
+    "ropeOverlapFrames": 98,
+    "ropeDepth": 0.069,
+    "ropeWorst": "rightForearm@2.67 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.083
+  },
+  "ropes.run-into": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 19,
+    "ropeDepth": 0.113,
+    "ropeWorst": "torso@0.77 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.161
+  },
+  "ropes.bounce-running": {
+    "floorPenetration": 0.014,
+    "at": 1.2,
+    "point": "left_toe",
+    "ropeOverlapFrames": 3,
+    "ropeDepth": 0.115,
+    "ropeWorst": "torso@0.70 rope 1.25",
+    "contactFixes": 3,
+    "ropePush": 0.163
+  },
+  "ropes.rebound-sprint": {
+    "floorPenetration": 0.008,
+    "at": 0.2,
+    "point": "left_toe",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.116,
+    "ropeWorst": "torso@0.10 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.156
+  },
+  "ropes.rebound-clothesline": {
+    "floorPenetration": 0.014,
+    "at": 0.77,
+    "point": "left_toe",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.116,
+    "ropeWorst": "torso@0.10 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.156
+  },
+  "ropes.rebound-crossbody": {
+    "floorPenetration": 0.009,
+    "at": 0.2,
+    "point": "left_toe",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.116,
+    "ropeWorst": "torso@0.10 rope 1.25",
+    "contactFixes": 3,
+    "ropePush": 0.157
+  },
+  "ropes.whipped-into": {
+    "floorPenetration": 0.012,
+    "at": 0.3,
+    "point": "left_toe",
+    "ropeOverlapFrames": 21,
+    "ropeDepth": 0.114,
+    "ropeWorst": "torso@1.23 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.17
+  },
+  "ropes.irish-whip": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ropes.pushed-against": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 18,
+    "ropeDepth": 0.134,
+    "ropeWorst": "torso@0.60 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.171
+  },
+  "ropes.push-into-ropes": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ropes.get-tangled": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 86,
+    "ropeDepth": 0.15,
+    "ropeWorst": "torso@0.43 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.178
+  },
+  "ropes.tangled-struggle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 305,
+    "ropeDepth": 0.112,
+    "ropeWorst": "torso@0.47 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.131
+  },
+  "ropes.tangled-escape": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 60,
+    "ropeDepth": 0.127,
+    "ropeWorst": "torso@0.20 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.145
+  },
+  "ropes.drape-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 10,
+    "ropeDepth": 0.122,
+    "ropeWorst": "torso@0.37 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.149
+  },
+  "ropes.hang-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.007
+  },
+  "ropes.drape-recover": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 9,
+    "ropeDepth": 0.133,
+    "ropeWorst": "torso@0.63 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.17
+  },
+  "ropes.hang-between": {
+    "floorPenetration": 0.012,
+    "at": 0.8,
+    "point": "left_toe",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.134,
+    "ropeWorst": "torso@0.60 rope 0.85",
+    "contactFixes": 2,
+    "ropePush": 0.157
+  },
+  "ropes.hung-between-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.052
+  },
+  "ropes.hung-recover": {
+    "floorPenetration": 0.002,
+    "at": 0.87,
+    "point": "left_heel",
+    "ropeOverlapFrames": 24,
+    "ropeDepth": 0.136,
+    "ropeWorst": "torso@0.33 rope 0.85",
+    "contactFixes": 4,
+    "ropePush": 0.178
+  },
+  "ropes.climb-to-middle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 24,
+    "ropeDepth": 0.101,
+    "ropeWorst": "leftUpperLeg@0.50 rope 0.85",
+    "contactFixes": 1,
+    "ropePush": 0.118
+  },
+  "ropes.springboard-launch": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 13,
+    "ropeDepth": 0.095,
+    "ropeWorst": "torso@0.53 rope 1.25",
+    "contactFixes": 4,
+    "ropePush": 0.113
+  },
+  "ropes.pulled-over-top": {
+    "floorPenetration": 0.01,
+    "at": 1.07,
+    "point": "left_heel",
+    "ropeOverlapFrames": 4,
+    "ropeDepth": 0.126,
+    "ropeWorst": "torso@0.40 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.157
+  },
+  "ropes.pull-over-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.approach-corner": {
+    "floorPenetration": 0.018,
+    "at": 0.23,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.grab-corner": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 46,
+    "ropeDepth": 0.081,
+    "ropeWorst": "rightUpperArm@0.47 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.093
+  },
+  "turnbuckle.climb-bottom": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 74,
+    "ropeDepth": 0.098,
+    "ropeWorst": "rightUpperLeg@0.23 rope 0.85",
+    "contactFixes": 0,
+    "ropePush": 0.12
+  },
+  "turnbuckle.climb-middle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 36,
+    "ropeDepth": 0.09,
+    "ropeWorst": "rightUpperLeg@0.20 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.114
+  },
+  "turnbuckle.climb-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 31,
+    "ropeDepth": 0.093,
+    "ropeWorst": "rightUpperLeg@0.33 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.106
+  },
+  "turnbuckle.climb-full": {
+    "floorPenetration": 0.0,
+    "at": 0.17,
+    "point": "left_toe",
+    "ropeOverlapFrames": 99,
+    "ropeDepth": 0.108,
+    "ropeWorst": "rightUpperLeg@0.23 rope 0.85",
+    "contactFixes": 0,
+    "ropePush": 0.121
+  },
+  "turnbuckle.climb-top-facing-out": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 3,
+    "ropeDepth": 0.071,
+    "ropeWorst": "leftLowerLeg@0.57 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.093
+  },
+  "turnbuckle.perched-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.prepare-jump": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.crouch-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.taunt-top": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0.014
+  },
+  "turnbuckle.look-crowd": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.recover-balance": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "turnbuckle.jump-down": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 2,
+    "ropeDepth": 0.072,
+    "ropeWorst": "rightLowerLeg@0.33 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.086
+  },
+  "turnbuckle.climb-down": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 111,
+    "ropeDepth": 0.084,
+    "ropeWorst": "rightUpperLeg@1.47 rope 0.85",
+    "contactFixes": 0,
+    "ropePush": 0.119
+  },
+  "turnbuckle.jump-forward": {
+    "floorPenetration": 0.003,
+    "at": 0.93,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "turnbuckle.jump-sideways": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 7,
+    "ropeDepth": 0.061,
+    "ropeWorst": "leftForearm@1.13 rope 0.85",
+    "contactFixes": 2,
+    "ropePush": 0.076
+  },
+  "turnbuckle.jump-backward": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0.016
+  },
+  "turnbuckle.fall": {
+    "floorPenetration": 0.016,
+    "at": 0.97,
+    "point": "left_hand",
+    "ropeOverlapFrames": 2,
+    "ropeDepth": 0.064,
+    "ropeWorst": "leftLowerLeg@0.57 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.077
+  },
+  "turnbuckle.pushed-off": {
+    "floorPenetration": 0.018,
+    "at": 0.93,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 10,
+    "ropePush": 0
+  },
+  "turnbuckle.thrown-off": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "turnbuckle.knocked-off-balance": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 14,
+    "ropeDepth": 0.067,
+    "ropeWorst": "rightForearm@0.60 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.08
+  },
+  "turnbuckle.seated-dazed": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 20,
+    "ropeDepth": 0.03,
+    "ropeWorst": "rightForearm@2.07 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.043
+  },
+  "turnbuckle.hang-from-corner": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 40,
+    "ropeDepth": 0.139,
+    "ropeWorst": "torso@0.70 rope 0.85",
+    "contactFixes": 1,
+    "ropePush": 0.164
+  },
+  "turnbuckle.hanging-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 31,
+    "ropeDepth": 0.05,
+    "ropeWorst": "rightUpperArm@0.77 rope 0.45",
+    "contactFixes": 0,
+    "ropePush": 0.06
+  },
+  "turnbuckle.hanging-drop": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 12,
+    "ropeDepth": 0.079,
+    "ropeWorst": "rightLowerLeg@0.53 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.092
+  },
+  "turnbuckle.miss-aerial": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0.047
+  },
+  "turnbuckle.land-awkward": {
+    "floorPenetration": 0.042,
+    "at": 1.33,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 12,
+    "ropePush": 0
+  },
+  "turnbuckle.whipped-into-corner": {
+    "floorPenetration": 0.016,
+    "at": 0.5,
+    "point": "right_toe",
+    "ropeOverlapFrames": 28,
+    "ropeDepth": 0.056,
+    "ropeWorst": "leftUpperArm@0.80 rope 1.25",
+    "contactFixes": 1,
+    "ropePush": 0.071
+  },
+  "turnbuckle.corner-back-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 117,
+    "ropeDepth": 0.049,
+    "ropeWorst": "leftForearm@1.53 rope 1.25",
+    "contactFixes": 0,
+    "ropePush": 0.063
+  },
+  "turnbuckle.corner-slump": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 58,
+    "ropeDepth": 0.084,
+    "ropeWorst": "leftUpperArm@0.43 rope 1.25",
+    "contactFixes": 2,
+    "ropePush": 0.092
+  }
+}

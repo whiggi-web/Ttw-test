@@ -1,0 +1,135 @@
+{
+ "id": "pair.shove-off",
+ "name": "Shove out of the lock-up",
+ "category": "grappling",
+ "description": "From the lock-up the attacker shoves the defender away; the defender back-pedals about 0.9 m.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 1.1,
+ "attacker": {
+  "animation": "grappling.shove-off-attacker",
+  "startState": "lockup",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "grappling.shove-off-defender",
+  "startState": "lockup",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -0.61
+  ],
+  "defenderFacing": -180,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0.0,
+    0.0,
+    -0.12
+   ],
+   "yaw": 0
+  },
+  "defender": {
+   "offset": [
+    0.0,
+    0.0,
+    0.9
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 0.05,
+   "to": 0.18,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "chest"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.05,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 0.12,
+   "name": "release",
+   "role": "both"
+  },
+  {
+   "time": 0.15,
+   "name": "hit",
+   "role": "attacker",
+   "zone": "body"
+  },
+  {
+   "time": 0.15,
+   "name": "hit_received",
+   "role": "defender",
+   "zone": "body"
+  },
+  {
+   "time": 0.45,
+   "name": "footstep",
+   "role": "defender"
+  },
+  {
+   "time": 1.05,
+   "name": "recover",
+   "role": "both"
+  },
+  {
+   "time": 1.1,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [
+   [
+    0.6,
+    1.1
+   ]
+  ]
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "lockup",
+  "shove"
+ ]
+}

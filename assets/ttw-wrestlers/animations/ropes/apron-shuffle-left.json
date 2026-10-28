@@ -1,0 +1,211 @@
+{
+  "id": "ropes.apron-shuffle-left",
+  "name": "Apron shuffle left",
+  "category": "ropes",
+  "description": "Side-step along the apron holding the top rope. In place: gameplay moves the wrestler along the apron at rootMotion.speed.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "apron-hold",
+  "endState": "apron-hold",
+  "startLocation": "apron",
+  "endLocation": "apron",
+  "placement": {
+    "start": "apron-facing-ring",
+    "end": "apron-facing-ring",
+    "frame": "rope",
+    "frameStart": [0, 0, -0.32, 180],
+    "note": "on the apron outside the ropes, facing the ring"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 1.0]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.33,
+      "name": "footstep"
+    },
+    {
+      "time": 0.83,
+      "name": "footstep"
+    },
+    {
+      "time": 1.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["apron", "loop", "locomotion", "starts-apron-hold", "ends-apron-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, 0.0, 0.0, 0],
+        [0.25, 0.0, 0.0, 3],
+        [0.5, 0.0, 0.0, 0],
+        [0.75, 0.0, 0.0, -3],
+        [1.0, 0.0, 0.0, 0]
+      ],
+      "position": [
+        [0, 0.0, -0.04, 0.0],
+        [0.25, 0.0, -0.06, 0.0],
+        [0.5, 0.0, -0.04, 0.0],
+        [0.75, 0.0, -0.06, 0.0],
+        [1.0, 0.0, -0.04, 0.0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, -30.6, -44.64, -34.4],
+        [0.25, -32.91, -47.71, -39.57],
+        [0.5, -30.6, -44.64, -34.4],
+        [0.75, -30.46, -41.68, -35.21],
+        [1.0, -30.6, -44.64, -34.4]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 121.15, 0, 0],
+        [0.25, 127.29, 0, 0],
+        [0.5, 121.15, 0, 0],
+        [0.75, 120.57, 0, 0],
+        [1.0, 121.15, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, -30.6, 44.64, 34.4],
+        [0.25, -30.46, 41.68, 35.21],
+        [0.5, -30.6, 44.64, 34.4],
+        [0.75, -32.91, 47.71, 39.57],
+        [1.0, -30.6, 44.64, 34.4]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 121.15, 0, 0],
+        [0.25, 120.57, 0, 0],
+        [0.5, 121.15, 0, 0],
+        [0.75, 127.29, 0, 0],
+        [1.0, 121.15, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 18.81, 6.11, -2.07],
+        [0.25, 23.14, 2.37, -11.49],
+        [0.5, 18.81, 6.11, -2.07],
+        [0.75, 24.98, 8.89, 2.59],
+        [1.0, 18.81, 6.11, -2.07]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -37.25, 0, 0],
+        [0.25, -44.53, 0, 0],
+        [0.5, -37.25, 0, 0],
+        [0.75, -50.95, 0, 0],
+        [1.0, -37.25, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 18.56, -6.45, -0.0],
+        [0.25, 22.19, -6.63, 6.69],
+        [0.5, 18.56, -6.45, -0.0],
+        [0.75, 25.39, -6.94, -3.14],
+        [1.0, 18.56, -6.45, -0.0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 18.81, -6.11, 2.07],
+        [0.25, 25.49, -5.76, 4.09],
+        [0.5, 18.81, -6.11, 2.07],
+        [0.75, 23.09, -7.02, 0.96],
+        [1.0, 18.81, -6.11, 2.07]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -37.25, 0, 0],
+        [0.25, -50.24, 0, 0],
+        [0.5, -37.25, 0, 0],
+        [0.75, -46.12, 0, 0],
+        [1.0, -37.25, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 18.56, 6.45, 0.0],
+        [0.25, 25.04, 6.96, -4.23],
+        [0.5, 18.56, 6.45, 0.0],
+        [0.75, 22.98, 6.83, 4.88],
+        [1.0, 18.56, 6.45, 0.0]
+      ]
+    }
+  },
+  "gameplay": {
+    "inPlace": {
+      "speed": 0.8,
+      "direction": [-1, 0, 0]
+    }
+  },
+  "ropeInteraction": {
+    "frame": "rope",
+    "ropes": [
+      {
+        "rope": "top",
+        "axis": "x",
+        "maxDisplacement": 0.033,
+        "keys": [
+          [0.0, -0.308, 0.0, -0.029, 0.008],
+          [0.033, 0.308, 0.0, -0.029, 0.008],
+          [0.067, 0.309, 0.0, -0.029, 0.009],
+          [0.1, 0.31, 0.0, -0.03, 0.01],
+          [0.133, 0.312, 0.0, -0.03, 0.011],
+          [0.167, 0.313, 0.0, -0.03, 0.012],
+          [0.2, 0.314, 0.0, -0.03, 0.013],
+          [0.233, 0.314, 0.0, -0.03, 0.014],
+          [0.267, 0.314, 0.0, -0.03, 0.014],
+          [0.3, 0.314, 0.0, -0.03, 0.013],
+          [0.333, 0.313, 0.0, -0.03, 0.012],
+          [0.367, 0.312, 0.0, -0.03, 0.011],
+          [0.4, 0.311, 0.0, -0.029, 0.01],
+          [0.433, 0.309, 0.0, -0.029, 0.009],
+          [0.467, 0.309, 0.0, -0.029, 0.008],
+          [0.5, 0.308, 0.0, -0.029, 0.008],
+          [0.533, -0.309, 0.0, -0.029, 0.008],
+          [0.567, -0.309, 0.0, -0.029, 0.009],
+          [0.6, -0.311, 0.0, -0.029, 0.01],
+          [0.633, -0.312, 0.0, -0.03, 0.011],
+          [0.667, -0.313, 0.0, -0.03, 0.012],
+          [0.7, -0.314, 0.0, -0.03, 0.013],
+          [0.733, -0.314, 0.0, -0.03, 0.014],
+          [0.767, -0.314, 0.0, -0.03, 0.014],
+          [0.8, -0.314, 0.0, -0.03, 0.013],
+          [0.833, -0.313, 0.0, -0.03, 0.012],
+          [0.867, -0.312, 0.0, -0.03, 0.011],
+          [0.9, -0.31, 0.0, -0.03, 0.01],
+          [0.933, -0.309, 0.0, -0.029, 0.009],
+          [0.967, -0.308, 0.0, -0.029, 0.008],
+          [1.0, -0.308, 0.0, -0.029, 0.008]
+        ]
+      }
+    ],
+    "note": "How far each rope gives way: keys [t, s, dx, dy, dz] in placement-frame metres; s is the contact point along the rope from the frame origin, (dx, dy, dz) the rope displacement there. Bend the rope with a smooth falloff around s (ttw-anim-runtime.js ropeDisplacement). Optional: games with static ropes can ignore it."
+  }
+}

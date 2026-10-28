@@ -1,0 +1,3086 @@
+[
+  {
+    "id": "grappling.lockup",
+    "name": "Collar-and-elbow lock-up",
+    "category": "grappling",
+    "file": "animations/grappling/lockup.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "grab",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "lockup",
+      "shared-role",
+      "starts-standing",
+      "ends-lockup"
+    ],
+    "startState": "standing",
+    "endState": "lockup",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.lockup-idle",
+    "name": "Lock-up struggle (loop)",
+    "category": "grappling",
+    "file": "animations/grappling/lockup-idle.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "curve",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "lockup",
+      "loop",
+      "shared-role",
+      "starts-lockup",
+      "ends-lockup"
+    ],
+    "startState": "lockup",
+    "endState": "lockup",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.lockup-break",
+    "name": "Break the lock-up",
+    "category": "grappling",
+    "file": "animations/grappling/lockup-break.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "lockup",
+      "shared-role",
+      "starts-lockup",
+      "ends-standing"
+    ],
+    "startState": "lockup",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.shove-off-defender",
+    "name": "Shoved out of the lock-up",
+    "category": "grappling",
+    "file": "animations/grappling/shove-off-defender.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "lockup",
+      "defender",
+      "starts-lockup",
+      "ends-standing"
+    ],
+    "startState": "lockup",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.shove-off-attacker",
+    "name": "Shove out of the lock-up",
+    "category": "grappling",
+    "file": "animations/grappling/shove-off-attacker.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "release",
+      "hit",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "lockup",
+      "attacker",
+      "starts-lockup",
+      "ends-standing"
+    ],
+    "startState": "lockup",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.side-headlock-defender",
+    "name": "Caught in a side headlock",
+    "category": "grappling",
+    "file": "animations/grappling/side-headlock-defender.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "headlock",
+      "defender",
+      "starts-lockup",
+      "ends-headlocked"
+    ],
+    "startState": "lockup",
+    "endState": "headlocked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.side-headlock-attacker",
+    "name": "Apply a side headlock",
+    "category": "grappling",
+    "file": "animations/grappling/side-headlock-attacker.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "headlock",
+      "attacker",
+      "starts-lockup",
+      "ends-headlock-hold"
+    ],
+    "startState": "lockup",
+    "endState": "headlock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.headlock-takeover-defender",
+    "name": "Taken over by the headlock",
+    "category": "grappling",
+    "file": "animations/grappling/headlock-takeover-defender.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "headlock",
+      "defender",
+      "takedown",
+      "starts-headlocked",
+      "ends-lying-back"
+    ],
+    "startState": "headlocked",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.headlock-takeover-attacker",
+    "name": "Headlock takeover",
+    "category": "grappling",
+    "file": "animations/grappling/headlock-takeover-attacker.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "headlock",
+      "attacker",
+      "takedown",
+      "starts-headlock-hold",
+      "ends-ground-headlock"
+    ],
+    "startState": "headlock-hold",
+    "endState": "ground-headlock",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.wristlock-defender",
+    "name": "Caught in a wristlock",
+    "category": "grappling",
+    "file": "animations/grappling/wristlock-defender.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "wristlock",
+      "defender",
+      "arm-work",
+      "starts-lockup",
+      "ends-wristlocked"
+    ],
+    "startState": "lockup",
+    "endState": "wristlocked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.wristlock-attacker",
+    "name": "Apply a wristlock",
+    "category": "grappling",
+    "file": "animations/grappling/wristlock-attacker.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "wristlock",
+      "attacker",
+      "arm-work",
+      "starts-lockup",
+      "ends-wristlock-hold"
+    ],
+    "startState": "lockup",
+    "endState": "wristlock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.hammerlock-defender",
+    "name": "Caught in a hammerlock",
+    "category": "grappling",
+    "file": "animations/grappling/hammerlock-defender.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "hammerlock",
+      "defender",
+      "arm-work",
+      "starts-lockup",
+      "ends-hammerlocked"
+    ],
+    "startState": "lockup",
+    "endState": "hammerlocked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.hammerlock-attacker",
+    "name": "Apply a hammerlock",
+    "category": "grappling",
+    "file": "animations/grappling/hammerlock-attacker.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "hammerlock",
+      "attacker",
+      "arm-work",
+      "starts-lockup",
+      "ends-hammerlock-hold"
+    ],
+    "startState": "lockup",
+    "endState": "hammerlock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.front-facelock-defender",
+    "name": "Caught in a front facelock",
+    "category": "grappling",
+    "file": "animations/grappling/front-facelock-defender.json",
+    "duration": 0.85,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "facelock",
+      "defender",
+      "setup",
+      "starts-lockup",
+      "ends-facelocked"
+    ],
+    "startState": "lockup",
+    "endState": "facelocked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.front-facelock-attacker",
+    "name": "Apply a front facelock",
+    "category": "grappling",
+    "file": "animations/grappling/front-facelock-attacker.json",
+    "duration": 0.85,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "facelock",
+      "attacker",
+      "setup",
+      "starts-lockup",
+      "ends-facelock-hold"
+    ],
+    "startState": "lockup",
+    "endState": "facelock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.waistlock-defender",
+    "name": "Caught in a body lock",
+    "category": "grappling",
+    "file": "animations/grappling/waistlock-defender.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "waistlock",
+      "defender",
+      "setup",
+      "starts-standing",
+      "ends-body-locked"
+    ],
+    "startState": "standing",
+    "endState": "body-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.waistlock-attacker",
+    "name": "Shoot in for a body lock",
+    "category": "grappling",
+    "file": "animations/grappling/waistlock-attacker.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "footstep",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "waistlock",
+      "attacker",
+      "setup",
+      "starts-standing",
+      "ends-body-lock-hold"
+    ],
+    "startState": "standing",
+    "endState": "body-lock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.rear-waistlock-defender",
+    "name": "Grabbed from behind",
+    "category": "grappling",
+    "file": "animations/grappling/rear-waistlock-defender.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "waistlock",
+      "defender",
+      "setup",
+      "starts-standing",
+      "ends-rear-locked"
+    ],
+    "startState": "standing",
+    "endState": "rear-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "grappling.rear-waistlock-attacker",
+    "name": "Rear waistlock",
+    "category": "grappling",
+    "file": "animations/grappling/rear-waistlock-attacker.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "footstep",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "grapple",
+      "waistlock",
+      "attacker",
+      "setup",
+      "starts-standing",
+      "ends-rear-lock-hold"
+    ],
+    "startState": "standing",
+    "endState": "rear-lock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.body-slam-defender",
+    "name": "Body slammed",
+    "category": "throws",
+    "file": "animations/throws/body-slam-defender.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "defender",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.body-slam-attacker",
+    "name": "Body slam",
+    "category": "throws",
+    "file": "animations/throws/body-slam-attacker.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "grip_locked",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "impact",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "attacker",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.vertical-suplex-defender",
+    "name": "Vertical suplex (taken)",
+    "category": "throws",
+    "file": "animations/throws/vertical-suplex-defender.json",
+    "duration": 2.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "defender",
+      "starts-facelocked",
+      "ends-lying-back"
+    ],
+    "startState": "facelocked",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.vertical-suplex-attacker",
+    "name": "Vertical suplex",
+    "category": "throws",
+    "file": "animations/throws/vertical-suplex-attacker.json",
+    "duration": 2.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grip_locked",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "attacker",
+      "starts-facelock-hold",
+      "ends-lying-back"
+    ],
+    "startState": "facelock-hold",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.snap-suplex-defender",
+    "name": "Snap suplex (taken)",
+    "category": "throws",
+    "file": "animations/throws/snap-suplex-defender.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "defender",
+      "starts-facelocked",
+      "ends-lying-back"
+    ],
+    "startState": "facelocked",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.snap-suplex-attacker",
+    "name": "Snap suplex",
+    "category": "throws",
+    "file": "animations/throws/snap-suplex-attacker.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grip_locked",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "attacker",
+      "starts-facelock-hold",
+      "ends-lying-back"
+    ],
+    "startState": "facelock-hold",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.ddt-defender",
+    "name": "Spiked with a DDT",
+    "category": "throws",
+    "file": "animations/throws/ddt-defender.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "impact",
+      "land",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "ddt",
+      "defender",
+      "starts-facelocked",
+      "ends-lying-front"
+    ],
+    "startState": "facelocked",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.ddt-attacker",
+    "name": "DDT",
+    "category": "throws",
+    "file": "animations/throws/ddt-attacker.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "jump",
+      "impact",
+      "land",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "ddt",
+      "attacker",
+      "finisher",
+      "starts-facelock-hold",
+      "ends-lying-back"
+    ],
+    "startState": "facelock-hold",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.neckbreaker-defender",
+    "name": "Neckbreakered",
+    "category": "throws",
+    "file": "animations/throws/neckbreaker-defender.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "neckbreaker",
+      "defender",
+      "starts-facelocked",
+      "ends-lying-back"
+    ],
+    "startState": "facelocked",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.neckbreaker-attacker",
+    "name": "Neckbreaker",
+    "category": "throws",
+    "file": "animations/throws/neckbreaker-attacker.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "impact",
+      "land",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "neckbreaker",
+      "attacker",
+      "starts-facelock-hold",
+      "ends-sitting"
+    ],
+    "startState": "facelock-hold",
+    "endState": "sitting",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.belly-to-belly-defender",
+    "name": "Belly-to-belly suplexed",
+    "category": "throws",
+    "file": "animations/throws/belly-to-belly-defender.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "lift_start",
+      "apex",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "defender",
+      "starts-body-locked",
+      "ends-lying-back"
+    ],
+    "startState": "body-locked",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.belly-to-belly-attacker",
+    "name": "Belly-to-belly suplex",
+    "category": "throws",
+    "file": "animations/throws/belly-to-belly-attacker.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "lift_start",
+      "release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "attacker",
+      "starts-body-lock-hold",
+      "ends-lying-back"
+    ],
+    "startState": "body-lock-hold",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.spinebuster-defender",
+    "name": "Spinebustered",
+    "category": "throws",
+    "file": "animations/throws/spinebuster-defender.json",
+    "duration": 1.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "lift_start",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "defender",
+      "starts-body-locked",
+      "ends-lying-back"
+    ],
+    "startState": "body-locked",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.spinebuster-attacker",
+    "name": "Spinebuster",
+    "category": "throws",
+    "file": "animations/throws/spinebuster-attacker.json",
+    "duration": 1.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "lift_start",
+      "lift_complete",
+      "impact",
+      "land",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "attacker",
+      "power",
+      "starts-body-lock-hold",
+      "ends-crouching"
+    ],
+    "startState": "body-lock-hold",
+    "endState": "crouching",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.german-suplex-defender",
+    "name": "German suplexed",
+    "category": "throws",
+    "file": "animations/throws/german-suplex-defender.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "lift_start",
+      "apex",
+      "impact",
+      "land",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "defender",
+      "starts-rear-locked",
+      "ends-lying-front"
+    ],
+    "startState": "rear-locked",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.german-suplex-attacker",
+    "name": "German suplex",
+    "category": "throws",
+    "file": "animations/throws/german-suplex-attacker.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "lift_start",
+      "impact",
+      "release",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "suplex",
+      "attacker",
+      "finisher",
+      "starts-rear-lock-hold",
+      "ends-lying-back"
+    ],
+    "startState": "rear-lock-hold",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.hip-toss-defender",
+    "name": "Hip toss (taken)",
+    "category": "throws",
+    "file": "animations/throws/hip-toss-defender.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "lift_start",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "defender",
+      "hip-toss",
+      "starts-lockup",
+      "ends-lying-back"
+    ],
+    "startState": "lockup",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.hip-toss-attacker",
+    "name": "Hip toss",
+    "category": "throws",
+    "file": "animations/throws/hip-toss-attacker.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "lift_start",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "attacker",
+      "hip-toss",
+      "starts-lockup",
+      "ends-standing"
+    ],
+    "startState": "lockup",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.arm-drag-defender",
+    "name": "Arm-dragged",
+    "category": "throws",
+    "file": "animations/throws/arm-drag-defender.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "arm-drag",
+      "defender",
+      "starts-lockup",
+      "ends-lying-back"
+    ],
+    "startState": "lockup",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.arm-drag-attacker",
+    "name": "Arm drag",
+    "category": "throws",
+    "file": "animations/throws/arm-drag-attacker.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "release",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "arm-drag",
+      "attacker",
+      "starts-lockup",
+      "ends-standing"
+    ],
+    "startState": "lockup",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.powerbomb-defender",
+    "name": "Powerbombed",
+    "category": "throws",
+    "file": "animations/throws/powerbomb-defender.json",
+    "duration": 2.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "powerbomb",
+      "defender",
+      "starts-bent-over",
+      "ends-lying-back"
+    ],
+    "startState": "bent-over",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.powerbomb-attacker",
+    "name": "Powerbomb",
+    "category": "throws",
+    "file": "animations/throws/powerbomb-attacker.json",
+    "duration": 2.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "grip_locked",
+      "lift_start",
+      "lift_complete",
+      "impact",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "powerbomb",
+      "attacker",
+      "finisher",
+      "power",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.chokeslam-defender",
+    "name": "Chokeslammed",
+    "category": "throws",
+    "file": "animations/throws/chokeslam-defender.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "defender",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.chokeslam-attacker",
+    "name": "Chokeslam",
+    "category": "throws",
+    "file": "animations/throws/chokeslam-attacker.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "impact",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "attacker",
+      "finisher",
+      "power",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.powerslam-defender",
+    "name": "Powerslammed",
+    "category": "throws",
+    "file": "animations/throws/powerslam-defender.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "defender",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.powerslam-attacker",
+    "name": "Scoop powerslam",
+    "category": "throws",
+    "file": "animations/throws/powerslam-attacker.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "slam",
+      "attacker",
+      "power",
+      "starts-standing",
+      "ends-covering"
+    ],
+    "startState": "standing",
+    "endState": "covering",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.backbreaker-defender",
+    "name": "Backbreakered",
+    "category": "throws",
+    "file": "animations/throws/backbreaker-defender.json",
+    "duration": 2.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "impact",
+      "stun_start",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "backbreaker",
+      "defender",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.backbreaker-attacker",
+    "name": "Backbreaker",
+    "category": "throws",
+    "file": "animations/throws/backbreaker-attacker.json",
+    "duration": 2.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "lift_start",
+      "impact",
+      "land",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "backbreaker",
+      "attacker",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.fireman-carry-defender",
+    "name": "Fireman's carry slam (taken)",
+    "category": "throws",
+    "file": "animations/throws/fireman-carry-defender.json",
+    "duration": 2.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "carry",
+      "defender",
+      "starts-bent-over",
+      "ends-lying-back"
+    ],
+    "startState": "bent-over",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.fireman-carry-attacker",
+    "name": "Fireman's carry slam",
+    "category": "throws",
+    "file": "animations/throws/fireman-carry-attacker.json",
+    "duration": 2.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "impact",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "carry",
+      "attacker",
+      "power",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.bulldog-defender",
+    "name": "Bulldogged",
+    "category": "throws",
+    "file": "animations/throws/bulldog-defender.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "impact",
+      "land",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "bulldog",
+      "defender",
+      "starts-headlocked",
+      "ends-lying-front"
+    ],
+    "startState": "headlocked",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "throws.bulldog-attacker",
+    "name": "Bulldog",
+    "category": "throws",
+    "file": "animations/throws/bulldog-attacker.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "jump",
+      "impact",
+      "land",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "throw",
+      "bulldog",
+      "attacker",
+      "starts-headlock-hold",
+      "ends-sitting"
+    ],
+    "startState": "headlock-hold",
+    "endState": "sitting",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.figure-four-defender",
+    "name": "Caught in a figure-four",
+    "category": "submissions",
+    "file": "animations/submissions/figure-four-defender.json",
+    "duration": 2.4,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "figure-four",
+      "leg-work",
+      "starts-lying-back",
+      "ends-figure-four-locked"
+    ],
+    "startState": "lying-back",
+    "endState": "figure-four-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.figure-four-attacker",
+    "name": "Apply a figure-four leglock",
+    "category": "submissions",
+    "file": "animations/submissions/figure-four-attacker.json",
+    "duration": 2.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "footstep",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "figure-four",
+      "leg-work",
+      "starts-standing",
+      "ends-figure-four-hold"
+    ],
+    "startState": "standing",
+    "endState": "figure-four-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.figure-four-hold-defender",
+    "name": "Figure-four: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/figure-four-hold-defender.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "figure-four",
+      "leg-work",
+      "starts-figure-four-locked",
+      "ends-figure-four-locked"
+    ],
+    "startState": "figure-four-locked",
+    "endState": "figure-four-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.figure-four-hold-attacker",
+    "name": "Figure-four: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/figure-four-hold-attacker.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "figure-four",
+      "leg-work",
+      "starts-figure-four-hold",
+      "ends-figure-four-hold"
+    ],
+    "startState": "figure-four-hold",
+    "endState": "figure-four-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sharpshooter-defender",
+    "name": "Caught in the sharpshooter",
+    "category": "submissions",
+    "file": "animations/submissions/sharpshooter-defender.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "land",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "sharpshooter",
+      "back-work",
+      "starts-lying-back",
+      "ends-sharpshooter-locked"
+    ],
+    "startState": "lying-back",
+    "endState": "sharpshooter-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sharpshooter-attacker",
+    "name": "Apply the sharpshooter",
+    "category": "submissions",
+    "file": "animations/submissions/sharpshooter-attacker.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "footstep",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "sharpshooter",
+      "back-work",
+      "starts-standing",
+      "ends-sharpshooter-hold"
+    ],
+    "startState": "standing",
+    "endState": "sharpshooter-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sharpshooter-hold-defender",
+    "name": "Sharpshooter: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/sharpshooter-hold-defender.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "sharpshooter",
+      "back-work",
+      "starts-sharpshooter-locked",
+      "ends-sharpshooter-locked"
+    ],
+    "startState": "sharpshooter-locked",
+    "endState": "sharpshooter-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sharpshooter-hold-attacker",
+    "name": "Sharpshooter: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/sharpshooter-hold-attacker.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "sharpshooter",
+      "back-work",
+      "starts-sharpshooter-hold",
+      "ends-sharpshooter-hold"
+    ],
+    "startState": "sharpshooter-hold",
+    "endState": "sharpshooter-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.boston-crab-defender",
+    "name": "Caught in the boston crab",
+    "category": "submissions",
+    "file": "animations/submissions/boston-crab-defender.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "land",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "boston-crab",
+      "back-work",
+      "starts-lying-back",
+      "ends-boston-crab-locked"
+    ],
+    "startState": "lying-back",
+    "endState": "boston-crab-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.boston-crab-attacker",
+    "name": "Apply the boston crab",
+    "category": "submissions",
+    "file": "animations/submissions/boston-crab-attacker.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "footstep",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "boston-crab",
+      "back-work",
+      "starts-standing",
+      "ends-boston-crab-hold"
+    ],
+    "startState": "standing",
+    "endState": "boston-crab-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.boston-crab-hold-defender",
+    "name": "Boston crab: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/boston-crab-hold-defender.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "boston-crab",
+      "back-work",
+      "starts-boston-crab-locked",
+      "ends-boston-crab-locked"
+    ],
+    "startState": "boston-crab-locked",
+    "endState": "boston-crab-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.boston-crab-hold-attacker",
+    "name": "Boston crab: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/boston-crab-hold-attacker.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "boston-crab",
+      "back-work",
+      "starts-boston-crab-hold",
+      "ends-boston-crab-hold"
+    ],
+    "startState": "boston-crab-hold",
+    "endState": "boston-crab-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.armbar-defender",
+    "name": "Caught in an armbar",
+    "category": "submissions",
+    "file": "animations/submissions/armbar-defender.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "armbar",
+      "arm-work",
+      "starts-lying-back",
+      "ends-armbar-locked"
+    ],
+    "startState": "lying-back",
+    "endState": "armbar-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.armbar-attacker",
+    "name": "Apply a cross armbar",
+    "category": "submissions",
+    "file": "animations/submissions/armbar-attacker.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "attack_start",
+      "grab",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "armbar",
+      "arm-work",
+      "starts-standing",
+      "ends-armbar-hold"
+    ],
+    "startState": "standing",
+    "endState": "armbar-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.armbar-hold-defender",
+    "name": "Cross armbar: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/armbar-hold-defender.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "armbar",
+      "arm-work",
+      "starts-armbar-locked",
+      "ends-armbar-locked"
+    ],
+    "startState": "armbar-locked",
+    "endState": "armbar-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.armbar-hold-attacker",
+    "name": "Cross armbar: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/armbar-hold-attacker.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "armbar",
+      "arm-work",
+      "starts-armbar-hold",
+      "ends-armbar-hold"
+    ],
+    "startState": "armbar-hold",
+    "endState": "armbar-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.camel-clutch-defender",
+    "name": "Caught in a camel clutch",
+    "category": "submissions",
+    "file": "animations/submissions/camel-clutch-defender.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "camel-clutch",
+      "back-work",
+      "starts-lying-front",
+      "ends-camel-clutch-locked"
+    ],
+    "startState": "lying-front",
+    "endState": "camel-clutch-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.camel-clutch-attacker",
+    "name": "Apply a camel clutch",
+    "category": "submissions",
+    "file": "animations/submissions/camel-clutch-attacker.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "attack_start",
+      "land",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "camel-clutch",
+      "back-work",
+      "starts-standing",
+      "ends-camel-clutch-hold"
+    ],
+    "startState": "standing",
+    "endState": "camel-clutch-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.camel-clutch-hold-defender",
+    "name": "Camel clutch: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/camel-clutch-hold-defender.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "camel-clutch",
+      "back-work",
+      "starts-camel-clutch-locked",
+      "ends-camel-clutch-locked"
+    ],
+    "startState": "camel-clutch-locked",
+    "endState": "camel-clutch-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.camel-clutch-hold-attacker",
+    "name": "Camel clutch: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/camel-clutch-hold-attacker.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "camel-clutch",
+      "back-work",
+      "starts-camel-clutch-hold",
+      "ends-camel-clutch-hold"
+    ],
+    "startState": "camel-clutch-hold",
+    "endState": "camel-clutch-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.crossface-defender",
+    "name": "Caught in a crossface",
+    "category": "submissions",
+    "file": "animations/submissions/crossface-defender.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "crossface",
+      "neck-work",
+      "starts-lying-front",
+      "ends-crossface-locked"
+    ],
+    "startState": "lying-front",
+    "endState": "crossface-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.crossface-attacker",
+    "name": "Apply a crossface",
+    "category": "submissions",
+    "file": "animations/submissions/crossface-attacker.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "attack_start",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "crossface",
+      "neck-work",
+      "starts-standing",
+      "ends-crossface-hold"
+    ],
+    "startState": "standing",
+    "endState": "crossface-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.crossface-hold-defender",
+    "name": "Crossface: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/crossface-hold-defender.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "crossface",
+      "neck-work",
+      "starts-crossface-locked",
+      "ends-crossface-locked"
+    ],
+    "startState": "crossface-locked",
+    "endState": "crossface-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.crossface-hold-attacker",
+    "name": "Crossface: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/crossface-hold-attacker.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "crossface",
+      "neck-work",
+      "starts-crossface-hold",
+      "ends-crossface-hold"
+    ],
+    "startState": "crossface-hold",
+    "endState": "crossface-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.ankle-lock-defender",
+    "name": "Caught in an ankle lock",
+    "category": "submissions",
+    "file": "animations/submissions/ankle-lock-defender.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "ankle-lock",
+      "leg-work",
+      "starts-lying-front",
+      "ends-ankle-lock-locked"
+    ],
+    "startState": "lying-front",
+    "endState": "ankle-lock-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.ankle-lock-attacker",
+    "name": "Apply an ankle lock",
+    "category": "submissions",
+    "file": "animations/submissions/ankle-lock-attacker.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "ankle-lock",
+      "leg-work",
+      "starts-standing",
+      "ends-ankle-lock-hold"
+    ],
+    "startState": "standing",
+    "endState": "ankle-lock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.ankle-lock-hold-defender",
+    "name": "Ankle lock: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/ankle-lock-hold-defender.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "ankle-lock",
+      "leg-work",
+      "starts-ankle-lock-locked",
+      "ends-ankle-lock-locked"
+    ],
+    "startState": "ankle-lock-locked",
+    "endState": "ankle-lock-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.ankle-lock-hold-attacker",
+    "name": "Ankle lock: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/ankle-lock-hold-attacker.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "ankle-lock",
+      "leg-work",
+      "starts-ankle-lock-hold",
+      "ends-ankle-lock-hold"
+    ],
+    "startState": "ankle-lock-hold",
+    "endState": "ankle-lock-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sleeper-hold-defender",
+    "name": "Caught in a sleeper hold",
+    "category": "submissions",
+    "file": "animations/submissions/sleeper-hold-defender.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "sleeper",
+      "neck-work",
+      "starts-rear-locked",
+      "ends-sleeper-locked"
+    ],
+    "startState": "rear-locked",
+    "endState": "sleeper-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sleeper-hold-attacker",
+    "name": "Apply a sleeper hold",
+    "category": "submissions",
+    "file": "animations/submissions/sleeper-hold-attacker.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "grip_locked",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "sleeper",
+      "neck-work",
+      "starts-rear-lock-hold",
+      "ends-sleeper-hold"
+    ],
+    "startState": "rear-lock-hold",
+    "endState": "sleeper-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sleeper-hold-hold-defender",
+    "name": "Sleeper hold: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/sleeper-hold-hold-defender.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "sleeper-hold",
+      "neck-work",
+      "starts-sleeper-locked",
+      "ends-sleeper-locked"
+    ],
+    "startState": "sleeper-locked",
+    "endState": "sleeper-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.sleeper-hold-hold-attacker",
+    "name": "Sleeper hold: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/sleeper-hold-hold-attacker.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "sleeper-hold",
+      "neck-work",
+      "starts-sleeper-hold",
+      "ends-sleeper-hold"
+    ],
+    "startState": "sleeper-hold",
+    "endState": "sleeper-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.abdominal-stretch-defender",
+    "name": "Caught in an abdominal stretch",
+    "category": "submissions",
+    "file": "animations/submissions/abdominal-stretch-defender.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "hit_received",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "abdominal-stretch",
+      "starts-rear-locked",
+      "ends-abdominal-stretch-locked"
+    ],
+    "startState": "rear-locked",
+    "endState": "abdominal-stretch-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.abdominal-stretch-attacker",
+    "name": "Apply an abdominal stretch",
+    "category": "submissions",
+    "file": "animations/submissions/abdominal-stretch-attacker.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "abdominal-stretch",
+      "starts-rear-lock-hold",
+      "ends-abdominal-stretch-hold"
+    ],
+    "startState": "rear-lock-hold",
+    "endState": "abdominal-stretch-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.abdominal-stretch-hold-defender",
+    "name": "Abdominal stretch: in the hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/abdominal-stretch-hold-defender.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "defender",
+      "loop",
+      "abdominal-stretch",
+      "stretch",
+      "starts-abdominal-stretch-locked",
+      "ends-abdominal-stretch-locked"
+    ],
+    "startState": "abdominal-stretch-locked",
+    "endState": "abdominal-stretch-locked",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "submissions.abdominal-stretch-hold-attacker",
+    "name": "Abdominal stretch: hold (loop)",
+    "category": "submissions",
+    "file": "animations/submissions/abdominal-stretch-hold-attacker.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "submission",
+      "attacker",
+      "loop",
+      "abdominal-stretch",
+      "stretch",
+      "starts-abdominal-stretch-hold",
+      "ends-abdominal-stretch-hold"
+    ],
+    "startState": "abdominal-stretch-hold",
+    "endState": "abdominal-stretch-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.cover-defender",
+    "name": "Cover (pinned)",
+    "category": "ground",
+    "file": "animations/ground/cover-defender.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "defender",
+      "cover",
+      "starts-lying-back",
+      "ends-pinned"
+    ],
+    "startState": "lying-back",
+    "endState": "pinned",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.cover-attacker",
+    "name": "Cover",
+    "category": "ground",
+    "file": "animations/ground/cover-attacker.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "attacker",
+      "cover",
+      "starts-standing",
+      "ends-covering"
+    ],
+    "startState": "standing",
+    "endState": "covering",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.hook-leg-cover-defender",
+    "name": "Hooked-leg cover (pinned)",
+    "category": "ground",
+    "file": "animations/ground/hook-leg-cover-defender.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "defender",
+      "hook-leg-cover",
+      "starts-lying-back",
+      "ends-pinned"
+    ],
+    "startState": "lying-back",
+    "endState": "pinned",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.hook-leg-cover-attacker",
+    "name": "Hooked-leg cover",
+    "category": "ground",
+    "file": "animations/ground/hook-leg-cover-attacker.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "grab",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "attacker",
+      "hook-leg-cover",
+      "starts-standing",
+      "ends-covering"
+    ],
+    "startState": "standing",
+    "endState": "covering",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.kick-out-defender",
+    "name": "Kick out of the pin",
+    "category": "ground",
+    "file": "animations/ground/kick-out-defender.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "defender",
+      "kick-out",
+      "starts-pinned",
+      "ends-lying-back"
+    ],
+    "startState": "pinned",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.kick-out-attacker",
+    "name": "Thrown off the pin",
+    "category": "ground",
+    "file": "animations/ground/kick-out-attacker.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "release",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "attacker",
+      "kick-out",
+      "starts-covering",
+      "ends-kneeling"
+    ],
+    "startState": "covering",
+    "endState": "kneeling",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.roll-up-defender",
+    "name": "Roll-up (pinned)",
+    "category": "ground",
+    "file": "animations/ground/roll-up-defender.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "defender",
+      "roll-up",
+      "starts-standing",
+      "ends-rolled-up"
+    ],
+    "startState": "standing",
+    "endState": "rolled-up",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.roll-up-attacker",
+    "name": "Roll-up",
+    "category": "ground",
+    "file": "animations/ground/roll-up-attacker.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "attacker",
+      "roll-up",
+      "starts-standing",
+      "ends-rolling-up"
+    ],
+    "startState": "standing",
+    "endState": "rolling-up",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.small-package-defender",
+    "name": "Small package (pinned)",
+    "category": "ground",
+    "file": "animations/ground/small-package-defender.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "defender",
+      "small-package",
+      "starts-standing",
+      "ends-rolled-up"
+    ],
+    "startState": "standing",
+    "endState": "rolled-up",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.small-package-attacker",
+    "name": "Small package",
+    "category": "ground",
+    "file": "animations/ground/small-package-attacker.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "grab",
+      "land",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "pin",
+      "attacker",
+      "small-package",
+      "starts-standing",
+      "ends-rolling-up"
+    ],
+    "startState": "standing",
+    "endState": "rolling-up",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.elbow-drop",
+    "name": "Elbow drop",
+    "category": "ground",
+    "file": "animations/ground/elbow-drop.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "impact",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground-attack",
+      "attacker",
+      "strike",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.leg-drop",
+    "name": "Leg drop",
+    "category": "ground",
+    "file": "animations/ground/leg-drop.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "impact",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground-attack",
+      "attacker",
+      "strike",
+      "starts-standing",
+      "ends-sitting"
+    ],
+    "startState": "standing",
+    "endState": "sitting",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.knee-drop",
+    "name": "Knee drop",
+    "category": "ground",
+    "file": "animations/ground/knee-drop.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "impact",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground-attack",
+      "attacker",
+      "strike",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.lying-hit-back",
+    "name": "Hit while lying on the back",
+    "category": "reactions",
+    "file": "animations/reactions/lying-hit-back.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit_received",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "ground",
+      "starts-lying-back",
+      "ends-lying-back"
+    ],
+    "startState": "lying-back",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.lying-hit-front",
+    "name": "Hit while lying on the front",
+    "category": "reactions",
+    "file": "animations/reactions/lying-hit-front.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "hit_received",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "ground",
+      "starts-lying-front",
+      "ends-lying-front"
+    ],
+    "startState": "lying-front",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.pick-up-opponent-defender",
+    "name": "Hauled to the feet",
+    "category": "ground",
+    "file": "animations/ground/pick-up-opponent-defender.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground",
+      "defender",
+      "pick-up",
+      "starts-lying-back",
+      "ends-bent-over"
+    ],
+    "startState": "lying-back",
+    "endState": "bent-over",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.pick-up-opponent-attacker",
+    "name": "Pick up a downed opponent",
+    "category": "ground",
+    "file": "animations/ground/pick-up-opponent-attacker.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "grab",
+      "lift_start",
+      "lift_complete",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground",
+      "attacker",
+      "pick-up",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.drag-opponent-defender",
+    "name": "Dragged by the feet",
+    "category": "ground",
+    "file": "animations/ground/drag-opponent-defender.json",
+    "duration": 2.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground",
+      "defender",
+      "drag",
+      "starts-lying-back",
+      "ends-lying-back"
+    ],
+    "startState": "lying-back",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ground.drag-opponent-attacker",
+    "name": "Drag a downed opponent",
+    "category": "ground",
+    "file": "animations/ground/drag-opponent-attacker.json",
+    "duration": 2.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "footstep",
+      "footstep",
+      "footstep",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ground",
+      "attacker",
+      "drag",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  }
+]

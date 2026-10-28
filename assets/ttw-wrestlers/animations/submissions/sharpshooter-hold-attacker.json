@@ -1,0 +1,165 @@
+{
+  "id": "submissions.sharpshooter-hold-attacker",
+  "name": "Sharpshooter: hold (loop)",
+  "category": "submissions",
+  "description": "Attacker, looping: wrenching back on the sharpshooter.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "sharpshooter-hold",
+  "endState": "sharpshooter-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -0.9, 180],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.4]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "loop", "sharpshooter", "back-work", "starts-sharpshooter-hold", "ends-sharpshooter-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, 18.0, 0.0, 0.0],
+        [0.6, 28.0, 0.0, 0.0],
+        [1.2, 18.0, 0.0, 0.0],
+        [1.7999999999999998, 8.0, 0.0, 0.0],
+        [2.4, 18.0, 0.0, 0.0]
+      ],
+      "position": [
+        [0.0, 0.0, -0.45, 0.0],
+        [0.6, 0.0, -0.5, 0.0],
+        [1.2, 0.0, -0.45, 0.0],
+        [1.7999999999999998, 0.0, -0.4, 0.0],
+        [2.4, 0.0, -0.45, 0.0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, -10, 0, 0],
+        [0.6, -10, 0, 0],
+        [1.2, -10, 0, 0],
+        [1.7999999999999998, -10, 0, 0],
+        [2.4, -10, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, -52.19, -74.75, 2.7],
+        [0.6, -69.41, -79.24, -14.76],
+        [1.2, -52.19, -74.75, 2.7],
+        [1.7999999999999998, -30.42, -68.34, 21.17],
+        [2.4, -52.19, -74.75, 2.7]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 90.15, 0, 0],
+        [0.6, 107.54, 0, 0],
+        [1.2, 90.15, 0, 0],
+        [1.7999999999999998, 67.09, 0, 0],
+        [2.4, 90.15, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 9.89, 44.43, -44.27],
+        [0.6, 9.81, 45.03, -46.01],
+        [1.2, 9.89, 44.43, -44.27],
+        [1.7999999999999998, 11.08, 43.4, -42.69],
+        [2.4, 9.89, 44.43, -44.27]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 2.31, 0, 0],
+        [0.6, 2.31, 0, 0],
+        [1.2, 2.31, 0, 0],
+        [1.7999999999999998, 2.31, 0, 0],
+        [2.4, 2.31, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 40.5, -9.18, -21.97],
+        [0.6, 33.27, -9.82, -27.8],
+        [1.2, 40.5, -9.18, -21.97],
+        [1.7999999999999998, 47.61, -8.64, -17.79],
+        [2.4, 40.5, -9.18, -21.97]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -119.32, 0, 0],
+        [0.6, -125.85, 0, 0],
+        [1.2, -119.32, 0, 0],
+        [1.7999999999999998, -112.22, 0, 0],
+        [2.4, -119.32, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, 61.43, -13.99, 19.36],
+        [0.6, 66.05, -19.66, 22.24],
+        [1.2, 61.43, -13.99, 19.36],
+        [1.7999999999999998, 56.74, -9.86, 17.16],
+        [2.4, 61.43, -13.99, 19.36]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 40.5, 9.18, 21.97],
+        [0.6, 33.27, 9.82, 27.8],
+        [1.2, 40.5, 9.18, 21.97],
+        [1.7999999999999998, 47.61, 8.64, 17.79],
+        [2.4, 40.5, 9.18, 21.97]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -119.32, 0, 0],
+        [0.6, -125.85, 0, 0],
+        [1.2, -119.32, 0, 0],
+        [1.7999999999999998, -112.22, 0, 0],
+        [2.4, -119.32, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, 61.43, 13.99, -19.36],
+        [0.6, 66.05, 19.66, -22.24],
+        [1.2, 61.43, 13.99, -19.36],
+        [1.7999999999999998, 56.74, 9.86, -17.16],
+        [2.4, 61.43, 13.99, -19.36]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

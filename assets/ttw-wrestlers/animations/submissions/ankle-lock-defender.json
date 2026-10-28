@@ -1,0 +1,176 @@
+{
+  "id": "submissions.ankle-lock-defender",
+  "name": "Caught in an ankle lock",
+  "category": "submissions",
+  "description": "Defender: face down; the right ankle is grabbed, the leg lifted and the foot twisted; push up on the hands in pain.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.8,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "lying-front",
+  "endState": "ankle-lock-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.25, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.5,
+      "name": "grab",
+      "attachment": "rightFoot"
+    },
+    {
+      "time": 1.2,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.25,
+      "name": "hit_received",
+      "zone": "legs"
+    },
+    {
+      "time": 1.8,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "ankle-lock", "leg-work", "starts-lying-front", "ends-ankle-lock-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -90, 0, 0],
+        [0.6, -90, 0, 0],
+        [1.2, -90, 0, 0],
+        [1.8, -90, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.84, 0],
+        [0.6, 0, -0.84, 0],
+        [1.2, 0, -0.84, 0],
+        [1.8, 0, -0.84, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.6, 0.0, 0, 0],
+        [1.2, 0.0, 0, 0],
+        [1.8, 7.0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 10, 40, 0],
+        [0.6, -7.5, 0, 0],
+        [1.2, -15.0, 0, 0],
+        [1.8, -22.0, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 20, 0],
+        [0.6, 0, 20, 0],
+        [1.2, 0, 20, 0],
+        [1.8, 0, 20, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 0, -80],
+        [0.6, -30.0, 0, -40],
+        [1.2, -60.0, 0, -40],
+        [1.8, -60.0, 0, -40]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 0, 0, -70],
+        [0.6, 30.0, 0, 0],
+        [1.2, 60.0, 0, 0],
+        [1.8, 60.0, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, 0, 80],
+        [0.6, -30.0, 0, 40],
+        [1.2, -60.0, 0, 40],
+        [1.8, -60.0, 0, 40]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 0, 0, 70],
+        [0.6, 30.0, 0, 0],
+        [1.2, 60.0, 0, 0],
+        [1.8, 60.0, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -6],
+        [0.6, 0, 0, -6],
+        [1.2, 0, 0, -6],
+        [1.8, 0, 0, -6]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [0.6, -6, 0, 0],
+        [1.2, -6, 0, 0],
+        [1.8, -6, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [0.6, -50, 0, 0],
+        [1.2, -50, 0, 0],
+        [1.8, -50, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 6],
+        [0.6, -10.0, 0, 0],
+        [1.2, -20.0, 0, 0],
+        [1.8, -20.0, 0, 0]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [0.6, -30.0, 0, 0],
+        [1.2, -60.0, 0, 0],
+        [1.8, -60.0, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [0.6, -50, 0, 0],
+        [1.2, -50, 0, 0],
+        [1.8, -50, 0, 0]
+      ]
+    }
+  }
+}

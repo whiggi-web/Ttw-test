@@ -1,0 +1,19 @@
+{
+  "source": "wrestling-arena/parts/ring.json (Wrestling Arena v1)",
+  "units": "meters",
+  "notes": "World heights in arena space. Ring centred on the origin. Animations use frames built from these numbers: the rope frame (rope line at z=0, ring at z>0, outside at z<0) and the corner frame (post at the origin, ropes along +X and +Z, ring at x>0 and z>0). Both frames sit at mat level, so the mat is y=0 and the arena floor is floorHeight - matHeight = -1.16.",
+  "matHeight": 1.2,
+  "floorHeight": 0.04,
+  "ropeLine": 3.5,
+  "ropeHeights": [1.65, 2.05, 2.45],
+  "ropeRadius": 0.028,
+  "apronEdge": 4.1,
+  "post": { "position": 3.5, "radius": 0.09, "top": 2.6 },
+  "turnbuckle": { "padCenter": 3.42, "padSize": 0.28, "padBottom": 1.45, "padTop": 2.65 },
+  "steps": { "position": [5.0, 0, -5.0], "width": 1.1, "steps": 3, "rise": 0.4, "run": 0.4 },
+  "derived": {
+    "ropeHeightsAboveMat": [0.45, 0.85, 1.25],
+    "apronWidth": 0.6,
+    "ringToFloorDrop": -1.16
+  }
+}

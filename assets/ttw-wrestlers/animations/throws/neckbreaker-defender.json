@@ -1,0 +1,233 @@
+{
+  "id": "throws.neckbreaker-defender",
+  "name": "Neckbreakered",
+  "category": "throws",
+  "description": "Defender: head kept under the attacker's arm while the attacker turns and drops; flipped over and snapped down onto the back of the neck.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.5,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.3, -0.05, -0.05, -0.1, 0],
+      [0.5, -0.15, -0.4, -0.05, 0],
+      [0.62, -0.1, 0.0, 0.1, -159.578],
+      [1.5, -0.1, 0.0, 0.1, -159.578]
+    ],
+    "endOffset": [-0.1, 0.0, 0.1],
+    "endYaw": -159.578,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "facelocked",
+  "endState": "lying-back",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0.0, -0.66, 180],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.62,
+      "name": "land",
+      "zone": "back"
+    },
+    {
+      "time": 0.62,
+      "name": "impact",
+      "surface": "mat",
+      "zone": "neck"
+    },
+    {
+      "time": 0.7,
+      "name": "stun_start"
+    },
+    {
+      "time": 1.5,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["throw", "neckbreaker", "defender", "starts-facelocked", "ends-lying-back"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 0, -159.58, 0],
+        [1.5, 0, -159.58, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.3, -0.05, -0.05, -0.1],
+        [0.5, -0.15, -0.4, -0.05],
+        [0.62, -0.1, 0.0, 0.1],
+        [1.5, -0.1, 0.0, 0.1]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, -18, 0.0, 0.0],
+        [0.3, -84.55, 20.27, 18.7],
+        [0.5, -85.19, 171.79, -30.52],
+        [0.62, -90.0, 180.0, -180.0],
+        [1.5, -90.0, 180.0, -180.0]
+      ],
+      "position": [
+        [0, 0.0, -0.14, 0.14],
+        [0.3, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 0, -0.83, 0],
+        [1.5, 0, -0.83, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -40, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 0, 0, 0],
+        [1.5, 0, 0, 0]
+      ]
+    },
+    "chest": {
+      "rotation": [
+        [0, -20, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 0, 0, 0],
+        [1.5, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 10, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 30, 0, 0],
+        [1.5, 6, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.62, 0, 14, 0],
+        [1.5, 0, 14, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, -51.0, -48.99, -88.09],
+        [0.3, 10, 0, -55],
+        [0.5, 30, 0, 80],
+        [0.62, 0, 10, -56],
+        [1.5, 0, 10, -56]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 150.0, 0, 0],
+        [0.3, 20, 0, 0],
+        [0.5, 20, 0, 0],
+        [0.62, 16, 0, 0],
+        [1.5, 16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, -58.43, 59.78, 94.95],
+        [0.3, 10, 0, 55],
+        [0.5, 30, 0, -80],
+        [0.62, 0, -10, 56],
+        [1.5, 0, -10, 56]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 150.0, 0, 0],
+        [0.3, 20, 0, 0],
+        [0.5, 20, 0, 0],
+        [0.62, 16, 0, 0],
+        [1.5, 16, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 61.84, 3.56, -5.82],
+        [0.0667, 61.65, 3.18, -6.79],
+        [0.3, 6, 0, -4],
+        [0.5, 20, 0, -10],
+        [0.62, 0, 0, -8],
+        [1.5, 0, 0, -8]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -62.38, 0, 0],
+        [0.0667, -73.63, 0, 0],
+        [0.3, -12, 0, 0],
+        [0.5, -35, 0, 0],
+        [0.62, -8, 0, 0],
+        [1.5, -8, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 18.82, -6.59, 1.75],
+        [0.0667, 27.44, -6.98, 2.03],
+        [0.3, 6, 0, 4],
+        [0.5, 0, 0, 0],
+        [0.62, -20, 0, 6],
+        [1.5, -20, 0, 6]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 61.84, -3.56, 5.82],
+        [0.3, 6, 0, 4],
+        [0.5, 10, 0, 10],
+        [0.62, 0, 0, 8],
+        [1.5, 0, 0, 8]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -62.38, 0, 0],
+        [0.3, -12, 0, 0],
+        [0.5, -20, 0, 0],
+        [0.62, -8, 0, 0],
+        [1.5, -8, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 18.82, 6.59, -1.75],
+        [0.3, 6, 0, -4],
+        [0.5, 0, 0, 0],
+        [0.62, -20, 0, -6],
+        [1.5, -20, 0, -6]
+      ]
+    }
+  }
+}

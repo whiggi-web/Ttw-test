@@ -1,0 +1,176 @@
+{
+ "id": "pair.pull-over-top-rope",
+ "name": "Pull over the top rope to the floor",
+ "category": "eliminations",
+ "description": "The attacker, on the arena floor, grabs an opponent draped over the top rope (ropes.drape-over-top / hang-over-top) and drags them over head first; the defender flips and lands on the back on the floor while the attacker steps aside.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 1.4,
+ "attacker": {
+  "animation": "ropes.pull-over-top",
+  "startState": "standing",
+  "endState": "standing",
+  "startLocation": "floor",
+  "endLocation": "floor"
+ },
+ "defender": {
+  "animation": "ropes.pulled-over-top",
+  "startState": "rope-draped",
+  "endState": "lying-back",
+  "startLocation": "ring",
+  "endLocation": "floor"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.45,
+   1.16,
+   -1.37
+  ],
+  "defenderFacing": -180,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    -0.45,
+    0.0,
+    0.25
+   ],
+   "yaw": 35
+  },
+  "defender": {
+   "offset": [
+    -0.35,
+    -1.16,
+    -2.37
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). Both end on the floor; the attacker 0.85 m to the side."
+ },
+ "placement": {
+  "frame": "rope",
+  "frameStart": [
+   0.45,
+   -1.16,
+   -1.05,
+   180
+  ],
+  "attacker": "floor-facing-ring",
+  "defender": "rope-draped"
+ },
+ "contacts": [
+  {
+   "from": 0.1,
+   "to": 0.6,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "head"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.1,
+   "name": "grab",
+   "role": "attacker",
+   "attachment": "rightHandGrip"
+  },
+  {
+   "time": 0.1,
+   "name": "grab",
+   "role": "defender",
+   "attachment": "head"
+  },
+  {
+   "time": 0.3,
+   "name": "grip_locked",
+   "role": "both"
+  },
+  {
+   "time": 0.35,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 0.55,
+   "name": "rope_release",
+   "role": "defender"
+  },
+  {
+   "time": 0.6,
+   "name": "release",
+   "role": "attacker"
+  },
+  {
+   "time": 0.8,
+   "name": "footstep",
+   "role": "attacker"
+  },
+  {
+   "time": 1.02,
+   "name": "land",
+   "role": "defender",
+   "zone": "back",
+   "height": 1.16
+  },
+  {
+   "time": 1.02,
+   "name": "impact",
+   "role": "defender",
+   "surface": "floor"
+  },
+  {
+   "time": 1.3,
+   "name": "recover",
+   "role": "attacker"
+  },
+  {
+   "time": 1.4,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [
+  {
+   "name": "contact",
+   "start": 0,
+   "end": 0.3
+  },
+  {
+   "name": "launch",
+   "start": 0.3,
+   "end": 0.6
+  },
+  {
+   "name": "traversal",
+   "start": 0.6,
+   "end": 1.02
+  },
+  {
+   "name": "recovery",
+   "start": 1.02,
+   "end": 1.4
+  }
+ ],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "ropes",
+  "elimination",
+  "to-floor"
+ ]
+}

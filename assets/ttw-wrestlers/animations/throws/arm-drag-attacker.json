@@ -1,0 +1,248 @@
+{
+  "id": "throws.arm-drag-attacker",
+  "name": "Arm drag",
+  "category": "throws",
+  "description": "Attacker: from the lock-up, trap the opponent's left arm, drop to one knee turning away and drag them over in a cartwheel; pop back up.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.2,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.15, 0.0, 0.0, -0.08, -20],
+      [0.35, 0.05, 0.0, -0.05, -70],
+      [0.55, 0.1, 0.0, 0.0, -110],
+      [0.9, 0.1, 0.0, 0.0, -110],
+      [1.2, 0.1, 0.0, 0.0, -110]
+    ],
+    "endOffset": [0.1, 0.0, 0.0],
+    "endYaw": -110,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "lockup",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, 0, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.18]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.1,
+      "name": "attack_start"
+    },
+    {
+      "time": 0.15,
+      "name": "grab",
+      "attachment": "propLeftHand"
+    },
+    {
+      "time": 0.42,
+      "name": "release"
+    },
+    {
+      "time": 0.55,
+      "name": "land",
+      "zone": "knees"
+    },
+    {
+      "time": 1.15,
+      "name": "recover"
+    },
+    {
+      "time": 1.2,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["throw", "arm-drag", "attacker", "starts-lockup", "ends-standing"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.15, 0, -20, 0],
+        [0.35, 0, -70, 0],
+        [0.55, 0, -110, 0],
+        [0.9, 0, -110, 0],
+        [1.2, 0, -110, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.15, 0.0, 0.0, -0.08],
+        [0.35, 0.05, 0.0, -0.05],
+        [0.55, 0.1, 0.0, 0.0],
+        [0.9, 0.1, 0.0, 0.0],
+        [1.2, 0.1, 0.0, 0.0]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, -14, 0.0, 0.0],
+        [0.15, -8, 0.0, 0.0],
+        [0.35, -20, 0.0, -12],
+        [0.55, -12, 0.0, 0.0],
+        [0.9, -6, 0.0, 0.0],
+        [1.2, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0.0, -0.08, 0.0],
+        [0.15, 0.0, -0.12, 0.0],
+        [0.35, 0.0, -0.35, 0.0],
+        [0.55, 0.0, -0.45, 0.0],
+        [0.9, 0, -0.03, 0],
+        [1.2, 0, -0.03, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.15, 0, 0, 0],
+        [0.35, 0, 0, 0],
+        [0.55, 0, 0, 0],
+        [0.9, -4, 0, 0],
+        [1.2, -4, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 8, 0, 0],
+        [0.15, 0, 0, 0],
+        [0.35, 0, 0, 0],
+        [0.55, 0, 0, 0],
+        [0.9, 4, 0, 0],
+        [1.2, 4, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 126.36, -57.93, 67.66],
+        [0.15, 41.38, -20.77, 129.67],
+        [0.35, 36.17, 0.14, 157.14],
+        [0.55, 10, 0, -55],
+        [0.9, 55, 0, 22],
+        [1.2, 55, 0, 22]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 113.15, 0, 0],
+        [0.15, 59.26, 0, 0],
+        [0.35, 108.67, 0, 0],
+        [0.55, 20, 0, 0],
+        [0.9, 120, 0, 0],
+        [1.2, 120, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, -161.36, 41.44, 140.4],
+        [0.15, 25.58, -39.95, 83.45],
+        [0.35, 19.37, -15.74, 162.17],
+        [0.55, 10, 0, 55],
+        [0.9, 50, 0, -22],
+        [1.2, 50, 0, -22]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 150.0, 0, 0],
+        [0.15, 150.0, 0, 0],
+        [0.35, 143.45, 0, 0],
+        [0.55, 20, 0, 0],
+        [0.9, 118, 0, 0],
+        [1.2, 118, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 40.61, 5.01, -4.84],
+        [0.15, 40.1, 5.21, -5.0],
+        [0.35, 72.45, 9.08, -2.43],
+        [0.4333, 42.78, 4.49, -7.29],
+        [0.55, -5, 0, -6],
+        [0.8, 26.95, 5.59, -6.09],
+        [0.9, 22.86, 5.88, -1.73],
+        [1.2, 16.57, 5.92, -1.75]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -50.6, 0, 0],
+        [0.15, -62.29, 0, 0],
+        [0.35, -103.21, 0, 0],
+        [0.4333, -122.14, 0, 0],
+        [0.55, -100, 0, 0],
+        [0.8, -80.98, 0, 0],
+        [0.9, -32.69, 0, 0],
+        [1.2, -32.83, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 24.32, -6.64, 2.1],
+        [0.15, 30.51, -7.06, 1.48],
+        [0.35, 50.58, -3.35, 5.54],
+        [0.4333, 22.54, -5.09, 4.04],
+        [0.55, -55, 0, 0],
+        [0.8, 15.21, -7.58, -1.16],
+        [0.9, 15.92, -6.13, -0.04],
+        [1.2, 16.35, -6.17, -0.0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 40.61, -5.01, 4.84],
+        [0.15, 40.1, -5.21, 5.0],
+        [0.35, 78.28, 12.88, 15.64],
+        [0.55, 105.68, 2.73, 7.73],
+        [0.8, 53.29, -5.27, 4.83],
+        [0.9, 22.86, -5.88, 1.73],
+        [1.2, 16.57, -5.92, 1.75]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -50.6, 0, 0],
+        [0.15, -62.29, 0, 0],
+        [0.35, -109.71, 0, 0],
+        [0.55, -125.3, 0, 0],
+        [0.8, -71.87, 0, 0],
+        [0.9, -32.69, 0, 0],
+        [1.2, -32.83, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 24.32, 6.64, -2.1],
+        [0.15, 30.51, 7.06, -1.48],
+        [0.35, 51.74, 10.68, -7.92],
+        [0.55, 10.47, 2.16, -3.13],
+        [0.8, 20.64, 6.97, -0.05],
+        [0.9, 15.92, 6.13, 0.04],
+        [1.2, 16.35, 6.17, 0.0]
+      ]
+    }
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "id": "grappling.rear-waistlock-defender",
+  "name": "Grabbed from behind",
+  "category": "grappling",
+  "description": "Defender: grabbed round the waist from behind; straightens up, hands clawing at the attacker's locked hands. German suplex set-up.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.0,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "standing",
+  "endState": "rear-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, -0.9, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.3,
+      "name": "grab",
+      "attachment": "hips"
+    },
+    {
+      "time": 0.55,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["grapple", "waistlock", "defender", "setup", "starts-standing", "ends-rear-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.3, 12, 0.0, 0.0],
+        [0.55, 6, 0.0, 0.0],
+        [0.8, 6, 0.0, 2.0],
+        [1.0, 6, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0, -0.03, 0],
+        [0.3, 0.0, -0.04, 0.0],
+        [0.55, 0.0, -0.05, 0.0],
+        [0.8, 0.0, -0.05, 0.0],
+        [1.0, 0.0, -0.05, 0.0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.55, 0, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.0, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.3, -14, 30, 0],
+        [0.55, -6, 20, 0],
+        [0.8, -6, 20, 0],
+        [1.0, -6, 20, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 55, 0, 22],
+        [0.3, 10, 0, -55],
+        [0.55, 30, 0, 20],
+        [0.8, 30, 0, 20],
+        [1.0, 30, 0, 20]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 120, 0, 0],
+        [0.3, 20, 0, 0],
+        [0.55, 70, 0, 0],
+        [0.8, 70, 0, 0],
+        [1.0, 70, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 50, 0, -22],
+        [0.3, 10, 0, 55],
+        [0.55, 30, 0, -20],
+        [0.8, 30, 0, -20],
+        [1.0, 30, 0, -20]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 118, 0, 0],
+        [0.3, 20, 0, 0],
+        [0.55, 70, 0, 0],
+        [0.8, 70, 0, 0],
+        [1.0, 70, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 16.57, 5.92, -1.75],
+        [0.3, 5.85, 6.44, -2.15],
+        [0.55, 14.44, 5.78, -4.45],
+        [0.8, 15.31, 5.19, -6.61],
+        [1.0, 14.44, 5.78, -4.45]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -32.83, 0, 0],
+        [0.3, -36.77, 0, 0],
+        [0.55, -40.76, 0, 0],
+        [0.8, -42.15, 0, 0],
+        [1.0, -40.76, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 16.35, -6.17, -0.0],
+        [0.3, 19.05, -6.78, 0.08],
+        [0.55, 20.67, -6.96, 2.17],
+        [0.8, 21.4, -7.01, 2.32],
+        [1.0, 20.67, -6.96, 2.17]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 16.57, -5.92, 1.75],
+        [0.3, 5.85, -6.44, 2.15],
+        [0.55, 14.44, -5.78, 4.45],
+        [0.8, 13.51, -6.28, 2.27],
+        [1.0, 14.44, -5.78, 4.45]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -32.83, 0, 0],
+        [0.3, -36.77, 0, 0],
+        [0.55, -40.76, 0, 0],
+        [0.8, -39.29, 0, 0],
+        [1.0, -40.76, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 16.35, 6.17, 0.0],
+        [0.3, 19.05, 6.78, -0.08],
+        [0.55, 20.67, 6.96, -2.17],
+        [0.8, 19.91, 6.89, -2.04],
+        [1.0, 20.67, 6.96, -2.17]
+      ]
+    }
+  }
+}

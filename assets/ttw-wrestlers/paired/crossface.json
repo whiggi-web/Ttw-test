@@ -1,0 +1,119 @@
+{
+ "id": "pair.crossface",
+ "name": "Crossface",
+ "category": "submissions",
+ "description": "Defender face down: crossface from the left side.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 2.0,
+ "attacker": {
+  "animation": "submissions.crossface-attacker",
+  "startState": "standing",
+  "endState": "crossface-hold",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "submissions.crossface-defender",
+  "startState": "lying-front",
+  "endState": "crossface-locked",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -1.25
+  ],
+  "defenderFacing": 0,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    -0.3,
+    0.0,
+    -1.4
+   ],
+   "yaw": -20
+  },
+  "defender": {
+   "offset": [
+    0,
+    0,
+    0
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 1.0,
+   "to": 2.0,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "head"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.9,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 1.0,
+   "name": "grab",
+   "role": "both"
+  },
+  {
+   "time": 1.5,
+   "name": "grip_locked",
+   "role": "both"
+  },
+  {
+   "time": 1.55,
+   "name": "hit_received",
+   "role": "defender",
+   "zone": "head"
+  },
+  {
+   "time": 2.0,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "crossface"
+ ]
+}

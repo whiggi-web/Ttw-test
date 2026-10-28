@@ -1,0 +1,157 @@
+{
+  "id": "reactions.kneeling-stunned",
+  "name": "Stunned on the knees (loop)",
+  "category": "reactions",
+  "description": "Up on both knees, arms hanging, head lolling and swaying. A sitting duck for kicks to the head.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "kneeling",
+  "endState": "kneeling",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, 0.0, 0.0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.4]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["reaction", "stunned", "loop", "kneeling", "starts-kneeling", "ends-kneeling"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -8, 0.0, 0.0],
+        [0.8, -8, 0.0, 2.5],
+        [1.6, -8, 0.0, -2.0],
+        [2.4, -8, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0.0, -0.515, 0.04],
+        [0.8, 0.0, -0.545, 0.04],
+        [1.6, 0.0, -0.505, 0.04],
+        [2.4, 0.0, -0.515, 0.04]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -16, 0, 0],
+        [0.8, -16, 0, 0],
+        [1.6, -16, 0, 0],
+        [2.4, -16, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 22.0, 0, 0],
+        [0.8, 25.0, 15, 0],
+        [1.6, 21.0, -10, 0],
+        [2.4, 22.0, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 10, 0, 12],
+        [0.8, 10, 0, 12],
+        [1.6, 10, 0, 12],
+        [2.4, 10, 0, 12]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 20, 0, 0],
+        [0.8, 20, 0, 0],
+        [1.6, 20, 0, 0],
+        [2.4, 20, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 10, 0, -12],
+        [0.8, 10, 0, -12],
+        [1.6, 10, 0, -12],
+        [2.4, 10, 0, -12]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 20, 0, 0],
+        [0.8, 20, 0, 0],
+        [1.6, 20, 0, 0],
+        [2.4, 20, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 10, 0, -4],
+        [0.8, 10, 0, -4],
+        [1.6, 10, 0, -4],
+        [2.4, 10, 0, -4]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -100, 0, 0],
+        [0.8, -100, 0, 0],
+        [1.6, -100, 0, 0],
+        [2.4, -100, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -55, 0, 0],
+        [0.8, -55, 0, 0],
+        [1.6, -55, 0, 0],
+        [2.4, -55, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 10, 0, 4],
+        [0.8, 10, 0, 4],
+        [1.6, 10, 0, 4],
+        [2.4, 10, 0, 4]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -100, 0, 0],
+        [0.8, -100, 0, 0],
+        [1.6, -100, 0, 0],
+        [2.4, -100, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -55, 0, 0],
+        [0.8, -55, 0, 0],
+        [1.6, -55, 0, 0],
+        [2.4, -55, 0, 0]
+      ]
+    }
+  }
+}

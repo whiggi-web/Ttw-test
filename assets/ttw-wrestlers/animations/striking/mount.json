@@ -1,0 +1,212 @@
+{
+  "id": "striking.mount",
+  "name": "Mount a downed opponent",
+  "category": "striking",
+  "description": "Opponent flat on the back with the feet towards you: step over them and drop into a mount, kneeling astride the waist.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.2,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0.0],
+      [0.35, 0.0, 0.0, -0.5, 0.0],
+      [0.65, 0.0, 0.0, -0.85, 0.0],
+      [0.95, 0.0, 0.0, -0.95, 0.0],
+      [1.2, 0.0, 0.0, -0.95, 0.0]
+    ],
+    "endOffset": [0.0, 0.0, -0.95],
+    "endYaw": 0.0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "standing",
+  "endState": "mounted",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, 0.0, 0.0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.18]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.35,
+      "name": "footstep"
+    },
+    {
+      "time": 0.65,
+      "name": "footstep"
+    },
+    {
+      "time": 0.95,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.2,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["strike", "ground-attack", "mount", "starts-standing", "ends-mounted"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0.0, 0],
+        [0.35, 0, 0.0, 0],
+        [0.65, 0, 0.0, 0],
+        [0.95, 0, 0.0, 0],
+        [1.2, 0, 0.0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.35, 0.0, 0.0, -0.5],
+        [0.65, 0.0, 0.0, -0.85],
+        [0.95, 0.0, 0.0, -0.95],
+        [1.2, 0.0, 0.0, -0.95]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0.0, 0.0, 0.0],
+        [0.35, -12, 0.0, 0.0],
+        [0.65, -10, 0.0, 0.0],
+        [0.95, -8, 0.0, 0.0],
+        [1.2, -8, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0.0, -0.02, 0.0],
+        [0.35, 0.0, -0.1, 0.0],
+        [0.65, 0.0, -0.35, 0.0],
+        [0.95, 0.0, -0.6, 0.02],
+        [1.2, 0.0, -0.6, 0.02]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.35, 0, 0, 0],
+        [0.65, 0, 0, 0],
+        [0.95, -8, 0, 0],
+        [1.2, -8, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.35, 28, 0, 0],
+        [0.65, 20, 0, 0],
+        [0.95, 18, 0, 0],
+        [1.2, 18, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.35, 6, 0, 10],
+        [0.65, 6, 0, 10],
+        [0.95, -73.05, -56.11, -49.48],
+        [1.2, -73.05, -56.11, -49.48]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.35, 14, 0, 0],
+        [0.65, 14, 0, 0],
+        [0.95, 150.0, 0, 0],
+        [1.2, 150.0, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [0.35, 6, 0, -10],
+        [0.65, 6, 0, -10],
+        [0.95, -73.05, 56.11, 49.48],
+        [1.2, -73.05, 56.11, 49.48]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.35, 14, 0, 0],
+        [0.65, 14, 0, 0],
+        [0.95, 150.0, 0, 0],
+        [1.2, 150.0, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 13.99, 5.58, -1.38],
+        [0.35, 45.63, -0.42, -14.19],
+        [0.65, 53.48, -17.32, -21.51],
+        [0.95, 29.46, -30.47, -48.82],
+        [1.2, 29.46, -30.47, -48.82]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -27.73, 0, 0],
+        [0.35, -46.45, 0, 0],
+        [0.65, -96.33, 0, 0],
+        [0.95, -127.13, 0, 0],
+        [1.2, -127.13, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 13.81, -5.75, -0.0],
+        [0.35, 13.56, -7.46, 12.11],
+        [0.65, 50.24, -2.94, 27.2],
+        [0.95, 47.38, -44.0, 37.91],
+        [1.2, 47.38, -44.0, 37.91]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 13.99, -5.58, 1.38],
+        [0.35, 11.01, -6.08, 3.69],
+        [0.65, 49.14, 16.29, 22.36],
+        [0.95, 29.46, 30.47, 48.82],
+        [1.2, 29.46, 30.47, 48.82]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -27.73, 0, 0],
+        [0.35, -39.23, 0, 0],
+        [0.65, -95.81, 0, 0],
+        [0.95, -127.13, 0, 0],
+        [1.2, -127.13, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 13.81, 5.75, 0.0],
+        [0.35, 40.61, 6.0, -3.82],
+        [0.65, 53.98, 2.23, -27.33],
+        [0.95, 47.38, 44.0, -37.91],
+        [1.2, 47.38, 44.0, -37.91]
+      ]
+    }
+  }
+}

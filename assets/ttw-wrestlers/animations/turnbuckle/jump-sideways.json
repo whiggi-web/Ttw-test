@@ -1,0 +1,289 @@
+{
+  "id": "turnbuckle.jump-sideways",
+  "name": "Leap sideways off the top",
+  "category": "turnbuckle",
+  "description": "From standing tall on top: jump out to the right side along the ropes, turning in the air, and land facing across the ring.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.3,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.18, 0.0, 0.0, 0.0, 0],
+      [0.34, -0.0566, 0.05, -0.099, 30],
+      [0.62, -0.4667, -0.478, -0.7313, 60],
+      [0.92, -0.7778, -1.278, -1.3313, 75],
+      [1.3, -0.7778, -1.278, -1.3313, 75]
+    ],
+    "endOffset": [-0.7778, -1.278, -1.3313],
+    "endYaw": 75,
+    "heightChange": -1.278,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "perched-ready",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "perched",
+    "end": "center",
+    "frame": "corner",
+    "frameStart": [0.19, 1.2780000000000002, 0.19, -135],
+    "note": "standing on the top turnbuckle, facing the ring"
+  },
+  "phases": [
+    {
+      "name": "launch",
+      "start": 0,
+      "end": 0.34
+    },
+    {
+      "name": "flight",
+      "start": 0.34,
+      "end": 0.92
+    },
+    {
+      "name": "landing",
+      "start": 0.92,
+      "end": 1.1
+    },
+    {
+      "name": "recovery",
+      "start": 1.1,
+      "end": 1.3
+    }
+  ],
+  "interrupt": {
+    "windows": [
+      [0, 0.195]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.34,
+      "name": "jump"
+    },
+    {
+      "time": 0.62,
+      "name": "apex"
+    },
+    {
+      "time": 0.92,
+      "name": "land"
+    },
+    {
+      "time": 1.25,
+      "name": "recover"
+    },
+    {
+      "time": 1.3,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["turnbuckle", "aerial", "dismount", "starts-perched-ready", "ends-standing"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.18, 0, 0, 0],
+        [0.34, 0, 30, 0],
+        [0.62, 0, 60, 0],
+        [0.92, 0, 75, 0],
+        [1.3, 0, 75, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.18, 0.0, 0.0, 0.0],
+        [0.34, -0.0566, 0.05, -0.099],
+        [0.62, -0.4667, -0.478, -0.7313],
+        [0.92, -0.7778, -1.278, -1.3313],
+        [1.3, -0.7778, -1.278, -1.3313]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, -4, 0.0, 0.0],
+        [0.18, -4, 0.0, 0.0],
+        [0.34, 0.0, 0.0, -12],
+        [0.62, 0.0, 0.0, -10],
+        [0.92, -16, 0.0, 0.0],
+        [1.3, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0.0, -0.06, 0.0],
+        [0.18, 0.0, -0.26, 0.0],
+        [0.34, 0.0, -0.04, 0.0],
+        [0.62, 0.0, -0.1, 0.0],
+        [0.92, 0.0, -0.44, 0.0],
+        [1.3, 0, -0.02, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.18, 0, 0, 0],
+        [0.34, 0, 0, 0],
+        [0.62, 0, 0, 0],
+        [0.92, -10, 0, 0],
+        [1.3, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.18, 4, 0, 0],
+        [0.34, 0, 0, 0],
+        [0.62, 0, 0, 0],
+        [0.92, 0, 0, 0],
+        [1.3, 0, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 170, 0, 10],
+        [0.18, 10, 0, -55],
+        [0.34, 10, 0, -55],
+        [0.62, 10, 0, -55],
+        [0.92, 10, 0, -55],
+        [1.3, 6, 0, 10]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 10, 0, 0],
+        [0.18, 20, 0, 0],
+        [0.34, 20, 0, 0],
+        [0.62, 20, 0, 0],
+        [0.92, 20, 0, 0],
+        [1.3, 14, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 170, 0, -10],
+        [0.18, 10, 0, 55],
+        [0.34, 10, 0, 55],
+        [0.62, 10, 0, 55],
+        [0.92, 10, 0, 55],
+        [1.3, 6, 0, -10]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 10, 0, 0],
+        [0.18, 20, 0, 0],
+        [0.34, 20, 0, 0],
+        [0.62, 20, 0, 0],
+        [0.92, 20, 0, 0],
+        [1.3, 14, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 23.4, 2.73, -10.23],
+        [0.18, 46.94, -3.11, -13.04],
+        [0.34, 2.52, -28.71, 7.2],
+        [0.62, 11.3, -27.43, 14.54],
+        [0.92, 78.91, -2.65, -9.26],
+        [1.1, 62.7, 1.31, -8.05],
+        [1.3, 13.99, 5.58, -1.38]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -40.82, 0, 0],
+        [0.18, -89.71, 0, 0],
+        [0.34, -1.75, 0, 0],
+        [0.62, -1.75, 0, 0],
+        [0.92, -121.32, 0, 0],
+        [1.1, -104.75, 0, 0],
+        [1.3, -27.73, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 22.12, -5.93, 8.78],
+        [0.18, 47.09, -6.6, 11.68],
+        [0.34, 2.83, 28.8, 5.17],
+        [0.62, -3.26, 29.11, -0.48],
+        [0.92, 58.6, -7.03, 6.59],
+        [1.1, 51.33, -9.08, 4.51],
+        [1.3, 13.81, -5.75, -0.0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 23.4, -2.73, 10.23],
+        [0.18, 46.94, 3.11, 13.04],
+        [0.34, 17.58, 0.33, 23.28],
+        [0.62, -8.42, 27.93, 9.07],
+        [0.92, 78.91, 2.65, 9.26],
+        [1.1, 63.97, -2.34, 7.41],
+        [1.3, 13.99, -5.58, 1.38]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -40.82, 0, 0],
+        [0.18, -89.71, 0, 0],
+        [0.34, -54.83, 0, 0],
+        [0.62, -1.75, 0, 0],
+        [0.92, -121.32, 0, 0],
+        [1.1, -103.88, 0, 0],
+        [1.3, -27.73, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 22.12, 5.93, -8.78],
+        [0.18, 47.09, 6.6, -11.68],
+        [0.34, 38.48, 6.56, -10.39],
+        [0.62, 6.42, -28.73, 4.23],
+        [0.92, 58.6, 7.03, -6.59],
+        [1.1, 49.97, 10.2, -4.69],
+        [1.3, 13.81, 5.75, 0.0]
+      ]
+    }
+  },
+  "ropeInteraction": {
+    "frame": "corner",
+    "ropes": [
+      {
+        "rope": "middle",
+        "axis": "x",
+        "maxDisplacement": 0.076,
+        "keys": [
+          [0.967, 1.568, 0.0, -0.012, 0.004],
+          [1.0, 1.56, 0.0, -0.033, 0.015],
+          [1.033, 1.546, 0.0, -0.044, 0.025],
+          [1.067, 1.53, 0.0, -0.05, 0.036],
+          [1.1, 1.518, 0.0, -0.055, 0.049],
+          [1.133, 1.514, 0.0, 0.052, -0.056],
+          [1.167, 1.519, 0.0, 0.035, -0.045],
+          [1.2, 1.536, 0.0, -0.003, -0.016]
+        ]
+      },
+      {
+        "rope": "top",
+        "axis": "x",
+        "maxDisplacement": 0.067,
+        "keys": [
+          [0.833, 1.464, 0.0, -0.067, 0.004]
+        ]
+      }
+    ],
+    "note": "How far each rope gives way: keys [t, s, dx, dy, dz] in placement-frame metres; s is the contact point along the rope from the frame origin, (dx, dy, dz) the rope displacement there. Bend the rope with a smooth falloff around s (ttw-anim-runtime.js ropeDisplacement). Optional: games with static ropes can ignore it."
+  }
+}

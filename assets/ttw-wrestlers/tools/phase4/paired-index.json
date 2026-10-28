@@ -1,0 +1,637 @@
+[
+  {
+    "id": "pair.lockup",
+    "name": "Lock-up",
+    "category": "grappling",
+    "file": "paired/lockup.json",
+    "duration": 1.0,
+    "attacker": "grappling.lockup",
+    "defender": "grappling.lockup",
+    "tags": [
+      "lockup",
+      "shared-role"
+    ]
+  },
+  {
+    "id": "pair.shove-off",
+    "name": "Shove out of the lock-up",
+    "category": "grappling",
+    "file": "paired/shove-off.json",
+    "duration": 1.1,
+    "attacker": "grappling.shove-off-attacker",
+    "defender": "grappling.shove-off-defender",
+    "tags": [
+      "lockup",
+      "shove"
+    ]
+  },
+  {
+    "id": "pair.side-headlock",
+    "name": "Side headlock",
+    "category": "grappling",
+    "file": "paired/side-headlock.json",
+    "duration": 0.9,
+    "attacker": "grappling.side-headlock-attacker",
+    "defender": "grappling.side-headlock-defender",
+    "tags": [
+      "headlock"
+    ]
+  },
+  {
+    "id": "pair.headlock-takeover",
+    "name": "Headlock takeover",
+    "category": "grappling",
+    "file": "paired/headlock-takeover.json",
+    "duration": 1.2,
+    "attacker": "grappling.headlock-takeover-attacker",
+    "defender": "grappling.headlock-takeover-defender",
+    "tags": [
+      "headlock",
+      "takedown"
+    ]
+  },
+  {
+    "id": "pair.wristlock",
+    "name": "Wristlock",
+    "category": "grappling",
+    "file": "paired/wristlock.json",
+    "duration": 1.0,
+    "attacker": "grappling.wristlock-attacker",
+    "defender": "grappling.wristlock-defender",
+    "tags": [
+      "wristlock",
+      "arm-work"
+    ]
+  },
+  {
+    "id": "pair.hammerlock",
+    "name": "Hammerlock",
+    "category": "grappling",
+    "file": "paired/hammerlock.json",
+    "duration": 1.2,
+    "attacker": "grappling.hammerlock-attacker",
+    "defender": "grappling.hammerlock-defender",
+    "tags": [
+      "hammerlock",
+      "arm-work"
+    ]
+  },
+  {
+    "id": "pair.front-facelock",
+    "name": "Front facelock",
+    "category": "grappling",
+    "file": "paired/front-facelock.json",
+    "duration": 0.85,
+    "attacker": "grappling.front-facelock-attacker",
+    "defender": "grappling.front-facelock-defender",
+    "tags": [
+      "facelock",
+      "setup"
+    ]
+  },
+  {
+    "id": "pair.waistlock",
+    "name": "Body lock",
+    "category": "grappling",
+    "file": "paired/waistlock.json",
+    "duration": 0.9,
+    "attacker": "grappling.waistlock-attacker",
+    "defender": "grappling.waistlock-defender",
+    "tags": [
+      "waistlock",
+      "setup"
+    ]
+  },
+  {
+    "id": "pair.rear-waistlock",
+    "name": "Rear waistlock",
+    "category": "grappling",
+    "file": "paired/rear-waistlock.json",
+    "duration": 1.0,
+    "attacker": "grappling.rear-waistlock-attacker",
+    "defender": "grappling.rear-waistlock-defender",
+    "tags": [
+      "waistlock",
+      "setup"
+    ]
+  },
+  {
+    "id": "pair.body-slam",
+    "name": "Body slam",
+    "category": "throws",
+    "file": "paired/body-slam.json",
+    "duration": 1.8,
+    "attacker": "throws.body-slam-attacker",
+    "defender": "throws.body-slam-defender",
+    "tags": [
+      "slam"
+    ]
+  },
+  {
+    "id": "pair.vertical-suplex",
+    "name": "Vertical suplex",
+    "category": "throws",
+    "file": "paired/vertical-suplex.json",
+    "duration": 2.4,
+    "attacker": "throws.vertical-suplex-attacker",
+    "defender": "throws.vertical-suplex-defender",
+    "tags": [
+      "suplex"
+    ]
+  },
+  {
+    "id": "pair.snap-suplex",
+    "name": "Snap suplex",
+    "category": "throws",
+    "file": "paired/snap-suplex.json",
+    "duration": 1.5,
+    "attacker": "throws.snap-suplex-attacker",
+    "defender": "throws.snap-suplex-defender",
+    "tags": [
+      "suplex"
+    ]
+  },
+  {
+    "id": "pair.ddt",
+    "name": "DDT",
+    "category": "throws",
+    "file": "paired/ddt.json",
+    "duration": 1.5,
+    "attacker": "throws.ddt-attacker",
+    "defender": "throws.ddt-defender",
+    "tags": [
+      "ddt",
+      "finisher"
+    ]
+  },
+  {
+    "id": "pair.neckbreaker",
+    "name": "Neckbreaker",
+    "category": "throws",
+    "file": "paired/neckbreaker.json",
+    "duration": 1.5,
+    "attacker": "throws.neckbreaker-attacker",
+    "defender": "throws.neckbreaker-defender",
+    "tags": [
+      "neckbreaker"
+    ]
+  },
+  {
+    "id": "pair.belly-to-belly",
+    "name": "Belly-to-belly suplex",
+    "category": "throws",
+    "file": "paired/belly-to-belly.json",
+    "duration": 1.6,
+    "attacker": "throws.belly-to-belly-attacker",
+    "defender": "throws.belly-to-belly-defender",
+    "tags": [
+      "suplex"
+    ]
+  },
+  {
+    "id": "pair.spinebuster",
+    "name": "Spinebuster",
+    "category": "throws",
+    "file": "paired/spinebuster.json",
+    "duration": 1.7,
+    "attacker": "throws.spinebuster-attacker",
+    "defender": "throws.spinebuster-defender",
+    "tags": [
+      "slam",
+      "power"
+    ]
+  },
+  {
+    "id": "pair.german-suplex",
+    "name": "German suplex",
+    "category": "throws",
+    "file": "paired/german-suplex.json",
+    "duration": 1.8,
+    "attacker": "throws.german-suplex-attacker",
+    "defender": "throws.german-suplex-defender",
+    "tags": [
+      "suplex",
+      "finisher"
+    ]
+  },
+  {
+    "id": "pair.hip-toss",
+    "name": "Hip toss",
+    "category": "throws",
+    "file": "paired/hip-toss.json",
+    "duration": 1.4,
+    "attacker": "throws.hip-toss-attacker",
+    "defender": "throws.hip-toss-defender",
+    "tags": [
+      "hip-toss"
+    ]
+  },
+  {
+    "id": "pair.arm-drag",
+    "name": "Arm drag",
+    "category": "throws",
+    "file": "paired/arm-drag.json",
+    "duration": 1.2,
+    "attacker": "throws.arm-drag-attacker",
+    "defender": "throws.arm-drag-defender",
+    "tags": [
+      "arm-drag"
+    ]
+  },
+  {
+    "id": "pair.powerbomb",
+    "name": "Powerbomb",
+    "category": "throws",
+    "file": "paired/powerbomb.json",
+    "duration": 2.3,
+    "attacker": "throws.powerbomb-attacker",
+    "defender": "throws.powerbomb-defender",
+    "tags": [
+      "powerbomb",
+      "finisher"
+    ]
+  },
+  {
+    "id": "pair.chokeslam",
+    "name": "Chokeslam",
+    "category": "throws",
+    "file": "paired/chokeslam.json",
+    "duration": 1.9,
+    "attacker": "throws.chokeslam-attacker",
+    "defender": "throws.chokeslam-defender",
+    "tags": [
+      "slam",
+      "finisher"
+    ]
+  },
+  {
+    "id": "pair.powerslam",
+    "name": "Scoop powerslam",
+    "category": "throws",
+    "file": "paired/powerslam.json",
+    "duration": 2.0,
+    "attacker": "throws.powerslam-attacker",
+    "defender": "throws.powerslam-defender",
+    "tags": [
+      "slam",
+      "power"
+    ]
+  },
+  {
+    "id": "pair.backbreaker",
+    "name": "Backbreaker",
+    "category": "throws",
+    "file": "paired/backbreaker.json",
+    "duration": 2.3,
+    "attacker": "throws.backbreaker-attacker",
+    "defender": "throws.backbreaker-defender",
+    "tags": [
+      "backbreaker"
+    ]
+  },
+  {
+    "id": "pair.fireman-carry",
+    "name": "Fireman's carry slam",
+    "category": "throws",
+    "file": "paired/fireman-carry.json",
+    "duration": 2.6,
+    "attacker": "throws.fireman-carry-attacker",
+    "defender": "throws.fireman-carry-defender",
+    "tags": [
+      "carry",
+      "power"
+    ]
+  },
+  {
+    "id": "pair.bulldog",
+    "name": "Bulldog",
+    "category": "throws",
+    "file": "paired/bulldog.json",
+    "duration": 1.4,
+    "attacker": "throws.bulldog-attacker",
+    "defender": "throws.bulldog-defender",
+    "tags": [
+      "bulldog"
+    ]
+  },
+  {
+    "id": "pair.figure-four",
+    "name": "Figure-four leglock",
+    "category": "submissions",
+    "file": "paired/figure-four.json",
+    "duration": 2.4,
+    "attacker": "submissions.figure-four-attacker",
+    "defender": "submissions.figure-four-defender",
+    "tags": [
+      "figure-four",
+      "leg-work"
+    ]
+  },
+  {
+    "id": "pair.figure-four-hold",
+    "name": "Figure-four (hold loop)",
+    "category": "submissions",
+    "file": "paired/figure-four-hold.json",
+    "duration": 2.4,
+    "attacker": "submissions.figure-four-hold-attacker",
+    "defender": "submissions.figure-four-hold-defender",
+    "tags": [
+      "loop",
+      "figure-four"
+    ]
+  },
+  {
+    "id": "pair.sharpshooter",
+    "name": "Sharpshooter",
+    "category": "submissions",
+    "file": "paired/sharpshooter.json",
+    "duration": 1.9,
+    "attacker": "submissions.sharpshooter-attacker",
+    "defender": "submissions.sharpshooter-defender",
+    "tags": [
+      "sharpshooter",
+      "back-work"
+    ]
+  },
+  {
+    "id": "pair.sharpshooter-hold",
+    "name": "Sharpshooter (hold loop)",
+    "category": "submissions",
+    "file": "paired/sharpshooter-hold.json",
+    "duration": 2.4,
+    "attacker": "submissions.sharpshooter-hold-attacker",
+    "defender": "submissions.sharpshooter-hold-defender",
+    "tags": [
+      "loop",
+      "sharpshooter"
+    ]
+  },
+  {
+    "id": "pair.boston-crab",
+    "name": "Boston crab",
+    "category": "submissions",
+    "file": "paired/boston-crab.json",
+    "duration": 1.9,
+    "attacker": "submissions.boston-crab-attacker",
+    "defender": "submissions.boston-crab-defender",
+    "tags": [
+      "boston-crab",
+      "back-work"
+    ]
+  },
+  {
+    "id": "pair.boston-crab-hold",
+    "name": "Boston crab (hold loop)",
+    "category": "submissions",
+    "file": "paired/boston-crab-hold.json",
+    "duration": 2.4,
+    "attacker": "submissions.boston-crab-hold-attacker",
+    "defender": "submissions.boston-crab-hold-defender",
+    "tags": [
+      "loop",
+      "boston-crab"
+    ]
+  },
+  {
+    "id": "pair.armbar",
+    "name": "Cross armbar",
+    "category": "submissions",
+    "file": "paired/armbar.json",
+    "duration": 2.0,
+    "attacker": "submissions.armbar-attacker",
+    "defender": "submissions.armbar-defender",
+    "tags": [
+      "armbar",
+      "arm-work"
+    ]
+  },
+  {
+    "id": "pair.armbar-hold",
+    "name": "Cross armbar (hold loop)",
+    "category": "submissions",
+    "file": "paired/armbar-hold.json",
+    "duration": 2.0,
+    "attacker": "submissions.armbar-hold-attacker",
+    "defender": "submissions.armbar-hold-defender",
+    "tags": [
+      "loop",
+      "armbar"
+    ]
+  },
+  {
+    "id": "pair.camel-clutch",
+    "name": "Camel clutch",
+    "category": "submissions",
+    "file": "paired/camel-clutch.json",
+    "duration": 2.0,
+    "attacker": "submissions.camel-clutch-attacker",
+    "defender": "submissions.camel-clutch-defender",
+    "tags": [
+      "camel-clutch",
+      "back-work"
+    ]
+  },
+  {
+    "id": "pair.camel-clutch-hold",
+    "name": "Camel clutch (hold loop)",
+    "category": "submissions",
+    "file": "paired/camel-clutch-hold.json",
+    "duration": 2.0,
+    "attacker": "submissions.camel-clutch-hold-attacker",
+    "defender": "submissions.camel-clutch-hold-defender",
+    "tags": [
+      "loop",
+      "camel-clutch"
+    ]
+  },
+  {
+    "id": "pair.crossface",
+    "name": "Crossface",
+    "category": "submissions",
+    "file": "paired/crossface.json",
+    "duration": 2.0,
+    "attacker": "submissions.crossface-attacker",
+    "defender": "submissions.crossface-defender",
+    "tags": [
+      "crossface"
+    ]
+  },
+  {
+    "id": "pair.crossface-hold",
+    "name": "Crossface (hold loop)",
+    "category": "submissions",
+    "file": "paired/crossface-hold.json",
+    "duration": 2.0,
+    "attacker": "submissions.crossface-hold-attacker",
+    "defender": "submissions.crossface-hold-defender",
+    "tags": [
+      "loop",
+      "crossface"
+    ]
+  },
+  {
+    "id": "pair.ankle-lock",
+    "name": "Ankle lock",
+    "category": "submissions",
+    "file": "paired/ankle-lock.json",
+    "duration": 1.8,
+    "attacker": "submissions.ankle-lock-attacker",
+    "defender": "submissions.ankle-lock-defender",
+    "tags": [
+      "ankle-lock",
+      "leg-work"
+    ]
+  },
+  {
+    "id": "pair.ankle-lock-hold",
+    "name": "Ankle lock (hold loop)",
+    "category": "submissions",
+    "file": "paired/ankle-lock-hold.json",
+    "duration": 2.0,
+    "attacker": "submissions.ankle-lock-hold-attacker",
+    "defender": "submissions.ankle-lock-hold-defender",
+    "tags": [
+      "loop",
+      "ankle-lock"
+    ]
+  },
+  {
+    "id": "pair.sleeper-hold",
+    "name": "Sleeper hold",
+    "category": "submissions",
+    "file": "paired/sleeper-hold.json",
+    "duration": 2.0,
+    "attacker": "submissions.sleeper-hold-attacker",
+    "defender": "submissions.sleeper-hold-defender",
+    "tags": [
+      "sleeper",
+      "neck-work"
+    ]
+  },
+  {
+    "id": "pair.sleeper-hold-hold",
+    "name": "Sleeper hold (hold loop)",
+    "category": "submissions",
+    "file": "paired/sleeper-hold-hold.json",
+    "duration": 2.4,
+    "attacker": "submissions.sleeper-hold-hold-attacker",
+    "defender": "submissions.sleeper-hold-hold-defender",
+    "tags": [
+      "loop",
+      "sleeper-hold"
+    ]
+  },
+  {
+    "id": "pair.abdominal-stretch",
+    "name": "Abdominal stretch",
+    "category": "submissions",
+    "file": "paired/abdominal-stretch.json",
+    "duration": 1.6,
+    "attacker": "submissions.abdominal-stretch-attacker",
+    "defender": "submissions.abdominal-stretch-defender",
+    "tags": [
+      "abdominal-stretch"
+    ]
+  },
+  {
+    "id": "pair.abdominal-stretch-hold",
+    "name": "Abdominal stretch (hold loop)",
+    "category": "submissions",
+    "file": "paired/abdominal-stretch-hold.json",
+    "duration": 2.0,
+    "attacker": "submissions.abdominal-stretch-hold-attacker",
+    "defender": "submissions.abdominal-stretch-hold-defender",
+    "tags": [
+      "loop",
+      "abdominal-stretch"
+    ]
+  },
+  {
+    "id": "pair.cover",
+    "name": "Cover",
+    "category": "ground",
+    "file": "paired/cover.json",
+    "duration": 1.3,
+    "attacker": "ground.cover-attacker",
+    "defender": "ground.cover-defender",
+    "tags": [
+      "pin"
+    ]
+  },
+  {
+    "id": "pair.hook-leg-cover",
+    "name": "Hooked-leg cover",
+    "category": "ground",
+    "file": "paired/hook-leg-cover.json",
+    "duration": 1.3,
+    "attacker": "ground.hook-leg-cover-attacker",
+    "defender": "ground.hook-leg-cover-defender",
+    "tags": [
+      "pin"
+    ]
+  },
+  {
+    "id": "pair.kick-out",
+    "name": "Kick-out",
+    "category": "ground",
+    "file": "paired/kick-out.json",
+    "duration": 1.3,
+    "attacker": "ground.kick-out-attacker",
+    "defender": "ground.kick-out-defender",
+    "tags": [
+      "pin",
+      "kick-out"
+    ]
+  },
+  {
+    "id": "pair.roll-up",
+    "name": "Roll-up",
+    "category": "ground",
+    "file": "paired/roll-up.json",
+    "duration": 1.6,
+    "attacker": "ground.roll-up-attacker",
+    "defender": "ground.roll-up-defender",
+    "tags": [
+      "pin",
+      "flash-pin"
+    ]
+  },
+  {
+    "id": "pair.small-package",
+    "name": "Small package",
+    "category": "ground",
+    "file": "paired/small-package.json",
+    "duration": 1.6,
+    "attacker": "ground.small-package-attacker",
+    "defender": "ground.small-package-defender",
+    "tags": [
+      "pin",
+      "flash-pin"
+    ]
+  },
+  {
+    "id": "pair.pick-up-opponent",
+    "name": "Pick up a downed opponent",
+    "category": "ground",
+    "file": "paired/pick-up-opponent.json",
+    "duration": 1.8,
+    "attacker": "ground.pick-up-opponent-attacker",
+    "defender": "ground.pick-up-opponent-defender",
+    "tags": [
+      "ground",
+      "setup"
+    ]
+  },
+  {
+    "id": "pair.drag-opponent",
+    "name": "Drag a downed opponent",
+    "category": "ground",
+    "file": "paired/drag-opponent.json",
+    "duration": 2.4,
+    "attacker": "ground.drag-opponent-attacker",
+    "defender": "ground.drag-opponent-defender",
+    "tags": [
+      "ground"
+    ]
+  }
+]

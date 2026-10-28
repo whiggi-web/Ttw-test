@@ -1,0 +1,260 @@
+{
+  "id": "reactions.head-snap-left",
+  "name": "Head snapped to the left",
+  "category": "reactions",
+  "description": "A big hit to the right side of the face whips the head to the left; the body follows through a quarter turn and a stagger step, then squares up again.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.05,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0.0],
+      [0.06, 0.0, 0.0, 0.02, 25.0],
+      [0.25, -0.12, 0.0, 0.12, 70.0],
+      [0.5, -0.2, 0.0, 0.18, 85.0],
+      [0.8, -0.2, 0.0, 0.18, 40.0],
+      [1.05, -0.2, 0.0, 0.18, 0.0]
+    ],
+    "endOffset": [-0.2, 0.0, 0.18],
+    "endYaw": 0.0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "standing",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, 0.0, 0.0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0.8, 1.05]
+    ]
+  },
+  "events": [
+    {
+      "time": 0,
+      "name": "hit_received",
+      "zone": "head",
+      "side": "right"
+    },
+    {
+      "time": 0.05,
+      "name": "stun_start"
+    },
+    {
+      "time": 0.25,
+      "name": "footstep",
+      "foot": "left"
+    },
+    {
+      "time": 0.5,
+      "name": "footstep",
+      "foot": "right"
+    },
+    {
+      "time": 1.0,
+      "name": "recover"
+    },
+    {
+      "time": 1.05,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["reaction", "head", "heavy", "starts-standing", "ends-standing"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0.0, 0],
+        [0.06, 0, 25.0, 0],
+        [0.25, 0, 70.0, 0],
+        [0.5, 0, 85.0, 0],
+        [0.8, 0, 40.0, 0],
+        [1.05, 0, 0.0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.06, 0.0, 0.0, 0.02],
+        [0.25, -0.12, 0.0, 0.12],
+        [0.5, -0.2, 0.0, 0.18],
+        [0.8, -0.2, 0.0, 0.18],
+        [1.05, -0.2, 0.0, 0.18]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.06, 0.0, 0.0, 8],
+        [0.25, 6, 0.0, 12],
+        [0.5, 0.0, 0.0, 6],
+        [0.8, 0.0, 0.0, 0.0],
+        [1.05, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.03, 0],
+        [0.06, 0.0, -0.04, 0.0],
+        [0.25, 0.0, -0.12, 0.0],
+        [0.5, 0.0, -0.14, 0.0],
+        [0.8, 0.0, -0.08, 0.0],
+        [1.05, 0, -0.03, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.06, -4, 0, 0],
+        [0.25, -4, 0, 0],
+        [0.5, -24, 0, 0],
+        [0.8, -4, 0, 0],
+        [1.05, -4, 0, 0]
+      ]
+    },
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.06, 0, 0, 0],
+        [0.25, 0, 0, 0],
+        [0.5, -12, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.05, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.06, 0, 45, 14],
+        [0.25, 10, 30, 16],
+        [0.5, 20, 0, 0],
+        [0.8, 8, 0, 0],
+        [1.05, 4, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.06, 0, 20, 6],
+        [0.25, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.05, 0, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 55, 0, 22],
+        [0.06, 20, 0, 40],
+        [0.25, 10, 0, -55],
+        [0.5, 30, 0, 10],
+        [0.8, 55, 0, 22],
+        [1.05, 55, 0, 22]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 120, 0, 0],
+        [0.06, 120, 0, 0],
+        [0.25, 20, 0, 0],
+        [0.5, 100, 0, 0],
+        [0.8, 120, 0, 0],
+        [1.05, 120, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 50, 0, -22],
+        [0.06, 40, 0, -20],
+        [0.25, 10, 0, 55],
+        [0.5, 30, 0, -10],
+        [0.8, 50, 0, -22],
+        [1.05, 50, 0, -22]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 118, 0, 0],
+        [0.06, 118, 0, 0],
+        [0.25, 20, 0, 0],
+        [0.5, 100, 0, 0],
+        [0.8, 118, 0, 0],
+        [1.05, 118, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 16.59, 5.72, -2.42],
+        [0.06, 22.29, 2.64, -11.06],
+        [0.25, 39.09, 1.03, -10.46],
+        [0.5, 42.29, 1.4, -9.58],
+        [0.8, 25.99, 5.97, -3.71],
+        [1.05, 16.59, 5.72, -2.42]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -32.74, 0, 0],
+        [0.06, -42.85, 0, 0],
+        [0.25, -63.21, 0, 0],
+        [0.5, -68.77, 0, 0],
+        [0.8, -51.33, 0, 0],
+        [1.05, -32.74, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 16.31, -6.17, 0.69],
+        [0.06, 21.35, -6.58, 1.29],
+        [0.25, 18.67, -6.86, -5.23],
+        [0.5, 27.0, -7.46, 0.19],
+        [0.8, 25.58, -6.99, 0.73],
+        [1.05, 16.31, -6.17, 0.69]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 16.59, -5.72, 2.42],
+        [0.06, 14.23, -7.65, -5.99],
+        [0.25, 9.18, -7.49, -1.07],
+        [0.5, 19.46, -8.28, -1.25],
+        [0.8, 25.99, -5.97, 3.71],
+        [1.05, 16.59, -5.72, 2.42]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -32.74, 0, 0],
+        [0.06, -29.94, 0, 0],
+        [0.25, -50.35, 0, 0],
+        [0.5, -61.25, 0, 0],
+        [0.8, -51.33, 0, 0],
+        [1.05, -32.74, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 16.31, 6.17, -0.69],
+        [0.06, 14.91, 5.89, -0.28],
+        [0.25, 34.98, 8.2, -8.93],
+        [0.5, 41.44, 7.38, -2.04],
+        [0.8, 25.58, 6.99, -0.73],
+        [1.05, 16.31, 6.17, -0.69]
+      ]
+    }
+  }
+}

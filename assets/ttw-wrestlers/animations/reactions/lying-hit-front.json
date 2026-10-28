@@ -1,0 +1,181 @@
+{
+  "id": "reactions.lying-hit-front",
+  "name": "Hit while lying on the front",
+  "category": "reactions",
+  "description": "Lying on the front: jolted by an elbow drop, leg drop or stomp; legs curl up, then settle.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.0,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "lying-front",
+  "endState": "lying-front",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, 0.0, 0.0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.15]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0,
+      "name": "hit_received",
+      "zone": "body"
+    },
+    {
+      "time": 0.08,
+      "name": "impact",
+      "surface": "mat"
+    },
+    {
+      "time": 1.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["reaction", "ground", "starts-lying-front", "ends-lying-front"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -90, 0, 0],
+        [0.08, -96.0, 0, 0],
+        [0.3, -93.6, 0, 0],
+        [0.7, -90.9, 0, 0],
+        [1.0, -90, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.83, 0],
+        [0.08, 0, -0.78, 0],
+        [0.3, 0, -0.8, 0],
+        [0.7, 0, -0.8225, 0],
+        [1.0, 0, -0.83, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 10, 0, 0],
+        [0.08, 35.0, 0, 0],
+        [0.3, 25.0, 0, 0],
+        [0.7, 13.75, 0, 0],
+        [1.0, 10, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 20, 0],
+        [0.08, 0, 20, 0],
+        [0.3, 0, 20, 0],
+        [0.7, 0, 20, 0],
+        [1.0, 0, 20, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 0, -80],
+        [0.08, 0, 0, -80],
+        [0.3, 0, 0, -80],
+        [0.7, 0, 0, -80],
+        [1.0, 0, 0, -80]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 0, 0, -70],
+        [0.08, 0, 0, -70],
+        [0.3, 0, 0, -70],
+        [0.7, 0, 0, -70],
+        [1.0, 0, 0, -70]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, 0, 80],
+        [0.08, 0, 0, 80],
+        [0.3, 0, 0, 80],
+        [0.7, 0, 0, 80],
+        [1.0, 0, 0, 80]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 0, 0, 70],
+        [0.08, 0, 0, 70],
+        [0.3, 0, 0, 70],
+        [0.7, 0, 0, 70],
+        [1.0, 0, 0, 70]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -8],
+        [0.08, 30.0, 0, -8],
+        [0.3, 18.0, 0, -8],
+        [0.7, 4.5, 0, -8],
+        [1.0, 0, 0, -8]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.08, -53.0, 0, 0],
+        [0.3, -35.0, 0, 0],
+        [0.7, -14.75, 0, 0],
+        [1.0, -8, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [0.08, -50, 0, 0],
+        [0.3, -50, 0, 0],
+        [0.7, -50, 0, 0],
+        [1.0, -50, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 8],
+        [0.08, 35.0, 0, 8],
+        [0.3, 21.0, 0, 8],
+        [0.7, 5.25, 0, 8],
+        [1.0, 0, 0, 8]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.08, -58.0, 0, 0],
+        [0.3, -38.0, 0, 0],
+        [0.7, -15.5, 0, 0],
+        [1.0, -8, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [0.08, -50, 0, 0],
+        [0.3, -50, 0, 0],
+        [0.7, -50, 0, 0],
+        [1.0, -50, 0, 0]
+      ]
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "id": "submissions.boston-crab-hold-defender",
+  "name": "Boston crab: in the hold (loop)",
+  "category": "submissions",
+  "description": "Defender, looping: struggling in the boston crab, reaching for the ropes.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "boston-crab-locked",
+  "endState": "boston-crab-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.3, 180],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.4]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "loop", "boston-crab", "back-work", "starts-boston-crab-locked", "ends-boston-crab-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, 75.55, 180.0, 0.0],
+        [0.6, 75.55, 180.0, 0.0],
+        [1.2, 75.55, 180.0, 0.0],
+        [1.7999999999999998, 75.55, 180.0, 0.0],
+        [2.4, 75.55, 180.0, 0.0]
+      ],
+      "position": [
+        [0.0, 0, 0, 0],
+        [0.6, 0, 0, 0],
+        [1.2, 0, 0, 0],
+        [1.7999999999999998, 0, 0, 0],
+        [2.4, 0, 0, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0.0, 15, 0, 0],
+        [0.6, 15, 0, 0],
+        [1.2, 15, 0, 0],
+        [1.7999999999999998, 15, 0, 0],
+        [2.4, 15, 0, 0]
+      ]
+    },
+    "chest": {
+      "rotation": [
+        [0.0, 10, 0, 0],
+        [0.6, 10, 0, 0],
+        [1.2, 10, 0, 0],
+        [1.7999999999999998, 10, 0, 0],
+        [2.4, 10, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, -25.0, 0.0, 0],
+        [0.6, -10.0, 0.0, 0],
+        [1.2, -25.0, -0.0, 0],
+        [1.7999999999999998, -40.0, 0.0, 0],
+        [2.4, -25.0, 0.0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 0, 0, -80.0],
+        [0.6, 0, 0, -60.0],
+        [1.2, 0, 0, -80.0],
+        [1.7999999999999998, 0, 0, -100.0],
+        [2.4, 0, 0, -80.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 0, 0, -70],
+        [0.6, 0, 0, -70],
+        [1.2, 0, 0, -70],
+        [1.7999999999999998, 0, 0, -70],
+        [2.4, 0, 0, -70]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 0, 0, 80.0],
+        [0.6, 0, 0, 110.0],
+        [1.2, 0, 0, 80.0],
+        [1.7999999999999998, 0, 0, 50.0],
+        [2.4, 0, 0, 80.0]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 0, 0, 70],
+        [0.6, 0, 0, 70],
+        [1.2, 0, 0, 70],
+        [1.7999999999999998, 0, 0, 70],
+        [2.4, 0, 0, 70]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, -25.0, 0, -6],
+        [0.6, -25.0, 0, -6],
+        [1.2, -25.0, 0, -6],
+        [1.7999999999999998, -25.0, 0, -6],
+        [2.4, -25.0, 0, -6]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -30.0, 0, 0],
+        [0.6, -30.0, 0, 0],
+        [1.2, -30.0, 0, 0],
+        [1.7999999999999998, -30.0, 0, 0],
+        [2.4, -30.0, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, -25.0, 0, 6],
+        [0.6, -25.0, 0, 6],
+        [1.2, -25.0, 0, 6],
+        [1.7999999999999998, -25.0, 0, 6],
+        [2.4, -25.0, 0, 6]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -30.0, 0, 0],
+        [0.6, -30.0, 0, 0],
+        [1.2, -30.0, 0, 0],
+        [1.7999999999999998, -30.0, 0, 0],
+        [2.4, -30.0, 0, 0]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "id": "submissions.abdominal-stretch-attacker",
+  "name": "Apply an abdominal stretch",
+  "category": "submissions",
+  "description": "Attacker: from behind, step the right leg over the opponent's left leg, drag their left arm over the head and lean away, stretching their side.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.6,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.5, -0.1, 0.0, 0.1, -8.0],
+      [1.0, -0.25, 0.0, 0.1, -20.0],
+      [1.6, -0.25, 0.0, 0.1, -20.0]
+    ],
+    "endOffset": [-0.25, 0.0, 0.1],
+    "endYaw": -20.0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "rear-lock-hold",
+  "endState": "abdominal-stretch-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0.0, -0.48, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.24]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.3,
+      "name": "attack_start"
+    },
+    {
+      "time": 0.4,
+      "name": "grab",
+      "attachment": "leftHandGrip"
+    },
+    {
+      "time": 0.8,
+      "name": "footstep"
+    },
+    {
+      "time": 1.0,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.6,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "abdominal-stretch", "starts-rear-lock-hold", "ends-abdominal-stretch-hold"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.5, 0, -8.0, 0],
+        [1.0, 0, -20.0, 0],
+        [1.6, 0, -20.0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.5, -0.1, 0.0, 0.1],
+        [1.0, -0.25, 0.0, 0.1],
+        [1.6, -0.25, 0.0, 0.1]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, -10, 0.0, 0.0],
+        [0.5, -8, 0.0, 4.0],
+        [1.0, -8, 0.0, 10.0],
+        [1.6, -8, 0.0, 10.0]
+      ],
+      "position": [
+        [0, 0.0, -0.12, 0.0],
+        [0.5, 0.0, -0.12, 0.0],
+        [1.0, 0.0, -0.12, 0.0],
+        [1.6, 0.0, -0.12, 0.0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 25, 0],
+        [0.5, 0, 0, 0],
+        [1.0, 0, 0, 0],
+        [1.6, 0, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 50.54, -49.88, 27.13],
+        [0.5, 25.71, -48.67, -78.58],
+        [1.0, 3.48, 21.08, 138.7],
+        [1.6, 3.48, 21.08, 138.7]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 53.31, 0, 0],
+        [0.5, 2.31, 0, 0],
+        [1.0, 2.31, 0, 0],
+        [1.6, 2.31, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 50.54, 49.88, -27.13],
+        [0.5, 6, 0, -10],
+        [1.0, 6, 0, -10],
+        [1.6, 6, 0, -10]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 53.31, 0, 0],
+        [0.5, 14, 0, 0],
+        [1.0, 14, 0, 0],
+        [1.6, 14, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 42.15, 4.24, -6.2],
+        [0.5, 42.28, -0.67, -12.34],
+        [1.0, 39.98, -5.05, -17.55],
+        [1.6, 39.98, -5.05, -17.55]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -61.94, 0, 0],
+        [0.5, -62.51, 0, 0],
+        [1.0, -65.07, 0, 0],
+        [1.6, -65.07, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 30.2, -6.88, 3.02],
+        [0.5, 28.83, -6.92, 6.66],
+        [1.0, 33.4, -6.44, 7.67],
+        [1.6, 33.4, -6.44, 7.67]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 42.15, -4.24, 6.2],
+        [0.5, 40.19, -7.34, 1.96],
+        [1.0, 58.19, 24.71, -36.53],
+        [1.6, 58.19, 24.71, -36.53]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -61.94, 0, 0],
+        [0.5, -60.1, 0, 0],
+        [1.0, -1.75, 0, 0],
+        [1.6, -1.75, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 30.2, 6.88, -3.02],
+        [0.5, 27.89, 6.7, -1.7],
+        [1.0, -36.32, -43.63, -0.23],
+        [1.6, -36.32, -43.63, -0.23]
+      ]
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+ "id": "pair.powerslam",
+ "name": "Scoop powerslam",
+ "category": "throws",
+ "description": "From fighting stance: the attacker scoops the defender and falls on top of them. Ends with the attacker lying across the defender (covering).",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 2.0,
+ "attacker": {
+  "animation": "throws.powerslam-attacker",
+  "startState": "standing",
+  "endState": "covering",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "throws.powerslam-defender",
+  "startState": "standing",
+  "endState": "lying-back",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -0.62
+  ],
+  "defenderFacing": -180,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0.0,
+    0.0,
+    -0.75
+   ],
+   "yaw": 0
+  },
+  "defender": {
+   "offset": [
+    0.0,
+    0.0,
+    0.33
+   ],
+   "yaw": 90.0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 0.3,
+   "to": 1.12,
+   "attacker": "propRightHand->crotch,propLeftHand->upperBack",
+   "defender": "hips+chest"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.2,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 0.3,
+   "name": "grab",
+   "role": "both"
+  },
+  {
+   "time": 0.35,
+   "name": "lift_start",
+   "role": "both"
+  },
+  {
+   "time": 0.65,
+   "name": "lift_complete",
+   "role": "both"
+  },
+  {
+   "time": 1.12,
+   "name": "impact",
+   "role": "both",
+   "surface": "mat"
+  },
+  {
+   "time": 1.12,
+   "name": "land",
+   "role": "defender",
+   "zone": "back"
+  },
+  {
+   "time": 2.0,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "slam",
+  "power"
+ ]
+}

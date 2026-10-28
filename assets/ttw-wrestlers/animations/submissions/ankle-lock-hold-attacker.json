@@ -1,0 +1,156 @@
+{
+  "id": "submissions.ankle-lock-hold-attacker",
+  "name": "Ankle lock: hold (loop)",
+  "category": "submissions",
+  "description": "Attacker, looping: wrenching back on the ankle lock.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "ankle-lock-hold",
+  "endState": "ankle-lock-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.15, 0, 0.12, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.0]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "loop", "ankle-lock", "leg-work", "starts-ankle-lock-hold", "ends-ankle-lock-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, 50.0, 0, 0],
+        [0.5, 60.0, 0, 0],
+        [1.0, 50.0, 0, 0],
+        [1.5, 40.0, 0, 0],
+        [2.0, 50.0, 0, 0]
+      ],
+      "position": [
+        [0.0, 0, -0.8, 0.05],
+        [0.5, 0, -0.8, 0.05],
+        [1.0, 0, -0.8, 0.05],
+        [1.5, 0, -0.8, 0.05],
+        [2.0, 0, -0.8, 0.05]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0.0, -10, 0, 0],
+        [0.5, -10, 0, 0],
+        [1.0, -10, 0, 0],
+        [1.5, -10, 0, 0],
+        [2.0, -10, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, 20, 0, 0],
+        [0.5, 20, 0, 0],
+        [1.0, 20, 0, 0],
+        [1.5, 20, 0, 0],
+        [2.0, 20, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 61.76, -36.24, 36.34],
+        [0.5, 53.93, -35.83, 35.66],
+        [1.0, 61.76, -36.24, 36.34],
+        [1.5, 70.12, -37.12, 37.25],
+        [2.0, 61.76, -36.24, 36.34]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 2.31, 0, 0],
+        [0.5, 2.31, 0, 0],
+        [1.0, 2.31, 0, 0],
+        [1.5, 2.31, 0, 0],
+        [2.0, 2.31, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 63.37, 34.82, -39.47],
+        [0.5, 55.53, 34.76, -38.67],
+        [1.0, 63.37, 34.82, -39.47],
+        [1.5, 71.74, 35.24, -40.52],
+        [2.0, 63.37, 34.82, -39.47]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 2.31, 0, 0],
+        [0.5, 2.31, 0, 0],
+        [1.0, 2.31, 0, 0],
+        [1.5, 2.31, 0, 0],
+        [2.0, 2.31, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 70, 0, -15],
+        [0.5, 70, 0, -15],
+        [1.0, 70, 0, -15],
+        [1.5, 70, 0, -15],
+        [2.0, 70, 0, -15]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -50, 0, 0],
+        [0.5, -50, 0, 0],
+        [1.0, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [2.0, -50, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 60, 0, 10],
+        [0.5, 60, 0, 10],
+        [1.0, 60, 0, 10],
+        [1.5, 60, 0, 10],
+        [2.0, 60, 0, 10]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -30, 0, 0],
+        [0.5, -30, 0, 0],
+        [1.0, -30, 0, 0],
+        [1.5, -30, 0, 0],
+        [2.0, -30, 0, 0]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

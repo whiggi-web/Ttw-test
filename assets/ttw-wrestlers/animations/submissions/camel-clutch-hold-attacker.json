@@ -1,0 +1,174 @@
+{
+  "id": "submissions.camel-clutch-hold-attacker",
+  "name": "Camel clutch: hold (loop)",
+  "category": "submissions",
+  "description": "Attacker, looping: wrenching back on the camel clutch.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "camel-clutch-hold",
+  "endState": "camel-clutch-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.05, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.0]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "loop", "camel-clutch", "back-work", "starts-camel-clutch-hold", "ends-camel-clutch-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, -2.0, 0, 0],
+        [0.5, 4.0, 0, 0],
+        [1.0, -2.0, 0, 0],
+        [1.5, -8.0, 0, 0],
+        [2.0, -2.0, 0, 0]
+      ],
+      "position": [
+        [0.0, 0, -0.58, 0.04],
+        [0.5, 0, -0.58, 0.04],
+        [1.0, 0, -0.58, 0.04],
+        [1.5, 0, -0.58, 0.04],
+        [2.0, 0, -0.58, 0.04]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0.0, 18.0, 0, 0],
+        [0.5, 24.0, 0, 0],
+        [1.0, 18.0, 0, 0],
+        [1.5, 12.0, 0, 0],
+        [2.0, 18.0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, 10, 0, 0],
+        [0.5, 10, 0, 0],
+        [1.0, 10, 0, 0],
+        [1.5, 10, 0, 0],
+        [2.0, 10, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 44.79, -36.27, 33.06],
+        [0.5, 36.48, -36.5, 32.6],
+        [1.0, 44.79, -36.27, 33.06],
+        [1.5, 53.48, -36.49, 33.7],
+        [2.0, 44.79, -36.27, 33.06]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 2.31, 0, 0],
+        [0.5, 2.31, 0, 0],
+        [1.0, 2.31, 0, 0],
+        [1.5, 2.31, 0, 0],
+        [2.0, 2.31, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 46.48, 35.36, -36.91],
+        [0.5, 38.12, 35.98, -36.32],
+        [1.0, 46.48, 35.36, -36.91],
+        [1.5, 55.25, 35.11, -37.74],
+        [2.0, 46.48, 35.36, -36.91]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 2.31, 0, 0],
+        [0.5, 2.31, 0, 0],
+        [1.0, 2.31, 0, 0],
+        [1.5, 2.31, 0, 0],
+        [2.0, 2.31, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 92.12, -32.09, -23.59],
+        [0.5, 85.62, -32.35, -23.7],
+        [1.0, 92.12, -32.09, -23.59],
+        [1.5, 98.37, -32.09, -23.1],
+        [2.0, 92.12, -32.09, -23.59]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -112.19, 0, 0],
+        [0.5, -112.6, 0, 0],
+        [1.0, -112.19, 0, 0],
+        [1.5, -111.72, 0, 0],
+        [2.0, -112.19, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, 22.08, -23.66, 32.05],
+        [0.5, 22.96, -23.49, 32.49],
+        [1.0, 22.08, -23.66, 32.05],
+        [1.5, 21.38, -23.3, 31.95],
+        [2.0, 22.08, -23.66, 32.05]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 92.12, 32.09, 23.59],
+        [0.5, 85.62, 32.35, 23.7],
+        [1.0, 92.12, 32.09, 23.59],
+        [1.5, 98.37, 32.09, 23.1],
+        [2.0, 92.12, 32.09, 23.59]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -112.19, 0, 0],
+        [0.5, -112.6, 0, 0],
+        [1.0, -112.19, 0, 0],
+        [1.5, -111.72, 0, 0],
+        [2.0, -112.19, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, 22.08, 23.66, -32.05],
+        [0.5, 22.96, 23.49, -32.49],
+        [1.0, 22.08, 23.66, -32.05],
+        [1.5, 21.38, 23.3, -31.95],
+        [2.0, 22.08, 23.66, -32.05]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "id": "striking.chop",
+  "name": "Knife-edge chop",
+  "category": "striking",
+  "description": "Wind the right arm back and lash an open-hand chop across the opponent's chest, stepping in on the left foot.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.05,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0.0],
+      [0.3, 0.0, 0.0, 0.02, 0.0],
+      [0.42, 0.0, 0.0, -0.08, 0.0],
+      [0.56, 0.0, 0.0, -0.1, 0.0],
+      [0.8, 0.0, 0.0, -0.06, 0.0],
+      [1.05, 0.0, 0.0, -0.04, 0.0]
+    ],
+    "endOffset": [0.0, 0.0, -0.04],
+    "endYaw": 0.0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "standing",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, 0.0, 0.0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [
+    {
+      "name": "approach",
+      "start": 0,
+      "end": 0.3
+    },
+    {
+      "name": "contact",
+      "start": 0.3,
+      "end": 0.5
+    },
+    {
+      "name": "recovery",
+      "start": 0.5,
+      "end": 1.05
+    }
+  ],
+  "interrupt": {
+    "windows": [
+      [0, 0.15],
+      [0.75, 1.05]
+    ]
+  },
+  "events": [
+    {
+      "time": 0.18,
+      "name": "attack_start"
+    },
+    {
+      "time": 0.42,
+      "name": "hit",
+      "zone": "body",
+      "attachment": "propRightHand",
+      "reach": 0.72
+    },
+    {
+      "time": 0.42,
+      "name": "footstep",
+      "foot": "left"
+    },
+    {
+      "time": 1.0,
+      "name": "recover"
+    },
+    {
+      "time": 1.05,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["strike", "chop", "open-hand", "starts-standing", "ends-standing"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0.0, 0],
+        [0.3, 0, 0.0, 0],
+        [0.42, 0, 0.0, 0],
+        [0.56, 0, 0.0, 0],
+        [0.8, 0, 0.0, 0],
+        [1.05, 0, 0.0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.3, 0.0, 0.0, 0.02],
+        [0.42, 0.0, 0.0, -0.08],
+        [0.56, 0.0, 0.0, -0.1],
+        [0.8, 0.0, 0.0, -0.06],
+        [1.05, 0.0, 0.0, -0.04]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.3, 0.0, -38, 0.0],
+        [0.42, 0, 6, 0.0],
+        [0.56, -4, 38, 0.0],
+        [0.8, 0.0, 8, 0.0],
+        [1.05, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.03, 0],
+        [0.3, 0.0, -0.06, 0.0],
+        [0.42, 0.0, -0.07, 0.0],
+        [0.56, 0.0, -0.06, 0.0],
+        [0.8, 0.0, -0.04, 0.0],
+        [1.05, 0, -0.03, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.3, 0, -10, 0],
+        [0.42, 0, 4, 0],
+        [0.56, 0, 14, 0],
+        [0.8, -4, 0, 0],
+        [1.05, -4, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.3, 4, 0, 0],
+        [0.42, 4, 0, 0],
+        [0.56, 4, 0, 0],
+        [0.8, 4, 0, 0],
+        [1.05, 4, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 55, 0, 22],
+        [0.3, 55, 0, 22],
+        [0.42, 55, 0, 22],
+        [0.56, 55, 0, 22],
+        [0.8, 55, 0, 22],
+        [1.05, 55, 0, 22]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 120, 0, 0],
+        [0.3, 120, 0, 0],
+        [0.42, 120, 0, 0],
+        [0.56, 120, 0, 0],
+        [0.8, 120, 0, 0],
+        [1.05, 120, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 50, 0, -22],
+        [0.3, 30.57, 19.83, 24.87],
+        [0.42, 83.13, 51.34, -25.38],
+        [0.56, 66.88, 39.28, -48.54],
+        [0.8, 50, 0, -22],
+        [1.05, 50, 0, -22]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 118, 0, 0],
+        [0.3, 87.65, 0, 0],
+        [0.42, 2.31, 0, 0],
+        [0.56, 41.87, 0, 0],
+        [0.8, 118, 0, 0],
+        [1.05, 118, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 16.59, 5.72, -2.42],
+        [0.3, 16.05, 6.71, -1.32],
+        [0.42, 34.28, 5.99, -0.48],
+        [0.56, 26.73, 3.42, 12.9],
+        [0.8, 20.79, -28.95, 2.62],
+        [1.05, 16.59, 5.72, -2.42]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -32.74, 0, 0],
+        [0.3, -43.44, 0, 0],
+        [0.42, -31.58, 0, 0],
+        [0.56, -11.59, 0, 0],
+        [0.8, -1.75, 0, 0],
+        [1.05, -32.74, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 16.31, -6.17, 0.69],
+        [0.3, 27.85, 31.19, -0.68],
+        [0.42, -3.13, -11.21, -3.03],
+        [0.56, -20.17, -35.11, -13.14],
+        [0.8, -19.22, 20.0, 7.89],
+        [1.05, 16.31, -6.17, 0.69]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 16.59, -5.72, 2.42],
+        [0.3, 27.55, -6.77, 1.35],
+        [0.42, 12.82, -6.54, 2.43],
+        [0.56, 7.63, -6.97, -2.7],
+        [0.8, 8.75, -6.19, 1.5],
+        [1.05, 16.59, -5.72, 2.42]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -32.74, 0, 0],
+        [0.3, -43.44, 0, 0],
+        [0.42, -44.45, 0, 0],
+        [0.56, -36.24, 0, 0],
+        [0.8, -33.61, 0, 0],
+        [1.05, -32.74, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 16.31, 6.17, -0.69],
+        [0.3, 14.18, 44.6, 2.71],
+        [0.42, 31.73, 0.91, -0.93],
+        [0.56, 35.5, -31.0, 6.63],
+        [0.8, 24.89, -1.65, -0.54],
+        [1.05, 16.31, 6.17, -0.69]
+      ]
+    }
+  }
+}

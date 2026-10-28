@@ -1,0 +1,2523 @@
+[
+  {
+    "id": "ropes.enter-between-ropes",
+    "name": "Enter between middle and top ropes",
+    "category": "ropes",
+    "file": "animations/ropes/enter-between-ropes.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-over-bottom",
+    "name": "Enter over the bottom rope",
+    "category": "ropes",
+    "file": "animations/ropes/enter-over-bottom.json",
+    "duration": 2.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "low",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-duck-top",
+    "name": "Duck under the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/enter-duck-top.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "fast",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-climb-over-top",
+    "name": "Climb over the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/enter-climb-over-top.json",
+    "duration": 2.95,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "footstep",
+      "footstep",
+      "rope_release",
+      "jump",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "slow",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-between-ropes",
+    "name": "Exit between middle and top ropes",
+    "category": "ropes",
+    "file": "animations/ropes/exit-between-ropes.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "apron",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-duck-through",
+    "name": "Duck out through the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/exit-duck-through.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "fast",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "apron",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-climb-over-top",
+    "name": "Climb out over the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/exit-climb-over-top.json",
+    "duration": 2.95,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "footstep",
+      "footstep",
+      "rope_release",
+      "jump",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "slow",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "apron",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-under-middle",
+    "name": "Exit between bottom and middle ropes",
+    "category": "ropes",
+    "file": "animations/ropes/exit-under-middle.json",
+    "duration": 2.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "low",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "apron",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-jump-over-top",
+    "name": "Jump over the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/enter-jump-over-top.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "jump",
+      "apex",
+      "rope_release",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "athletic",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-jump-over-top",
+    "name": "Vault over the top rope to the floor",
+    "category": "ropes",
+    "file": "animations/ropes/exit-jump-over-top.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "jump",
+      "apex",
+      "rope_release",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "athletic",
+      "to-floor",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-slide-under",
+    "name": "Slide in under the bottom rope",
+    "category": "ropes",
+    "file": "animations/ropes/enter-slide-under.json",
+    "duration": 2.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "jump",
+      "land",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "from-floor",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "floor",
+    "endLocation": "ring",
+    "placement": "floor-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-dive-under",
+    "name": "Dive in under the bottom rope",
+    "category": "ropes",
+    "file": "animations/ropes/enter-dive-under.json",
+    "duration": 1.15,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "jump",
+      "land",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "from-floor",
+      "fast",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "floor",
+    "endLocation": "ring",
+    "placement": "floor-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-from-corner",
+    "name": "Enter at the corner",
+    "category": "ropes",
+    "file": "animations/ropes/enter-from-corner.json",
+    "duration": 2.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "footstep",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "corner",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-beside-corner",
+    "batch": 3
+  },
+  {
+    "id": "ropes.enter-injured",
+    "name": "Enter the ring injured",
+    "category": "ropes",
+    "file": "animations/ropes/enter-injured.json",
+    "duration": 5.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "land",
+      "rope_contact",
+      "rope_release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-entry",
+      "injured",
+      "slow",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-slide-under",
+    "name": "Slide out under the bottom rope",
+    "category": "ropes",
+    "file": "animations/ropes/exit-slide-under.json",
+    "duration": 1.95,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "land",
+      "rope_release",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "to-floor",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-roll-under",
+    "name": "Roll out under the bottom rope",
+    "category": "ropes",
+    "file": "animations/ropes/exit-roll-under.json",
+    "duration": 2.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "land",
+      "rope_release",
+      "jump",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "to-floor",
+      "roll",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.exit-crawl-out",
+    "name": "Crawl out of the ring",
+    "category": "ropes",
+    "file": "animations/ropes/exit-crawl-out.json",
+    "duration": 4.75,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "land",
+      "rope_contact",
+      "rope_release",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ring-exit",
+      "to-floor",
+      "injured",
+      "slow",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.apron-climb-up",
+    "name": "Climb onto the apron",
+    "category": "ropes",
+    "file": "animations/ropes/apron-climb-up.json",
+    "duration": 1.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "jump",
+      "land",
+      "footstep",
+      "recover",
+      "rope_contact",
+      "animation_complete"
+    ],
+    "tags": [
+      "apron",
+      "from-floor",
+      "starts-standing",
+      "ends-apron-hold"
+    ],
+    "startState": "standing",
+    "endState": "apron-hold",
+    "startLocation": "floor",
+    "endLocation": "apron",
+    "placement": "floor-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.apron-drop-down",
+    "name": "Drop down from the apron",
+    "category": "ropes",
+    "file": "animations/ropes/apron-drop-down.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_release",
+      "jump",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "apron",
+      "to-floor",
+      "starts-apron-hold",
+      "ends-standing"
+    ],
+    "startState": "apron-hold",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "floor",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.apron-idle",
+    "name": "Apron idle",
+    "category": "ropes",
+    "file": "animations/ropes/apron-idle.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "apron",
+      "loop",
+      "idle",
+      "starts-apron-hold",
+      "ends-apron-hold"
+    ],
+    "startState": "apron-hold",
+    "endState": "apron-hold",
+    "startLocation": "apron",
+    "endLocation": "apron",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.apron-shuffle-left",
+    "name": "Apron shuffle left",
+    "category": "ropes",
+    "file": "animations/ropes/apron-shuffle-left.json",
+    "duration": 1.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "footstep",
+      "footstep",
+      "animation_complete"
+    ],
+    "tags": [
+      "apron",
+      "loop",
+      "locomotion",
+      "starts-apron-hold",
+      "ends-apron-hold"
+    ],
+    "startState": "apron-hold",
+    "endState": "apron-hold",
+    "startLocation": "apron",
+    "endLocation": "apron",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.apron-shuffle-right",
+    "name": "Apron shuffle right",
+    "category": "ropes",
+    "file": "animations/ropes/apron-shuffle-right.json",
+    "duration": 1.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "footstep",
+      "footstep",
+      "animation_complete"
+    ],
+    "tags": [
+      "apron",
+      "loop",
+      "locomotion",
+      "starts-apron-hold",
+      "ends-apron-hold"
+    ],
+    "startState": "apron-hold",
+    "endState": "apron-hold",
+    "startLocation": "apron",
+    "endLocation": "apron",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.apron-hang-on",
+    "name": "Hang on at the apron edge",
+    "category": "ropes",
+    "file": "animations/ropes/apron-hang-on.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "apron",
+      "loop",
+      "elimination-risk",
+      "starts-apron-teeter",
+      "ends-apron-teeter"
+    ],
+    "startState": "apron-teeter",
+    "endState": "apron-teeter",
+    "startLocation": "apron",
+    "endLocation": "apron",
+    "placement": "apron-edge-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "eliminations.apron-fall-back",
+    "name": "Fall backwards off the apron",
+    "category": "eliminations",
+    "file": "animations/eliminations/apron-fall-back.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "stun_start",
+      "jump",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "elimination",
+      "to-floor",
+      "fall",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "apron",
+    "endLocation": "floor",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "eliminations.apron-fall-forward",
+    "name": "Fall forwards off the apron",
+    "category": "eliminations",
+    "file": "animations/eliminations/apron-fall-forward.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "stun_start",
+      "jump",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "elimination",
+      "to-floor",
+      "fall",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "apron",
+    "endLocation": "floor",
+    "placement": "apron-facing-out",
+    "batch": 3
+  },
+  {
+    "id": "eliminations.fall-through-ropes",
+    "name": "Stumble through the ropes to the floor",
+    "category": "eliminations",
+    "file": "animations/eliminations/fall-through-ropes.json",
+    "duration": 1.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "stun_start",
+      "footstep",
+      "footstep",
+      "rope_contact",
+      "rope_release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "elimination",
+      "to-floor",
+      "fall",
+      "stumble",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "eliminations.knocked-through-ropes",
+    "name": "Knocked backwards through the ropes",
+    "category": "eliminations",
+    "file": "animations/eliminations/knocked-through-ropes.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "stun_start",
+      "rope_contact",
+      "rope_release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "elimination",
+      "to-floor",
+      "fall",
+      "reaction",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "eliminations.thrown-over-top",
+    "name": "Thrown over the top rope",
+    "category": "eliminations",
+    "file": "animations/eliminations/thrown-over-top.json",
+    "duration": 1.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "stun_start",
+      "rope_contact",
+      "apex",
+      "rope_release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "elimination",
+      "to-floor",
+      "fall",
+      "over-top-rope",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "eliminations.thrown-through-middle",
+    "name": "Thrown through the middle ropes",
+    "category": "eliminations",
+    "file": "animations/eliminations/thrown-through-middle.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "stun_start",
+      "footstep",
+      "jump",
+      "rope_contact",
+      "rope_release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "elimination",
+      "to-floor",
+      "fall",
+      "through-ropes",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.grab-ropes",
+    "name": "Grab the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/grab-ropes.json",
+    "duration": 0.85,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "rope_contact",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "hold",
+      "starts-standing",
+      "ends-rope-hold"
+    ],
+    "startState": "standing",
+    "endState": "rope-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.hold-ropes",
+    "name": "Hold the ropes (loop)",
+    "category": "ropes",
+    "file": "animations/ropes/hold-ropes.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "hold",
+      "loop",
+      "starts-rope-hold",
+      "ends-rope-hold"
+    ],
+    "startState": "rope-hold",
+    "endState": "rope-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.turn-from-ropes",
+    "name": "Turn away from the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/turn-from-ropes.json",
+    "duration": 1.05,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_release",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "turn",
+      "starts-rope-hold",
+      "ends-standing"
+    ],
+    "startState": "rope-hold",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.grab-hold",
+    "name": "Reach back and brace on the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/grab-hold.json",
+    "duration": 0.7,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "brace",
+      "rope-break",
+      "starts-standing",
+      "ends-rope-lean"
+    ],
+    "startState": "standing",
+    "endState": "rope-lean",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.stretch",
+    "name": "Stretch on the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/stretch.json",
+    "duration": 3.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "rope_release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "taunt",
+      "warm-up",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.run-into",
+    "name": "Run into the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/run-into.json",
+    "duration": 0.95,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "footstep",
+      "rope_contact",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "running",
+      "starts-running",
+      "ends-rope-lean"
+    ],
+    "startState": "running",
+    "endState": "rope-lean",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "running-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.bounce-running",
+    "name": "Bounce off the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/bounce-running.json",
+    "duration": 1.28,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "rope_contact",
+      "rebound",
+      "footstep",
+      "footstep",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "running",
+      "rebound",
+      "chains-to-run",
+      "starts-running",
+      "ends-running"
+    ],
+    "startState": "running",
+    "endState": "running",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "running-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.rebound-sprint",
+    "name": "Rebound into a sprint",
+    "category": "ropes",
+    "file": "animations/ropes/rebound-sprint.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rebound",
+      "footstep",
+      "footstep",
+      "footstep",
+      "footstep",
+      "release",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "rebound",
+      "running",
+      "chains-to-run",
+      "starts-rope-lean",
+      "ends-running"
+    ],
+    "startState": "rope-lean",
+    "endState": "running",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.rebound-clothesline",
+    "name": "Rebound clothesline",
+    "category": "ropes",
+    "file": "animations/ropes/rebound-clothesline.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rebound",
+      "footstep",
+      "footstep",
+      "footstep",
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "rebound",
+      "strike",
+      "running-attack",
+      "starts-rope-lean",
+      "ends-standing"
+    ],
+    "startState": "rope-lean",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.rebound-crossbody",
+    "name": "Rebound crossbody",
+    "category": "ropes",
+    "file": "animations/ropes/rebound-crossbody.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rebound",
+      "footstep",
+      "footstep",
+      "jump",
+      "apex",
+      "hit",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "rebound",
+      "aerial",
+      "running-attack",
+      "starts-rope-lean",
+      "ends-lying-front"
+    ],
+    "startState": "rope-lean",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.whipped-into",
+    "name": "Whipped into the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/whipped-into.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "release",
+      "footstep",
+      "footstep",
+      "footstep",
+      "rope_contact",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "whip",
+      "defender",
+      "irish-whip",
+      "starts-standing",
+      "ends-rope-lean"
+    ],
+    "startState": "standing",
+    "endState": "rope-lean",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ropes.irish-whip",
+    "name": "Irish whip",
+    "category": "ropes",
+    "file": "animations/ropes/irish-whip.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "attack_start",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "whip",
+      "attacker",
+      "irish-whip",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ropes.pushed-against",
+    "name": "Shoved into the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/pushed-against.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "rope_contact",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "defender",
+      "shove",
+      "starts-standing",
+      "ends-rope-lean"
+    ],
+    "startState": "standing",
+    "endState": "rope-lean",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ropes.push-into-ropes",
+    "name": "Shove into the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/push-into-ropes.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "attacker",
+      "shove",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "ropes.get-tangled",
+    "name": "Get tangled in the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/get-tangled.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "tangled",
+      "stunned",
+      "starts-rope-lean",
+      "ends-rope-tangled"
+    ],
+    "startState": "rope-lean",
+    "endState": "rope-tangled",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.tangled-struggle",
+    "name": "Struggle in the ropes (loop)",
+    "category": "ropes",
+    "file": "animations/ropes/tangled-struggle.json",
+    "duration": 2.0,
+    "loop": true,
+    "rootMotion": "curve",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "tangled",
+      "loop",
+      "stunned",
+      "starts-rope-tangled",
+      "ends-rope-tangled"
+    ],
+    "startState": "rope-tangled",
+    "endState": "rope-tangled",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.tangled-escape",
+    "name": "Break free of the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/tangled-escape.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_release",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "tangled",
+      "escape",
+      "starts-rope-tangled",
+      "ends-standing"
+    ],
+    "startState": "rope-tangled",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.drape-over-top",
+    "name": "Fold over the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/drape-over-top.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "rope_contact",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "draped",
+      "stunned",
+      "starts-standing",
+      "ends-rope-draped"
+    ],
+    "startState": "standing",
+    "endState": "rope-draped",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.hang-over-top",
+    "name": "Draped over the top rope (loop)",
+    "category": "ropes",
+    "file": "animations/ropes/hang-over-top.json",
+    "duration": 2.8,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "draped",
+      "loop",
+      "stunned",
+      "starts-rope-draped",
+      "ends-rope-draped"
+    ],
+    "startState": "rope-draped",
+    "endState": "rope-draped",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "rope-draped",
+    "batch": 3
+  },
+  {
+    "id": "ropes.drape-recover",
+    "name": "Push off the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/drape-recover.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "rope_release",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "draped",
+      "recover",
+      "starts-rope-draped",
+      "ends-standing"
+    ],
+    "startState": "rope-draped",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "rope-draped",
+    "batch": 3
+  },
+  {
+    "id": "ropes.hang-between",
+    "name": "Slump between the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/hang-between.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "rope_contact",
+      "land",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "hung",
+      "stunned",
+      "619-setup",
+      "starts-standing",
+      "ends-rope-hung"
+    ],
+    "startState": "standing",
+    "endState": "rope-hung",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.hung-between-idle",
+    "name": "Hung between the ropes (loop)",
+    "category": "ropes",
+    "file": "animations/ropes/hung-between-idle.json",
+    "duration": 3.0,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "hung",
+      "loop",
+      "stunned",
+      "starts-rope-hung",
+      "ends-rope-hung"
+    ],
+    "startState": "rope-hung",
+    "endState": "rope-hung",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.hung-recover",
+    "name": "Climb out of the ropes",
+    "category": "ropes",
+    "file": "animations/ropes/hung-recover.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "footstep",
+      "rope_release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "hung",
+      "recover",
+      "starts-rope-hung",
+      "ends-standing"
+    ],
+    "startState": "rope-hung",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-ropes",
+    "batch": 3
+  },
+  {
+    "id": "ropes.climb-to-middle",
+    "name": "Climb onto the middle rope",
+    "category": "ropes",
+    "file": "animations/ropes/climb-to-middle.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "apron",
+      "climb",
+      "aerial-setup",
+      "starts-apron-hold",
+      "ends-rope-middle-perched"
+    ],
+    "startState": "apron-hold",
+    "endState": "rope-middle-perched",
+    "startLocation": "apron",
+    "endLocation": "apron",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.springboard-launch",
+    "name": "Springboard off the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/springboard-launch.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "rope_contact",
+      "rebound",
+      "rope_release",
+      "apex",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "apron",
+      "springboard",
+      "aerial-setup",
+      "athletic",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "apron",
+    "endLocation": "ring",
+    "placement": "apron-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "ropes.pulled-over-top",
+    "name": "Pulled over the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/pulled-over-top.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "rope_release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "defender",
+      "to-floor",
+      "elimination",
+      "starts-rope-draped",
+      "ends-lying-back"
+    ],
+    "startState": "rope-draped",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "rope-draped",
+    "batch": 3
+  },
+  {
+    "id": "ropes.pull-over-top",
+    "name": "Pull opponent over the top rope",
+    "category": "ropes",
+    "file": "animations/ropes/pull-over-top.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "grip_locked",
+      "attack_start",
+      "release",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "ropes",
+      "attacker",
+      "floor",
+      "elimination",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "floor",
+    "endLocation": "floor",
+    "placement": "floor-facing-ring",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.approach-corner",
+    "name": "Walk to the corner",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/approach-corner.json",
+    "duration": 1.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "footstep",
+      "footstep",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "walk",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-corner",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.grab-corner",
+    "name": "Take hold of the corner",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/grab-corner.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "rope_contact",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "hold",
+      "starts-standing",
+      "ends-corner-hold"
+    ],
+    "startState": "standing",
+    "endState": "corner-hold",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-facing-corner",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.climb-bottom",
+    "name": "Climb onto the bottom rope",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/climb-bottom.json",
+    "duration": 0.85,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "climb",
+      "starts-corner-hold",
+      "ends-corner-climb-1"
+    ],
+    "startState": "corner-hold",
+    "endState": "corner-climb-1",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "corner-climb",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.climb-middle",
+    "name": "Climb onto the middle rope",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/climb-middle.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "climb",
+      "starts-corner-climb-1",
+      "ends-corner-climb-2"
+    ],
+    "startState": "corner-climb-1",
+    "endState": "corner-climb-2",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "corner-climb",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.climb-top",
+    "name": "Turn and climb to the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/climb-top.json",
+    "duration": 1.45,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "footstep",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "climb",
+      "aerial-setup",
+      "starts-corner-climb-2",
+      "ends-perched"
+    ],
+    "startState": "corner-climb-2",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "corner-climb",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.climb-full",
+    "name": "Climb the turnbuckle",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/climb-full.json",
+    "duration": 2.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "footstep",
+      "jump",
+      "footstep",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "climb",
+      "aerial-setup",
+      "starts-corner-hold",
+      "ends-perched"
+    ],
+    "startState": "corner-hold",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "corner-climb",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.climb-top-facing-out",
+    "name": "Stand on the top rope facing out",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/climb-top-facing-out.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "climb",
+      "aerial-setup",
+      "starts-corner-climb-2",
+      "ends-corner-top-out"
+    ],
+    "startState": "corner-climb-2",
+    "endState": "corner-top-out",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "corner-climb",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.perched-idle",
+    "name": "Perched on the top turnbuckle (loop)",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/perched-idle.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "loop",
+      "starts-perched",
+      "ends-perched"
+    ],
+    "startState": "perched",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.prepare-jump",
+    "name": "Rise up on the top turnbuckle",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/prepare-jump.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "aerial-setup",
+      "starts-perched",
+      "ends-perched-ready"
+    ],
+    "startState": "perched",
+    "endState": "perched-ready",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.crouch-top",
+    "name": "Crouch back down on top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/crouch-top.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "starts-perched-ready",
+      "ends-perched"
+    ],
+    "startState": "perched-ready",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.taunt-top",
+    "name": "Pose on the top turnbuckle",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/taunt-top.json",
+    "duration": 2.6,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "apex",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "taunt",
+      "starts-perched",
+      "ends-perched"
+    ],
+    "startState": "perched",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.look-crowd",
+    "name": "Look round the crowd from the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/look-crowd.json",
+    "duration": 3.0,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "taunt",
+      "starts-perched",
+      "ends-perched"
+    ],
+    "startState": "perched",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.recover-balance",
+    "name": "Wobble and steady on top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/recover-balance.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "balance",
+      "starts-perched-ready",
+      "ends-perched"
+    ],
+    "startState": "perched-ready",
+    "endState": "perched",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.jump-down",
+    "name": "Hop down into the ring",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/jump-down.json",
+    "duration": 1.05,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "dismount",
+      "starts-perched",
+      "ends-standing"
+    ],
+    "startState": "perched",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.climb-down",
+    "name": "Climb down from the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/climb-down.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "footstep",
+      "footstep",
+      "rope_release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "perched",
+      "dismount",
+      "starts-perched",
+      "ends-standing"
+    ],
+    "startState": "perched",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.jump-forward",
+    "name": "Leap forward off the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/jump-forward.json",
+    "duration": 1.35,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "apex",
+      "land",
+      "impact",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "aerial",
+      "dismount",
+      "starts-perched-ready",
+      "ends-standing"
+    ],
+    "startState": "perched-ready",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.jump-sideways",
+    "name": "Leap sideways off the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/jump-sideways.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "apex",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "aerial",
+      "dismount",
+      "starts-perched-ready",
+      "ends-standing"
+    ],
+    "startState": "perched-ready",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.jump-backward",
+    "name": "Backflip off the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/jump-backward.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "apex",
+      "land",
+      "impact",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "aerial",
+      "athletic",
+      "dismount",
+      "starts-corner-top-out",
+      "ends-standing"
+    ],
+    "startState": "corner-top-out",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "corner-climb",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.fall",
+    "name": "Fall off the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/fall.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "fall",
+      "starts-perched",
+      "ends-lying-front"
+    ],
+    "startState": "perched",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.pushed-off",
+    "name": "Shoved off the top to the floor",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/pushed-off.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "fall",
+      "to-floor",
+      "elimination",
+      "starts-perched",
+      "ends-lying-back"
+    ],
+    "startState": "perched",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "floor",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.thrown-off",
+    "name": "Thrown off the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/thrown-off.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "release",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "fall",
+      "thrown",
+      "starts-perched",
+      "ends-lying-back"
+    ],
+    "startState": "perched",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.knocked-off-balance",
+    "name": "Knocked down onto the turnbuckle",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/knocked-off-balance.json",
+    "duration": 0.85,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "seated",
+      "stunned",
+      "starts-perched-ready",
+      "ends-corner-seated"
+    ],
+    "startState": "perched-ready",
+    "endState": "corner-seated",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.seated-dazed",
+    "name": "Seated on the top turnbuckle (loop)",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/seated-dazed.json",
+    "duration": 2.8,
+    "loop": true,
+    "rootMotion": "curve",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "seated",
+      "loop",
+      "stunned",
+      "starts-corner-seated",
+      "ends-corner-seated"
+    ],
+    "startState": "corner-seated",
+    "endState": "corner-seated",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.hang-from-corner",
+    "name": "Slip into the tree of woe",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/hang-from-corner.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_contact",
+      "grip_locked",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "hanging",
+      "tree-of-woe",
+      "stunned",
+      "starts-corner-seated",
+      "ends-corner-hanging"
+    ],
+    "startState": "corner-seated",
+    "endState": "corner-hanging",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.hanging-idle",
+    "name": "Hanging in the corner (loop)",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/hanging-idle.json",
+    "duration": 3.2,
+    "loop": true,
+    "rootMotion": "curve",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "hanging",
+      "tree-of-woe",
+      "loop",
+      "stunned",
+      "starts-corner-hanging",
+      "ends-corner-hanging"
+    ],
+    "startState": "corner-hanging",
+    "endState": "corner-hanging",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.hanging-drop",
+    "name": "Drop out of the tree of woe",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/hanging-drop.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "rope_release",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "hanging",
+      "recover",
+      "starts-corner-hanging",
+      "ends-lying-back"
+    ],
+    "startState": "corner-hanging",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.miss-aerial",
+    "name": "Miss a dive from the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/miss-aerial.json",
+    "duration": 2.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "apex",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "aerial",
+      "miss",
+      "starts-perched-ready",
+      "ends-lying-front"
+    ],
+    "startState": "perched-ready",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.land-awkward",
+    "name": "Land badly off the top",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/land-awkward.json",
+    "duration": 2.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "apex",
+      "land",
+      "impact",
+      "hit_received",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "aerial",
+      "injury",
+      "starts-perched-ready",
+      "ends-sitting"
+    ],
+    "startState": "perched-ready",
+    "endState": "sitting",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "perched",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.whipped-into-corner",
+    "name": "Whipped into the corner",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/whipped-into-corner.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "footstep",
+      "impact",
+      "rope_contact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "whip",
+      "defender",
+      "corner",
+      "starts-standing",
+      "ends-corner-back"
+    ],
+    "startState": "standing",
+    "endState": "corner-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.corner-back-idle",
+    "name": "Propped in the corner (loop)",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/corner-back-idle.json",
+    "duration": 2.8,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "corner",
+      "loop",
+      "stunned",
+      "starts-corner-back",
+      "ends-corner-back"
+    ],
+    "startState": "corner-back",
+    "endState": "corner-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-corner",
+    "batch": 3
+  },
+  {
+    "id": "turnbuckle.corner-slump",
+    "name": "Slump down in the corner",
+    "category": "turnbuckle",
+    "file": "animations/turnbuckle/corner-slump.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "turnbuckle",
+      "corner",
+      "stunned",
+      "starts-corner-back",
+      "ends-corner-slumped"
+    ],
+    "startState": "corner-back",
+    "endState": "corner-slumped",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-corner",
+    "batch": 3
+  }
+]

@@ -1,0 +1,126 @@
+{
+ "id": "pair.spinebuster",
+ "name": "Spinebuster",
+ "category": "throws",
+ "description": "From the front body lock: the attacker spins a half turn and slams the defender down, ending crouched over them.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 1.7,
+ "attacker": {
+  "animation": "throws.spinebuster-attacker",
+  "startState": "body-lock-hold",
+  "endState": "crouching",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "throws.spinebuster-defender",
+  "startState": "body-locked",
+  "endState": "lying-back",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -0.5
+  ],
+  "defenderFacing": -180,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0.0,
+    0.0,
+    0.25
+   ],
+   "yaw": 180
+  },
+  "defender": {
+   "offset": [
+    -0.0,
+    0.0,
+    -1.15
+   ],
+   "yaw": 180.0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0.0,
+   0.0,
+   -0.32,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 0,
+   "to": 1.0,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "hips"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.1,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 0.2,
+   "name": "lift_start",
+   "role": "both"
+  },
+  {
+   "time": 0.9,
+   "name": "impact",
+   "role": "both",
+   "surface": "mat"
+  },
+  {
+   "time": 0.9,
+   "name": "land",
+   "role": "defender",
+   "zone": "back"
+  },
+  {
+   "time": 1.0,
+   "name": "release",
+   "role": "attacker"
+  },
+  {
+   "time": 1.7,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "slam",
+  "power"
+ ]
+}

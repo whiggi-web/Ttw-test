@@ -1,0 +1,120 @@
+{
+ "id": "pair.camel-clutch",
+ "name": "Camel clutch",
+ "category": "submissions",
+ "description": "Defender face down, feet towards the attacker: camel clutch.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 2.0,
+ "attacker": {
+  "animation": "submissions.camel-clutch-attacker",
+  "startState": "standing",
+  "endState": "camel-clutch-hold",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "submissions.camel-clutch-defender",
+  "startState": "lying-front",
+  "endState": "camel-clutch-locked",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -1.25
+  ],
+  "defenderFacing": 0,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0.0,
+    0.0,
+    -1.05
+   ],
+   "yaw": 0
+  },
+  "defender": {
+   "offset": [
+    0,
+    0,
+    0
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 1.3,
+   "to": 2.0,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "chin"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.8,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 1.3,
+   "name": "grab",
+   "role": "both"
+  },
+  {
+   "time": 1.5,
+   "name": "grip_locked",
+   "role": "both"
+  },
+  {
+   "time": 1.55,
+   "name": "hit_received",
+   "role": "defender",
+   "zone": "back"
+  },
+  {
+   "time": 2.0,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "camel-clutch",
+  "back-work"
+ ]
+}

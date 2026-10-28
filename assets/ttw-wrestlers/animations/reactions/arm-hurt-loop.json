@@ -1,0 +1,149 @@
+{
+  "id": "reactions.arm-hurt-loop",
+  "name": "Hurt arm (loop)",
+  "category": "reactions",
+  "description": "Selling an injured right arm: elbow tucked in, cradled by the left hand, shoulders hunched, rolling it gingerly.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "standing",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, 0.0, 0.0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.4]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["reaction", "limb", "injury", "loop", "starts-standing", "ends-standing"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -6, -12.0, -6],
+        [0.8, -6, -8.0, -6],
+        [1.6, -6, -15.0, -6],
+        [2.4, -6, -12.0, -6]
+      ],
+      "position": [
+        [0, 0.0, -0.05, 0.0],
+        [0.8, 0.0, -0.05, 0.0],
+        [1.6, 0.0, -0.05, 0.0],
+        [2.4, 0.0, -0.05, 0.0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [0.8, 16, -20, 0],
+        [1.6, 16, 15, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 42.66, -61.78, 71.06],
+        [0.8, 44.32, -60.3, 73.99],
+        [1.6, 41.11, -62.94, 68.65],
+        [2.4, 42.66, -61.78, 71.06]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 94.77, 0, 0],
+        [0.8, 92.81, 0, 0],
+        [1.6, 96.28, 0, 0],
+        [2.4, 94.77, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 20, 0, -6],
+        [0.8, 20, 0, -6],
+        [1.6, 20, 0, -6],
+        [2.4, 20, 0, -6]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 70, 0, 0],
+        [0.8, 70, 0, 0],
+        [1.6, 70, 0, 0],
+        [2.4, 70, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 22.58, 7.75, 2.15],
+        [0.8, 23.11, 7.88, 2.46],
+        [1.6, 22.15, 7.67, 1.95],
+        [2.4, 22.58, 7.75, 2.15]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -37.31, 0, 0],
+        [0.8, -37.04, 0, 0],
+        [1.6, -37.48, 0, 0],
+        [2.4, -37.31, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 20.13, 5.76, 0.41],
+        [0.8, 19.39, 1.79, 0.43],
+        [1.6, 20.68, 8.73, 0.37],
+        [2.4, 20.13, 5.76, 0.41]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 30.93, -3.59, 7.45],
+        [0.8, 30.58, -3.33, 7.97],
+        [1.6, 31.15, -3.81, 7.04],
+        [2.4, 30.93, -3.59, 7.45]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -44.04, 0, 0],
+        [0.8, -44.4, 0, 0],
+        [1.6, -43.76, 0, 0],
+        [2.4, -44.04, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 19.66, 18.93, -0.57],
+        [0.8, 20.47, 14.89, -0.79],
+        [1.6, 19.03, 21.96, -0.37],
+        [2.4, 19.66, 18.93, -0.57]
+      ]
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "id": "submissions.sleeper-hold-hold-attacker",
+  "name": "Sleeper hold: hold (loop)",
+  "category": "submissions",
+  "description": "Attacker, looping: wrenching back on the sleeper hold.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "sleeper-hold",
+  "endState": "sleeper-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0, -0.43, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.4]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "loop", "sleeper-hold", "neck-work", "starts-sleeper-hold", "ends-sleeper-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, -6.0, 0.0, 0.0],
+        [0.6, 0.0, 0.0, 0.0],
+        [1.2, -6.0, 0.0, 0.0],
+        [1.7999999999999998, -12.0, 0.0, 0.0],
+        [2.4, -6.0, 0.0, 0.0]
+      ],
+      "position": [
+        [0.0, 0.0, -0.5, 0.04],
+        [0.6, 0.0, -0.52, 0.04],
+        [1.2, 0.0, -0.5, 0.04],
+        [1.7999999999999998, 0.0, -0.48, 0.04],
+        [2.4, 0.0, -0.5, 0.04]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 92.99, -17.9, 65.51],
+        [0.6, 103.72, -19.22, 59.78],
+        [1.2, 92.99, -17.9, 65.51],
+        [1.7999999999999998, 72.38, 0.28, 86.33],
+        [2.4, 92.99, -17.9, 65.51]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 55.78, 0, 0],
+        [0.6, 24.23, 0, 0],
+        [1.2, 55.78, 0, 0],
+        [1.7999999999999998, 74.6, 0, 0],
+        [2.4, 55.78, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 92.08, 17.99, -65.75],
+        [0.6, 102.38, 18.8, -59.96],
+        [1.2, 92.08, 17.99, -65.75],
+        [1.7999999999999998, 74.02, 2.16, -84.6],
+        [2.4, 92.08, 17.99, -65.75]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 55.95, 0, 0],
+        [0.6, 24.8, 0, 0],
+        [1.2, 55.95, 0, 0],
+        [1.7999999999999998, 74.67, 0, 0],
+        [2.4, 55.95, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 10, 0, -4],
+        [0.6, 10, 0, -4],
+        [1.2, 10, 0, -4],
+        [1.7999999999999998, 10, 0, -4],
+        [2.4, 10, 0, -4]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -100, 0, 0],
+        [0.6, -100, 0, 0],
+        [1.2, -100, 0, 0],
+        [1.7999999999999998, -100, 0, 0],
+        [2.4, -100, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, -55, 0, 0],
+        [0.6, -55, 0, 0],
+        [1.2, -55, 0, 0],
+        [1.7999999999999998, -55, 0, 0],
+        [2.4, -55, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 10, 0, 4],
+        [0.6, 10, 0, 4],
+        [1.2, 10, 0, 4],
+        [1.7999999999999998, 10, 0, 4],
+        [2.4, 10, 0, 4]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -100, 0, 0],
+        [0.6, -100, 0, 0],
+        [1.2, -100, 0, 0],
+        [1.7999999999999998, -100, 0, 0],
+        [2.4, -100, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, -55, 0, 0],
+        [0.6, -55, 0, 0],
+        [1.2, -55, 0, 0],
+        [1.7999999999999998, -55, 0, 0],
+        [2.4, -55, 0, 0]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

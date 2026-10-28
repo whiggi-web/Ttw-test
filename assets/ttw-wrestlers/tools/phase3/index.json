@@ -1,0 +1,1037 @@
+[
+  {
+    "id": "striking.chop",
+    "name": "Knife-edge chop",
+    "category": "striking",
+    "file": "animations/striking/chop.json",
+    "duration": 1.05,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "chop",
+      "open-hand",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.forearm-smash",
+    "name": "Forearm smash",
+    "category": "striking",
+    "file": "animations/striking/forearm-smash.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "forearm",
+      "brawl",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.european-uppercut",
+    "name": "European uppercut",
+    "category": "striking",
+    "file": "animations/striking/european-uppercut.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "forearm",
+      "uppercut",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.back-elbow",
+    "name": "Back elbow",
+    "category": "striking",
+    "file": "animations/striking/back-elbow.json",
+    "duration": 0.9,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "elbow",
+      "counter",
+      "rear",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.spinning-backfist",
+    "name": "Spinning backfist",
+    "category": "striking",
+    "file": "animations/striking/spinning-backfist.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "spin",
+      "backfist",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.superkick",
+    "name": "Superkick",
+    "category": "striking",
+    "file": "animations/striking/superkick.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "kick",
+      "finisher",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.big-boot",
+    "name": "Big boot",
+    "category": "striking",
+    "file": "animations/striking/big-boot.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "kick",
+      "power",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.headbutt",
+    "name": "Headbutt",
+    "category": "striking",
+    "file": "animations/striking/headbutt.json",
+    "duration": 0.95,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "attack_start",
+      "hit",
+      "release",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "headbutt",
+      "brawl",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.lariat",
+    "name": "Short-arm lariat",
+    "category": "striking",
+    "file": "animations/striking/lariat.json",
+    "duration": 1.25,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "grab",
+      "attack_start",
+      "release",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "lariat",
+      "power",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.leg-kick-combo",
+    "name": "Leg kick combination",
+    "category": "striking",
+    "file": "animations/striking/leg-kick-combo.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "hit",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "kick",
+      "combo",
+      "low",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.stomp",
+    "name": "Stomp",
+    "category": "striking",
+    "file": "animations/striking/stomp.json",
+    "duration": 0.8,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "stomp",
+      "ground-attack",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.mount",
+    "name": "Mount a downed opponent",
+    "category": "striking",
+    "file": "animations/striking/mount.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "grip_locked",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "ground-attack",
+      "mount",
+      "starts-standing",
+      "ends-mounted"
+    ],
+    "startState": "standing",
+    "endState": "mounted",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.mounted-punches",
+    "name": "Mounted punches (loop)",
+    "category": "striking",
+    "file": "animations/striking/mounted-punches.json",
+    "duration": 1.4,
+    "loop": true,
+    "rootMotion": "curve",
+    "events": [
+      "hit",
+      "hit",
+      "hit",
+      "hit",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "ground-attack",
+      "mount",
+      "loop",
+      "starts-mounted",
+      "ends-mounted"
+    ],
+    "startState": "mounted",
+    "endState": "mounted",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.mount-off",
+    "name": "Get off the mount",
+    "category": "striking",
+    "file": "animations/striking/mount-off.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "ground-attack",
+      "mount",
+      "starts-mounted",
+      "ends-standing"
+    ],
+    "startState": "mounted",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.shoulder-block",
+    "name": "Running shoulder block",
+    "category": "striking",
+    "file": "animations/striking/shoulder-block.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "running-attack",
+      "tackle",
+      "starts-running",
+      "ends-standing"
+    ],
+    "startState": "running",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.running-knee",
+    "name": "Running knee",
+    "category": "striking",
+    "file": "animations/striking/running-knee.json",
+    "duration": 1.25,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "footstep",
+      "jump",
+      "attack_start",
+      "hit",
+      "apex",
+      "land",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "running-attack",
+      "knee",
+      "aerial",
+      "starts-running",
+      "ends-standing"
+    ],
+    "startState": "running",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.discus-clothesline",
+    "name": "Discus clothesline",
+    "category": "striking",
+    "file": "animations/striking/discus-clothesline.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "footstep",
+      "attack_start",
+      "footstep",
+      "hit",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "spin",
+      "clothesline",
+      "finisher",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.spinning-heel-kick",
+    "name": "Spinning heel kick",
+    "category": "striking",
+    "file": "animations/striking/spinning-heel-kick.json",
+    "duration": 1.2,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "attack_start",
+      "hit",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "spin",
+      "kick",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.dropkick",
+    "name": "Dropkick",
+    "category": "striking",
+    "file": "animations/striking/dropkick.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "attack_start",
+      "hit",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "kick",
+      "aerial",
+      "high-flyer",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "striking.enzuigiri",
+    "name": "Enzuigiri",
+    "category": "striking",
+    "file": "animations/striking/enzuigiri.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "jump",
+      "attack_start",
+      "hit",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "strike",
+      "kick",
+      "aerial",
+      "high-flyer",
+      "starts-standing",
+      "ends-sitting"
+    ],
+    "startState": "standing",
+    "endState": "sitting",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.chop-sell",
+    "name": "Sell a chest chop",
+    "category": "reactions",
+    "file": "animations/reactions/chop-sell.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "chop",
+      "body",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.head-snap-left",
+    "name": "Head snapped to the left",
+    "category": "reactions",
+    "file": "animations/reactions/head-snap-left.json",
+    "duration": 1.05,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "stun_start",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "head",
+      "heavy",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.head-snap-right",
+    "name": "Head snapped to the right",
+    "category": "reactions",
+    "file": "animations/reactions/head-snap-right.json",
+    "duration": 1.05,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "stun_start",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "head",
+      "heavy",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.doubled-over",
+    "name": "Doubled over",
+    "category": "reactions",
+    "file": "animations/reactions/doubled-over.json",
+    "duration": 1.0,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "body",
+      "setup",
+      "starts-standing",
+      "ends-bent-over"
+    ],
+    "startState": "standing",
+    "endState": "bent-over",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.bent-over-idle",
+    "name": "Bent over, winded (loop)",
+    "category": "reactions",
+    "file": "animations/reactions/bent-over-idle.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "curve",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "body",
+      "setup",
+      "loop",
+      "starts-bent-over",
+      "ends-bent-over"
+    ],
+    "startState": "bent-over",
+    "endState": "bent-over",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.spin-out-fall",
+    "name": "Spin out and fall",
+    "category": "reactions",
+    "file": "animations/reactions/spin-out-fall.json",
+    "duration": 1.5,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "footstep",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "head",
+      "knockdown",
+      "heavy",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.stagger-back-long",
+    "name": "Long stagger backwards",
+    "category": "reactions",
+    "file": "animations/reactions/stagger-back-long.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "body",
+      "heavy",
+      "stagger",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.stagger-forward-long",
+    "name": "Long stagger forwards",
+    "category": "reactions",
+    "file": "animations/reactions/stagger-forward-long.json",
+    "duration": 1.6,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "footstep",
+      "footstep",
+      "footstep",
+      "recover",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "back",
+      "heavy",
+      "stagger",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.arm-hurt-loop",
+    "name": "Hurt arm (loop)",
+    "category": "reactions",
+    "file": "animations/reactions/arm-hurt-loop.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "limb",
+      "injury",
+      "loop",
+      "starts-standing",
+      "ends-standing"
+    ],
+    "startState": "standing",
+    "endState": "standing",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.kneeling-stunned",
+    "name": "Stunned on the knees (loop)",
+    "category": "reactions",
+    "file": "animations/reactions/kneeling-stunned.json",
+    "duration": 2.4,
+    "loop": true,
+    "rootMotion": "none",
+    "events": [
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "stunned",
+      "loop",
+      "kneeling",
+      "starts-kneeling",
+      "ends-kneeling"
+    ],
+    "startState": "kneeling",
+    "endState": "kneeling",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.hit-in-corner",
+    "name": "Hit in the corner",
+    "category": "reactions",
+    "file": "animations/reactions/hit-in-corner.json",
+    "duration": 1.1,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "impact",
+      "rope_contact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "corner",
+      "starts-corner-back",
+      "ends-corner-back"
+    ],
+    "startState": "corner-back",
+    "endState": "corner-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "inside-back-to-corner",
+    "batch": 3
+  },
+  {
+    "id": "reactions.knee-buckle-fall",
+    "name": "Knees buckle",
+    "category": "reactions",
+    "file": "animations/reactions/knee-buckle-fall.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "land",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "knockdown",
+      "ko",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.flip-bump",
+    "name": "Flip bump",
+    "category": "reactions",
+    "file": "animations/reactions/flip-bump.json",
+    "duration": 1.3,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "knockdown",
+      "heavy",
+      "bump",
+      "starts-standing",
+      "ends-lying-front"
+    ],
+    "startState": "standing",
+    "endState": "lying-front",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.superkick-drop",
+    "name": "Dropped by a superkick",
+    "category": "reactions",
+    "file": "animations/reactions/superkick-drop.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "land",
+      "impact",
+      "stun_start",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "knockdown",
+      "ko",
+      "head",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  },
+  {
+    "id": "reactions.dropkick-fly-back",
+    "name": "Blasted back by a dropkick",
+    "category": "reactions",
+    "file": "animations/reactions/dropkick-fly-back.json",
+    "duration": 1.4,
+    "loop": false,
+    "rootMotion": "curve",
+    "events": [
+      "hit_received",
+      "apex",
+      "land",
+      "impact",
+      "animation_complete"
+    ],
+    "tags": [
+      "reaction",
+      "knockdown",
+      "heavy",
+      "body",
+      "starts-standing",
+      "ends-lying-back"
+    ],
+    "startState": "standing",
+    "endState": "lying-back",
+    "startLocation": "ring",
+    "endLocation": "ring",
+    "placement": "center",
+    "batch": 3
+  }
+]

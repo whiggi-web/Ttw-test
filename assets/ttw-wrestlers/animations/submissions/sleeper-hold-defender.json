@@ -1,0 +1,185 @@
+{
+  "id": "submissions.sleeper-hold-defender",
+  "name": "Caught in a sleeper hold",
+  "category": "submissions",
+  "description": "Defender: grabbed from behind, the arm slides round the neck; claws at it and sinks to the knees.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "rear-locked",
+  "endState": "sleeper-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0.0, -0.9, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.3,
+      "name": "grab",
+      "attachment": "neck"
+    },
+    {
+      "time": 0.5,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.4,
+      "name": "land",
+      "zone": "knees"
+    },
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "sleeper", "neck-work", "starts-rear-locked", "ends-sleeper-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, 6, 0.0, 0.0],
+        [0.4, 10, 0.0, 0.0],
+        [0.9, 10, 0.0, 0.0],
+        [1.4, 6.0, 0.0, 0.0],
+        [2.0, 8.0, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0.0, -0.05, 0.0],
+        [0.4, 0.0, -0.11, 0.0],
+        [0.9, 0.0, -0.17, 0.0],
+        [1.4, 0.0, -0.49, 0.04],
+        [2.0, 0.0, -0.49, 0.04]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, -6, 20, 0],
+        [0.4, -20, 0, 0],
+        [0.9, -20, 0, 0],
+        [1.4, -15.0, 0, 0.0],
+        [2.0, -9.0, 0, 2.0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 30, 0, 20],
+        [0.4, 60, 0, 20],
+        [0.9, 60, 0, 20],
+        [1.4, 60.0, 0, 20],
+        [2.0, 50.0, 0, 20]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 70, 0, 0],
+        [0.4, 110, 0, 0],
+        [0.9, 110, 0, 0],
+        [1.4, 110.0, 0, 0],
+        [2.0, 94.0, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 30, 0, -20],
+        [0.4, 60, 0, -20],
+        [0.9, 60, 0, -20],
+        [1.4, 60.0, 0, -20],
+        [2.0, 50.0, 0, -20]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 70, 0, 0],
+        [0.4, 110, 0, 0],
+        [0.9, 110, 0, 0],
+        [1.4, 110.0, 0, 0],
+        [2.0, 94.0, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 14.39, 6.33, -2.39],
+        [0.4, 19.51, 6.48, -3.75],
+        [0.9, 26.75, 6.15, -4.69],
+        [1.1667, 25.43, 4.43, -10.7],
+        [1.4, 10, 0, -4],
+        [1.7667, 10.98, 6.16, -14.06],
+        [2.0, 11.8, 5.98, -14.07]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -41.11, 0, 0],
+        [0.4, -59.73, 0, 0],
+        [0.9, -74.23, 0, 0],
+        [1.1667, -118.47, 0, 0],
+        [1.4, -100, 0, 0],
+        [1.7667, -109.9, 0, 0],
+        [2.0, -110.85, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 20.85, -6.76, 0.04],
+        [0.4, 30.44, -7.48, 0.08],
+        [0.9, 37.73, -7.73, 0.09],
+        [1.1667, 9.88, -8.56, -3.97],
+        [1.4, -55, 0, 0],
+        [1.7667, -47.63, 2.5, -11.82],
+        [2.0, -44.84, 1.48, -11.64]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 14.39, -6.33, 2.39],
+        [0.4, 19.51, -6.48, 3.75],
+        [0.9, 26.75, -6.15, 4.69],
+        [1.1667, 25.43, -4.43, 10.7],
+        [1.4, 10, 0, 4],
+        [1.7667, 10.98, -6.16, 14.06],
+        [2.0, 11.8, -5.98, 14.07]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -41.11, 0, 0],
+        [0.4, -59.73, 0, 0],
+        [0.9, -74.23, 0, 0],
+        [1.1667, -118.47, 0, 0],
+        [1.4, -100, 0, 0],
+        [1.7667, -109.9, 0, 0],
+        [2.0, -110.85, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 20.85, 6.76, -0.04],
+        [0.4, 30.44, 7.48, -0.08],
+        [0.9, 37.73, 7.73, -0.09],
+        [1.1667, 9.88, 8.56, 3.97],
+        [1.4, -55, 0, 0],
+        [1.7667, -47.63, -2.5, 11.82],
+        [2.0, -44.84, -1.48, 11.64]
+      ]
+    }
+  }
+}

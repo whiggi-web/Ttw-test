@@ -1,0 +1,184 @@
+{
+  "id": "turnbuckle.prepare-jump",
+  "name": "Rise up on the top turnbuckle",
+  "category": "turnbuckle",
+  "description": "From the crouch: stand up tall on the top ropes and raise the arms. Ends perched-ready, the take-off pose for every top-rope dive.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.0,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "perched",
+  "endState": "perched-ready",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "perched",
+    "end": "perched",
+    "frame": "corner",
+    "frameStart": [0.19, 1.2780000000000002, 0.19, -135],
+    "note": "standing on the top turnbuckle, facing the ring"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.15]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.65,
+      "name": "recover"
+    },
+    {
+      "time": 1.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["turnbuckle", "perched", "aerial-setup", "starts-perched", "ends-perched-ready"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -22, 0.0, 0.0],
+        [0.3, -22, 0.0, 0.0],
+        [0.65, -4, 0.0, 0.0],
+        [0.8, -4, 0.0, 0.0],
+        [1.0, -4, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0.0, -0.42, 0.06],
+        [0.3, 0.0, -0.48, 0.06],
+        [0.65, 0.0, -0.1, 0.0],
+        [0.8, 0.0, -0.03, 0.0],
+        [1.0, 0.0, -0.06, 0.0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -10, 0, 0],
+        [0.3, -10, 0, 0],
+        [0.65, 0, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.0, 0, 0, 0]
+      ]
+    },
+    "chest": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.3, -4, 0, 0],
+        [0.65, 0, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.0, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 22, 0, 0],
+        [0.3, 22, 0, 0],
+        [0.65, 4, 0, 0],
+        [0.8, 4, 0, 0],
+        [1.0, 4, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 30, 0, 40],
+        [0.3, 30, 0, 40],
+        [0.65, 10, 0, 70],
+        [0.8, 170, 0, 10],
+        [1.0, 170, 0, 10]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 40, 0, 0],
+        [0.3, 40, 0, 0],
+        [0.65, 10, 0, 0],
+        [0.8, 10, 0, 0],
+        [1.0, 10, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 30, 0, -40],
+        [0.3, 30, 0, -40],
+        [0.65, 10, 0, -70],
+        [0.8, 170, 0, -10],
+        [1.0, 170, 0, -10]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 40, 0, 0],
+        [0.3, 40, 0, 0],
+        [0.65, 10, 0, 0],
+        [0.8, 10, 0, 0],
+        [1.0, 10, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 86.05, -9.55, -13.4],
+        [0.3, 91.18, -12.59, -13.55],
+        [0.65, 29.84, 1.72, -11.06],
+        [0.8, 16.64, 3.13, -9.32],
+        [1.0, 23.4, 2.73, -10.23]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -115.28, 0, 0],
+        [0.3, -124.02, 0, 0],
+        [0.65, -53.9, 0, 0],
+        [0.8, -27.35, 0, 0],
+        [1.0, -40.82, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 51.11, -7.91, 14.42],
+        [0.3, 54.54, -8.26, 16.51],
+        [0.65, 28.74, -6.32, 9.25],
+        [0.8, 15.34, -5.05, 8.44],
+        [1.0, 22.12, -5.93, 8.78]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 86.05, 9.55, 13.4],
+        [0.3, 91.18, 12.59, 13.55],
+        [0.65, 29.84, -1.72, 11.06],
+        [0.8, 16.64, -3.13, 9.32],
+        [1.0, 23.4, -2.73, 10.23]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -115.28, 0, 0],
+        [0.3, -124.02, 0, 0],
+        [0.65, -53.9, 0, 0],
+        [0.8, -27.35, 0, 0],
+        [1.0, -40.82, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 51.11, 7.91, -14.42],
+        [0.3, 54.54, 8.26, -16.51],
+        [0.65, 28.74, 6.32, -9.25],
+        [0.8, 15.34, 5.05, -8.44],
+        [1.0, 22.12, 5.93, -8.78]
+      ]
+    }
+  }
+}

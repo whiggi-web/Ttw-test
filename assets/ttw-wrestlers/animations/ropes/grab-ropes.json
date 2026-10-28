@@ -1,0 +1,234 @@
+{
+  "id": "ropes.grab-ropes",
+  "name": "Grab the ropes",
+  "category": "ropes",
+  "description": "Step up to the ropes and take hold of the top rope with both hands. Ends holding the ropes, facing out.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 0.85,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.3, 0.0, 0.0, -0.13, 0],
+      [0.55, 0.0, 0.0, -0.24, 0],
+      [0.85, 0.0, 0.0, -0.24, 0]
+    ],
+    "endOffset": [0.0, 0.0, -0.24],
+    "endYaw": 0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "standing",
+  "endState": "rope-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "inside-facing-ropes",
+    "end": "inside-facing-ropes",
+    "frame": "rope",
+    "frameStart": [0, 0, 0.6, 0],
+    "note": "inside the ring, facing the ropes"
+  },
+  "phases": [
+    {
+      "name": "approach",
+      "start": 0,
+      "end": 0.3
+    },
+    {
+      "name": "contact",
+      "start": 0.3,
+      "end": 0.55
+    },
+    {
+      "name": "recovery",
+      "start": 0.55,
+      "end": 0.85
+    }
+  ],
+  "interrupt": {
+    "windows": [
+      [0, 0.128]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.28,
+      "name": "footstep"
+    },
+    {
+      "time": 0.51,
+      "name": "rope_contact",
+      "attachment": "rightHandGrip"
+    },
+    {
+      "time": 0.55,
+      "name": "grip_locked"
+    },
+    {
+      "time": 0.85,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["ropes", "hold", "starts-standing", "ends-rope-hold"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.55, 0, 0, 0],
+        [0.85, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.3, 0.0, 0.0, -0.13],
+        [0.55, 0.0, 0.0, -0.24],
+        [0.85, 0.0, 0.0, -0.24]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0.0, 0.0, 0.0],
+        [0.3, -6, 0.0, 0.0],
+        [0.55, -12, 0.0, 0.0],
+        [0.85, -8, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0.0, -0.02, 0.0],
+        [0.3, 0.0, -0.03, 0.0],
+        [0.55, 0.0, -0.05, 0.0],
+        [0.85, 0.0, -0.03, 0.0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.3, 0, 0, 0],
+        [0.55, -4, 0, 0],
+        [0.85, -4, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.3, 70, 0, 10],
+        [0.55, -54.16, -41.9, -56.17],
+        [0.85, -44.06, -44.07, -47.02]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.3, 30, 0, 0],
+        [0.55, 150.0, 0, 0],
+        [0.85, 138.85, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 6, 0, -10],
+        [0.3, 70, 0, -10],
+        [0.55, -54.16, 41.9, 56.17],
+        [0.85, -44.06, 44.07, 47.02]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.3, 30, 0, 0],
+        [0.55, 150.0, 0, 0],
+        [0.85, 138.85, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 13.99, 5.58, -1.38],
+        [0.3, 24.16, 5.87, -1.72],
+        [0.55, 33.35, 5.8, -2.92],
+        [0.85, 24.95, 5.61, -2.37]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -27.73, 0, 0],
+        [0.3, -32.52, 0, 0],
+        [0.55, -40.71, 0, 0],
+        [0.85, -32.5, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 13.81, -5.75, -0.0],
+        [0.3, 14.44, -6.11, -0.19],
+        [0.55, 19.54, -6.46, 0.62],
+        [0.85, 15.7, -6.05, 0.64]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 13.99, -5.58, 1.38],
+        [0.3, 16.61, -5.03, 1.79],
+        [0.55, 33.35, -5.8, 2.92],
+        [0.85, 24.95, -5.61, 2.37]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -27.73, 0, 0],
+        [0.3, -24.28, 0, 0],
+        [0.55, -40.71, 0, 0],
+        [0.85, -32.5, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 13.81, 5.75, 0.0],
+        [0.3, 21.82, 5.11, -1.56],
+        [0.55, 19.54, 6.46, -0.62],
+        [0.85, 15.7, 6.05, -0.64]
+      ]
+    }
+  },
+  "ropeInteraction": {
+    "frame": "rope",
+    "ropes": [
+      {
+        "rope": "top",
+        "axis": "x",
+        "maxDisplacement": 0.076,
+        "keys": [
+          [0.2, -0.343, 0.0, 0.072, -0.024],
+          [0.233, -0.341, 0.0, -0.02, 0.004],
+          [0.367, 0.454, 0.0, -0.028, -0.005],
+          [0.4, -0.481, 0.0, -0.034, -0.007],
+          [0.433, -0.462, 0.0, -0.035, -0.006],
+          [0.467, -0.414, 0.0, -0.04, -0.005],
+          [0.5, 0.363, 0.0, -0.045, -0.007],
+          [0.533, -0.331, 0.0, -0.043, -0.01],
+          [0.567, 0.321, 0.0, -0.039, -0.012],
+          [0.6, -0.317, 0.0, -0.036, -0.013],
+          [0.633, -0.314, 0.0, -0.034, -0.012],
+          [0.667, -0.311, 0.0, -0.032, -0.011],
+          [0.7, 0.309, 0.0, -0.03, -0.01],
+          [0.733, 0.308, 0.0, -0.029, -0.009],
+          [0.767, 0.308, 0.0, -0.029, -0.008],
+          [0.8, 0.309, 0.0, -0.029, -0.008],
+          [0.833, 0.309, 0.0, -0.029, -0.007]
+        ]
+      }
+    ],
+    "note": "How far each rope gives way: keys [t, s, dx, dy, dz] in placement-frame metres; s is the contact point along the rope from the frame origin, (dx, dy, dz) the rope displacement there. Bend the rope with a smooth falloff around s (ttw-anim-runtime.js ropeDisplacement). Optional: games with static ropes can ignore it."
+  }
+}

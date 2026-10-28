@@ -1,0 +1,184 @@
+{
+  "id": "submissions.camel-clutch-defender",
+  "name": "Caught in a camel clutch",
+  "category": "submissions",
+  "description": "Defender: face down; sat on, arms draped over the attacker's knees and the chin wrenched back, bending the spine.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "lying-front",
+  "endState": "camel-clutch-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.25, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.9,
+      "name": "grab",
+      "attachment": "head"
+    },
+    {
+      "time": 1.5,
+      "name": "grip_locked"
+    },
+    {
+      "time": 1.55,
+      "name": "hit_received",
+      "zone": "back"
+    },
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "camel-clutch", "back-work", "starts-lying-front", "ends-camel-clutch-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, -90, 0, 0],
+        [0.9, -90, 0, 0.0],
+        [1.5, -90, 0, 0.0],
+        [2.0, -90, 0, 2.5]
+      ],
+      "position": [
+        [0, 0, -0.84, 0],
+        [0.9, 0, -0.84, 0],
+        [1.5, 0, -0.84, 0],
+        [2.0, 0, -0.84, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.9, 4.4, 0, 0],
+        [1.5, 22.0, 0, 0],
+        [2.0, 22.0, 0, 0]
+      ]
+    },
+    "chest": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.9, 3.6, 0, 0],
+        [1.5, 18.0, 0, 0],
+        [2.0, 18.0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 10, 40, 0],
+        [0.9, -4.0, 0.0, 0],
+        [1.5, -20.0, 0.0, 0],
+        [2.0, -20.0, 7.5, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 20, 0],
+        [0.9, -2.0, 0, 0],
+        [1.5, -10.0, 0, 0],
+        [2.0, -10.0, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 0, -80],
+        [0.9, -6.0, 0, -72.0],
+        [1.5, -30.0, 0, -40.0],
+        [2.0, -30.0, 0, -40.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 0, 0, -70],
+        [0.9, 8.0, 0, 0],
+        [1.5, 40.0, 0, 0],
+        [2.0, 40.0, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, 0, 80],
+        [0.9, -6.0, 0, 72.0],
+        [1.5, -30.0, 0, 40.0],
+        [2.0, -30.0, 0, 40.0]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 0, 0, 70],
+        [0.9, 8.0, 0, 0],
+        [1.5, 40.0, 0, 0],
+        [2.0, 40.0, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -6],
+        [0.9, 0, 0, -6],
+        [1.5, 0, 0, -6],
+        [2.0, 0, 0, -6]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [0.9, -6, 0, 0],
+        [1.5, -6, 0, 0],
+        [2.0, -6, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [0.9, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [2.0, -50, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 6],
+        [0.9, 0, 0, 6],
+        [1.5, 0, 0, 6],
+        [2.0, 0, 0, 6]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [0.9, -6, 0, 0],
+        [1.5, -6, 0, 0],
+        [2.0, -6, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -50, 0, 0],
+        [0.9, -50, 0, 0],
+        [1.5, -50, 0, 0],
+        [2.0, -50, 0, 0]
+      ]
+    }
+  }
+}

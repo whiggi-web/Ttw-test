@@ -1,0 +1,126 @@
+{
+ "id": "pair.boston-crab",
+ "name": "Boston crab",
+ "category": "submissions",
+ "description": "Defender flat on the back, feet towards the attacker. ankles trapped, turned face down and folded back into a Boston crab.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 1.9,
+ "attacker": {
+  "animation": "submissions.boston-crab-attacker",
+  "startState": "standing",
+  "endState": "boston-crab-hold",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "submissions.boston-crab-defender",
+  "startState": "lying-back",
+  "endState": "boston-crab-locked",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -1.3
+  ],
+  "defenderFacing": -180,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0.0,
+    0.0,
+    -0.9
+   ],
+   "yaw": 180
+  },
+  "defender": {
+   "offset": [
+    0.0,
+    -0.84,
+    0.0
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 0.6,
+   "to": 1.9,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "legs"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.5,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 0.6,
+   "name": "grab",
+   "role": "both"
+  },
+  {
+   "time": 1.4,
+   "name": "land",
+   "role": "defender",
+   "zone": "front"
+  },
+  {
+   "time": 1.9,
+   "name": "grip_locked",
+   "role": "both"
+  },
+  {
+   "time": 1.9,
+   "name": "hit_received",
+   "role": "defender",
+   "zone": "back"
+  },
+  {
+   "time": 1.9,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "boston-crab",
+  "back-work"
+ ]
+}

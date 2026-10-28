@@ -1,0 +1,174 @@
+{
+  "id": "submissions.abdominal-stretch-hold-defender",
+  "name": "Abdominal stretch: in the hold (loop)",
+  "category": "submissions",
+  "description": "Defender, looping: struggling in the abdominal stretch, reaching for the ropes.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "abdominal-stretch-locked",
+  "endState": "abdominal-stretch-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0.0, 0.0, -0.9, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.0]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "loop", "abdominal-stretch", "stretch", "starts-abdominal-stretch-locked", "ends-abdominal-stretch-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, 4, 0.0, -32.8],
+        [0.5, 4, 0.0, -35.2],
+        [1.0, 4, 0.0, -32.8],
+        [1.5, 4, 0.0, -30.4],
+        [2.0, 4, 0.0, -32.8]
+      ],
+      "position": [
+        [0.0, 0.0, -0.08, 0.0],
+        [0.5, 0.0, -0.08, 0.0],
+        [1.0, 0.0, -0.08, 0.0],
+        [1.5, 0.0, -0.08, 0.0],
+        [2.0, 0.0, -0.08, 0.0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0.0, 0, 0, -12.0],
+        [0.5, 0, 0, -12.0],
+        [1.0, 0, 0, -12.0],
+        [1.5, 0, 0, -12.0],
+        [2.0, 0, 0, -12.0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, 0, 0, -10.0],
+        [0.5, 0, 0, -10.0],
+        [1.0, 0, 0, -10.0],
+        [1.5, 0, 0, -10.0],
+        [2.0, 0, 0, -10.0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 20, 0, -150.0],
+        [0.5, 20, 0, -150.0],
+        [1.0, 20, 0, -150.0],
+        [1.5, 20, 0, -150.0],
+        [2.0, 20, 0, -150.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 14, 0, 0],
+        [0.5, 14, 0, 0],
+        [1.0, 14, 0, 0],
+        [1.5, 14, 0, 0],
+        [2.0, 14, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 30, 0, -30],
+        [0.5, 30, 0, -30],
+        [1.0, 30, 0, -30],
+        [1.5, 30, 0, -30],
+        [2.0, 30, 0, -30]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 14, 0, 0],
+        [0.5, 14, 0, 0],
+        [1.0, 14, 0, 0],
+        [1.5, 14, 0, 0],
+        [2.0, 14, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 3.84, 6.45, 27.31],
+        [0.5, 2.29, 4.61, 29.99],
+        [1.0, 3.84, 6.45, 27.31],
+        [1.5, 5.4, 7.62, 24.62],
+        [2.0, 3.84, 6.45, 27.31]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -20.53, 0, 0],
+        [0.5, -16.34, 0, 0],
+        [1.0, -20.53, 0, 0],
+        [1.5, -24.01, 0, 0],
+        [2.0, -20.53, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, 10.15, -4.29, 4.77],
+        [0.5, 8.05, -3.18, 4.8],
+        [1.0, 10.15, -4.29, 4.77],
+        [1.5, 11.9, -4.98, 4.75],
+        [2.0, 10.15, -4.29, 4.77]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 25.03, 13.2, 37.5],
+        [0.5, 24.47, 14.68, 39.94],
+        [1.0, 25.03, 13.2, 37.5],
+        [1.5, 25.48, 11.69, 35.1],
+        [2.0, 25.03, 13.2, 37.5]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -64.21, 0, 0],
+        [0.5, -64.73, 0, 0],
+        [1.0, -64.21, 0, 0],
+        [1.5, -63.62, 0, 0],
+        [2.0, -64.21, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, 32.59, 5.79, -5.94],
+        [0.5, 32.87, 5.56, -6.3],
+        [1.0, 32.59, 5.79, -5.94],
+        [1.5, 32.28, 6.01, -5.59],
+        [2.0, 32.59, 5.79, -5.94]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

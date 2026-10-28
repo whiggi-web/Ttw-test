@@ -1,0 +1,155 @@
+<meta charset="utf-8">
+<title>TTW Animation Lab</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  /* Layout: 3D ring on the left with a timeline strip under it; library browser and inspector docked right; phone: stacked */
+  :root {
+    --bg: #0b0c10;
+    --panel: #13151b;
+    --raise: #1b1e26;
+    --line: #2a2e3a;
+    --fg: #eceef3;
+    --muted: #8b92a3;
+    --accent: #ff4d4d;
+    --gold: #ffc84a;
+    --ok: #4fd18b;
+    --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+    --body: "Barlow", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    color-scheme: dark;
+  }
+  [hidden] { display: none !important; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); overflow: hidden; }
+  .app { display: grid; grid-template-columns: minmax(0, 1fr) 380px; height: 100%; }
+  .stage { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-width: 0; }
+  #view { position: relative; min-width: 0; min-height: 0; }
+  #view canvas { display: block; width: 100%; height: 100%; }
+  .badge { position: absolute; top: calc(env(safe-area-inset-top, 0px) + 12px); left: max(16px, env(safe-area-inset-left, 0px)); pointer-events: none; }
+  .badge h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: 24px; letter-spacing: 0.03em; text-transform: uppercase; line-height: 1; }
+  .badge p { margin: 5px 0 0; font: 600 12px var(--mono); color: var(--gold); }
+  .hud { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); bottom: 10px; font: 12px var(--mono); color: var(--muted); pointer-events: none; display: grid; gap: 2px; }
+  .hud b { color: var(--fg); font-weight: 500; }
+  .warn { color: var(--accent); }
+  .ticker { position: absolute; right: 12px; top: 12px; display: flex; flex-direction: column; gap: 3px; align-items: flex-end; pointer-events: none; }
+  .ev { font: 12px var(--mono); background: rgba(11, 12, 16, 0.86); border: 1px solid var(--line); border-left: 3px solid var(--gold); padding: 3px 8px; }
+  .ev.a { border-left-color: var(--accent); }
+  .ev.d { border-left-color: #6aa8ff; }
+  .cams { position: absolute; right: 12px; bottom: 10px; display: flex; gap: 4px; }
+  .timeline { border-top: 1px solid var(--line); background: var(--panel); padding-block: 8px 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px; display: grid; gap: 6px; }
+  .trow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .track { position: relative; height: 34px; background: var(--raise); border: 1px solid var(--line); border-radius: 2px; cursor: pointer; }
+  .track .phase { position: absolute; top: 0; height: 8px; opacity: 0.85; }
+  .track .tick { position: absolute; top: 9px; width: 2px; height: 24px; background: var(--gold); }
+  .track .tick.a { background: var(--accent); }
+  .track .tick.d { background: #6aa8ff; }
+  .track .tick span { position: absolute; top: 12px; left: 4px; font: 10px var(--mono); color: var(--muted); white-space: nowrap; }
+  .track .head { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--fg); }
+  .time { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 120px; }
+  .panel { background: var(--panel); border-left: 1px solid var(--line); overflow-y: auto; min-width: 0;
+    padding-block: 14px calc(14px + env(safe-area-inset-bottom, 0px)); padding-left: 14px; padding-right: max(14px, env(safe-area-inset-right, 0px));
+    display: flex; flex-direction: column; gap: 14px; }
+  h2 { margin: 0 0 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  button, select, input[type=search] {
+    font: 600 13px/1.1 var(--body); color: var(--fg); background: var(--raise); border: 1px solid var(--line); padding: 7px 9px; border-radius: 2px;
+  }
+  select, input[type=search] { width: 100%; }
+  button { cursor: pointer; }
+  button:hover { border-color: var(--muted); }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+  button[aria-pressed="true"] { background: var(--fg); color: #111; border-color: var(--fg); }
+  .seg button { flex: 1; }
+  .list { max-height: 34vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 2px; }
+  .item { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; padding: 6px 8px; border-bottom: 1px solid var(--line); cursor: pointer; }
+  .item:hover { background: var(--raise); }
+  .item[aria-selected="true"] { background: #262a35; box-shadow: inset 3px 0 0 var(--gold); }
+  .item .n { font-weight: 600; font-size: 13px; }
+  .item .m { font: 11px var(--mono); color: var(--muted); grid-column: 1 / -1; }
+  .item .d { font: 11px var(--mono); color: var(--muted); }
+  .chip { font: 10px var(--mono); padding: 1px 5px; border: 1px solid var(--line); border-radius: 2px; color: var(--muted); }
+  .chip.new { color: var(--gold); border-color: #5a4a20; }
+  .chip.pair { color: #6aa8ff; border-color: #24406c; }
+  .toggle { display: flex; align-items: center; gap: 7px; font-size: 13px; }
+  .kv { display: grid; grid-template-columns: 110px 1fr; gap: 3px 8px; font: 12px var(--mono); }
+  .kv span:nth-child(odd) { color: var(--muted); }
+  .kv span { min-width: 0; overflow-wrap: anywhere; }
+  .report { font: 11px var(--mono); max-height: 22vh; overflow: auto; border: 1px solid var(--line); padding: 6px; white-space: pre-wrap; }
+  .report .e { color: var(--accent); } .report .w { color: var(--gold); } .report .ok { color: var(--ok); }
+  input[type=range] { width: 100%; accent-color: var(--gold); }
+  @media (max-width: 860px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+    .panel { border-left: 0; border-top: 1px solid var(--line); max-height: 46vh; padding-left: max(14px, env(safe-area-inset-left, 0px)); }
+    .ticker, .cams { display: none; }
+  }
+</style>
+
+<div class="app">
+  <div class="stage">
+    <div id="view">
+      <div class="badge"><h1>Animation Lab</h1><p id="curId">loading</p></div>
+      <div class="ticker" id="ticker" aria-live="polite"></div>
+      <div class="hud" id="hud"></div>
+      <div class="cams row">
+        <button data-cam="front">Front</button><button data-cam="side">Side</button><button data-cam="rear">Rear</button><button data-cam="top">Top</button><button data-cam="follow" aria-pressed="true">Follow</button>
+      </div>
+    </div>
+    <div class="timeline">
+      <div class="trow">
+        <button id="play">Pause</button><button id="restart">Restart</button>
+        <label class="toggle"><input type="checkbox" id="loop"> Loop</label>
+        <label class="toggle" style="min-width:150px">Speed <input type="range" id="speed" min="0.1" max="2" step="0.05" value="1" aria-label="Playback speed"> <span id="speedOut" class="time" style="min-width:36px">1.00</span></label>
+        <span class="time" id="time">0.00 / 0.00 s</span>
+      </div>
+      <div class="track" id="track" role="slider" aria-label="Timeline" tabindex="0"><div class="head" id="head"></div></div>
+    </div>
+  </div>
+  <aside class="panel">
+    <section>
+      <h2>Mode</h2>
+      <div class="row seg"><button id="mode-single" aria-pressed="true">Single</button><button id="mode-pair" aria-pressed="false">Two-person</button></div>
+    </section>
+    <section>
+      <h2>Wrestlers</h2>
+      <div class="grid2"><select id="wA" aria-label="Wrestler"></select><select id="wB" aria-label="Second wrestler"></select></div>
+      <div class="row" style="margin-top:6px"><button id="swap">Switch attacker and defender</button></div>
+    </section>
+    <section>
+      <h2>Library</h2>
+      <div class="grid2"><select id="cat" aria-label="Category"></select><input type="search" id="search" placeholder="Search" aria-label="Search animations"></div>
+      <div class="list" id="list" role="listbox" style="margin-top:6px"></div>
+    </section>
+    <section>
+      <h2>Inspector</h2>
+      <div class="kv" id="inspect"></div>
+    </section>
+    <section>
+      <h2>Display</h2>
+      <div class="grid2">
+        <label class="toggle"><input type="checkbox" id="showRing" checked> Ring and ropes</label>
+        <label class="toggle"><input type="checkbox" id="showSkel"> Skeleton</label>
+        <label class="toggle"><input type="checkbox" id="showRoot" checked> Root motion path</label>
+        <label class="toggle"><input type="checkbox" id="showHit" checked> Gameplay hitbox</label>
+        <label class="toggle"><input type="checkbox" id="visualPolicy"> Visual root policy</label>
+        <label class="toggle"><input type="checkbox" id="showMesh" checked> Mesh</label>
+      </div>
+    </section>
+    <section>
+      <h2>Validation</h2>
+      <div class="row"><button id="runValidate">Run validation</button></div>
+      <div class="report" id="report" style="margin-top:6px">Loading library</div>
+    </section>
+  </aside>
+</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module" src="./lab.js"></script>

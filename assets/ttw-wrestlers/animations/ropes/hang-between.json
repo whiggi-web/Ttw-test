@@ -1,0 +1,284 @@
+{
+  "id": "ropes.hang-between",
+  "name": "Slump between the ropes",
+  "category": "ropes",
+  "description": "Staggering into the ropes and sinking to the knees with the chest over the middle rope, head and arms hanging out between middle and top ropes.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.1,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.25, 0.0, 0.0, -0.15, 0],
+      [0.5, 0.0, 0.0, -0.27, 0],
+      [0.8, 0.0, 0.0, -0.33, 0],
+      [1.1, 0.0, 0.0, -0.33, 0]
+    ],
+    "endOffset": [0.0, 0.0, -0.33],
+    "endYaw": 0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "standing",
+  "endState": "rope-hung",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "inside-facing-ropes",
+    "end": "inside-facing-ropes",
+    "frame": "rope",
+    "frameStart": [0, 0, 0.75, 0],
+    "note": "inside the ring, facing the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.165]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.25,
+      "name": "footstep"
+    },
+    {
+      "time": 0.6,
+      "name": "rope_contact",
+      "attachment": "body"
+    },
+    {
+      "time": 0.8,
+      "name": "land",
+      "zone": "knees"
+    },
+    {
+      "time": 0.85,
+      "name": "stun_start"
+    },
+    {
+      "time": 1.1,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["ropes", "hung", "stunned", "619-setup", "starts-standing", "ends-rope-hung"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.25, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.1, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.25, 0.0, 0.0, -0.15],
+        [0.5, 0.0, 0.0, -0.27],
+        [0.8, 0.0, 0.0, -0.33],
+        [1.1, 0.0, 0.0, -0.33]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.25, -30, 0.0, 0.0],
+        [0.5, -55, 0.0, 0.0],
+        [0.8, -62, 0.0, 0.0],
+        [1.1, -62, 0.0, 0.0]
+      ],
+      "position": [
+        [0, 0, -0.02, 0],
+        [0.25, 0.0, -0.06, 0.0],
+        [0.5, 0.0, -0.3, 0.0],
+        [0.8, 0.0, -0.54, -0.06],
+        [1.1, 0.0, -0.48, -0.06]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -14, 0, 4],
+        [0.25, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.8, -14, 0, 0],
+        [1.1, -14, 0, 0]
+      ]
+    },
+    "chest": {
+      "rotation": [
+        [0, -6, 0, 0],
+        [0.25, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.8, -10, 0, 0],
+        [1.1, -10, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 12, 0, 0],
+        [0.25, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.8, -8, 0, 0],
+        [1.1, -8, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 6, 0, 10],
+        [0.25, 80, 0, 8],
+        [0.5, 130, 0, 20],
+        [0.8, 130, 0, -20.0],
+        [1.1, 130, 0, -20.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 14, 0, 0],
+        [0.25, 20, 0, 0],
+        [0.5, 14, 0, 0],
+        [0.8, 20, 0, 0],
+        [1.1, 20, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 22, 0, -30],
+        [0.25, 80, 0, -8],
+        [0.5, 130, 0, -20],
+        [0.8, 130, 0, 20.0],
+        [1.1, 130, 0, 20.0]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 112, 0, 0],
+        [0.25, 20, 0, 0],
+        [0.5, 14, 0, 0],
+        [0.8, 20, 0, 0],
+        [1.1, 20, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 13.99, 5.58, -1.38],
+        [0.25, 55.49, 4.53, -1.72],
+        [0.5, 92.58, 3.09, -3.35],
+        [0.6667, 85.52, 0.55, -7.65],
+        [0.8, 75, 0, -6],
+        [1.1, 75, 0, -6]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -27.73, 0, 0],
+        [0.25, -41.47, 0, 0],
+        [0.5, -94.32, 0, 0],
+        [0.6667, -124.83, 0, 0],
+        [0.8, -100, 0, 0],
+        [1.1, -100, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 13.81, -5.75, -0.0],
+        [0.25, 16.03, -4.83, -0.4],
+        [0.5, 56.86, -4.49, 0.77],
+        [0.6667, 18.79, -4.66, 0.25],
+        [0.8, -55, 0, 0],
+        [1.1, -55, 0, 0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 13.99, -5.58, 1.38],
+        [0.25, 46.29, -5.58, 2.21],
+        [0.5, 92.58, -3.09, 3.35],
+        [0.6667, 86.24, -0.45, 7.66],
+        [0.8, 75, 0, 6],
+        [1.1, 75, 0, 6]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -27.73, 0, 0],
+        [0.25, -42.99, 0, 0],
+        [0.5, -94.32, 0, 0],
+        [0.6667, -125.24, 0, 0],
+        [0.8, -100, 0, 0],
+        [1.1, -100, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 13.81, 5.75, 0.0],
+        [0.25, 26.84, 5.98, -0.56],
+        [0.5, 56.86, 4.49, -0.77],
+        [0.6667, 18.47, 4.64, -0.18],
+        [0.8, -55, 0, 0],
+        [1.1, -55, 0, 0]
+      ]
+    }
+  },
+  "ropeInteraction": {
+    "frame": "rope",
+    "ropes": [
+      {
+        "rope": "bottom",
+        "axis": "x",
+        "maxDisplacement": 0.108,
+        "keys": [
+          [0.733, 0.0, 0.0, -0.032, -0.009],
+          [0.767, 0.0, 0.0, -0.065, -0.016],
+          [0.8, 0.0, 0.0, -0.089, -0.02],
+          [0.833, 0.0, 0.0, -0.102, -0.021],
+          [0.867, 0.0, 0.0, -0.106, -0.02],
+          [0.9, 0.0, 0.0, -0.101, -0.019],
+          [0.933, 0.0, 0.0, -0.091, -0.017],
+          [0.967, 0.0, 0.0, -0.078, -0.015],
+          [1.0, 0.0, 0.0, -0.063, -0.013],
+          [1.033, 0.0, 0.0, -0.049, -0.01],
+          [1.067, 0.0, 0.0, -0.038, -0.008],
+          [1.1, 0.0, 0.0, -0.032, -0.007]
+        ]
+      },
+      {
+        "rope": "middle",
+        "axis": "x",
+        "maxDisplacement": 0.157,
+        "keys": [
+          [0.5, 0.0, 0.0, -0.021, -0.015],
+          [0.533, 0.0, 0.0, -0.068, -0.043],
+          [0.567, 0.0, 0.0, -0.121, -0.068],
+          [0.6, 0.0, 0.0, 0.14, 0.07],
+          [0.633, 0.0, 0.0, 0.088, 0.038],
+          [0.667, 0.0, 0.0, 0.035, 0.013]
+        ]
+      },
+      {
+        "rope": "top",
+        "axis": "x",
+        "maxDisplacement": 0.101,
+        "keys": [
+          [0.3, -0.312, 0.0, 0.016, -0.01],
+          [0.333, -0.287, 0.0, 0.017, -0.008],
+          [0.367, 0.002, 0.0, -0.003, -0.016],
+          [0.4, 0.002, 0.0, -0.041, -0.051],
+          [0.433, 0.001, 0.0, 0.099, -0.018],
+          [0.467, 0.0, 0.0, 0.025, 0.01]
+        ]
+      }
+    ],
+    "note": "How far each rope gives way: keys [t, s, dx, dy, dz] in placement-frame metres; s is the contact point along the rope from the frame origin, (dx, dy, dz) the rope displacement there. Bend the rope with a smooth falloff around s (ttw-anim-runtime.js ropeDisplacement). Optional: games with static ropes can ignore it."
+  }
+}

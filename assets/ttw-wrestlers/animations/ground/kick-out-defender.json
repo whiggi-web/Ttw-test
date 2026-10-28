@@ -1,0 +1,186 @@
+{
+  "id": "ground.kick-out-defender",
+  "name": "Kick out of the pin",
+  "category": "ground",
+  "description": "Defender: pinned, bridges and jerks a shoulder off the mat, throwing the attacker off. Stays lying on the back.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 1.3,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "pinned",
+  "endState": "lying-back",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -0.9, 90],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": []
+  },
+  "events": [
+    {
+      "time": 0.42,
+      "name": "release"
+    },
+    {
+      "time": 0.42,
+      "name": "recover",
+      "note": "shoulder up before three"
+    },
+    {
+      "time": 1.3,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["pin", "defender", "kick-out", "starts-pinned", "ends-lying-back"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0, 90, 0, 0],
+        [0.25, 80.0, 0.0, -0.0],
+        [0.42, 80.0, 0.0, -25.0],
+        [0.8, 90.0, 0.0, -0.0],
+        [1.3, 90.0, 0.0, -0.0]
+      ],
+      "position": [
+        [0, 0, -0.83, 0],
+        [0.25, 0, -0.8, 0],
+        [0.42, 0, -0.72, 0],
+        [0.8, 0, -0.83, 0],
+        [1.3, 0, -0.83, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.25, 0, 0, 0],
+        [0.42, -10, 0, 0],
+        [0.8, 0, 0, 0],
+        [1.3, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 6, 0, 0],
+        [0.25, 6, 0, 0],
+        [0.42, 30, 0, 0],
+        [0.8, 20, 0, 0],
+        [1.3, 6, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 14, 0],
+        [0.25, 0, 14, 0],
+        [0.42, 0, 14, 0],
+        [0.8, 0, 14, 0],
+        [1.3, 0, 14, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 0, 10, -56],
+        [0.25, 0, 10, -56],
+        [0.42, 0, 10, -56],
+        [0.8, 0, 10, -56],
+        [1.3, 0, 10, -56]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [0.25, 16, 0, 0],
+        [0.42, 16, 0, 0],
+        [0.8, 16, 0, 0],
+        [1.3, 16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 0, -10, 56],
+        [0.25, 0, -10, 56],
+        [0.42, 60, 0, 30],
+        [0.8, 0, -10, 56],
+        [1.3, 0, -10, 56]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 16, 0, 0],
+        [0.25, 16, 0, 0],
+        [0.42, 16, 0, 0],
+        [0.8, 16, 0, 0],
+        [1.3, 16, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 0, 0, -8],
+        [0.25, 40, 0, 0],
+        [0.42, 0, 0, -8],
+        [0.8, 0, 0, -8],
+        [1.3, 0, 0, -8]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.25, -60, 0, 0],
+        [0.42, -8, 0, 0],
+        [0.8, -8, 0, 0],
+        [1.3, -8, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, -20, 0, 6],
+        [0.25, -20, 0, 6],
+        [0.42, -20, 0, 6],
+        [0.8, -20, 0, 6],
+        [1.3, -20, 0, 6]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 0, 0, 8],
+        [0.25, 40, 0, 0],
+        [0.42, 0, 0, 8],
+        [0.8, 0, 0, 8],
+        [1.3, 0, 0, 8]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.25, -60, 0, 0],
+        [0.42, -8, 0, 0],
+        [0.8, -8, 0, 0],
+        [1.3, -8, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, -20, 0, -6],
+        [0.25, -20, 0, -6],
+        [0.42, -20, 0, -6],
+        [0.8, -20, 0, -6],
+        [1.3, -20, 0, -6]
+      ]
+    }
+  }
+}

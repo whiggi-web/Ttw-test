@@ -1,0 +1,174 @@
+{
+  "id": "submissions.figure-four-hold-attacker",
+  "name": "Figure-four: hold (loop)",
+  "category": "submissions",
+  "description": "Attacker, looping: wrenching back on the figure-four.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "figure-four-hold",
+  "endState": "figure-four-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, 0.42, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.4]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "loop", "figure-four", "leg-work", "starts-figure-four-hold", "ends-figure-four-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, 70.0, 0, 0],
+        [0.6, 78.0, 0, 0],
+        [1.2, 70.0, 0, 0],
+        [1.7999999999999998, 62.0, 0, 0],
+        [2.4, 70.0, 0, 0]
+      ],
+      "position": [
+        [0.0, 0, -0.78, 0],
+        [0.6, 0, -0.78, 0],
+        [1.2, 0, -0.78, 0],
+        [1.7999999999999998, 0, -0.78, 0],
+        [2.4, 0, -0.78, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, 6, 0, 0],
+        [0.6, 6, 0, 0],
+        [1.2, 6, 0, 0],
+        [1.7999999999999998, 6, 0, 0],
+        [2.4, 6, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0.0, 0, 14, 0],
+        [0.6, 0, 14, 0],
+        [1.2, 0, 14, 0],
+        [1.7999999999999998, 0, 14, 0],
+        [2.4, 0, 14, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 0, 0, -60.0],
+        [0.6, 0, 0, -75.0],
+        [1.2, 0, 0, -60.0],
+        [1.7999999999999998, 0, 0, -45.0],
+        [2.4, 0, 0, -60.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 16, 0, 0],
+        [0.6, 16, 0, 0],
+        [1.2, 16, 0, 0],
+        [1.7999999999999998, 16, 0, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 0, 0, 60.0],
+        [0.6, 0, 0, 75.0],
+        [1.2, 0, 0, 60.0],
+        [1.7999999999999998, 0, 0, 45.0],
+        [2.4, 0, 0, 60.0]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 16, 0, 0],
+        [0.6, 16, 0, 0],
+        [1.2, 16, 0, 0],
+        [1.7999999999999998, 16, 0, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 30, 0, -10],
+        [0.6, 30, 0, -10],
+        [1.2, 37.0, 1.54, -10.87],
+        [1.7999999999999998, 49.7, 0.85, -11.41],
+        [2.4, 30, 0, -10]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -40, 0, 0],
+        [0.6, -40, 0, 0],
+        [1.2, -43.47, 0, 0],
+        [1.7999999999999998, -52.46, 0, 0],
+        [2.4, -40, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, -20, 0, 6],
+        [0.6, -20, 0, 6],
+        [1.2, -23.17, -1.94, 3.86],
+        [1.7999999999999998, -26.84, -2.72, 2.25],
+        [2.4, -20, 0, 6]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 60, 0, 10],
+        [0.6, 60, 0, 10],
+        [1.2, 60, 0, 10],
+        [1.7999999999999998, 70.22, 1.06, 9.42],
+        [2.4, 60, 0, 10]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -100, 0, 0],
+        [0.6, -100, 0, 0],
+        [1.2, -100, 0, 0],
+        [1.7999999999999998, -103.5, 0, 0],
+        [2.4, -100, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, -20, 0, -6],
+        [0.6, -20, 0, -6],
+        [1.2, -20, 0, -6],
+        [1.7999999999999998, -26.75, -0.79, -5.72],
+        [2.4, -20, 0, -6]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

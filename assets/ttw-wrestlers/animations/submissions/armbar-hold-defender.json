@@ -1,0 +1,174 @@
+{
+  "id": "submissions.armbar-hold-defender",
+  "name": "Cross armbar: in the hold (loop)",
+  "category": "submissions",
+  "description": "Defender, looping: struggling in the cross armbar, reaching for the ropes.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "armbar-locked",
+  "endState": "armbar-locked",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, -1.3, 180],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.0]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "defender", "loop", "armbar", "arm-work", "starts-armbar-locked", "ends-armbar-locked"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, 90, 0, 4.8],
+        [0.5, 90, 0, 8.0],
+        [1.0, 90, 0, 4.8],
+        [1.5, 90, 0, 1.6],
+        [2.0, 90, 0, 4.8]
+      ],
+      "position": [
+        [0.0, 0, -0.83, 0],
+        [0.5, 0, -0.83, 0],
+        [1.0, 0, -0.83, 0],
+        [1.5, 0, -0.83, 0],
+        [2.0, 0, -0.83, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0.0, 24.0, 0, -12.0],
+        [0.5, 30.0, 0, -20.0],
+        [1.0, 24.0, 0, -12.0],
+        [1.5, 18.0, 0, -4.0],
+        [2.0, 24.0, 0, -12.0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0.0, 0, 14, 0],
+        [0.5, 0, 14, 0],
+        [1.0, 0, 14, 0],
+        [1.5, 0, 14, 0],
+        [2.0, 0, 14, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 95.0, 0, -0.0],
+        [0.5, 95.0, 0, -0.0],
+        [1.0, 95.0, 0, -0.0],
+        [1.5, 95.0, 0, -0.0],
+        [2.0, 95.0, 0, -0.0]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 5, 0, 0],
+        [0.5, 5, 0, 0],
+        [1.0, 5, 0, 0],
+        [1.5, 5, 0, 0],
+        [2.0, 5, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 20.0, 0, 50],
+        [0.5, 20.0, 0, 50],
+        [1.0, 20.0, 0, 50],
+        [1.5, 20.0, 0, 50],
+        [2.0, 20.0, 0, 50]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 16, 0, 0],
+        [0.5, 16, 0, 0],
+        [1.0, 16, 0, 0],
+        [1.5, 16, 0, 0],
+        [2.0, 16, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 0, 0, -8],
+        [0.5, 0, 0, -8],
+        [1.0, 0, 0, -8],
+        [1.5, 0, 0, -8],
+        [2.0, 0, 0, -8]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -8, 0, 0],
+        [0.5, -8, 0, 0],
+        [1.0, -8, 0, 0],
+        [1.5, -8, 0, 0],
+        [2.0, -8, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, -20, 0, 6],
+        [0.5, -20, 0, 6],
+        [1.0, -20, 0, 6],
+        [1.5, -20, 0, 6],
+        [2.0, -20, 0, 6]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 0, 0, 8],
+        [0.5, 0, 0, 8],
+        [1.0, 0, 0, 8],
+        [1.5, 0, 0, 8],
+        [2.0, 0, 0, 8]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -8, 0, 0],
+        [0.5, -8, 0, 0],
+        [1.0, -8, 0, 0],
+        [1.5, -8, 0, 0],
+        [2.0, -8, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, -20, 0, -6],
+        [0.5, -20, 0, -6],
+        [1.0, -20, 0, -6],
+        [1.5, -20, 0, -6],
+        [2.0, -20, 0, -6]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}

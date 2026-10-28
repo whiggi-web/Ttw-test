@@ -1,0 +1,195 @@
+{
+  "id": "grappling.lockup-break",
+  "name": "Break the lock-up",
+  "category": "grappling",
+  "description": "Clean break: both let go, hands up, and step back into fighting stance (about 1.25 m apart). Played by both wrestlers.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 0.8,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.25, 0.0, 0.0, 0.06, 0],
+      [0.5, 0.0, 0.0, 0.3, 0],
+      [0.8, 0.0, 0.0, 0.32, 0]
+    ],
+    "endOffset": [0.0, 0.0, 0.32],
+    "endYaw": 0,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "lockup",
+  "endState": "standing",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, 0, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.12]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.2,
+      "name": "release"
+    },
+    {
+      "time": 0.5,
+      "name": "footstep"
+    },
+    {
+      "time": 0.75,
+      "name": "recover"
+    },
+    {
+      "time": 0.8,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["grapple", "lockup", "shared-role", "starts-lockup", "ends-standing"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.25, 0, 0, 0],
+        [0.5, 0, 0, 0],
+        [0.8, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.25, 0.0, 0.0, 0.06],
+        [0.5, 0.0, 0.0, 0.3],
+        [0.8, 0.0, 0.0, 0.32]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, -14, 0.0, 0.0],
+        [0.25, -6, 0.0, 0.0],
+        [0.5, 0.0, 0.0, 0.0],
+        [0.8, 0, 0, 0]
+      ],
+      "position": [
+        [0, 0.0, -0.08, 0.0],
+        [0.25, 0.0, -0.06, 0.0],
+        [0.5, 0.0, -0.05, 0.0],
+        [0.8, 0, -0.03, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -8, 0, 0],
+        [0.25, -8, 0, 0],
+        [0.5, -4, 0, 0],
+        [0.8, -4, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 8, 0, 0],
+        [0.25, 8, 0, 0],
+        [0.5, 4, 0, 0],
+        [0.8, 4, 0, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 126.36, -57.93, 67.66],
+        [0.25, 60, 0, 30],
+        [0.5, 55, 0, 22],
+        [0.8, 55, 0, 22]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 113.15, 0, 0],
+        [0.25, 40, 0, 0],
+        [0.5, 120, 0, 0],
+        [0.8, 120, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, -161.36, 41.44, 140.4],
+        [0.25, 60, 0, -30],
+        [0.5, 50, 0, -22],
+        [0.8, 50, 0, -22]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 150.0, 0, 0],
+        [0.25, 40, 0, 0],
+        [0.5, 118, 0, 0],
+        [0.8, 118, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 50.07, 4.64, -3.27],
+        [0.25, 37.89, 5.12, -3.05],
+        [0.5, 27.54, 5.79, -2.73],
+        [0.8, 16.57, 5.92, -1.75]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -41.06, 0, 0],
+        [0.25, -34.3, 0, 0],
+        [0.5, -37.64, 0, 0],
+        [0.8, -32.83, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 5.12, -5.67, -0.08],
+        [0.25, 2.54, -5.95, -0.11],
+        [0.5, 10.22, -6.39, -0.25],
+        [0.8, 16.35, -6.17, -0.0]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 24.59, -5.65, 3.92],
+        [0.25, 12.62, -5.92, 3.51],
+        [0.5, 7.47, -6.2, 2.74],
+        [0.8, 16.57, -5.92, 1.75]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -44.88, 0, 0],
+        [0.25, -37.36, 0, 0],
+        [0.5, -35.53, 0, 0],
+        [0.8, -32.83, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 34.63, 6.27, -2.83],
+        [0.25, 31.07, 6.27, -2.82],
+        [0.5, 28.32, 6.5, -1.92],
+        [0.8, 16.35, 6.17, 0.0]
+      ]
+    }
+  }
+}

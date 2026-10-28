@@ -1,0 +1,119 @@
+{
+ "id": "pair.small-package",
+ "name": "Small package",
+ "category": "ground",
+ "description": "Defender standing with the back to the attacker, 0.6 m away. rolled up into a tight ball on the shoulders, knees to the chest, legs trapped. Run the count from 0.8 s.",
+ "libraryVersion": 3,
+ "skeleton": "ttw-humanoid",
+ "duration": 1.6,
+ "attacker": {
+  "animation": "ground.small-package-attacker",
+  "startState": "standing",
+  "endState": "rolling-up",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "defender": {
+  "animation": "ground.small-package-defender",
+  "startState": "standing",
+  "endState": "rolled-up",
+  "startLocation": "ring",
+  "endLocation": "ring"
+ },
+ "anchor": "attacker",
+ "start": {
+  "attackerOffset": [
+   0,
+   0,
+   0
+  ],
+  "attackerFacing": 0,
+  "defenderOffset": [
+   0.0,
+   0.0,
+   -0.6
+  ],
+  "defenderFacing": 0,
+  "note": "Defender start in the attacker's start frame (x right, y up, -z forward); facing in degrees relative to the attacker."
+ },
+ "end": {
+  "attacker": {
+   "offset": [
+    0.0,
+    0.0,
+    -0.08
+   ],
+   "yaw": 0
+  },
+  "defender": {
+   "offset": [
+    0.0,
+    -0.38,
+    0.3
+   ],
+   "yaw": 0
+  },
+  "note": "Where each wrestler ends, in its own start frame (from the clips' root-motion curves). "
+ },
+ "placement": {
+  "frame": "mat",
+  "frameStart": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "attacker": "center",
+  "defender": "center"
+ },
+ "contacts": [
+  {
+   "from": 0.1,
+   "to": 1.6,
+   "attacker": "propLeftHand+propRightHand",
+   "defender": "legs"
+  }
+ ],
+ "events": [
+  {
+   "time": 0.1,
+   "name": "attack_start",
+   "role": "attacker"
+  },
+  {
+   "time": 0.1,
+   "name": "grab",
+   "role": "both"
+  },
+  {
+   "time": 0.55,
+   "name": "land",
+   "role": "both"
+  },
+  {
+   "time": 0.8,
+   "name": "grip_locked",
+   "role": "both"
+  },
+  {
+   "time": 1.6,
+   "name": "animation_complete",
+   "role": "both"
+  }
+ ],
+ "phases": [],
+ "interruptible": {
+  "windows": [],
+  "note": "committed once started"
+ },
+ "multiplayer": {
+  "sync": "shared-clock",
+  "authority": "server picks the pair, the anchor transform and the start time; clients seek both clips to the same time",
+  "lateJoin": "PairedPlayer.start(elapsed) or seekAnimation on both clips with the recorded start transforms",
+  "deterministic": true
+ },
+ "tags": [
+  "pin",
+  "flash-pin"
+ ]
+}

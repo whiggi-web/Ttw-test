@@ -1,0 +1,237 @@
+{
+  "id": "submissions.figure-four-attacker",
+  "name": "Apply a figure-four leglock",
+  "category": "submissions",
+  "description": "Attacker: at the opponent's feet, grab the legs, step through and spin round, then fall back with the legs locked in a figure-four.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.4,
+  "loop": false,
+  "clampWhenFinished": true,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "curve",
+    "space": "start-frame",
+    "policy": "gameplay",
+    "curve": [
+      [0, 0.0, 0.0, 0.0, 0],
+      [0.6, 0.0, 0.0, -0.05, 0],
+      [1.2, 0.05, 0.0, -0.05, -180],
+      [1.8, 0.0, 0.0, 0.4, -360],
+      [2.4, 0.0, 0.0, 0.42, -360]
+    ],
+    "endOffset": [0.0, 0.0, 0.42],
+    "endYaw": -360,
+    "heightChange": 0.0,
+    "note": "Travel of the wrestler in its own start frame (x right, y up, -z forward). Gameplay moves the authoritative position along this curve; the root bone shows the same motion only in \"visual\" policy."
+  },
+  "startState": "standing",
+  "endState": "figure-four-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [0, 0, 0, 0],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 0.36]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 0.5,
+      "name": "attack_start"
+    },
+    {
+      "time": 0.6,
+      "name": "grab",
+      "attachment": "leftHandGrip"
+    },
+    {
+      "time": 1.2,
+      "name": "footstep"
+    },
+    {
+      "time": 1.8,
+      "name": "land",
+      "zone": "back"
+    },
+    {
+      "time": 1.8,
+      "name": "grip_locked"
+    },
+    {
+      "time": 2.4,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "figure-four", "leg-work", "starts-standing", "ends-figure-four-hold"],
+  "tracks": {
+    "root": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.6, 0, 0, 0],
+        [1.2, 0, -180, 0],
+        [1.8, 0, -360, 0],
+        [2.4, 0, -360, 0]
+      ],
+      "position": [
+        [0, 0.0, 0.0, 0.0],
+        [0.6, 0.0, 0.0, -0.05],
+        [1.2, 0.05, 0.0, -0.05],
+        [1.8, 0.0, 0.0, 0.4],
+        [2.4, 0.0, 0.0, 0.42]
+      ]
+    },
+    "hips": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.6, -35, 0.0, 0.0],
+        [1.2, -15, 0.0, 0.0],
+        [1.8, 80, 0, 0],
+        [2.4, 70, 0, 0]
+      ],
+      "position": [
+        [0, 0, -0.03, 0],
+        [0.6, 0.0, -0.35, 0.0],
+        [1.2, 0.0, -0.25, 0.0],
+        [1.8, 0, -0.8, 0],
+        [2.4, 0, -0.78, 0]
+      ]
+    },
+    "spine": {
+      "rotation": [
+        [0, -4, 0, 0],
+        [0.6, 0, 0, 0],
+        [1.2, 0, 0, 0],
+        [1.8, 0, 0, 0],
+        [2.4, 0, 0, 0]
+      ]
+    },
+    "neck": {
+      "rotation": [
+        [0, 4, 0, 0],
+        [0.6, 0, 0, 0],
+        [1.2, 0, 0, 0],
+        [1.8, 6, 0, 0],
+        [2.4, 6, 0, 0]
+      ]
+    },
+    "head": {
+      "rotation": [
+        [0, 0, 0, 0],
+        [0.6, 0, 0, 0],
+        [1.2, 0, 0, 0],
+        [1.8, 0, 14, 0],
+        [2.4, 0, 14, 0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0, 55, 0, 22],
+        [0.6, 55.99, -27.25, 55.4],
+        [1.2, -23.77, -50.49, 23.51],
+        [1.8, 10, 0, -55],
+        [2.4, 0, 0, -60]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0, 120, 0, 0],
+        [0.6, 2.31, 0, 0],
+        [1.2, 2.31, 0, 0],
+        [1.8, 20, 0, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0, 50, 0, -22],
+        [0.6, 54.35, 29.06, -52.55],
+        [1.2, -13.58, 47.2, -26.77],
+        [1.8, 10, 0, 55],
+        [2.4, 0, 0, 60]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0, 118, 0, 0],
+        [0.6, 2.31, 0, 0],
+        [1.2, 2.31, 0, 0],
+        [1.8, 20, 0, 0],
+        [2.4, 16, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0, 16.57, 5.92, -1.75],
+        [0.6, 91.07, -3.31, -10.22],
+        [1.2, 46.18, 6.76, -3.94],
+        [1.4667, 72.68, 1.12, -7.92],
+        [1.8, 30, 0, -10],
+        [2.4, 36.95, 1.54, -10.86]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0, -32.83, 0, 0],
+        [0.6, -105.16, 0, 0],
+        [1.2, -87.35, 0, 0],
+        [1.4667, -107.42, 0, 0],
+        [1.8, -40, 0, 0],
+        [2.4, -43.46, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0, 16.35, -6.17, -0.0],
+        [0.6, 49.28, -6.64, 8.46],
+        [1.2, 56.4, -7.82, -0.12],
+        [1.4667, 28.94, -5.06, 0.88],
+        [1.8, -20, 0, 6],
+        [2.4, -23.13, -1.93, 3.87]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0, 16.57, -5.92, 1.75],
+        [0.6, 91.07, 3.31, 10.22],
+        [1.2, 34.61, -2.4, 11.08],
+        [1.5333, 65.4, 2.4, 9.54],
+        [1.8, 60, 0, 10],
+        [2.4, 60, 0, 10]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0, -32.83, 0, 0],
+        [0.6, -105.16, 0, 0],
+        [1.2, -116.01, 0, 0],
+        [1.5333, -124.91, 0, 0],
+        [1.8, -100, 0, 0],
+        [2.4, -100, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0, 16.35, 6.17, 0.0],
+        [0.6, 49.28, 6.64, -8.46],
+        [1.2, 97.13, 5.92, -9.68],
+        [1.5333, 30.72, 1.71, -7.84],
+        [1.8, -20, 0, -6],
+        [2.4, -20, 0, -6]
+      ]
+    }
+  }
+}

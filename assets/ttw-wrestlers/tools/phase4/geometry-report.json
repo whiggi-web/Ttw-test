@@ -1,0 +1,1062 @@
+{
+  "grappling.lockup": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.lockup-idle": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.lockup-break": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.shove-off-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.shove-off-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.side-headlock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.side-headlock-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.headlock-takeover-defender": {
+    "floorPenetration": 0.018,
+    "at": 0.4,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 3,
+    "ropePush": 0
+  },
+  "grappling.headlock-takeover-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 8,
+    "ropePush": 0
+  },
+  "grappling.wristlock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.wristlock-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.hammerlock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.hammerlock-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.front-facelock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.front-facelock-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.waistlock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.waistlock-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.rear-waistlock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "grappling.rear-waistlock-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.body-slam-defender": {
+    "floorPenetration": 0.007,
+    "at": 1.07,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.body-slam-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.vertical-suplex-defender": {
+    "floorPenetration": 0.005,
+    "at": 1.93,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.vertical-suplex-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.snap-suplex-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.snap-suplex-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.ddt-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.ddt-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.neckbreaker-defender": {
+    "floorPenetration": 0.016,
+    "at": 0.77,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "throws.neckbreaker-attacker": {
+    "floorPenetration": 0.016,
+    "at": 0.33,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 8,
+    "ropePush": 0
+  },
+  "throws.belly-to-belly-defender": {
+    "floorPenetration": 0.01,
+    "at": 0.97,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.belly-to-belly-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.spinebuster-defender": {
+    "floorPenetration": 0.04,
+    "at": 1.1,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.spinebuster-attacker": {
+    "floorPenetration": 0.009,
+    "at": 0.7,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 6,
+    "ropePush": 0
+  },
+  "throws.german-suplex-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.german-suplex-attacker": {
+    "floorPenetration": 0.03,
+    "at": 0.93,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.hip-toss-defender": {
+    "floorPenetration": 0.067,
+    "at": 0.83,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "throws.hip-toss-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.arm-drag-defender": {
+    "floorPenetration": 0.023,
+    "at": 0.83,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "throws.arm-drag-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "throws.powerbomb-defender": {
+    "floorPenetration": 0.033,
+    "at": 1.6,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.powerbomb-attacker": {
+    "floorPenetration": 0.002,
+    "at": 1.33,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.chokeslam-defender": {
+    "floorPenetration": 0.058,
+    "at": 1.23,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.chokeslam-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.powerslam-defender": {
+    "floorPenetration": 0.015,
+    "at": 1.17,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.powerslam-attacker": {
+    "floorPenetration": 0.01,
+    "at": 1.3,
+    "point": "left_hand",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "throws.backbreaker-defender": {
+    "floorPenetration": 0.014,
+    "at": 1.9,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "throws.backbreaker-attacker": {
+    "floorPenetration": 0.019,
+    "at": 0.93,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 5,
+    "ropePush": 0
+  },
+  "throws.fireman-carry-defender": {
+    "floorPenetration": 0.006,
+    "at": 2.07,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.fireman-carry-attacker": {
+    "floorPenetration": 0.02,
+    "at": 0.1,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.bulldog-defender": {
+    "floorPenetration": 0.015,
+    "at": 0.07,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "throws.bulldog-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 7,
+    "ropePush": 0
+  },
+  "submissions.figure-four-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 3,
+    "ropePush": 0
+  },
+  "submissions.figure-four-attacker": {
+    "floorPenetration": 0.011,
+    "at": 0.3,
+    "point": "right_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 3,
+    "ropePush": 0
+  },
+  "submissions.figure-four-hold-defender": {
+    "floorPenetration": 0.024,
+    "at": 0.0,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "submissions.figure-four-hold-attacker": {
+    "floorPenetration": 0.023,
+    "at": 0.0,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 3,
+    "ropePush": 0
+  },
+  "submissions.sharpshooter-defender": {
+    "floorPenetration": 0.085,
+    "at": 1.3,
+    "point": "left_hand",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 6,
+    "ropePush": 0
+  },
+  "submissions.sharpshooter-attacker": {
+    "floorPenetration": 0.013,
+    "at": 0.8,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "submissions.sharpshooter-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.sharpshooter-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.boston-crab-defender": {
+    "floorPenetration": 0.085,
+    "at": 1.3,
+    "point": "left_hand",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 6,
+    "ropePush": 0
+  },
+  "submissions.boston-crab-attacker": {
+    "floorPenetration": 0.019,
+    "at": 1.2,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.boston-crab-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.boston-crab-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.armbar-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.armbar-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "submissions.armbar-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.armbar-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.camel-clutch-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.camel-clutch-attacker": {
+    "floorPenetration": 0.006,
+    "at": 0.67,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.camel-clutch-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.camel-clutch-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.crossface-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.crossface-attacker": {
+    "floorPenetration": 0.007,
+    "at": 0.77,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 9,
+    "ropePush": 0
+  },
+  "submissions.crossface-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.crossface-hold-attacker": {
+    "floorPenetration": 0.045,
+    "at": 0.0,
+    "point": "right_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 17,
+    "ropePush": 0
+  },
+  "submissions.ankle-lock-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.ankle-lock-attacker": {
+    "floorPenetration": 0.015,
+    "at": 0.9,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 5,
+    "ropePush": 0
+  },
+  "submissions.ankle-lock-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.ankle-lock-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.sleeper-hold-defender": {
+    "floorPenetration": 0.019,
+    "at": 1.37,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 6,
+    "ropePush": 0
+  },
+  "submissions.sleeper-hold-attacker": {
+    "floorPenetration": 0.008,
+    "at": 1.6,
+    "point": "left_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "submissions.sleeper-hold-hold-defender": {
+    "floorPenetration": 0.038,
+    "at": 0.0,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 12,
+    "ropePush": 0
+  },
+  "submissions.sleeper-hold-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.abdominal-stretch-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.abdominal-stretch-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.abdominal-stretch-hold-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "submissions.abdominal-stretch-hold-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.cover-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.cover-attacker": {
+    "floorPenetration": 0.001,
+    "at": 0.63,
+    "point": "right_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "ground.hook-leg-cover-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.hook-leg-cover-attacker": {
+    "floorPenetration": 0.001,
+    "at": 0.63,
+    "point": "right_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "ground.kick-out-defender": {
+    "floorPenetration": 0.019,
+    "at": 0.47,
+    "point": "right_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.kick-out-attacker": {
+    "floorPenetration": 0.008,
+    "at": 0.9,
+    "point": "right_knee",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.roll-up-defender": {
+    "floorPenetration": 0.002,
+    "at": 1.13,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "ground.roll-up-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 8,
+    "ropePush": 0
+  },
+  "ground.small-package-defender": {
+    "floorPenetration": 0.001,
+    "at": 1.13,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.small-package-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 8,
+    "ropePush": 0
+  },
+  "ground.elbow-drop": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "ground.leg-drop": {
+    "floorPenetration": 0.018,
+    "at": 0.17,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 1,
+    "ropePush": 0
+  },
+  "ground.knee-drop": {
+    "floorPenetration": 0.013,
+    "at": 0.17,
+    "point": "left_heel",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 2,
+    "ropePush": 0
+  },
+  "reactions.lying-hit-back": {
+    "floorPenetration": 0.048,
+    "at": 0.1,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "reactions.lying-hit-front": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.pick-up-opponent-defender": {
+    "floorPenetration": 0.07,
+    "at": 0.37,
+    "point": "head_top",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 4,
+    "ropePush": 0
+  },
+  "ground.pick-up-opponent-attacker": {
+    "floorPenetration": 0.018,
+    "at": 0.4,
+    "point": "left_toe",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.drag-opponent-defender": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  },
+  "ground.drag-opponent-attacker": {
+    "floorPenetration": 0.0,
+    "at": 0.0,
+    "point": "",
+    "ropeOverlapFrames": 0,
+    "ropeDepth": 0.0,
+    "ropeWorst": "",
+    "contactFixes": 0,
+    "ropePush": 0
+  }
+}

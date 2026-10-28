@@ -1,0 +1,156 @@
+{
+  "id": "submissions.abdominal-stretch-hold-attacker",
+  "name": "Abdominal stretch: hold (loop)",
+  "category": "submissions",
+  "description": "Attacker, looping: wrenching back on the abdominal stretch.",
+  "skeleton": "ttw-humanoid",
+  "skeletonVersion": 1,
+  "libraryVersion": 3,
+  "batch": 3,
+  "duration": 2.0,
+  "loop": true,
+  "clampWhenFinished": false,
+  "interpolation": "smooth",
+  "sampleRate": 30,
+  "rotationUnits": "degrees",
+  "positionMode": "offsetFromRest",
+  "rootMotion": {
+    "mode": "none"
+  },
+  "startState": "abdominal-stretch-hold",
+  "endState": "abdominal-stretch-hold",
+  "startLocation": "ring",
+  "endLocation": "ring",
+  "placement": {
+    "start": "center",
+    "end": "center",
+    "frame": "mat",
+    "frameStart": [-0.25, 0, -0.38, -20],
+    "note": "in the open ring, away from the ropes"
+  },
+  "phases": [],
+  "interrupt": {
+    "windows": [
+      [0, 2.0]
+    ],
+    "note": "times when gameplay may cut to another clip without a visible snap"
+  },
+  "events": [
+    {
+      "time": 2.0,
+      "name": "animation_complete"
+    }
+  ],
+  "tags": ["submission", "attacker", "loop", "abdominal-stretch", "stretch", "starts-abdominal-stretch-hold", "ends-abdominal-stretch-hold"],
+  "tracks": {
+    "hips": {
+      "rotation": [
+        [0.0, -8, 0.0, 10.0],
+        [0.5, -8, 0.0, 14.0],
+        [1.0, -8, 0.0, 10.0],
+        [1.5, -8, 0.0, 6.0],
+        [2.0, -8, 0.0, 10.0]
+      ],
+      "position": [
+        [0.0, 0.0, -0.12, 0.0],
+        [0.5, 0.0, -0.12, 0.0],
+        [1.0, 0.0, -0.12, 0.0],
+        [1.5, 0.0, -0.12, 0.0],
+        [2.0, 0.0, -0.12, 0.0]
+      ]
+    },
+    "leftUpperArm": {
+      "rotation": [
+        [0.0, 3.48, 21.08, 138.7],
+        [0.5, 10.96, 22.02, 132.33],
+        [1.0, 3.48, 21.08, 138.7],
+        [1.5, -4.53, 18.63, 145.34],
+        [2.0, 3.48, 21.08, 138.7]
+      ]
+    },
+    "leftForearm": {
+      "rotation": [
+        [0.0, 2.31, 0, 0],
+        [0.5, 2.31, 0, 0],
+        [1.0, 2.31, 0, 0],
+        [1.5, 2.31, 0, 0],
+        [2.0, 2.31, 0, 0]
+      ]
+    },
+    "rightUpperArm": {
+      "rotation": [
+        [0.0, 6, 0, -10],
+        [0.5, 6, 0, -10],
+        [1.0, 6, 0, -10],
+        [1.5, 6, 0, -10],
+        [2.0, 6, 0, -10]
+      ]
+    },
+    "rightForearm": {
+      "rotation": [
+        [0.0, 14, 0, 0],
+        [0.5, 14, 0, 0],
+        [1.0, 14, 0, 0],
+        [1.5, 14, 0, 0],
+        [2.0, 14, 0, 0]
+      ]
+    },
+    "leftUpperLeg": {
+      "rotation": [
+        [0.0, 39.98, -5.05, -17.55],
+        [0.5, 40.32, -8.21, -20.88],
+        [1.0, 39.98, -5.05, -17.55],
+        [1.5, 39.36, -2.01, -14.18],
+        [2.0, 39.98, -5.05, -17.55]
+      ]
+    },
+    "leftLowerLeg": {
+      "rotation": [
+        [0.0, -65.07, 0, 0],
+        [0.5, -66.52, 0, 0],
+        [1.0, -65.07, 0, 0],
+        [1.5, -63.48, 0, 0],
+        [2.0, -65.07, 0, 0]
+      ]
+    },
+    "leftFoot": {
+      "rotation": [
+        [0.0, 33.4, -6.44, 7.67],
+        [0.5, 34.05, -6.34, 8.13],
+        [1.0, 33.4, -6.44, 7.67],
+        [1.5, 32.67, -6.47, 7.25],
+        [2.0, 33.4, -6.44, 7.67]
+      ]
+    },
+    "rightUpperLeg": {
+      "rotation": [
+        [0.0, 58.19, 24.71, -36.53],
+        [0.5, 60.16, 23.03, -39.37],
+        [1.0, 58.19, 24.71, -36.53],
+        [1.5, 56.11, 26.21, -33.49],
+        [2.0, 58.19, 24.71, -36.53]
+      ]
+    },
+    "rightLowerLeg": {
+      "rotation": [
+        [0.0, -1.75, 0, 0],
+        [0.5, -1.75, 0, 0],
+        [1.0, -1.75, 0, 0],
+        [1.5, -1.75, 0, 0],
+        [2.0, -1.75, 0, 0]
+      ]
+    },
+    "rightFoot": {
+      "rotation": [
+        [0.0, -36.32, -43.63, -0.23],
+        [0.5, -37.09, -45.28, -1.77],
+        [1.0, -36.32, -43.63, -0.23],
+        [1.5, -35.58, -41.89, 1.29],
+        [2.0, -36.32, -43.63, -0.23]
+      ]
+    }
+  },
+  "gameplay": {
+    "rootMotion": "none"
+  }
+}
