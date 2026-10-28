@@ -261,7 +261,9 @@ let remoteWrestler=null;
 let usingBatchOne=false;
 let wrestlerPack=null;
 try{
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json');
+ const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
+ const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -697,83 +699,54 @@ function updateTraversal(dt){
  return true;
 }
 // Shared-clock, offline two-person grapple. The player/remote groups remain authoritative.
-// TTW v0.78: Complete ready animation library and shared paired-move test harness.
-// The asset manifest supplies clips, durations and impact events; gameplay remains offline-only.
-const pairedMoves=(wrestlerPack?.manifest?.paired||[]).filter(p=>p.status==='ready'&&wrestlerPack.animations?.defs?.[p.attacker]&&wrestlerPack.animations?.defs?.[p.defender]);
-let selectedPair=pairedMoves.find(p=>p.id==='pair.powerbomb')||pairedMoves[0]||null;
 let grappleMove=null;
-const movePicker=document.createElement('select');
-movePicker.setAttribute('aria-label','Choose wrestling grapple');
-movePicker.style.cssText='width:100%;max-width:260px;background:#1c253a;color:#fff;border:1px solid #91a9d7;border-radius:7px;padding:9px;font:700 12px system-ui';
-for(const p of pairedMoves){
- const opt=document.createElement('option');opt.value=p.id;opt.textContent=p.name;movePicker.appendChild(opt);
-}
-if(selectedPair)movePicker.value=selectedPair.id;
-movePicker.addEventListener('change',()=>{selectedPair=pairedMoves.find(p=>p.id===movePicker.value)||selectedPair;});
-attackPanel.appendChild(movePicker);
-const pairDataCache=new Map();
-async function beginPowerbomb(){
+const POWERBOMB_DURATION=2.3,POWERBOMB_IMPACT=1.55;
+function beginPowerbomb(){
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0||remoteHP<=0)return;
- if(!botMode)return showContextMessage('Paired moves currently available against the offline bot');
- const pair=selectedPair;
- if(!pair)return showContextMessage('No paired moves loaded');
+ if(!botMode)return showContextMessage('Powerbomb currently available against the offline bot');
+ if(!loadedWrestler?.library?.defs?.['throws.powerbomb-attacker']||!remoteWrestler?.library?.defs?.['throws.powerbomb-defender'])return showContextMessage('Powerbomb assets not loaded');
  const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
  if(Math.hypot(dx,dz)>2.2)return showContextMessage('Move closer to grapple');
- let data=pairDataCache.get(pair.id);
- if(!data){
-  try{
-   const res=await fetch('./assets/ttw-wrestlers/'+pair.file);
-   if(!res.ok)throw new Error('HTTP '+res.status);
-   data=await res.json();pairDataCache.set(pair.id,data);
-  }catch(error){console.error('Paired move data unavailable',error);return showContextMessage('Move data unavailable');}
- }
- if(grappleMove||traversal||!botMode||playerHP<=0||remoteHP<=0)return;
- const attacker=loadedWrestler?.library?.defs?.[pair.attacker];
- const defender=remoteWrestler?.library?.defs?.[pair.defender];
- if(!attacker||!defender)return showContextMessage('Move animation unavailable');
+ // Keep the pair in the ring, away from the ropes.
  const x=THREE.MathUtils.clamp(player.position.x,-2.3,2.3);
  const z=THREE.MathUtils.clamp(player.position.z,-2.3,2.3);
  player.position.set(x,1.2,z);
  const yaw=Math.atan2(-dx,-dz);
  player.rotation.y=yaw;
- const start=data.start||{};
- const offset=start.defenderOffset||[0,0,-.55];
- const ahead=new THREE.Vector3(offset[0]||0,0,offset[2]??-.55).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
- const facing=THREE.MathUtils.degToRad(start.defenderFacing??-180);
- remote.rotation.y=yaw+facing;
+ remote.rotation.y=yaw-Math.PI;
+ const ahead=new THREE.Vector3(0,0,-.55).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
  remote.position.copy(player.position).add(ahead);
  remote.position.y=1.2;
- botStrikeClock=99;remoteReactionTime=0;punchRemaining=0;playerPunchImpact=-1;
- const duration=Number(data.duration||pair.duration||2);
- const event=(data.events||[]).find(e=>e.name==='impact'||e.name==='land'||e.name==='hit'||e.name==='slam');
- const impact=event?.time??duration*.7;
- grappleMove={time:0,impactDone:false,origin:player.position.clone(),yaw,offset:ahead,facing,duration,impact,pair};
+ botStrikeClock=99;
+ remoteReactionTime=0;
+ punchRemaining=0;playerPunchImpact=-1;
+ grappleMove={time:0,impact:false,origin:player.position.clone(),yaw,offset:ahead};
  try{
-  loadedWrestler.play(pair.attacker,{fade:0,restart:true});
-  remoteWrestler.play(pair.defender,{fade:0,restart:true});
-  loadedWrestler._ttwState=pair.attacker;
-  remoteWrestler._ttwState=pair.defender;
- }catch(error){console.error('Paired move failed',error);grappleMove=null;showContextMessage('Move playback error');return;}
- showContextMessage(pair.name.toUpperCase()+'!');
+  loadedWrestler.play('throws.powerbomb-attacker',{fade:0,restart:true});
+  remoteWrestler.play('throws.powerbomb-defender',{fade:0,restart:true});
+  loadedWrestler._ttwState='throws.powerbomb-attacker';
+  remoteWrestler._ttwState='throws.powerbomb-defender';
+ }catch(error){console.error('TTW powerbomb failed',error);grappleMove=null;showContextMessage('Powerbomb animation error');return;}
+ showContextMessage('POWERBOMB!');
 }
 function updatePowerbomb(dt){
  if(!grappleMove)return;
  const g=grappleMove;
- g.time=Math.min(g.duration,g.time+dt);
+ g.time=Math.min(POWERBOMB_DURATION,g.time+dt);
+ // Freeze AI and gameplay movement, while retaining the paired asset's poses.
  const forward=new THREE.Vector3(0,0,-1).applyAxisAngle(new THREE.Vector3(0,1,0),g.yaw);
- const travel=THREE.MathUtils.smoothstep(g.time,0,g.duration)*.2;
+ const travel=THREE.MathUtils.smoothstep(g.time,0,POWERBOMB_DURATION)*.2;
  player.position.copy(g.origin).addScaledVector(forward,travel);
  remote.position.copy(g.origin).add(g.offset);
- remote.rotation.y=g.yaw+g.facing;
+ remote.rotation.y=g.yaw-Math.PI;
  remote.position.y=1.2;
- if(!g.impactDone&&g.time>=g.impact){
-  g.impactDone=true;
-  const damage=g.pair.category==='throws'?30:g.pair.category==='submissions'?12:8;
-  remoteHP=Math.max(0,remoteHP-damage);
-  showDamage(remote.position,'-'+damage,'#ffdf55');
+ if(!g.impact&&g.time>=POWERBOMB_IMPACT){
+  g.impact=true;
+  remoteHP=Math.max(0,remoteHP-30);
+  showDamage(remote.position,'-30','#ffdf55');
   refreshCombatHud();
  }
- if(g.time>=g.duration){
+ if(g.time>=POWERBOMB_DURATION){
   grappleMove=null;
   remoteReaction=remoteHP<=0?'fall':'reactions.stunned';
   remoteReactionTime=remoteHP<=0?0:1.5;
