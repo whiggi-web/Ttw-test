@@ -2209,6 +2209,115 @@ function updateMagician(dt){
  return true;
 }
 
+
+/* TTW v0.73: The Swinging Entrance, a suspended aerial ring arrival. */
+const swingButton=document.createElement('button');
+swingButton.type='button';swingButton.textContent='🪢 THE SWINGING ENTRANCE';
+let swingTime=-1,swingResumeFeed=false,swingCard=-1;
+const swingRig=new THREE.Group();scene.add(swingRig);
+const swingPerson=new THREE.Group();swingRig.add(swingPerson);
+let swingActor=null;
+if(wrestlerPack){
+ try{swingActor=wrestlerPack.createWrestler('wrestler-09');swingPerson.add(swingActor.object);}
+ catch(e){console.warn('Swing entrance wrestler fallback',e);}
+}
+if(!swingActor){
+ const suit=new THREE.MeshStandardMaterial({color:0x8b252c,roughness:.7});
+ const skin=new THREE.MeshStandardMaterial({color:0xc89170,roughness:.8});
+ const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.36,.95,5,10),suit);torso.position.y=1.25;swingPerson.add(torso);
+ const head=new THREE.Mesh(new THREE.SphereGeometry(.27,12,8),skin);head.position.y=2.1;swingPerson.add(head);
+ for(const side of [-1,1]){
+  const arm=new THREE.Mesh(new THREE.CapsuleGeometry(.12,.7,4,7),skin);
+  arm.position.set(side*.47,1.88,0);arm.rotation.z=side*.45;swingPerson.add(arm);
+  const leg=new THREE.Mesh(new THREE.CapsuleGeometry(.14,.7,4,7),suit);
+  leg.position.set(side*.19,.55,0);swingPerson.add(leg);
+ }
+}
+const swingRopeMaterial=new THREE.MeshStandardMaterial({color:0xc9b68a,roughness:1});
+const swingRope=new THREE.Mesh(new THREE.CylinderGeometry(.052,.052,1,10),swingRopeMaterial);
+swingRig.add(swingRope);
+const swingGrip=new THREE.Mesh(new THREE.TorusGeometry(.25,.05,7,14),new THREE.MeshStandardMaterial({color:0x8b9299,metalness:.7,roughness:.4}));
+swingGrip.rotation.x=Math.PI/2;swingRig.add(swingGrip);
+const swingAnchor=new THREE.Vector3(-3.8,17,0);
+const swingFrom=new THREE.Vector3(-16,7.3,0);
+const swingRelease=new THREE.Vector3(-.6,5.2,0);
+const swingLanding=new THREE.Vector3(0,1.2,0);
+function stopSwing(){
+ if(swingTime<0)return;
+ swingTime=-1;swingCard=-1;swingRig.visible=false;
+ if(swingResumeFeed)setActionFeed(true);
+ swingResumeFeed=false;
+}
+swingButton.addEventListener('click',()=>{
+ entranceTime=-1;epicEntranceTime=-1;slideEntranceTime=-1;
+ stopTiny();stopProcession();stopShowcase();stopBetter();stopGod();stopConvoy();stopStory();stopMagician();
+ resetStagePyro();for(const p of epicShards)p.mesh.visible=false;
+ cinematicBlackout.style.opacity='0';
+ stopSwing();swingTime=0;swingCard=-1;
+ swingResumeFeed=actionFeedEnabled;if(actionFeedEnabled)setActionFeed(false);
+ jumbotronCountdown=-1;entranceBot.visible=false;swingRig.visible=true;
+ if(swingActor)swingActor._swingState='';
+});
+for(const b of [entranceButton,slowEntranceButton,slideEntranceButton,processionButton,tinyButton,betterButton,godButton,convoyButton,magicianButton,...storyButtons,...showcaseButtons])b.addEventListener('click',stopSwing);
+function updateSwing(dt){
+ if(swingTime<0)return false;
+ swingTime+=dt;const t=swingTime;
+ const clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
+ const ease=v=>{v=clamp(v,0,1);return v*v*(3-2*v);};
+ if(swingCard!==Math.floor(t/5)){
+  swingCard=Math.floor(t/5);
+  if(t<5)setJumbotron('HERE HE','COMES!',['#122333','#e0bb74']);
+  else setJumbotron('THE','SWINGING ENTRANCE',['#1d2434','#d6b56d']);
+ }
+ let p;
+ if(t<3)p=swingFrom.clone();
+ else if(t<10){
+  // Arc passes high above the outside ropes, descending toward ring centre.
+  const u=ease((t-3)/7);
+  p=swingFrom.clone().lerp(swingRelease,u);
+  p.y=lerp(7.3,5.2,u)-Math.sin(Math.PI*u)*1.1;
+ }else if(t<12.2){
+  const u=ease((t-10)/2.2);
+  p=swingRelease.clone().lerp(swingLanding,u);
+  p.y+=Math.sin(Math.PI*u)*1.15;
+ }else p=swingLanding.clone();
+ swingPerson.position.copy(p);
+ if(t<10){
+  swingPerson.rotation.set(0,Math.PI/2,Math.sin(Math.PI*clamp((t-3)/7,0,1))*.17);
+ }else if(t<12.2){
+  swingPerson.rotation.set(-.22*Math.sin(Math.PI*(t-10)/2.2),0,0);
+ }else swingPerson.rotation.set(0,0,0);
+ // The rope is attached to the roof throughout the swing and releases in flight.
+ const ropeEnd=p.clone().add(new THREE.Vector3(0,2.1,0));
+ swingRope.visible=t<10;
+ swingGrip.visible=t<10;
+ if(t<10){
+  const diff=swingAnchor.clone().sub(ropeEnd);
+  swingRope.position.copy(swingAnchor).add(ropeEnd).multiplyScalar(.5);
+  swingRope.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),diff.clone().normalize());
+  swingRope.scale.set(1,diff.length(),1);
+  swingGrip.position.copy(ropeEnd);
+ }
+ if(swingActor){
+  const state=t<10?'movement.idle':t<12.2?'movement.run':'movement.idle';
+  if(swingActor._swingState!==state){
+   try{swingActor.play(state,{fade:.16,restart:true});}catch(e){console.warn('Swing animation',e);}
+   swingActor._swingState=state;
+  }
+  swingActor.update(dt);
+  swingActor.object.position.set(0,0,0);
+ }
+ let eye,look;
+ if(t<3){eye=entranceV(7,10,14);look=entranceV(-12,8,0);}
+ else if(t<9){eye=entranceV(8,6,9);look=p.clone().add(new THREE.Vector3(0,1,0));}
+ else if(t<12.5){eye=entranceV(5,4,6);look=p.clone().add(new THREE.Vector3(0,1,0));}
+ else{eye=entranceV(3.5,2.5,5);look=entranceV(0,2.2,0);}
+ camera.position.lerp(eye,Math.min(1,dt*5));
+ camera.lookAt(look);
+ if(t>=18)stopSwing();
+ return true;
+}
+
 // Single compact, scrollable entrance selector for desktop and mobile.
 const scenesButton=document.createElement('button');
 scenesButton.textContent='🎬 SCENES ▾';
@@ -2238,6 +2347,7 @@ for(const [button,title] of [
  [godButton,'👑 A God Was Born'],
  [convoyButton,'🚙 The Convoy'],
  [magicianButton,'🎩 The Magician'],
+ [swingButton,'🪢 The Swinging Entrance'],
  ...storyButtons.map((button,i)=>[button,storyNames[i]]),
  ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
 ]){
@@ -2356,7 +2466,7 @@ renderer.setAnimationLoop(()=>{
   keepWrestlerAtHitbox(loadedWrestler);
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
- const cinematicActive=magicianTime>=0?updateMagician(dt):storyMode>=0?updateStory(dt):convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
+ const cinematicActive=swingTime>=0?updateSwing(dt):magicianTime>=0?updateMagician(dt):storyMode>=0?updateStory(dt):convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
  if(!cinematicActive){
  camera.position.set(
  target.x+Math.sin(yaw)*Math.cos(pitch)*distance,
