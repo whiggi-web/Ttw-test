@@ -2397,19 +2397,11 @@ scenesButton.addEventListener('click',()=>{
  scenesButton.setAttribute('aria-expanded',String(!open));
  scenesButton.textContent=open?'🎬 SCENES ▾':'🎬 SCENES ▴';
 });
+// Keep only straightforward stage/ramp entrances. Experimental ring-prop scenes are retired.
 for(const [button,title] of [
  [entranceButton,'🎬 Bot Entrance'],
  [slowEntranceButton,'✨ Epic Walk Entrance'],
- [slideEntranceButton,'🏃 Run & Slide Entrance'],
- [processionButton,'👑 Royal Procession'],
- [tinyButton,'🐜 Tiny Invasion'],
- [betterButton,'😎 Better Than You'],
- [godButton,'👑 A God Was Born'],
- [convoyButton,'🚙 The Convoy'],
- [magicianButton,'🎩 The Magician'],
- [swingButton,'🪢 The Swinging Entrance'],
- ...storyButtons.map((button,i)=>[button,storyNames[i]]),
- ...showcaseButtons.map((button,i)=>[button,showcaseNames[i]])
+ [slideEntranceButton,'🏃 Run & Slide Entrance']
 ]){
  button.textContent=title;
  button.style.cssText='position:relative;inset:auto;top:auto;left:auto;width:100%;flex:none;text-align:left;z-index:auto;padding:13px 12px;background:#30324c;color:#fff;border:1px solid #656987;border-radius:8px;font:700 13px system-ui;cursor:pointer';
