@@ -261,7 +261,9 @@ let remoteWrestler=null;
 let usingBatchOne=false;
 let wrestlerPack=null;
 try{
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-batch2.json');
+ const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
+ const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -548,7 +550,7 @@ function hitSparringBot(move){
  if(remoteHP<=0){botRecover=10;remoteAnim='fall';}
 }
 function updateSparringBot(dt){
- if(!botMode||document.getElementById('home').hidden===false)return;
+ if(!botMode||grappleMove||document.getElementById('home').hidden===false)return;
  if(remoteHP<=0){
   botRecover-=dt;
   if(botRecover<=0){remoteHP=100;remoteAnim='idle';remoteReactionTime=0;remote.position.set(1.8,1.2,-.6);refreshCombatHud();}
@@ -586,7 +588,7 @@ function combatTick(dt){
   let delta=THREE.MathUtils.euclideanModulo(remoteTargetRotation-remote.rotation.y+Math.PI,Math.PI*2)-Math.PI;
   remote.rotation.y+=delta*blend;
  }
- if(remoteWrestler&&(remoteConnected||botMode)){
+ if(remoteWrestler&&(remoteConnected||botMode)&&!grappleMove){
   remoteReactionTime=Math.max(0,remoteReactionTime-dt);
   const state=remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
   if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
@@ -636,7 +638,7 @@ let contextMessageUntil=0;
 function showContextMessage(message){contextMessage.textContent=message;contextMessage.style.display='block';contextMessageUntil=performance.now()+2000;}
 let attackSequence=0;
 function performAttack(move){
- if(traversal||punchRemaining>0||playerHP<=0||!(remoteConnected||botMode)||document.getElementById('home').hidden===false)return;
+ if(grappleMove||traversal||punchRemaining>0||playerHP<=0||!(remoteConnected||botMode)||document.getElementById('home').hidden===false)return;
  const attack=attackMoves[move];if(!attack)return;
  activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
 }
@@ -696,11 +698,69 @@ function updateTraversal(dt){
  }
  return true;
 }
+// Shared-clock, offline two-person grapple. The player/remote groups remain authoritative.
+let grappleMove=null;
+const POWERBOMB_DURATION=2.3,POWERBOMB_IMPACT=1.55;
+function beginPowerbomb(){
+ if(grappleMove||traversal||punchRemaining>0||playerHP<=0||remoteHP<=0)return;
+ if(!botMode)return showContextMessage('Powerbomb currently available against the offline bot');
+ if(!loadedWrestler?.library?.defs?.['throws.powerbomb-attacker']||!remoteWrestler?.library?.defs?.['throws.powerbomb-defender'])return showContextMessage('Powerbomb assets not loaded');
+ const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
+ if(Math.hypot(dx,dz)>2.2)return showContextMessage('Move closer to grapple');
+ // Keep the pair in the ring, away from the ropes.
+ const x=THREE.MathUtils.clamp(player.position.x,-2.3,2.3);
+ const z=THREE.MathUtils.clamp(player.position.z,-2.3,2.3);
+ player.position.set(x,1.2,z);
+ const yaw=Math.atan2(-dx,-dz);
+ player.rotation.y=yaw;
+ remote.rotation.y=yaw-Math.PI;
+ const ahead=new THREE.Vector3(0,0,-.55).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
+ remote.position.copy(player.position).add(ahead);
+ remote.position.y=1.2;
+ botStrikeClock=99;
+ remoteReactionTime=0;
+ punchRemaining=0;playerPunchImpact=-1;
+ grappleMove={time:0,impact:false,origin:player.position.clone(),yaw,offset:ahead};
+ try{
+  loadedWrestler.play('throws.powerbomb-attacker',{fade:0,restart:true});
+  remoteWrestler.play('throws.powerbomb-defender',{fade:0,restart:true});
+  loadedWrestler._ttwState='throws.powerbomb-attacker';
+  remoteWrestler._ttwState='throws.powerbomb-defender';
+ }catch(error){console.error('TTW powerbomb failed',error);grappleMove=null;showContextMessage('Powerbomb animation error');return;}
+ showContextMessage('POWERBOMB!');
+}
+function updatePowerbomb(dt){
+ if(!grappleMove)return;
+ const g=grappleMove;
+ g.time=Math.min(POWERBOMB_DURATION,g.time+dt);
+ // Freeze AI and gameplay movement, while retaining the paired asset's poses.
+ const forward=new THREE.Vector3(0,0,-1).applyAxisAngle(new THREE.Vector3(0,1,0),g.yaw);
+ const travel=THREE.MathUtils.smoothstep(g.time,0,POWERBOMB_DURATION)*.2;
+ player.position.copy(g.origin).addScaledVector(forward,travel);
+ remote.position.copy(g.origin).add(g.offset);
+ remote.rotation.y=g.yaw-Math.PI;
+ remote.position.y=1.2;
+ if(!g.impact&&g.time>=POWERBOMB_IMPACT){
+  g.impact=true;
+  remoteHP=Math.max(0,remoteHP-30);
+  showDamage(remote.position,'-30','#ffdf55');
+  refreshCombatHud();
+ }
+ if(g.time>=POWERBOMB_DURATION){
+  grappleMove=null;
+  remoteReaction=remoteHP<=0?'fall':'reactions.stunned';
+  remoteReactionTime=remoteHP<=0?0:1.5;
+  botStrikeClock=3.2;
+  if(remoteHP<=0){botRecover=10;remoteAnim='fall';}
+  loadedWrestler._ttwState='';
+  remoteWrestler._ttwState='';
+ }
+}
 const contextActions=[
  ['GRAPPLE','KeyG',()=>{
   if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
   if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
-  performAttack('clothesline');showContextMessage('Grapple test: clothesline');
+  beginPowerbomb();
  }],
  ['ROPES','KeyR',()=>{
   const near=Math.min(Math.abs(Math.abs(player.position.x)-3.5),Math.abs(Math.abs(player.position.z)-3.5));
@@ -2411,7 +2471,7 @@ renderer.setAnimationLoop(()=>{
  const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
  // Losing continuous movement resets all accumulated rope momentum.
  if(playerHP<=0||Math.abs(inputX)+Math.abs(inputZ)<=.001){ropeSpeedMultiplier=1;}
- if(playerHP>0&&!traversal&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
+ if(playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
   const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
@@ -2444,26 +2504,28 @@ renderer.setAnimationLoop(()=>{
   }
  }
 
- if(playerHP>0&&!traversal&&ropeBounceDelay<=0&&ropeRecoilTime>0){
+ if(playerHP>0&&!grappleMove&&!traversal&&ropeBounceDelay<=0&&ropeRecoilTime>0){
   ropeRecoilTime=Math.max(0,ropeRecoilTime-dt);
   const amount=dt*(ropeRecoilTime/.28);
   const nx=player.position.x+ropeRecoil.x*amount,nz=player.position.z+ropeRecoil.z*amount;
   if(!blockedByArena(nx,nz,player.position.y)){player.position.x=nx;player.position.z=nz;}
  }
  updateTraversal(dt);
+ updatePowerbomb(dt);
  if(contextMessageUntil&&performance.now()>contextMessageUntil){contextMessage.style.display='none';contextMessageUntil=0;}
  if(playerPunchImpact>=0){playerPunchImpact-=dt;if(playerPunchImpact<0&&playerHP>0){if(botMode)hitSparringBot(activeAttack);else if(remoteConnected)sendNetwork({type:'punch',move:activeAttack,momentum:ropeSpeedMultiplier});}}
  combatTick(dt);
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=playerHP<=0?'fall':traversal?'idle':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
+  const nextAnimation=grappleMove?'throws.powerbomb-attacker':playerHP<=0?'fall':traversal?'idle':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
   }
   loadedWrestler.update(dt);
   keepWrestlerAtHitbox(loadedWrestler);
+  if(grappleMove&&remoteWrestler){remoteWrestler.update(dt);keepWrestlerAtHitbox(remoteWrestler);}
  }
  target.lerp(new THREE.Vector3(player.position.x,player.position.y+1.25,player.position.z),Math.min(1,dt*6));
  const cinematicActive=swingTime>=0?updateSwing(dt):magicianTime>=0?updateMagician(dt):storyMode>=0?updateStory(dt):convoyTime>=0?updateConvoy(dt):godTime>=0?updateGod(dt):betterTime>=0?updateBetter(dt):showcaseMode>=0?updateShowcase(dt):tinyTime>=0?updateTiny(dt):processionTime>=0?updateProcession(dt):slideEntranceTime>=0?updateSlideEntrance(dt):epicEntranceTime>=0?updateEpicEntrance(dt):updateEntrance(dt);
