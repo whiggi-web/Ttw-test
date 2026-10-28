@@ -699,7 +699,7 @@ function updateTraversal(dt){
 // Shared-clock, offline two-person grapple. The player/remote groups remain authoritative.
 // TTW v0.78: Complete ready animation library and shared paired-move test harness.
 // The asset manifest supplies clips, durations and impact events; gameplay remains offline-only.
-const pairedMoves=(wrestlerPack?.manifest?.paired||[]).filter(p=>p.status==='ready'&&wrestlerPack.animationDefs?.[p.attacker]&&wrestlerPack.animationDefs?.[p.defender]);
+const pairedMoves=(wrestlerPack?.manifest?.paired||[]).filter(p=>p.status==='ready'&&wrestlerPack.animations?.defs?.[p.attacker]&&wrestlerPack.animations?.defs?.[p.defender]);
 let selectedPair=pairedMoves.find(p=>p.id==='pair.powerbomb')||pairedMoves[0]||null;
 let grappleMove=null;
 const movePicker=document.createElement('select');
