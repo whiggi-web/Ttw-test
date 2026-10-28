@@ -772,7 +772,7 @@ function beginChokeslam(){
  player.rotation.y=yaw;
  remote.rotation.y=yaw-Math.PI;
  // Shift the receiver toward the attacker's raised hand, without changing height or pose.
- const ahead=new THREE.Vector3(-.55,0,-.6).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
+ const ahead=new THREE.Vector3(.55,0,-.6).applyAxisAngle(new THREE.Vector3(0,1,0),yaw);
  remote.position.copy(player.position).add(ahead);remote.position.y=1.2;
  botStrikeClock=99;remoteReactionTime=0;punchRemaining=0;playerPunchImpact=-1;
  grappleMove={time:0,impact:false,origin:player.position.clone(),yaw,offset:ahead,kind:'chokeslam'};
