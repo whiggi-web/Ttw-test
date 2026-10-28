@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.chokeslam-attacker','throws.chokeslam-defender']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.chokeslam-attacker','throws.chokeslam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -655,13 +655,25 @@ function beginTraversal(kind){
   const side=Math.abs(x)>Math.abs(z)?'x':'z';
   const sign=Math.sign(player.position[side])||1;
   const distance=Math.abs(player.position[side]);
-  if(distance<2.6||distance>4.15)return showContextMessage('Stand beside the ropes to enter or exit');
-  const outside=distance>3.6;
+  if(distance<2.6||distance>5.2)return showContextMessage('Stand beside the ring to enter or exit');
+  const onFloor=player.position.y<.65;
+  const onApron=distance>3.6&&!onFloor;
+  const outside=onApron;
+  const clip=onFloor?'ropes.apron-climb-up':onApron?'ropes.apron-drop-down':'ropes.exit-between-ropes';
+  if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Rope traversal animation unavailable');
   const start=player.position.clone(),end=start.clone();
-  end[side]=sign*(outside?2.55:3.98);
-  end.y=1.2;
-  traversal={kind,start,end,time:0,duration:1.65};
-  showContextMessage(outside?'Climbing into the ring':'Climbing out of the ring');
+  end[side]=sign*(onFloor?3.94:onApron?4.65:3.94);
+  end.y=onApron?0:1.2;
+  // Face into the ring on entry, outward on exit. The clip handles the duck/step pose.
+  const inward=new THREE.Vector3(side==='x'?-sign:0,0,side==='z'?-sign:0);
+  const travel=onFloor?inward:inward.clone().negate();
+  player.rotation.y=Math.atan2(-travel.x,-travel.z);
+  traversal={kind,start,end,time:0,duration:onFloor?1.7:onApron?1.5:2,clip};
+  ropeRecoilTime=0;ropeRecoil.set(0,0,0);
+  ropeAnimationTime=0;
+  loadedWrestler.play(clip,{fade:.12,restart:true});
+  loadedWrestler._ttwState=clip;
+  showContextMessage(onFloor?'Climbing onto the apron':onApron?'Dropping to the floor':'Exiting between the ropes');
  }else if(kind==='climb'){
   if(Math.abs(x)<2.15||Math.abs(z)<2.15)return showContextMessage('Move into a ring corner to climb');
   const corner=new THREE.Vector3(Math.sign(x)*3.1,1.2,Math.sign(z)*3.1);
@@ -684,8 +696,7 @@ function updateTraversal(dt){
  const eased=p*p*(3-2*p);
  player.position.lerpVectors(traversal.start,traversal.end,eased);
  if(traversal.kind==='ring'){
-  player.position.y=1.2+Math.sin(Math.PI*p)*.18;
-  if(loadedWrestler)loadedWrestler.object.rotation.x=-Math.sin(Math.PI*p)*.28;
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,traversal.end.y,eased); // Apron-to-floor height transition.
  }else if(traversal.kind==='climb'){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,2.55,eased);
  }else if(traversal.kind==='dive'){
@@ -2553,7 +2564,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?'idle':hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
+  const nextAnimation=grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
