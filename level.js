@@ -664,8 +664,8 @@ function setPadLabel(id,label){const el=controllerRoot?.querySelector('[data-id=
 function refreshCombatButtons(){
  setPadLabel('ultimate',staminaExhausted?'TIRED':runToggle?'RUN ON':'RUN OFF');
  setPadLabel('ability2',combatRunning?'CLOTHES':'POWERBOMB');
- setPadLabel('ability3',combatRunning?'UPPER':'HOOK');
- setPadLabel('ability4',combatRunning?'RUN KICK':'KICK');
+ setPadLabel('ability3','CLIMB / EXIT');
+ setPadLabel('ability4','ATTACK');
 }
 function toggleRun(){if(staminaExhausted){showContextMessage('Recover stamina before running');return;}runToggle=!runToggle;refreshCombatButtons();}
 window.addEventListener('controller:button',e=>{
@@ -675,8 +675,8 @@ window.addEventListener('controller:button',e=>{
  else if(id==='counter')activateCounter();
  else if(id==='ability1')tapAttack();
  else if(id==='ability2'){if(combatRunning)performAttack('clothesline');else beginPowerbomb();}
- else if(id==='ability3'){if(combatRunning)performAttack('uppercut');else performAttack('hook');}
- else if(id==='ability4')performAttack('kick');
+ else if(id==='ability3')climbOrExit();
+ else if(id==='ability4')tapAttack();
 });
 refreshCombatButtons();
 const clock=new THREE.Clock();
@@ -704,6 +704,13 @@ function activateCounter(){
  if(!crowdCanAfford(1,'Counter'))return;
  crowdSpend(1);counterUntil=now+1200;counterCooldownUntil=now+3500;
  showContextMessage('COUNTER READY! 50% chance for 1.2s');
+}
+function climbOrExit(){
+ if(traversal?.kind==='perched')return beginTraversal('ring');
+ const x=Math.abs(player.position.x),z=Math.abs(player.position.z);
+ const atCorner=x>=2.15&&z>=2.15&&x<=3.55&&z<=3.55&&player.position.y>=.75;
+ if(atCorner)return beginTraversal('climb');
+ return beginTraversal('ring');
 }
 function tapAttack(){
  const moves=['punch','jab','hook','kick'];
