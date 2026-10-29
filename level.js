@@ -649,7 +649,7 @@ function startMultiplayer(){
   }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;const damagedPeer=onlinePeers.get(m.targetSlot);if(damagedPeer)damagedPeer.hp=m.other;refreshCombatHud();
-   if(m.hit==='self'){if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){traversal=null;showContextMessage('Climb interrupted by attack');}showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
+   if(m.hit==='self'){if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){interruptTurnbuckleClimb();}showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
    if(m.hit==='other'){crowdEarn(3);showDamage((damagedPeer?.group||remote).position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){if(damagedPeer){damagedPeer.reaction=m.reaction||'reactions.hit-front';damagedPeer.reactionTime=.72;}}}
   }
  };
@@ -710,7 +710,7 @@ function updateSparringBot(dt){
   }
   if(counterActive)showContextMessage('COUNTER FAILED!');
   hitReaction='reactions.hit-front';hitReactionTime=.65;
-  if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){traversal=null;showContextMessage('Climb interrupted by attack');}
+  if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){interruptTurnbuckleClimb();}
   playerHP=Math.max(0,playerHP-2);
   showDamage(player.position,'-2','#ff6969');
   refreshCombatHud();
@@ -914,6 +914,21 @@ function swanDive(){
  traversal={kind:'dive',start:player.position.clone(),end,time:0,duration:1.35,clip};
  showContextMessage('JUMP EXIT! -10 Crowd Momentum');
 }
+function interruptTurnbuckleClimb(){
+ if(!traversal||!['approach-corner','climb','turn','perched'].includes(traversal.kind))return;
+ const elevated=player.position.y>1.4;
+ if(elevated){
+  const end=player.position.clone();
+  end.x=THREE.MathUtils.clamp(end.x,-2.65,2.65);
+  end.z=THREE.MathUtils.clamp(end.z,-2.65,2.65);
+  end.y=1.2;
+  traversal={kind:'knocked-off-corner',start:player.position.clone(),end,time:0,duration:.65,clip:'falls.fall-forward'};
+  showContextMessage('Knocked off the turnbuckle!');
+ }else{
+  traversal=null;
+  showContextMessage('Climb interrupted by attack');
+ }
+}
 function updateTraversal(dt){
  if(!traversal)return false;
  if(traversal.kind==='perched'){player.position.copy(traversal.end);return true;}
@@ -927,6 +942,8 @@ function updateTraversal(dt){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,2.078,eased);
  }else if(traversal.kind==='turn'){
   player.rotation.y=traversal.startYaw+Math.PI*eased;
+ }else if(traversal.kind==='knocked-off-corner'){
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.15;
  }else if(traversal.kind==='dive'){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.35;
  }
