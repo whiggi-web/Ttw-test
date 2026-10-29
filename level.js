@@ -556,7 +556,7 @@ function startMultiplayer(){
   if(m.type==='full'){networkStatus.textContent='Ring full (4 players maximum)';}
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
    const peer=makeOnlinePeer(m.slot);const position=m.position||{};
-   if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
+   if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)&&peer.grappleUntil<=performance.now()){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
    peer.anim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
    /* Legacy primary remote hidden; onlinePeers renders all opponents. */
    const p=m.position||{};
@@ -571,6 +571,9 @@ function startMultiplayer(){
     for(const [peer,role] of [[attacker,'attacker'],[defender,'defender']]){
      if(!peer)continue;
      peer.grappleUntil=until;
+     // Keep the spectator's paired wrestlers at their grapple start locations.
+     peer.target.copy(peer.group.position);
+     peer.hasTarget=true;
      if(peer.wrestler){
       const clip='throws.'+m.move+'-'+role;
       peer.wrestler.play(clip,{fade:0,restart:true});
@@ -671,7 +674,7 @@ function combatTick(dt){
  }
  // Tick all remote wrestlers, including paired Special animations.
  for(const peer of onlinePeers.values()){
-  if(peer.hasTarget){
+  if(peer.hasTarget&&peer.grappleUntil<=performance.now()){
    const blend=1-Math.exp(-dt*16);
    peer.group.position.lerp(peer.target,blend);
    const delta=THREE.MathUtils.euclideanModulo(peer.rotation-peer.group.rotation.y+Math.PI,Math.PI*2)-Math.PI;
