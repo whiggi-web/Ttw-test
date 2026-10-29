@@ -2442,6 +2442,10 @@ document.body.appendChild(scenesButton);
 const scenesMenu=document.createElement('div');
 scenesMenu.style.cssText='position:fixed;top:106px;left:16px;z-index:18;width:min(300px,calc(100vw - 32px));max-height:min(52vh,390px);overflow-y:auto;overscroll-behavior:contain;background:#151c2df5;border:1px solid #8d73a7;border-radius:11px;padding:8px;box-shadow:0 12px 30px #000b;display:none';
 document.body.appendChild(scenesMenu);
+// TTW v0.93: Hide retired production/debug controls without removing their behavior.
+for(const control of [scenesButton,scenesMenu,jumbotronButton,processionButton,actionFeedButton]){
+ control.style.setProperty('display','none','important');
+}
 function closeScenesMenu(){scenesMenu.style.display='none';scenesButton.setAttribute('aria-expanded','false');scenesButton.textContent='🎬 SCENES ▾';}
 scenesButton.addEventListener('click',()=>{
  const open=scenesMenu.style.display!=='none';
