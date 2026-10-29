@@ -62,6 +62,7 @@ export class TTWRoom extends DurableObject {
    this.locks.set(ws,now+2.55);this.locks.set(otherWs,now+2.55);
    send(ws,{type:"grapple",role:"attacker",move,duration:2.3,impact:1.55,attackerSlot:p.slot,defenderSlot:other.slot});
    send(otherWs,{type:"grapple",role:"defender",move,duration:2.3,impact:1.55,attackerSlot:p.slot,defenderSlot:other.slot});
+   for(const peer of this.players.keys())if(peer!==ws&&peer!==otherWs)send(peer,{type:"grapple",role:"observer",move,duration:2.3,impact:1.55,attackerSlot:p.slot,defenderSlot:other.slot});
    const due=Date.now()+1550;
    await this.ctx.storage.put("pending-grapple",{attackerSlot:p.slot,defenderSlot:other.slot,move,due});
    await this.scheduleAlarm(due);
