@@ -565,6 +565,20 @@ function startMultiplayer(){
    remoteAnim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
   if(m.type==='grapple'&&['powerbomb','german-suplex'].includes(m.move)){
+   if(m.role==='observer'){
+    const attacker=onlinePeers.get(m.attackerSlot),defender=onlinePeers.get(m.defenderSlot);
+    const until=performance.now()+(m.duration||2.3)*1000;
+    for(const [peer,role] of [[attacker,'attacker'],[defender,'defender']]){
+     if(!peer)continue;
+     peer.grappleUntil=until;
+     if(peer.wrestler){
+      const clip='throws.'+m.move+'-'+role;
+      peer.wrestler.play(clip,{fade:0,restart:true});
+      peer.wrestler._ttwState=clip;
+     }
+    }
+    return;
+   }
    const grapplePeer=onlinePeers.get(m.role==='attacker'?m.defenderSlot:m.attackerSlot);
    if(grapplePeer)grapplePeer.grappleUntil=performance.now()+(m.duration||2.3)*1000;
    const role=m.role==='attacker'?'attacker':'defender';
