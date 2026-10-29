@@ -621,8 +621,8 @@ function startMultiplayer(){
    if(playerSlot===m.attackerSlot||playerSlot===m.defenderSlot){
     const role=playerSlot===m.attackerSlot?'attacker':'defender';
     const clip=role==='attacker'?'ropes.irish-whip':'ropes.whipped-into';
-    grappleMove={network:true,kind:'irish-whip',move:'irish-whip',role,time:0,duration:m.duration||1.4,
-     origin:player.position.clone(),landing:role==='defender'?new THREE.Vector3(m.target.x,m.target.y,m.target.z):null,snapTurn:role==='attacker',snapped:false};
+    grappleMove={network:true,kind:'irish-whip',move:'irish-whip',role,time:0,duration:role==='defender'?12:(m.duration||1.4),
+     origin:player.position.clone(),landing:null,whip:role==='defender'?makeWhip(new THREE.Vector3(-Math.sin(m.directionYaw),0,-Math.cos(m.directionYaw))):null};
     punchRemaining=0;playerPunchImpact=-1;
     loadedWrestler?.play(clip,{fade:0,restart:true});
     if(loadedWrestler)loadedWrestler._ttwState=clip;
@@ -745,11 +745,10 @@ function combatTick(dt){
  if(irishWhipTest){
   const test=irishWhipTest;
   test.time+=dt;
-  const t=THREE.MathUtils.smoothstep(test.time,.42,1.14);
-  remote.position.lerpVectors(test.start,test.end,t);
-  if(test.time>=test.duration){
+  moveWhipped(remote,test.whip,dt,false);
+  if(test.whip.done||test.time>=test.duration){
    irishWhipTest=null;
-   botMode=false;remote.visible=false;
+   botMode=true;remote.visible=true;remoteAnim=test.whip.fall?'fall':'idle';botMoveClock=99999;botStrikeClock=99999;
    if(remoteWrestler)remoteWrestler._ttwState='';
   }
  }
@@ -791,7 +790,7 @@ function combatTick(dt){
  }
  if(remoteWrestler&&(remoteConnected||botMode)&&(!grappleMove||irishWhipTest)){
   remoteReactionTime=Math.max(0,remoteReactionTime-dt);
-  const state=irishWhipTest?(irishWhipTest.whipStarted?'ropes.whipped-into':'idle'):remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
+  const state=irishWhipTest?(irishWhipTest.whip.time<.42?'ropes.whipped-into':'run'):remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
   const holdingSlamPose=botMode&&(remoteHP<=0||botKnockdownTime>0)&&remoteWrestler._ttwState==='knockdown-hold';
   if(!holdingSlamPose){
    if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
@@ -892,6 +891,32 @@ function climbOrExit(){
 }
 // Temporary offline Irish Whip test opponent; never joins the multiplayer room.
 let irishWhipTest=null;
+function makeWhip(dir){return {dir:dir.normalize(),time:0,springs:0,done:false,fall:false};}
+function moveWhipped(v,w,dt,isPlayer){
+ if(!w||w.done)return;
+ w.time+=dt;if(w.time<.42)return;
+ const next=v.position.clone().addScaledVector(w.dir,5.5*dt);
+ const edge=Math.abs(next.x)>=3.3||Math.abs(next.z)>=3.3;
+ let wall=Math.abs(next.x)>=3.05&&Math.abs(next.z)>=3.05;
+ if(!edge)for(const c of solidArenaBoxes){
+  if((c.tags||[]).includes('rope')||c.id==='ring_apron')continue;
+  const b=c.box;if(next.y>b.max.y-.08||next.y+1.65<b.min.y+.08)continue;
+  const x=THREE.MathUtils.clamp(next.x,b.min.x,b.max.x),z=THREE.MathUtils.clamp(next.z,b.min.z,b.max.z);
+  if((next.x-x)**2+(next.z-z)**2<.1024){wall=true;break;}
+ }
+ if(wall){w.done=true;w.fall=true;return;}
+ if(edge){
+  const side=Math.abs(next.x)>Math.abs(next.z)?(next.x>0?'east':'west'):(next.z>0?'north':'south');
+  const inward=side==='east'?new THREE.Vector3(-1,0,0):side==='west'?new THREE.Vector3(1,0,0):side==='north'?new THREE.Vector3(0,0,-1):new THREE.Vector3(0,0,1);
+  const spring=ropeSprings[side];spring.contact=side==='east'||side==='west'?v.position.z:v.position.x;
+  spring.bend=Math.max(.6,spring.bend);spring.velocity+=3;spring.impact=.45;
+  w.dir.copy(inward);w.springs++;w.time=-.68;
+  if(isPlayer)registerRopeBounce(inward);
+  if(w.springs>=4)w.done=true;
+ }else v.position.copy(next);
+ v.rotation.y=Math.atan2(-w.dir.x,-w.dir.z);
+}
+
 let irishNpcEnabled=true;
 function showIrishNpc(){
  if(!irishNpcEnabled||onlinePeers.size||irishWhipTest||!document.getElementById('home').hidden)return;
@@ -918,11 +943,8 @@ irishTestButton.addEventListener('click',()=>{
  start.x=THREE.MathUtils.clamp(start.x,-2.2,2.2);
  start.z=THREE.MathUtils.clamp(start.z,-2.2,2.2);start.y=1.2;
  remote.position.copy(start);remote.rotation.y=player.rotation.y+Math.PI;
- const end=start.clone().addScaledVector(forward,2.58);
- end.x=THREE.MathUtils.clamp(end.x,-3.3,3.3);
- end.z=THREE.MathUtils.clamp(end.z,-3.3,3.3);
- irishWhipTest={time:0,duration:1.4,start,end};
- grappleMove={network:true,kind:'irish-whip',move:'irish-whip',role:'attacker',time:0,duration:1.4,origin:player.position.clone(),landing:null,snapTurn:true,snapped:false};
+ irishWhipTest={time:0,duration:12,start,whip:makeWhip(forward.clone().negate())};
+ grappleMove={network:true,kind:'irish-whip',move:'irish-whip',role:'attacker',time:0,duration:1.4,origin:player.position.clone(),landing:null};
  loadedWrestler?.play('ropes.irish-whip',{fade:0,restart:true});
  remoteWrestler?.play('ropes.whipped-into',{fade:0,restart:true});
  if(loadedWrestler)loadedWrestler._ttwState='ropes.irish-whip';
@@ -1129,14 +1151,7 @@ function updatePowerbomb(dt){
  const g=grappleMove;
  if(g.network){
   g.time+=dt;
-  if(g.kind==='irish-whip'&&g.snapTurn&&!g.snapped&&g.time>=.42){
-   player.rotation.y+=Math.PI;
-   g.snapped=true;
-  }
-  if(g.kind==='irish-whip'&&g.role==='defender'&&g.landing){
-   const t=THREE.MathUtils.smoothstep(g.time,.42,1.14);
-   player.position.lerpVectors(g.origin,g.landing,t);
-  }
+  if(g.kind==='irish-whip'&&g.role==='defender'&&g.whip){moveWhipped(player,g.whip,dt,true);if(g.whip.done)g.duration=g.time;}
   if(g.time>=g.duration){
    if(g.landing){
     player.position.copy(g.landing);
@@ -3022,7 +3037,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?.network?(grappleMove.kind==='irish-whip'?(grappleMove.role==='attacker'?'ropes.irish-whip':'ropes.whipped-into'):'throws.'+grappleMove.move+'-'+grappleMove.role):grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle';
+  const nextAnimation=grappleMove?.network?(grappleMove.kind==='irish-whip'?(grappleMove.role==='attacker'?'ropes.irish-whip':grappleMove.whip?.time<.42?'ropes.whipped-into':'run'):'throws.'+grappleMove.move+'-'+grappleMove.role):grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
