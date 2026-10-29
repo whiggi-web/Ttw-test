@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop','ropes.irish-whip','ropes.whipped-into','eliminations.apron-fall-back','eliminations.apron-fall-forward','eliminations.fall-through-ropes','eliminations.knocked-through-ropes','eliminations.thrown-over-top','eliminations.thrown-through-middle','ropes.pull-over-top','ropes.pulled-over-top','ropes.push-into-ropes','ropes.pushed-against','ropes.drape-over-top','ropes.drape-recover','ropes.hang-over-top','ropes.grab-hold','ropes.apron-hang-on','ropes.apron-climb-up','ropes.apron-drop-down','ropes.tangled-struggle','ropes.tangled-escape']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop','ropes.irish-whip','ropes.whipped-into','eliminations.apron-fall-back','eliminations.apron-fall-forward','eliminations.fall-through-ropes','eliminations.knocked-through-ropes','eliminations.thrown-over-top','eliminations.thrown-through-middle','ropes.pull-over-top','ropes.pulled-over-top','throws.hip-toss-attacker','ropes.push-into-ropes','ropes.pushed-against','ropes.drape-over-top','ropes.drape-recover','ropes.hang-over-top','ropes.grab-hold','ropes.apron-hang-on','ropes.apron-climb-up','ropes.apron-drop-down','ropes.tangled-struggle','ropes.tangled-escape']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -279,7 +279,7 @@ try{
 const attackMoves={punch:{anim:'striking.punch',reaction:'reactions.hit-front',duration:.8,impact:.3},jab:{anim:'striking.jab',reaction:'reactions.hit-front',duration:.65,impact:.23},hook:{anim:'striking.hook-right',reaction:'reactions.hit-left',duration:.85,impact:.35},uppercut:{anim:'striking.uppercut',reaction:'reactions.knocked-back',duration:1,impact:.42},kick:{anim:'striking.roundhouse',reaction:'reactions.hit-kick',duration:1.05,impact:.48},clothesline:{anim:'striking.clothesline',reaction:'reactions.hit-clothesline',duration:1.1,impact:.5}};
 const playTTWAnimation=(w,state,fade=.2)=>{
  if(!w)return;
- const name=usingBatchOne?({idle:'movement.idle',walk:'movement.walk',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||((state.startsWith('reactions.')||state.startsWith('ropes.')||state.startsWith('movement.'))?state:'movement.idle')):state;
+ const name=usingBatchOne?({idle:'movement.idle',walk:'movement.walk',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||((state.startsWith('reactions.')||state.startsWith('ropes.')||state.startsWith('movement.')||state.startsWith('throws.')||state.startsWith('eliminations.'))?state:'movement.idle')):state;
  const safeName=usingBatchOne&&w.library?.defs?.[name]?name:(usingBatchOne?'movement.idle':name);
  try{w.play(safeName,{fade,restart:true});}catch(error){console.warn('TTW animation unavailable:',name,error);if(safeName!=='movement.idle')try{w.play('movement.idle',{fade:0,restart:true});}catch{}}
 };
@@ -615,6 +615,27 @@ function startMultiplayer(){
    if(peer){peer.draped=!!m.active;if(peer.draped){peer.reactionTime=0;peer.anim='ropes.drape-over-top';}}
    return;
   }
+  if(m.type==='middle-rope-toss'){
+   const duration=1.45;
+   if(playerSlot===m.attackerSlot){
+    eliminationPreview=null;
+    traversal={kind:'middle-toss-attacker',start:player.position.clone(),end:player.position.clone(),time:0,duration,clip:'throws.hip-toss-attacker'};
+    showContextMessage('Hip toss!');
+   }else{
+    const peer=onlinePeers.get(m.attackerSlot);
+    if(peer){peer.grappleUntil=performance.now()+duration*1000;peer.wrestler?.play('throws.hip-toss-attacker',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='throws.hip-toss-attacker';}
+   }
+   if(playerSlot===m.defenderSlot){
+    const start=player.position.clone(),end=start.clone();
+    end[m.axis]=m.sign*4.45;end.y=.08;
+    traversal={kind:'middle-toss-defender',start,end,time:0,duration,clip:'eliminations.thrown-through-middle'};
+    showContextMessage('Thrown through middle ropes!');
+   }else{
+    const peer=onlinePeers.get(m.defenderSlot);
+    if(peer){peer.grappleUntil=performance.now()+duration*1000;peer.wrestler?.play('eliminations.thrown-through-middle',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='eliminations.thrown-through-middle';}
+   }
+   return;
+  }
   if(m.type==='paired-pull-over'){
    if(playerSlot===m.attackerSlot){
     eliminationPreview=null;
@@ -946,6 +967,15 @@ pairedPullButton.addEventListener('click',()=>{
  sendNetwork({type:'paired-pull-over'});
  showContextMessage('Attempting paired pull-over (stand outside near draped wrestler)');
 });
+const middleTossButton=document.createElement('button');
+middleTossButton.textContent='TEST: HIP TOSS THROUGH MIDDLE';
+middleTossButton.style.cssText='width:100%;margin-top:7px;padding:9px 6px;border-radius:6px;background:#425a99;color:white;border:0;font:700 11px system-ui;cursor:pointer';
+eliminationPreviewPanel.appendChild(middleTossButton);
+middleTossButton.addEventListener('click',()=>{
+ if(!remoteConnected||traversal||grappleMove||playerHP<=0)return showContextMessage('Need another player and no active move');
+ sendNetwork({type:'middle-rope-toss'});
+ showContextMessage('Attempting hip toss through middle ropes');
+});
 const ropeRecoverButton=document.createElement('button');
 ropeRecoverButton.textContent='RECOVER INTO RING';
 ropeRecoverButton.style.cssText='display:none;width:100%;margin-top:7px;padding:10px 6px;border-radius:6px;background:#23764e;color:white;border:0;font:700 12px system-ui;cursor:pointer';
@@ -1160,6 +1190,20 @@ function updateTraversal(dt){
    sendNetwork({type:'drape-status',active:true,axis:traversal.side.axis,sign:traversal.side.sign});
    console.info('TTW drape sync: announcing drape',traversal.side);
   }
+  return true;
+ }
+ if(traversal.kind==='middle-toss-attacker'){
+  traversal.time+=dt;
+  if(traversal.time>=traversal.duration)traversal=null;
+  return true;
+ }
+ if(traversal.kind==='middle-toss-defender'){
+  traversal.time+=dt;
+  const p=Math.min(1,traversal.time/traversal.duration);
+  player.position.lerpVectors(traversal.start,traversal.end,p*p*(3-2*p));
+  // The defender's throw travels 20% higher. Other animation heights are unchanged.
+  player.position.y+=Math.sin(Math.PI*p)*.24;
+  if(p>=1){traversal=null;showContextMessage('Through the middle ropes');}
   return true;
  }
  if(traversal.kind==='rope-paired-attacker'){
