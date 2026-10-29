@@ -608,6 +608,25 @@ function startMultiplayer(){
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
+  if(m.type==='over-top-rope'){
+   if(playerSlot===m.slot){
+    const start=player.position.clone(),end=start.clone();
+    end[m.axis]=m.sign*4.65;end.y=.08;
+    const outward=new THREE.Vector3(m.axis==='x'?m.sign:0,0,m.axis==='z'?m.sign:0);
+    player.rotation.y=Math.atan2(-outward.x,-outward.z);
+    traversal={kind:'rope-punch-over-top',start,end,time:0,duration:m.duration||1.4,clip:'eliminations.thrown-over-top'};
+    eliminationPreview=null;
+    showContextMessage('THROWN OVER THE TOP ROPE!');
+   }else{
+    const peer=onlinePeers.get(m.slot);
+    if(peer){
+     peer.grappleUntil=performance.now()+(m.duration||1.4)*1000;
+     peer.wrestler?.play('eliminations.thrown-over-top',{fade:0,restart:true});
+     if(peer.wrestler)peer.wrestler._ttwState='eliminations.thrown-over-top';
+    }
+   }
+   return;
+  }
   if(m.type==='irish-whip'){
    const now=performance.now(),until=now+(m.duration||1.4)*1000;
    const attacker=onlinePeers.get(m.attackerSlot),defender=onlinePeers.get(m.defenderSlot);
@@ -1077,6 +1096,14 @@ function updateTraversal(dt){
    traversal={kind:'rope-test-pull',start,end,time:0,duration:1.4,clip:'ropes.pulled-over-top',side};
    showContextMessage('Pulled over top rope!');
   }
+  return true;
+ }
+ if(traversal.kind==='rope-punch-over-top'){
+  traversal.time+=dt;
+  const p=Math.min(1,traversal.time/traversal.duration);
+  const eased=p*p*(3-2*p);
+  player.position.lerpVectors(traversal.start,traversal.end,eased);
+  if(p>=1){traversal=null;showContextMessage('Thrown outside the ring');}
   return true;
  }
  if(traversal.kind==='rope-test-pull'){
