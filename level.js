@@ -587,7 +587,7 @@ function startMultiplayer(){
    const peer=makeOnlinePeer(m.slot);const position=m.position||{};
    if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)&&peer.grappleUntil<=performance.now()){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
    const previousPeerAnim=peer.anim;
-   peer.anim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
+   peer.anim=['idle','run','fall','ropeLean','ropeRebound','ropes.drape-over-top','ropes.drape-recover','ropes.pulled-over-top',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
    // The Worker relays rope animation states but not spring physics.
    // Reconstruct a rope impulse on every observer when a wrestler first leans in.
    if((peer.anim==='ropeLean'||peer.anim==='ropeRebound')&&previousPeerAnim!=='ropeLean'&&previousPeerAnim!=='ropeRebound'){
@@ -608,6 +608,11 @@ function startMultiplayer(){
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
+  if(m.type==='drape-status'&&m.slot!==playerSlot){
+   const peer=onlinePeers.get(m.slot);
+   if(peer){peer.draped=!!m.active;if(peer.draped)peer.reactionTime=0;}
+   return;
+  }
   if(m.type==='drape-pulled-over'){
    if(playerSlot===m.slot&&traversal?.kind==='rope-test-drape'){
     const start=player.position.clone(),end=start.clone();
@@ -617,7 +622,7 @@ function startMultiplayer(){
     showContextMessage('PULLED OVER THE TOP ROPE!');
    }else{
     const peer=onlinePeers.get(m.slot);
-    if(peer){peer.grappleUntil=performance.now()+1400;peer.wrestler?.play('ropes.pulled-over-top',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='ropes.pulled-over-top';}
+    if(peer){peer.draped=false;peer.grappleUntil=performance.now()+1400;peer.wrestler?.play('ropes.pulled-over-top',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='ropes.pulled-over-top';}
    }
    return;
   }
@@ -706,8 +711,8 @@ function startMultiplayer(){
   }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;const damagedPeer=onlinePeers.get(m.targetSlot);if(damagedPeer)damagedPeer.hp=m.other;refreshCombatHud();
-   if(m.hit==='self'){if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){interruptTurnbuckleClimb();}showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
-   if(m.hit==='other'){crowdEarn(3);showDamage((damagedPeer?.group||remote).position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){if(damagedPeer){damagedPeer.reaction=m.reaction||'reactions.hit-front';damagedPeer.reactionTime=.72;}}}
+   if(m.hit==='self'){if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){interruptTurnbuckleClimb();}showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(traversal?.kind!=='rope-test-drape'&&!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
+   if(m.hit==='other'){crowdEarn(3);showDamage((damagedPeer?.group||remote).position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){if(damagedPeer&&!damagedPeer.draped){damagedPeer.reaction=m.reaction||'reactions.hit-front';damagedPeer.reactionTime=.72;}}}
   }
  };
  network.onclose=()=>{for(const slot of [...onlinePeers.keys()])removeOnlinePeer(slot);botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;networkStatus.textContent='Disconnected. AI opponent disabled.';refreshCombatHud();};
@@ -797,7 +802,7 @@ function combatTick(dt){
    peer.wrestler.update(dt);keepWrestlerAtHitbox(peer.wrestler);continue;
   }
   peer.reactionTime=Math.max(0,peer.reactionTime-dt);
-  const state=peer.hp<=0?'fall':peer.reactionTime>0?peer.reaction:peer.anim;
+  const state=peer.hp<=0?'fall':peer.draped?'ropes.drape-over-top':peer.reactionTime>0?peer.reaction:peer.anim;
   if(peer.wrestler._ttwState!==state){playTTWAnimation(peer.wrestler,state,.12);peer.wrestler._ttwState=state;}
   peer.wrestler.update(dt);keepWrestlerAtHitbox(peer.wrestler);
  }
@@ -821,7 +826,7 @@ function combatTick(dt){
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
   sendClock-=.05;
-  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':combatRunning?'run':ropeAnimationTime>0?'ropeRebound':'idle'});
+  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:traversal&&['rope-test-drape','rope-test-recover','rope-test-pull'].includes(traversal.kind)?traversal.clip:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':combatRunning?'run':ropeAnimationTime>0?'ropeRebound':'idle'});
  }
 }
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
