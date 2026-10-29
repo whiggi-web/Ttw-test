@@ -498,7 +498,7 @@ function makeOnlinePeer(slot){
  if(wrestler){lockGameplayWrestler(wrestler);group.add(wrestler.object);playTTWAnimation(wrestler,'idle');wrestler._ttwState='idle';}
  else{const mesh=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:[0,0xee5533,0x55dd77,0xcc77ff,0xffcc44][slot]}));mesh.position.y=1;group.add(mesh);}
  scene.add(group);
- const peer={slot,group,wrestler,hp:100,target:new THREE.Vector3(),rotation:0,hasTarget:false,anim:'idle',reaction:null,reactionTime:0};
+ const peer={slot,group,wrestler,hp:100,target:new THREE.Vector3(),rotation:0,hasTarget:false,anim:'idle',reaction:null,reactionTime:0,grappleUntil:0};
  onlinePeers.set(slot,peer);return peer;
 }
 function removeOnlinePeer(slot){const p=onlinePeers.get(slot);if(!p)return;scene.remove(p.group);onlinePeers.delete(slot);}
@@ -566,6 +566,7 @@ function startMultiplayer(){
   }
   if(m.type==='grapple'&&['powerbomb','german-suplex'].includes(m.move)){
    const grapplePeer=onlinePeers.get(m.role==='attacker'?m.defenderSlot:m.attackerSlot);
+   if(grapplePeer)grapplePeer.grappleUntil=performance.now()+(m.duration||2.3)*1000;
    const role=m.role==='attacker'?'attacker':'defender';
    const anim='throws.'+m.move+'-'+role;
    const otherAnim='throws.'+m.move+'-'+(role==='attacker'?'defender':'attacker');
