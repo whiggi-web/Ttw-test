@@ -655,6 +655,23 @@ function combatTick(dt){
   const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
   if(p.life<=0){scene.remove(p.sprite);p.mat.dispose();p.tex.dispose();damagePopups.splice(i,1);}
  }
+ // Tick all remote wrestlers, including paired Special animations.
+ for(const peer of onlinePeers.values()){
+  if(peer.hasTarget){
+   const blend=1-Math.exp(-dt*16);
+   peer.group.position.lerp(peer.target,blend);
+   const delta=THREE.MathUtils.euclideanModulo(peer.rotation-peer.group.rotation.y+Math.PI,Math.PI*2)-Math.PI;
+   peer.group.rotation.y+=delta*blend;
+  }
+  if(!peer.wrestler)continue;
+  if(peer.grappleUntil>performance.now()){
+   peer.wrestler.update(dt);keepWrestlerAtHitbox(peer.wrestler);continue;
+  }
+  peer.reactionTime=Math.max(0,peer.reactionTime-dt);
+  const state=peer.hp<=0?'fall':peer.reactionTime>0?peer.reaction:peer.anim;
+  if(peer.wrestler._ttwState!==state){playTTWAnimation(peer.wrestler,state,.12);peer.wrestler._ttwState=state;}
+  peer.wrestler.update(dt);keepWrestlerAtHitbox(peer.wrestler);
+ }
  if(remoteConnected&&remoteHasTarget){
   // Render every frame between network updates instead of teleporting at 20Hz.
   const blend=1-Math.exp(-dt*16);
