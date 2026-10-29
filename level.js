@@ -813,8 +813,9 @@ function showContextMessage(message){contextMessage.textContent=message;contextM
 let attackSequence=0;
 function performAttack(move){
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0||!(remoteConnected||botMode)||document.getElementById('home').hidden===false)return;
- const attack=attackMoves[move];if(!attack)return;
- activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
+ const selectedMove=combatRunning?'clothesline':move;
+ const attack=attackMoves[selectedMove];if(!attack)return;
+ activeAttack=selectedMove;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
 }
 function activateCounter(){
  const now=performance.now();
