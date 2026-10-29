@@ -104,7 +104,14 @@ async def handler(ws):
                 if other["hp"] <= 0:
                     continue
                 a, b = last_position[ws], last_position[other_ws]
-                if math.hypot(a["x"] - b["x"], a["z"] - b["z"]) > 2.2:
+                dx, dz = b["x"] - a["x"], b["z"] - a["z"]
+                distance = math.hypot(dx, dz)
+                if distance > 2.2 or distance < 0.001:
+                    continue
+                # Authoritative forward-facing 120-degree attack cone.
+                attacker_angle = last_rotation.get(ws, 0.0)
+                facing_dot = (-math.sin(attacker_angle) * dx - math.cos(attacker_angle) * dz) / distance
+                if facing_dot < 0.5:
                     continue
                 try:
                     momentum = float(data.get("momentum", 1))
