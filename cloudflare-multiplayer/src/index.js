@@ -1,0 +1,117 @@
+import { DurableObject } from "cloudflare:workers";
+
+const ATTACKS = {
+ punch:[11,.7,"reactions.hit-front"], jab:[7,.48,"reactions.hit-front"],
+ hook:[13,.8,"reactions.hit-left"], uppercut:[16,.95,"reactions.knocked-back"],
+ kick:[15,1,"reactions.hit-kick"], clothesline:[18,1.1,"reactions.hit-clothesline"]
+};
+const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall"]);
+const send=(ws,msg)=>{try{ws.send(JSON.stringify(msg));}catch{}};
+const forward=(angle)=>[-Math.sin(angle),-Math.cos(angle)];
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
+
+export class TTWRoom extends DurableObject {
+ constructor(ctx,env){super(ctx,env);this.players=new Map();this.lastHits=new Map();this.locks=new Map();
+  for(const ws of ctx.getWebSockets()){const info=ws.deserializeAttachment();if(info?.slot)this.players.set(ws,info);}
+ }
+ broadcast(msg,except=null){for(const ws of this.players.keys())if(ws!==except)send(ws,msg);}
+ async fetch(request){
+  if(request.headers.get("Upgrade")?.toLowerCase()!=="websocket")return new Response("WebSocket required",{status:426});
+  const pair=new WebSocketPair();const client=pair[0],server=pair[1];
+  this.ctx.acceptWebSocket(server);return new Response(null,{status:101,webSocket:client});
+ }
+ async webSocketMessage(ws,raw){
+  if(typeof raw!=="string"||raw.length>4096)return;
+  let data;try{data=JSON.parse(raw);}catch{return;}
+  if(!data||typeof data!=="object")return;
+  let p=this.players.get(ws);
+  if(!p){
+   if(data.type!=="join")return;
+   if(this.players.size>=2){send(ws,{type:"full"});ws.close(1000,"Room full");return;}
+   const slot=[...this.players.values()].some(v=>v.slot===1)?2:1;
+   p={slot,hp:100,name:String(data.name||"Wrestler").slice(0,20),position:{x:slot===1?-1.4:1.4,y:1.2,z:0},rotation:0,animation:"idle"};
+   this.players.set(ws,p);ws.serializeAttachment(p);send(ws,{type:"welcome",slot,hp:100});
+   if(this.players.size===2)for(const [peer,info] of this.players){const other=[...this.players.values()].find(v=>v!==info);send(peer,{type:"joined",hp:other.hp,name:other.name});}
+   else send(ws,{type:"waiting"});
+   return;
+  }
+  if(data.type==="state"){
+   const pos=data.position,rotation=Number(data.rotation);
+   if(!pos||!["x","y","z"].every(k=>Number.isFinite(pos[k]))||!Number.isFinite(rotation))return;
+   if(Math.abs(pos.x)>4.1||Math.abs(pos.z)>4.1||pos.y<0||pos.y>5)return;
+   p.position={x:pos.x,y:pos.y,z:pos.z};p.rotation=rotation;
+   p.animation=allowedAnimations.has(data.animation)?data.animation:"idle";
+   ws.serializeAttachment(p);
+   this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.animation},ws);
+   return;
+  }
+  if(this.players.size!==2)return;
+  const otherWs=[...this.players.keys()].find(w=>w!==ws),other=this.players.get(otherWs);
+  const now=Date.now()/1000;
+  if(p.hp<=0||other.hp<=0||now<(this.locks.get(ws)||0)||now<(this.locks.get(otherWs)||0))return;
+  const dx=other.position.x-p.position.x,dz=other.position.z-p.position.z;
+  const dist=Math.hypot(dx,dz);
+  if(dist<.1||dist>2.2||Math.abs(other.position.y-p.position.y)>.65)return;
+  const direction=[dx/dist,dz/dist];
+  if(dot(forward(p.rotation),direction)<.5)return;
+  if(data.type==="special"){
+   const behind=dot(forward(other.rotation),direction)>.5;
+   const move=behind?"german-suplex":"powerbomb";
+   this.locks.set(ws,now+2.55);this.locks.set(otherWs,now+2.55);
+   send(ws,{type:"grapple",role:"attacker",move,duration:2.3,impact:1.55});
+   send(otherWs,{type:"grapple",role:"defender",move,duration:2.3,impact:1.55});
+   await this.ctx.storage.setAlarm(Date.now()+1550);
+   this.ctx.storage.put("pending-grapple",{attackerSlot:p.slot,defenderSlot:other.slot,move});
+   return;
+  }
+  if(data.type!=="punch"||!Object.hasOwn(ATTACKS,data.move))return;
+  const [base,cooldown,defaultReaction]=ATTACKS[data.move];
+  if(now-(this.lastHits.get(ws)||0)<cooldown)return;
+  this.lastHits.set(ws,now);
+  const momentum=Number(data.momentum);
+  const damage=Math.round(base*Math.max(1,Math.min(1.3,Number.isFinite(momentum)?momentum:1)));
+  let reaction=defaultReaction;
+  if(["punch","jab","hook"].includes(data.move)){
+   reaction=dot(forward(other.rotation),[-direction[0],-direction[1]])>=0?"reactions.hit-front":"reactions.hit-back";
+  }
+  this.damage(ws,otherWs,damage,reaction,data.move);
+ }
+ damage(attackerWs,defenderWs,damage,reaction,move){
+  const a=this.players.get(attackerWs),b=this.players.get(defenderWs);if(!a||!b)return;
+  b.hp=Math.max(0,b.hp-damage);attackerWs.serializeAttachment(a);defenderWs.serializeAttachment(b);
+  send(attackerWs,{type:"health",self:a.hp,other:b.hp,hit:"other",damage,reaction,move});
+  send(defenderWs,{type:"health",self:b.hp,other:a.hp,hit:"self",damage,reaction,move});
+  if(b.hp===0){this.ctx.storage.put("ko-"+b.slot,Date.now()+10000);this.ctx.storage.setAlarm(Date.now()+10000);}
+ }
+ async alarm(){
+  const pending=await this.ctx.storage.get("pending-grapple");
+  if(pending){
+   await this.ctx.storage.delete("pending-grapple");
+   const attacker=[...this.players].find(([,p])=>p.slot===pending.attackerSlot)?.[0];
+   const defender=[...this.players].find(([,p])=>p.slot===pending.defenderSlot)?.[0];
+   if(attacker&&defender)this.damage(attacker,defender,30,"reactions.knocked-back",pending.move);
+  }
+  for(const [ws,p] of this.players){
+   const deadline=await this.ctx.storage.get("ko-"+p.slot);
+   if(deadline&&Date.now()>=deadline){
+    p.hp=100;ws.serializeAttachment(p);await this.ctx.storage.delete("ko-"+p.slot);
+    const other=[...this.players.values()].find(v=>v!==p);
+    send(ws,{type:"health",self:p.hp,other:other?.hp??100,hit:null});
+    if(other){const peer=[...this.players.keys()].find(w=>w!==ws);send(peer,{type:"health",self:other.hp,other:p.hp,hit:null});}
+   }
+  }
+ }
+ async webSocketClose(ws){this.leave(ws);}
+ async webSocketError(ws){this.leave(ws);}
+ leave(ws){if(!this.players.delete(ws))return;this.lastHits.delete(ws);this.locks.delete(ws);this.broadcast({type:"peer_left"});}
+}
+export default {
+ async fetch(request,env){
+  const url=new URL(request.url);
+  if(url.pathname==="/health")return Response.json({ok:true,service:"ttw-multiplayer"});
+  if(url.pathname!=="/ws")return new Response("TTW multiplayer: connect to /ws",{status:404});
+  if(request.headers.get("Upgrade")?.toLowerCase()!=="websocket")return new Response("WebSocket required",{status:426});
+  const id=env.ROOM.idFromName("ttw-main-ring");
+  return env.ROOM.get(id).fetch(request);
+ }
+};
