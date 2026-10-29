@@ -857,6 +857,25 @@ eliminationPreviewSelect.style.cssText='width:100%;max-width:100%;font:12px syst
 const eliminationPreviewPlay=document.createElement('button');
 eliminationPreviewPlay.textContent='PLAY';
 eliminationPreviewPlay.style.cssText='margin-top:8px;padding:7px 12px;border-radius:6px;background:#376db7;color:white;border:0;font-weight:700;cursor:pointer';
+const ropeSequenceButton=document.createElement('button');
+ropeSequenceButton.textContent='TEST: DRAPE → PULL OVER';
+ropeSequenceButton.style.cssText='width:100%;margin-top:9px;padding:9px 6px;border-radius:6px;background:#a35728;color:white;border:0;font:700 11px system-ui;cursor:pointer';
+eliminationPreviewPanel.appendChild(ropeSequenceButton);
+ropeSequenceButton.addEventListener('click',()=>{
+ if(!document.getElementById('home').hidden||playerHP<=0||grappleMove||traversal)return;
+ if(!loadedWrestler?.library?.defs?.['ropes.drape-over-top']||!loadedWrestler?.library?.defs?.['ropes.pulled-over-top'])return showContextMessage('Rope sequence animations unavailable');
+ const x=player.position.x,z=player.position.z;
+ const choices=[{axis:'x',sign:1,dist:3.02-x},{axis:'x',sign:-1,dist:3.02+x},{axis:'z',sign:1,dist:3.02-z},{axis:'z',sign:-1,dist:3.02+z}];
+ choices.sort((a,b)=>Math.abs(a.dist)-Math.abs(b.dist));
+ const side=choices[0],end=player.position.clone();
+ end[side.axis]=side.sign*3.02;
+ end[side.axis==='x'?'z':'x']=THREE.MathUtils.clamp(end[side.axis==='x'?'z':'x'],-2.55,2.55);
+ end.y=1.2;
+ eliminationPreview=null;
+ const distance=player.position.distanceTo(end);
+ traversal={kind:'rope-test-approach',start:player.position.clone(),end,time:0,duration:Math.max(.35,distance/2.6),clip:'walk',side};
+ showContextMessage('Walking to nearest rope');
+});
 const eliminationPreviewStop=document.createElement('button');
 eliminationPreviewStop.textContent='STOP';
 eliminationPreviewStop.style.cssText='margin:8px 0 0 6px;padding:7px 12px;border-radius:6px;background:#555;color:white;border:0;cursor:pointer';
@@ -1047,6 +1066,25 @@ function interruptTurnbuckleClimb(){
 function updateTraversal(dt){
  if(!traversal)return false;
  if(traversal.kind==='perched'){player.position.copy(traversal.end);return true;}
+ if(traversal.kind==='rope-test-drape'){
+  traversal.time+=dt;
+  player.position.copy(traversal.end);
+  if(traversal.time>=3){
+   const start=player.position.clone(),end=start.clone(),side=traversal.side;
+   end[side.axis]=side.sign*4.65;end.y=.08;
+   traversal={kind:'rope-test-pull',start,end,time:0,duration:1.4,clip:'ropes.pulled-over-top',side};
+   showContextMessage('Pulled over top rope!');
+  }
+  return true;
+ }
+ if(traversal.kind==='rope-test-pull'){
+  traversal.time+=dt;
+  const p=Math.min(1,traversal.time/traversal.duration);
+  const eased=p*p*(3-2*p);
+  player.position.lerpVectors(traversal.start,traversal.end,eased);
+  if(p>=1){traversal=null;showContextMessage('Rope test complete');}
+  return true;
+ } if(traversal.kind==='perched'){player.position.copy(traversal.end);return true;}
  traversal.time+=dt;
  const p=Math.min(1,traversal.time/traversal.duration);
  const eased=p*p*(3-2*p);
@@ -1065,7 +1103,13 @@ function updateTraversal(dt){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.35;
  }
  if(p>=1){
-  if(traversal.kind==='approach-corner'){
+  if(traversal.kind==='rope-test-approach'){
+   const side=traversal.side;
+   const outward=new THREE.Vector3(side.axis==='x'?side.sign:0,0,side.axis==='z'?side.sign:0);
+   player.rotation.y=Math.atan2(-outward.x,-outward.z);
+   traversal={kind:'rope-test-drape',start:player.position.clone(),end:player.position.clone(),time:0,duration:3,clip:'ropes.drape-over-top',side};
+   showContextMessage('Draped over top rope: 3 seconds');
+  }else if(traversal.kind==='approach-corner'){
    const corner=traversal.corner;
    const outward=new THREE.Vector3(Math.sign(corner.x),0,Math.sign(corner.z)).normalize();
    player.rotation.y=Math.atan2(-outward.x,-outward.z);
