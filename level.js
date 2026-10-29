@@ -932,6 +932,7 @@ irishTestButton.addEventListener('click',()=>{
 function beginIrishWhip(){
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0)return;
  if(!loadedWrestler?.library?.defs?.['ropes.irish-whip'])return showContextMessage('Irish whip animation unavailable');
+ if(!onlinePeers.size&&irishNpcEnabled){irishTestButton.click();return;}
  if(!remoteConnected)return showContextMessage('Irish whip requires another wrestler');
  sendNetwork({type:'irish-whip'});
 }
