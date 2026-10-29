@@ -5,7 +5,7 @@ const ATTACKS = {
  hook:[13,.8,"reactions.hit-left"], uppercut:[16,.95,"reactions.knocked-back"],
  kick:[15,1,"reactions.hit-kick"], clothesline:[18,1.1,"reactions.hit-clothesline"]
 };
-const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top"]);
+const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top"]);
 const send=(ws,msg)=>{try{ws.send(JSON.stringify(msg));}catch{}};
 const forward=(angle)=>[-Math.sin(angle),-Math.cos(angle)];
 const dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
@@ -51,6 +51,23 @@ export class TTWRoom extends DurableObject {
    }else delete p.drape;
    ws.serializeAttachment(p);
    this.broadcast({type:"drape-status",slot:p.slot,active:!!p.drape},ws);
+   return;
+  }
+  if(data.type==="paired-pull-over"){
+   if(p.hp<=0||p.drape)return;
+   const targets=[...this.players].filter(([otherWs,b])=>otherWs!==ws&&b.drape&&b.hp>0)
+    .map(([otherWs,b])=>({otherWs,b,d:Math.hypot(b.position.x-p.position.x,b.position.z-p.position.z)}))
+    .filter(t=>t.d<=2.6&&t.d>=.2).sort((a,b)=>a.d-b.d);
+   const target=targets[0];
+   if(!target){send(ws,{type:"notice",message:"No draped wrestler within 2.6m"});return;}
+   const b=target.b,side=b.drape;
+   const attackerOutside=side.axis==="x"?(p.position.x-b.position.x)*side.sign>.15:(p.position.z-b.position.z)*side.sign>.15;
+   if(!attackerOutside){send(ws,{type:"notice",message:"Stand outside the ring, beside the draped wrestler"});return;}
+   delete b.drape;
+   target.otherWs.serializeAttachment(b);
+   const now=Date.now()/1000;
+   this.locks.set(ws,now+1.5);this.locks.set(target.otherWs,now+1.5);
+   this.broadcast({type:"paired-pull-over",attackerSlot:p.slot,defenderSlot:b.slot,axis:side.axis,sign:side.sign,duration:1.4});
    return;
   }
   if(this.players.size<2)return;
