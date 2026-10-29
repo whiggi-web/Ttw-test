@@ -706,7 +706,7 @@ function activateCounter(){
  showContextMessage('COUNTER READY! 50% chance for 1.2s');
 }
 function climbOrExit(){
- if(traversal?.kind==='perched')return beginTraversal('ring');
+ if(traversal?.kind==='perched')return showContextMessage('Already on the turnbuckle; press SPECIAL to dive');
  const x=Math.abs(player.position.x),z=Math.abs(player.position.z);
  const atCorner=x>=2.15&&z>=2.15&&x<=3.55&&z<=3.55&&player.position.y>=.75;
  if(atCorner)return beginTraversal('climb');
