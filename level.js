@@ -582,12 +582,12 @@ function startMultiplayer(){
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
    const peer=makeOnlinePeer(m.slot);const position=m.position||{};
    if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)&&peer.grappleUntil<=performance.now()){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
-   peer.anim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
+   peer.anim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
    /* Legacy primary remote hidden; onlinePeers renders all opponents. */
    const p=m.position||{};
    if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remoteTarget.set(p.x,p.y,p.z);remoteTargetRotation=m.rotation;
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
-   remoteAnim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
+   remoteAnim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
   if(m.type==='grapple'&&['powerbomb','german-suplex'].includes(m.move)){
    if(m.role==='observer'){
@@ -747,7 +747,7 @@ function combatTick(dt){
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
   sendClock-=.05;
-  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?activeAttack:heldKeys.size||movement.active?'run':'idle'});
+  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':combatRunning?'run':'idle'});
  }
 }
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
