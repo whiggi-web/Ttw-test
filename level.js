@@ -549,8 +549,8 @@ function startMultiplayer(){
   }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;refreshCombatHud();
-   if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}
-   if(m.hit==='other'){crowdEarn(3);showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}
+   if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
+   if(m.hit==='other'){crowdEarn(3);showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}}
   }
  };
  network.onclose=()=>{botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;networkStatus.textContent='Disconnected. AI opponent disabled.';refreshCombatHud();};
