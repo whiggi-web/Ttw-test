@@ -1106,6 +1106,7 @@ function updatePowerbomb(dt){
  const g=grappleMove;
  if(g.network){
   g.time+=dt;
+  if(g.kind==='irish-whip'&&g.role==='attacker'&&!g.attackerTurned&&g.time>=.42){player.rotation.y+=Math.PI;g.attackerTurned=true;}
   if(g.kind==='irish-whip'&&g.role==='defender'&&g.whip){moveWhipped(player,g.whip,dt,true);if(g.whip.done){g.duration=g.time;if(g.whip.fall){hitReaction='fall';hitReactionTime=1.2;}}}
   if(g.time>=g.duration){
    if(g.landing){
