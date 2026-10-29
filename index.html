@@ -21,13 +21,13 @@ body.ttw-clean #hud,body.ttw-clean #help,body.ttw-clean #crowdMeter,body.ttw-cle
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
 </head>
 <body>
-<div id="hud"><strong>TTW</strong><small>DEV: Signature Move v0.99</small></div>
+<div id="hud"><strong>TTW</strong><small>DEV: Counter Test v1.00</small></div>
 <div id="crowdMeter" role="progressbar" aria-label="Crowd Momentum" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="meterHeading"><span>★ CROWD MOMENTUM</span><span id="crowdValue">0 / 100</span></div><div class="meterTrack"><div id="crowdFill"></div></div><div class="meterHint">Earn momentum • Spend it on big moves</div></div>
 <div id="help">WASD move · Shift sprint · Click punch · Drag to orbit · Scroll/pinch zoom</div>
 <div id="controllerSlot"></div>
 <button id="viewToggle" type="button" hidden aria-pressed="false">👁 HIDE INTERFACE</button>
 <div id="home"><form id="homePanel"><h1>TTW</h1><p>Enter the ring</p><p>Two-player ring · Join from a second browser</p><label for="wrestlerName">Wrestler name</label><input id="wrestlerName" name="wrestlerName" maxlength="20" autocomplete="nickname" placeholder="Enter your wrestler name" required><button id="enterRing" type="submit">ENTER THE RING</button><p id="homeError" role="alert"></p></form></div>
-<script src="./assets/controllers/game-controller.js?v=099"></script>
+<script src="./assets/controllers/game-controller.js?v=100"></script>
 <script>
 // Local-player-only Crowd Momentum HUD. Gameplay hooks can call TTWCrowdMomentum.add/spend.
 (()=>{let value=0;const root=document.getElementById('crowdMeter'),fill=document.getElementById('crowdFill'),label=document.getElementById('crowdValue');const update=()=>{fill.style.width=value+'%';label.textContent=value+' / 100';root.setAttribute('aria-valuenow',String(value));};window.TTWCrowdMomentum={get value(){return value;},add(points){if(!Number.isFinite(points)||points<=0)return value;value=Math.min(100,value+points);update();return value;},spend(cost){if(!Number.isFinite(cost)||cost<=0||value<cost)return false;value-=cost;update();return true;},reset(){value=0;update();}};update();})();
@@ -53,6 +53,6 @@ viewToggle.addEventListener('click',()=>{
  viewToggle.setAttribute('aria-pressed',String(hidden));
 });
 </script>
-<script type="module" src="./level.js?v=signature-move-099"></script>
+<script type="module" src="./level.js?v=counter-test-100"></script>
 </body>
 </html>
