@@ -5,7 +5,7 @@ const ATTACKS = {
  hook:[13,.8,"reactions.hit-left"], uppercut:[16,.95,"reactions.knocked-back"],
  kick:[15,1,"reactions.hit-kick"], clothesline:[18,1.1,"reactions.hit-clothesline"]
 };
-const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top","movement.stumble-forward"]);
+const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top","movement.stumble-forward","throws.fireman-carry-attacker","throws.fireman-carry-defender"]);
 const send=(ws,msg)=>{try{ws.send(JSON.stringify(msg));}catch{}};
 const forward=(angle)=>[-Math.sin(angle),-Math.cos(angle)];
 const dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
@@ -51,6 +51,20 @@ export class TTWRoom extends DurableObject {
    }else delete p.drape;
    ws.serializeAttachment(p);
    this.broadcast({type:"drape-status",slot:p.slot,active:!!p.drape},ws);
+   return;
+  }
+  if(data.type==="test-fireman-carry"){
+   if(p.hp<=0)return;
+   const targets=[...this.players].filter(([otherWs,b])=>otherWs!==ws&&b.hp>0&&!b.drape)
+    .map(([otherWs,b])=>({otherWs,b,d:Math.hypot(b.position.x-p.position.x,b.position.z-p.position.z)}))
+    .filter(t=>t.d>=.1&&t.d<=1.8&&Math.abs(t.b.position.y-p.position.y)<.65)
+    .sort((a,b)=>a.d-b.d);
+   const chosen=targets[0];
+   if(!chosen){send(ws,{type:"notice",message:"No opponent within 1.8m"});return;}
+   const now=Date.now()/1000;
+   if(now<(this.locks.get(ws)||0)||now<(this.locks.get(chosen.otherWs)||0))return;
+   this.locks.set(ws,now+2.7);this.locks.set(chosen.otherWs,now+2.7);
+   this.broadcast({type:"test-fireman-carry",attackerSlot:p.slot,defenderSlot:chosen.b.slot,position:{...p.position},yaw:p.rotation,duration:2.6});
    return;
   }
   if(data.type==="middle-rope-toss"){
