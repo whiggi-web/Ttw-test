@@ -634,11 +634,36 @@ window.addEventListener('ttw:player-name',e=>updateNameplate(e.detail.name));
 const controllerSlot=document.getElementById('controllerSlot');
 const pad=window.GameController.mount(controllerSlot,{mode:'auto'});
 const movement=pad.state.joysticks.controlMOVEMENT;
+let runToggle=false,stamina=100,staminaExhausted=false,combatRunning=false;
+const staminaHud=document.createElement('div');
+staminaHud.id='ttwStamina';
+staminaHud.style.cssText='position:fixed;top:160px;left:16px;width:min(270px,calc(100vw - 32px));z-index:12;pointer-events:none;background:#111724d9;border:1px solid #4b9baf;border-radius:10px;padding:9px 12px;color:#b7eefa;font:700 12px system-ui;box-shadow:0 5px 18px #0008';
+staminaHud.innerHTML='<div style="display:flex;justify-content:space-between"><span>STAMINA</span><span id="ttwStaminaValue">100 / 100</span></div><div style="height:10px;background:#303947;border-radius:8px;overflow:hidden;margin-top:6px"><div id="ttwStaminaFill" style="width:100%;height:100%;background:#51b9cb"></div></div>';
+document.body.appendChild(staminaHud);
+const controllerRoot=controllerSlot.firstElementChild?.shadowRoot;
+function setPadLabel(id,label){const el=controllerRoot?.querySelector('[data-id="'+id+'"] .txt');if(el)el.textContent=label;}
+function refreshCombatButtons(){
+ setPadLabel('ultimate',staminaExhausted?'TIRED':runToggle?'RUN ON':'RUN OFF');
+ setPadLabel('ability2',combatRunning?'CLOTHES':'JAB');
+ setPadLabel('ability3',combatRunning?'UPPER':'HOOK');
+ setPadLabel('ability4',combatRunning?'RUN KICK':'KICK');
+}
+function toggleRun(){if(staminaExhausted){showContextMessage('Recover stamina before running');return;}runToggle=!runToggle;refreshCombatButtons();}
+window.addEventListener('controller:button',e=>{
+ if(!e.detail.pressed)return;
+ const id=e.detail.id;
+ if(id==='ultimate')toggleRun();
+ else if(id==='ability1')tapAttack();
+ else if(id==='ability2')performAttack(combatRunning?'clothesline':'jab');
+ else if(id==='ability3')performAttack(combatRunning?'uppercut':'hook');
+ else if(id==='ability4')performAttack('kick');
+});
+refreshCombatButtons();
 const clock=new THREE.Clock();
 const heldKeys=new Set();
 let punchRemaining=0,activeAttack='punch',hitReactionTime=0,hitReaction='reactions.hit-front',remoteReactionTime=0,remoteReaction='reactions.hit-front';
 const attackPanel=document.createElement('div');
-attackPanel.style.cssText='position:fixed;bottom:120px;right:12px;z-index:16;display:flex;flex-wrap:wrap;gap:5px;max-width:320px;justify-content:flex-end';
+attackPanel.style.cssText='display:none';
 document.body.appendChild(attackPanel);
 const contextMessage=document.createElement('div');
 contextMessage.style.cssText='position:fixed;bottom:190px;right:12px;z-index:16;color:#fff;background:#14243bd9;padding:7px 10px;border-radius:6px;font:12px system-ui;pointer-events:none;display:none';
@@ -811,6 +836,7 @@ function beginChokeslam(){
 let lastCrowdTaunt=0;
 function crowdTaunt(){if(playerHP<=0||grappleMove||traversal)return;const now=performance.now();if(now-lastCrowdTaunt<6000)return showContextMessage('Let the crowd react before taunting again');lastCrowdTaunt=now;crowdEarn(12);showContextMessage('CROWD LOVES IT! +12');}
 const contextActions=[
+ ['RUN','KeyV',()=>toggleRun()],
  ['TAUNT','KeyY',()=>crowdTaunt()],
  ['GRAPPLE','KeyG',()=>{
   if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
@@ -2534,7 +2560,17 @@ renderer.setAnimationLoop(()=>{
  const keyboardZ=Number(heldKeys.has('KeyS'))-Number(heldKeys.has('KeyW'));
  const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
  const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
- const sprint=heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
+ const movingInput=Math.abs(inputX)+Math.abs(inputZ)>.001;
+ const wantsRun=runToggle||heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
+ const sprint=wantsRun&&!staminaExhausted&&stamina>0&&movingInput&&playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0;
+ if(sprint){stamina=Math.max(0,stamina-20*dt);if(stamina<=0){staminaExhausted=true;runToggle=false;showContextMessage('Out of stamina! Walking until recovered');}}
+ else{stamina=Math.min(100,stamina+14*dt);if(staminaExhausted&&stamina>=35)staminaExhausted=false;}
+ const runningNow=sprint&&!staminaExhausted;
+ if(combatRunning!==runningNow){combatRunning=runningNow;refreshCombatButtons();}
+ const staminaFill=document.getElementById('ttwStaminaFill'),staminaValue=document.getElementById('ttwStaminaValue');
+ staminaFill.style.width=stamina.toFixed(1)+'%';staminaFill.style.background=staminaExhausted?'#dc7865':'#51b9cb';
+ staminaValue.textContent=Math.floor(stamina)+' / 100';
+ if(staminaExhausted)refreshCombatButtons();
  // Losing continuous movement resets all accumulated rope momentum.
  if(playerHP<=0||Math.abs(inputX)+Math.abs(inputZ)<=.001){ropeSpeedMultiplier=1;}
  if(playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
@@ -2544,7 +2580,7 @@ renderer.setAnimationLoop(()=>{
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
    isWalking=true;
-   const step=move.multiplyScalar((sprint?8:5)*ropeSpeedMultiplier*dt);
+   const step=move.multiplyScalar((runningNow?8:5)*ropeSpeedMultiplier*dt);
    if(loadedArena){
     const tryAxis=(axis,amount)=>{
      const nx=player.position.x+(axis==='x'?amount:0);
