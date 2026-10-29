@@ -48,6 +48,7 @@
     { id: 'quests',          type: 'button',   label: 'Quests',    area: 'qst', role: 'nav' },
     { id: 'abilities',       type: 'button',   label: 'Abilities', area: 'abl', role: 'action' },
     { id: 'ultimate',        type: 'button',   label: 'RUN',      area: 'ult', role: 'ultimate' },
+    { id: 'counter',         type: 'button',   label: 'COUNTER',   area: 'ctr', role: 'ability' },
     { id: 'ability1',        type: 'button',   label: 'HIT',       area: 'a1',  role: 'ability' },
     { id: 'ability2',        type: 'button',   label: 'POWERBOMB', area: 'a2',  role: 'ability' },
     { id: 'ability3',        type: 'button',   label: 'HOOK',      area: 'a3',  role: 'ability' },
@@ -69,7 +70,7 @@
     .pad.portrait { pointer-events: auto; aspect-ratio: 1 / 1; height: 100%;
       grid-template-columns: repeat(4, 1fr); grid-template-rows: 2fr 2fr 2fr 1fr 1fr;
       grid-template-areas:
-        ".   .   a3  a4"
+        "ctr .   a3  a4"
         "mv  mv  a1  a2"
         "mv  mv  tj  cj"
         "inv qst abl ult"
@@ -79,7 +80,7 @@
       grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(6, 1fr);
       grid-template-areas:
         "lob lob .   .   .   .   .   .   .   .   tlk tlk"
-        ".   .   .   .   .   .   .   .   .   .   .   .  "
+        ".   .   .   .   .   .   .   .   .   .   ctr ctr"
         "mv  mv  mv  mv  .   .   .   .   a1  a2  a3  a4 "
         "mv  mv  mv  mv  .   .   .   .   tj  tj  cj  cj "
         "mv  mv  mv  mv  .   .   .   .   tj  tj  cj  cj "
