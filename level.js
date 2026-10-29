@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -852,6 +852,7 @@ function climbOrExit(){
  return beginTraversal('ring');
 }
 function tapAttack(){
+ if(traversal?.kind==='perched')return swanDive();
  const moves=['punch','jab','hook','kick'];
  performAttack(moves[attackSequence++%moves.length]);
 }
@@ -904,8 +905,12 @@ function beginTraversal(kind){
 }
 function swanDive(){
  if(!traversal||traversal.kind!=='perched')return showContextMessage('Climb a turnbuckle first');
- traversal={kind:'dive',start:player.position.clone(),end:new THREE.Vector3(0,1.2,0),time:0,duration:1.45};
- showContextMessage('SWAN DIVE!');
+ const clip='turnbuckle.jump-forward';
+ if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Jump attack animation unavailable');
+ const forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+ const end=player.position.clone().addScaledVector(forward,2.18);end.y=1.2;
+ traversal={kind:'dive',start:player.position.clone(),end,time:0,duration:1.35,clip};
+ showContextMessage('JUMP ATTACK!');
 }
 function updateTraversal(dt){
  if(!traversal)return false;
@@ -921,8 +926,7 @@ function updateTraversal(dt){
  }else if(traversal.kind==='turn'){
   player.rotation.y=traversal.startYaw+Math.PI*eased;
  }else if(traversal.kind==='dive'){
-  player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*1.4;
-  if(loadedWrestler)loadedWrestler.object.rotation.x=-Math.sin(Math.PI*p)*1.2;
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.35;
  }
  if(p>=1){
   if(traversal.kind==='approach-corner'){
@@ -939,7 +943,7 @@ function updateTraversal(dt){
    }else{
     player.rotation.y+=Math.PI;
     traversal={kind:'perched',end:player.position.clone(),clip:'idle'};
-    showContextMessage('Press SPECIAL (F) to swan dive');
+    showContextMessage('Press ATTACK to jump');
    }
   }else if(traversal.kind==='turn'){
    player.rotation.y=traversal.startYaw+Math.PI;
