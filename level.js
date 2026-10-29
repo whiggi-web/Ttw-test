@@ -927,7 +927,7 @@ function combatTick(dt){
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
   sendClock-=.05;
-  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:traversal&&['rope-test-drape','rope-test-recover','rope-test-pull','rear-ko-stumble','fireman-test'].includes(traversal.kind)?traversal.clip:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':combatRunning?'run':ropeAnimationTime>0?'ropeRebound':'idle'});
+  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:traversal&&['rope-test-drape','ko-pushed-ropes','rope-test-recover','rope-test-pull','rear-ko-stumble','ko-stumble','fireman-test'].includes(traversal.kind)?traversal.clip:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':combatRunning?'run':ropeAnimationTime>0?'ropeRebound':'idle'});
  }
 }
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
@@ -1046,7 +1046,7 @@ ropeRecoverButton.textContent='RECOVER INTO RING';
 ropeRecoverButton.style.cssText='display:none;width:100%;margin-top:7px;padding:10px 6px;border-radius:6px;background:#23764e;color:white;border:0;font:700 12px system-ui;cursor:pointer';
 eliminationPreviewPanel.appendChild(ropeRecoverButton);
 ropeRecoverButton.addEventListener('click',()=>{
- if(traversal?.kind!=='rope-test-drape')return;
+ if(!['rope-test-drape','ko-pushed-ropes'].includes(traversal?.kind))return;
  const side=traversal.side,start=player.position.clone(),end=start.clone();
  end[side.axis]=side.sign*2.65;end.y=1.2;
  traversal={kind:'rope-test-recover',start,end,time:0,duration:1.1,clip:'ropes.drape-recover'};
