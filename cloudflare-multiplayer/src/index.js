@@ -5,7 +5,7 @@ const ATTACKS = {
  hook:[13,.8,"reactions.hit-left"], uppercut:[16,.95,"reactions.knocked-back"],
  kick:[15,1,"reactions.hit-kick"], clothesline:[18,1.1,"reactions.hit-clothesline"]
 };
-const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top","movement.stumble-forward","throws.fireman-carry-attacker","throws.fireman-carry-defender"]);
+const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top","movement.stumble-forward","movement.stumble-backward","ropes.pushed-against","throws.fireman-carry-attacker","throws.fireman-carry-defender"]);
 const send=(ws,msg)=>{try{ws.send(JSON.stringify(msg));}catch{}};
 const forward=(angle)=>[-Math.sin(angle),-Math.cos(angle)];
 const dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
@@ -42,15 +42,24 @@ export class TTWRoom extends DurableObject {
    p.position={x:pos.x,y:pos.y,z:pos.z};p.rotation=rotation;
    p.animation=allowedAnimations.has(data.animation)?data.animation:"idle";
    ws.serializeAttachment(p);
-   this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.drape?"ropes.drape-over-top":p.animation},ws);
+   this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.drape?(p.drape.pose==="pushed"?"ropes.pushed-against":"ropes.drape-over-top"):p.animation},ws);
    return;
   }
   if(data.type==="drape-status"){
    if(data.active&&["x","z"].includes(data.axis)&&[1,-1].includes(data.sign)){
-    p.drape={axis:data.axis,sign:data.sign};
+    p.drape={axis:data.axis,sign:data.sign,pose:data.pose==="pushed"?"pushed":"drape"};
    }else delete p.drape;
    ws.serializeAttachment(p);
-   this.broadcast({type:"drape-status",slot:p.slot,active:!!p.drape},ws);
+   this.broadcast({type:"drape-status",slot:p.slot,active:!!p.drape,pose:p.drape?.pose},ws);
+   return;
+  }
+  if(data.type==="ko-stumble-resolved"){
+   if(p.hp!==0||!p.koStumble)return;
+   p.hp=25;delete p.koStumble;
+   ws.serializeAttachment(p);
+   await this.ctx.storage.delete("ko-"+p.slot);
+   this.broadcast({type:"ko-recovered",slot:p.slot,hp:25});
+   this.broadcast({type:"hp",slot:p.slot,hp:25});
    return;
   }
   if(data.type==="test-fireman-carry"){
@@ -161,9 +170,10 @@ export class TTWRoom extends DurableObject {
    this.broadcast({type:"drape-pulled-over",slot:b.slot,axis:draped.axis,sign:draped.sign});
   }
   const rearLethal=punchHit&&b.hp>0&&b.hp<=damage&&dot(forward(b.rotation),[(bx-a.position.x)/Math.max(.01,Math.hypot(bx-a.position.x,bz-a.position.z)),(bz-a.position.z)/Math.max(.01,Math.hypot(bx-a.position.x,bz-a.position.z))])>.55;
-  const overTop=!rearLethal&&punchHit&&b.position.y>.75&&Math.abs(side.d)<.85&&Math.abs((side.axis==="x"?bz:bx))<2.7&&dot(facing,inward)>.6;
+  const frontLethal=punchHit&&b.hp>0&&b.hp<=damage&&!rearLethal;
+  const overTop=!rearLethal&&!frontLethal&&punchHit&&b.position.y>.75&&Math.abs(side.d)<.85&&Math.abs((side.axis==="x"?bz:bx))<2.7&&dot(facing,inward)>.6;
   b.hp=Math.max(0,b.hp-damage);attackerWs.serializeAttachment(a);defenderWs.serializeAttachment(b);
-  if(rearLethal){this.locks.set(defenderWs,Date.now()/1000+1.2);this.broadcast({type:"rear-ko-stumble",slot:b.slot,yaw:b.rotation,duration:.95});}
+  if(rearLethal||frontLethal){b.koStumble=true;defenderWs.serializeAttachment(b);this.locks.set(defenderWs,Date.now()/1000+1.2);this.broadcast({type:"ko-stumble",slot:b.slot,yaw:b.rotation,direction:rearLethal?"forward":"backward",duration:.95});}
   if(overTop&&!behindDraped){
    const event={type:"over-top-rope",slot:b.slot,axis:side.axis,sign:side.sign,duration:1.4};
    this.locks.set(defenderWs,Date.now()/1000+1.5);
@@ -188,7 +198,7 @@ export class TTWRoom extends DurableObject {
    const deadline=await this.ctx.storage.get("ko-"+p.slot);
    if(deadline&&Date.now()<deadline)nextDue=nextDue===null?deadline:Math.min(nextDue,deadline);
    if(deadline&&Date.now()>=deadline){
-    p.hp=100;ws.serializeAttachment(p);await this.ctx.storage.delete("ko-"+p.slot);
+    p.hp=100;delete p.koStumble;delete p.drape;ws.serializeAttachment(p);await this.ctx.storage.delete("ko-"+p.slot);
     this.broadcast({type:"hp",slot:p.slot,hp:p.hp});
    }
   }
