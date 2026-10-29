@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop','ropes.irish-whip','ropes.whipped-into']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -608,6 +608,28 @@ function startMultiplayer(){
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
+  if(m.type==='irish-whip'){
+   const now=performance.now(),until=now+(m.duration||1.4)*1000;
+   const attacker=onlinePeers.get(m.attackerSlot),defender=onlinePeers.get(m.defenderSlot);
+   for(const [peer,clip] of [[attacker,'ropes.irish-whip'],[defender,'ropes.whipped-into']]){
+    if(!peer)continue;
+    peer.grappleUntil=until;
+    peer.target.copy(peer.group.position);
+    peer.wrestler?.play(clip,{fade:0,restart:true});
+    if(peer.wrestler)peer.wrestler._ttwState=clip;
+   }
+   if(playerSlot===m.attackerSlot||playerSlot===m.defenderSlot){
+    const role=playerSlot===m.attackerSlot?'attacker':'defender';
+    const clip=role==='attacker'?'ropes.irish-whip':'ropes.whipped-into';
+    grappleMove={network:true,kind:'irish-whip',move:'irish-whip',role,time:0,duration:m.duration||1.4,
+     origin:player.position.clone(),landing:role==='defender'?new THREE.Vector3(m.target.x,m.target.y,m.target.z):null};
+    punchRemaining=0;playerPunchImpact=-1;
+    loadedWrestler?.play(clip,{fade:0,restart:true});
+    if(loadedWrestler)loadedWrestler._ttwState=clip;
+    showContextMessage(role==='attacker'?'IRISH WHIP!':'WHIPPED INTO THE ROPES!');
+   }
+   return;
+  }
   if(m.type==='grapple'&&['powerbomb','german-suplex'].includes(m.move)){
    if(m.role==='observer'){
     const attacker=onlinePeers.get(m.attackerSlot),defender=onlinePeers.get(m.defenderSlot);
@@ -807,6 +829,7 @@ function refreshCombatButtons(){
  setPadLabel('ability2',forcedRopeRun?'NO SPECIAL':'SPECIAL');
  setPadLabel('ability3','CLIMB / EXIT');
  setPadLabel('ability4','ATTACK');
+ setPadLabel('ability1','IRISH WHIP');
 }
 function toggleRun(){showContextMessage('Run automatically by bouncing off the ropes');}
 window.addEventListener('controller:button',e=>{
@@ -814,7 +837,7 @@ window.addEventListener('controller:button',e=>{
  const id=e.detail.id;
  if(id==='ultimate')toggleRun();
  else if(id==='counter')activateCounter();
- else if(id==='ability1')tapAttack();
+ else if(id==='ability1')beginIrishWhip();
  else if(id==='ability2')beginSpecial();
  else if(id==='ability3')climbOrExit();
  else if(id==='ability4')tapAttack();
@@ -853,6 +876,12 @@ function climbOrExit(){
  const x=Math.abs(player.position.x),z=Math.abs(player.position.z);
  if(player.position.y>=.75&&x<3.6&&z<3.6)return beginTraversal('climb');
  return beginTraversal('ring');
+}
+function beginIrishWhip(){
+ if(grappleMove||traversal||punchRemaining>0||playerHP<=0)return;
+ if(!loadedWrestler?.library?.defs?.['ropes.irish-whip'])return showContextMessage('Irish whip animation unavailable');
+ if(!remoteConnected)return showContextMessage('Irish whip requires another wrestler');
+ sendNetwork({type:'irish-whip'});
 }
 function tapAttack(){
  if(traversal?.kind==='perched')return turnbuckleElbowDrop();
@@ -1047,6 +1076,10 @@ function updatePowerbomb(dt){
  const g=grappleMove;
  if(g.network){
   g.time+=dt;
+  if(g.kind==='irish-whip'&&g.role==='defender'&&g.landing){
+   const t=THREE.MathUtils.smoothstep(g.time,.42,1.14);
+   player.position.lerpVectors(g.origin,g.landing,t);
+  }
   if(g.time>=g.duration){
    if(g.landing){
     player.position.copy(g.landing);
@@ -2932,7 +2965,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?.network?'throws.'+grappleMove.move+'-'+grappleMove.role:grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle';
+  const nextAnimation=grappleMove?.network?(grappleMove.kind==='irish-whip'?(grappleMove.role==='attacker'?'ropes.irish-whip':'ropes.whipped-into'):'throws.'+grappleMove.move+'-'+grappleMove.role):grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
