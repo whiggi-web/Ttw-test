@@ -411,6 +411,7 @@ function updateRopes(dt){
 let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 let ropeSpeedMultiplier=1,ropeFacingTime=0;
 let ropeAnimationTime=0,ropeBounceDelay=0,ropeMovementLock=0;
+let forcedRopeRun=false,ropeRunDirection=new THREE.Vector3(0,0,-1);
 const ropeLeanDuration=.7,ropeReboundDuration=.8;
 let lastCrowdRopeReward=0;
 function crowdEarn(points){window.TTWCrowdMomentum?.add(points);}
@@ -422,7 +423,7 @@ function registerRopeBounce(inward){
  ropeFacingTime=1;
  ropeBounceDelay=1;
  ropeMovementLock=1.10;
- runToggle=true;refreshCombatButtons();
+ forcedRopeRun=true;ropeRunDirection.copy(inward).normalize();refreshCombatButtons();
  if(usingBatchOne)ropeAnimationTime=ropeLeanDuration+ropeReboundDuration;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
 }
@@ -796,12 +797,12 @@ document.body.appendChild(staminaHud);
 const controllerRoot=controllerSlot.firstElementChild?.shadowRoot;
 function setPadLabel(id,label){const el=controllerRoot?.querySelector('[data-id="'+id+'"] .txt');if(el)el.textContent=label;}
 function refreshCombatButtons(){
- setPadLabel('ultimate',staminaExhausted?'TIRED':runToggle?'RUN ON':'RUN OFF');
+ setPadLabel('ultimate','ROPE RUN');
  setPadLabel('ability2','SPECIAL');
  setPadLabel('ability3','CLIMB / EXIT');
  setPadLabel('ability4','ATTACK');
 }
-function toggleRun(){if(staminaExhausted){showContextMessage('Recover stamina before running');return;}runToggle=!runToggle;refreshCombatButtons();}
+function toggleRun(){showContextMessage('Run automatically by bouncing off the ropes');}
 window.addEventListener('controller:button',e=>{
  if(!e.detail.pressed)return;
  const id=e.detail.id;
@@ -830,6 +831,7 @@ function performAttack(move){
  const selectedMove=combatRunning?'clothesline':move;
  const attack=attackMoves[selectedMove];if(!attack)return;
  activeAttack=selectedMove;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
+ if(forcedRopeRun){forcedRopeRun=false;ropeSpeedMultiplier=1;refreshCombatButtons();}
 }
 function activateCounter(){
  const now=performance.now();
@@ -2796,23 +2798,21 @@ renderer.setAnimationLoop(()=>{
  const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
  const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
  const movingInput=Math.abs(inputX)+Math.abs(inputZ)>.001;
- if(!movingInput&&ropeMovementLock<=0&&runToggle){runToggle=false;refreshCombatButtons();}
- const wantsRun=runToggle||heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
- const sprint=wantsRun&&!staminaExhausted&&stamina>0&&movingInput&&playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0;
- if(sprint){stamina=Math.max(0,stamina-32*dt);if(stamina<=0){staminaExhausted=true;runToggle=false;showContextMessage('Out of stamina! Walking until recovered');}}
- else{stamina=Math.min(100,stamina+5*dt);if(staminaExhausted&&stamina>=35)staminaExhausted=false;}
- const runningNow=sprint&&!staminaExhausted;
+ if(playerHP<=0||grappleMove||traversal){forcedRopeRun=false;}
+ const runningNow=forcedRopeRun&&ropeMovementLock<=0&&playerHP>0&&!grappleMove&&!traversal;
+ stamina=Math.min(100,stamina+5*dt);
+ if(staminaExhausted&&stamina>=35)staminaExhausted=false;
  if(combatRunning!==runningNow){combatRunning=runningNow;refreshCombatButtons();}
  const staminaFill=document.getElementById('ttwStaminaFill'),staminaValue=document.getElementById('ttwStaminaValue');
  staminaFill.style.width=stamina.toFixed(1)+'%';staminaFill.style.background=staminaExhausted?'#dc7865':'#51b9cb';
  staminaValue.textContent=Math.floor(stamina)+' / 100';
  if(staminaExhausted)refreshCombatButtons();
  // Losing continuous movement resets all accumulated rope momentum.
- if(playerHP<=0||(!movingInput&&ropeMovementLock<=0)){ropeSpeedMultiplier=1;}
- if(playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
+ if(playerHP<=0||(!movingInput&&!forcedRopeRun&&ropeMovementLock<=0)){ropeSpeedMultiplier=1;}
+ if(playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0&&(movingInput||forcedRopeRun)){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
-  const move=right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
+  const move=forcedRopeRun?ropeRunDirection.clone():right.multiplyScalar(inputX).add(forward.multiplyScalar(-inputZ));
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
    isWalking=true;
@@ -2838,7 +2838,7 @@ renderer.setAnimationLoop(()=>{
     player.position.x=THREE.MathUtils.clamp(player.position.x,-7.65,7.65);
     player.position.z=THREE.MathUtils.clamp(player.position.z,-7.65,7.65);
    }
-   if(ropeFacingTime<=0)player.rotation.y=Math.atan2(-move.x,-move.z);
+   if(ropeFacingTime<=0&&!forcedRopeRun)player.rotation.y=Math.atan2(-move.x,-move.z);
   }
  }
 
