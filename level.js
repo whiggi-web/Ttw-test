@@ -582,7 +582,20 @@ function startMultiplayer(){
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
    const peer=makeOnlinePeer(m.slot);const position=m.position||{};
    if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)&&peer.grappleUntil<=performance.now()){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
+   const previousPeerAnim=peer.anim;
    peer.anim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
+   // The Worker relays rope animation states but not spring physics.
+   // Reconstruct a rope impulse on every observer when a wrestler first leans in.
+   if(peer.anim==='ropeLean'&&previousPeerAnim!=='ropeLean'){
+    const side=ropeSideAt(position.x,position.z);
+    if(side){
+     const spring=ropeSprings[side];
+     spring.contact=side==='east'||side==='west'?position.z:position.x;
+     spring.bend=Math.max(spring.bend,.6);
+     spring.velocity+=2.2;
+     spring.impact=.45;
+    }
+   }
    /* Legacy primary remote hidden; onlinePeers renders all opponents. */
    const p=m.position||{};
    if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remoteTarget.set(p.x,p.y,p.z);remoteTargetRotation=m.rotation;
