@@ -498,10 +498,24 @@ function makeOnlinePeer(slot){
  if(wrestler){lockGameplayWrestler(wrestler);group.add(wrestler.object);playTTWAnimation(wrestler,'idle');wrestler._ttwState='idle';}
  else{const mesh=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:[0,0xee5533,0x55dd77,0xcc77ff,0xffcc44][slot]}));mesh.position.y=1;group.add(mesh);}
  scene.add(group);
- const peer={slot,group,wrestler,hp:100,target:new THREE.Vector3(),rotation:0,hasTarget:false,anim:'idle',reaction:null,reactionTime:0,grappleUntil:0};
+ const peerLabelCanvas=document.createElement('canvas');peerLabelCanvas.width=512;peerLabelCanvas.height=128;
+ const peerLabelCtx=peerLabelCanvas.getContext('2d');
+ const peerLabelTexture=new THREE.CanvasTexture(peerLabelCanvas);
+ const peerLabel=new THREE.Sprite(new THREE.SpriteMaterial({map:peerLabelTexture,transparent:true,depthTest:false}));
+ peerLabel.position.set(0,2.65,0);peerLabel.scale.set(2.8,.7,1);group.add(peerLabel);
+ const setPeerName=(name)=>{
+  peerLabelCtx.clearRect(0,0,512,128);
+  peerLabelCtx.fillStyle='rgba(9,14,23,.82)';
+  peerLabelCtx.beginPath();peerLabelCtx.roundRect(10,18,492,92,18);peerLabelCtx.fill();
+  peerLabelCtx.font='bold 54px system-ui,sans-serif';peerLabelCtx.textAlign='center';peerLabelCtx.textBaseline='middle';
+  peerLabelCtx.fillStyle='#fff';peerLabelCtx.fillText(String(name||'Wrestler'),256,64,460);
+  peerLabelTexture.needsUpdate=true;
+ };
+ setPeerName('Wrestler');
+ const peer={slot,group,wrestler,setPeerName,peerLabelTexture,hp:100,target:new THREE.Vector3(),rotation:0,hasTarget:false,anim:'idle',reaction:null,reactionTime:0,grappleUntil:0};
  onlinePeers.set(slot,peer);return peer;
 }
-function removeOnlinePeer(slot){const p=onlinePeers.get(slot);if(!p)return;scene.remove(p.group);onlinePeers.delete(slot);}
+function removeOnlinePeer(slot){const p=onlinePeers.get(slot);if(!p)return;scene.remove(p.group);p.peerLabelTexture.dispose();onlinePeers.delete(slot);}
 function closestOnlinePeer(){
  let best=null,dist=Infinity;
  for(const p of onlinePeers.values()){if(p.hp<=0)continue;const d=player.position.distanceTo(p.group.position);if(d<dist){best=p;dist=d;}}
@@ -533,6 +547,16 @@ function showDamage(position,value,color){
 const params=new URLSearchParams(location.search);
 const wsUrl=params.get('server')||(['localhost','127.0.0.1'].includes(location.hostname)?'ws://'+location.hostname+':8765':'wss://ttw-multiplayer.whiggi.workers.dev/ws');
 function sendNetwork(data){if(network?.readyState===WebSocket.OPEN)network.send(JSON.stringify(data));}
+function setLocalWrestlerForSlot(slot){
+ if(!wrestlerPack||!loadedWrestler||slot===1)return;
+ try{
+  const next=wrestlerPack.createWrestler('wrestler-'+String(slot).padStart(2,'0'));
+  lockGameplayWrestler(next);
+  player.remove(loadedWrestler.object);
+  loadedWrestler=next;player.add(next.object);
+  next.object.position.set(0,0,0);playTTWAnimation(next,'idle');
+ }catch(error){console.warn('Could not set local wrestler slot',slot,error);}
+}
 function startMultiplayer(){
  if(network)return;
  if(!wsUrl){networkStatus.textContent='Solo practice (AI opponent disabled)';return;}
@@ -541,10 +565,10 @@ function startMultiplayer(){
  network.onopen=()=>sendNetwork({type:'join',name:window.TTWPlayerName||'Wrestler'});
  network.onmessage=e=>{
   let m;try{m=JSON.parse(e.data);}catch{return;}
-  if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot%2?-1.4:1.4,1.2,m.slot<=2?-1.4:1.4);playerHP=m.hp??100;refreshCombatHud();}
+  if(m.type==='welcome'){playerSlot=m.slot;setLocalWrestlerForSlot(m.slot);player.position.set(m.slot%2?-1.4:1.4,1.2,m.slot<=2?-1.4:1.4);playerHP=m.hp??100;refreshCombatHud();}
   if(m.type==='roster'){
    playerSlot=m.slot;const active=new Set();
-   for(const entry of m.players){if(entry.slot===playerSlot){playerHP=entry.hp;continue;}active.add(entry.slot);const p=makeOnlinePeer(entry.slot);p.hp=entry.hp;p.target.set(entry.position.x,entry.position.y,entry.position.z);p.group.position.copy(p.target);p.rotation=entry.rotation;p.group.rotation.y=entry.rotation;p.hasTarget=true;}
+   for(const entry of m.players){if(entry.slot===playerSlot){playerHP=entry.hp;continue;}active.add(entry.slot);const p=makeOnlinePeer(entry.slot);p.setPeerName(entry.name);p.hp=entry.hp;p.target.set(entry.position.x,entry.position.y,entry.position.z);p.group.position.copy(p.target);p.rotation=entry.rotation;p.group.rotation.y=entry.rotation;p.hasTarget=true;}
    for(const slot of [...onlinePeers.keys()])if(!active.has(slot))removeOnlinePeer(slot);
    remoteConnected=onlinePeers.size>0;remote.visible=false;
    networkStatus.textContent=(onlinePeers.size+1)+'/4 wrestlers connected';refreshCombatHud();
@@ -721,7 +745,7 @@ const labelMaterial=new THREE.SpriteMaterial({map:labelTexture,transparent:true,
 const nameplate=new THREE.Sprite(labelMaterial);
 nameplate.position.set(0,2.65,0);
 nameplate.scale.set(2.8,.7,1);
-player.add(nameplate);
+player.add(nameplate);nameplate.visible=false;
 function updateNameplate(name){
  labelContext.clearRect(0,0,512,128);
  labelContext.fillStyle='rgba(9,14,23,.82)';
