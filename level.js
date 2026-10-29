@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop','ropes.irish-whip','ropes.whipped-into']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop','ropes.irish-whip','ropes.whipped-into','eliminations.apron-fall-back','eliminations.apron-fall-forward','eliminations.fall-through-ropes','eliminations.knocked-through-ropes','eliminations.thrown-over-top','eliminations.thrown-through-middle','ropes.pull-over-top','ropes.pulled-over-top','ropes.push-into-ropes','ropes.pushed-against','ropes.drape-over-top','ropes.drape-recover','ropes.hang-over-top','ropes.grab-hold','ropes.apron-hang-on','ropes.apron-climb-up','ropes.apron-drop-down','ropes.tangled-struggle','ropes.tangled-escape']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -846,6 +846,46 @@ refreshCombatButtons();
 const clock=new THREE.Clock();
 const heldKeys=new Set();
 let punchRemaining=0,activeAttack='punch',hitReactionTime=0,hitReaction='reactions.hit-front',remoteReactionTime=0,remoteReaction='reactions.hit-front';
+
+const eliminationPreviewPanel=document.createElement('div');
+eliminationPreviewPanel.style.cssText='position:fixed;right:8px;top:42%;transform:translateY(-50%);z-index:35;background:#101827ed;color:white;padding:10px;border:1px solid #8392a8;border-radius:10px;font:12px system-ui;max-width:min(230px,45vw);box-shadow:0 3px 16px #0009';
+const eliminationPreviewTitle=document.createElement('div');
+eliminationPreviewTitle.textContent='ANIMATION TEST (TEMP)';
+eliminationPreviewTitle.style.cssText='font-weight:700;margin-bottom:8px';
+const eliminationPreviewSelect=document.createElement('select');
+eliminationPreviewSelect.style.cssText='width:100%;max-width:100%;font:12px system-ui;padding:7px;background:#26344b;color:white;border-radius:6px';
+const eliminationPreviewPlay=document.createElement('button');
+eliminationPreviewPlay.textContent='PLAY';
+eliminationPreviewPlay.style.cssText='margin-top:8px;padding:7px 12px;border-radius:6px;background:#376db7;color:white;border:0;font-weight:700;cursor:pointer';
+const eliminationPreviewStop=document.createElement('button');
+eliminationPreviewStop.textContent='STOP';
+eliminationPreviewStop.style.cssText='margin:8px 0 0 6px;padding:7px 12px;border-radius:6px;background:#555;color:white;border:0;cursor:pointer';
+const eliminationPreviewHint=document.createElement('div');
+eliminationPreviewHint.textContent='Local animation preview only. Paired moves: test each role separately.';
+eliminationPreviewHint.style.cssText='margin-top:7px;font-size:10px;opacity:.8';
+eliminationPreviewPanel.append(eliminationPreviewTitle,eliminationPreviewSelect,eliminationPreviewPlay,eliminationPreviewStop,eliminationPreviewHint);
+document.body.appendChild(eliminationPreviewPanel);
+const eliminationPreviewGroups={
+ 'Eliminations':["eliminations.apron-fall-back","eliminations.apron-fall-forward","eliminations.fall-through-ropes","eliminations.knocked-through-ropes","eliminations.thrown-over-top","eliminations.thrown-through-middle"],
+ 'Rope interactions':["ropes.pull-over-top","ropes.pulled-over-top","ropes.push-into-ropes","ropes.pushed-against","ropes.drape-over-top","ropes.drape-recover","ropes.hang-over-top","ropes.grab-hold","ropes.apron-hang-on","ropes.apron-climb-up","ropes.apron-drop-down","ropes.tangled-struggle","ropes.tangled-escape"]
+};
+for(const [group,clips] of Object.entries(eliminationPreviewGroups)){
+ const optgroup=document.createElement('optgroup');optgroup.label=group;
+ for(const clip of clips){const option=document.createElement('option');option.value=clip;option.textContent=clip.split('.')[1].replaceAll('-',' ');optgroup.appendChild(option);}
+ eliminationPreviewSelect.appendChild(optgroup);
+}
+let eliminationPreview=null;
+eliminationPreviewPlay.addEventListener('click',()=>{
+ const clip=eliminationPreviewSelect.value;
+ if(!loadedWrestler?.library?.defs?.[clip]){eliminationPreviewHint.textContent='Animation unavailable: '+clip;return;}
+ if(grappleMove||traversal){eliminationPreviewHint.textContent='Finish current grapple or climb first';return;}
+ const duration=loadedWrestler.library.defs[clip].duration||2;
+ eliminationPreview={clip,until:performance.now()+Math.max(.5,duration)*1000+180};
+ loadedWrestler.play(clip,{fade:0,restart:true});
+ loadedWrestler._ttwState=clip;
+ eliminationPreviewHint.textContent=clip+' ('+duration+'s)';
+});
+eliminationPreviewStop.addEventListener('click',()=>{eliminationPreview=null;if(loadedWrestler)loadedWrestler._ttwState='';});
 const attackPanel=document.createElement('div');
 attackPanel.style.cssText='display:none';
 document.body.appendChild(attackPanel);
@@ -2994,7 +3034,8 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?.network?(grappleMove.kind==='irish-whip'?(grappleMove.role==='attacker'?'ropes.irish-whip':grappleMove.whip?.time<.42?'ropes.whipped-into':'run'):'throws.'+grappleMove.move+'-'+grappleMove.role):grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle';
+  if(eliminationPreview&&performance.now()>=eliminationPreview.until)eliminationPreview=null;
+  const nextAnimation=eliminationPreview?.clip??(grappleMove?.network?(grappleMove.kind==='irish-whip'?(grappleMove.role==='attacker'?'ropes.irish-whip':grappleMove.whip?.time<.42?'ropes.whipped-into':'run'):'throws.'+grappleMove.move+'-'+grappleMove.role):grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle');
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
