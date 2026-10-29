@@ -753,7 +753,7 @@ function combatTick(dt){
    if(remoteWrestler)remoteWrestler._ttwState='';
   }
  }
- irishTestButton.hidden=onlinePeers.size>0;
+ irishTestButton.hidden=onlinePeers.size>0||!document.getElementById('home').hidden;
  updateSparringBot(dt);
  for(let i=damagePopups.length-1;i>=0;i--){
   const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
