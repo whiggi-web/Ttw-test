@@ -8,25 +8,29 @@
 canvas{display:block;touch-action:none}
 #controllerSlot{position:fixed;inset:0;z-index:10;pointer-events:none} @media (orientation:portrait){#controllerSlot{top:auto;height:42vh;bottom:0;background:#15110e} #help{bottom:43vh!important}} #hud{position:fixed;top:16px;left:16px;pointer-events:none;text-shadow:0 2px 6px #000}
 #hud strong{display:block;font-size:21px;letter-spacing:.12em}
-#hud small{color:#a9e4c3}#help{position:fixed;bottom:14px;left:16px;color:#b9c3d6;pointer-events:none}
+#hud small{color:#a9e4c3}
+#crowdMeter{position:fixed;top:66px;left:16px;width:min(270px,calc(100vw - 32px));z-index:12;pointer-events:none;background:#111724d9;border:1px solid #aa864b;border-radius:12px;padding:10px 12px;box-shadow:0 5px 18px #0008;font:700 12px system-ui,sans-serif}#crowdMeter .meterHeading{display:flex;justify-content:space-between;align-items:center;color:#f5dba5;letter-spacing:.06em}#crowdMeter .meterTrack{height:13px;background:#333947;border-radius:10px;overflow:hidden;margin-top:7px}#crowdFill{height:100%;width:0%;background:linear-gradient(90deg,#b77d32,#ffd66b);transition:width .22s ease}#crowdMeter .meterHint{font-size:10px;color:#b6bfd0;margin-top:5px;font-weight:500}@media(orientation:portrait){#crowdMeter{top:64px;width:min(240px,calc(100vw - 32px))}}#help{position:fixed;bottom:14px;left:16px;color:#b9c3d6;pointer-events:none}
 #home{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:linear-gradient(140deg,rgba(8,12,22,.96),rgba(26,20,33,.94));padding:20px}#home[hidden]{display:none}#homePanel{width:min(420px,100%);padding:30px 26px;background:#1d2330;border:1px solid #48576e;border-radius:18px;text-align:center;box-shadow:0 20px 70px #0008}#homePanel h1{font-size:clamp(38px,9vw,62px);margin:0;letter-spacing:.12em}#homePanel p{color:#c3ccdc}#homePanel label{display:block;text-align:left;margin:20px 0 8px;font-weight:700}#wrestlerName{width:100%;padding:14px;border-radius:9px;background:#101620;border:1px solid #78889d;color:white;font:inherit;font-size:18px}#enterRing{width:100%;padding:15px;margin-top:16px;background:#49d5a2;color:#0b1b19;border:0;border-radius:9px;font:inherit;font-size:18px;font-weight:800;cursor:pointer}#enterRing:focus-visible,#wrestlerName:focus-visible{outline:3px solid #f6ce68;outline-offset:2px}#homeError{color:#ffaaa8;min-height:1.2em;margin:10px 0 0}
 body.ttw-clean > :not(canvas):not(#home):not(#viewToggle):not(script){visibility:hidden!important}
 body.ttw-clean #controllerSlot,body.ttw-clean #controllerSlot *{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
 body.ttw-clean #controllerSlot{display:none!important;background:transparent!important}
-body.ttw-clean #hud,body.ttw-clean #help{display:none!important}
+body.ttw-clean #hud,body.ttw-clean #help,body.ttw-clean #crowdMeter{display:none!important}
 #viewToggle{position:fixed;top:12px;right:12px;z-index:50;border:1px solid #ffe1a3;background:#1d2636e8;color:#fff;border-radius:9px;padding:10px 12px;font:700 12px system-ui;cursor:pointer;box-shadow:0 3px 12px #0008}
 #viewToggle[hidden]{display:none}
 </style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
 </head>
 <body>
-<div id="hud"><strong>TTW</strong><small>DEV: Apron To Floor v0.91</small></div>
+<div id="hud"><strong>TTW</strong><small>DEV: Crowd Meter v0.92</small></div>
+<div id="crowdMeter" role="progressbar" aria-label="Crowd Momentum" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="meterHeading"><span>★ CROWD MOMENTUM</span><span id="crowdValue">0 / 100</span></div><div class="meterTrack"><div id="crowdFill"></div></div><div class="meterHint">Earn momentum • Spend it on big moves</div></div>
 <div id="help">WASD move · Shift sprint · Click punch · Drag to orbit · Scroll/pinch zoom</div>
 <div id="controllerSlot"></div>
 <button id="viewToggle" type="button" hidden aria-pressed="false">👁 HIDE INTERFACE</button>
 <div id="home"><form id="homePanel"><h1>TTW</h1><p>Enter the ring</p><p>Two-player ring · Join from a second browser</p><label for="wrestlerName">Wrestler name</label><input id="wrestlerName" name="wrestlerName" maxlength="20" autocomplete="nickname" placeholder="Enter your wrestler name" required><button id="enterRing" type="submit">ENTER THE RING</button><p id="homeError" role="alert"></p></form></div>
 <script src="./assets/controllers/game-controller.js"></script>
 <script>
+// Local-player-only Crowd Momentum HUD. Gameplay hooks can call TTWCrowdMomentum.add/spend.
+(()=>{let value=0;const root=document.getElementById('crowdMeter'),fill=document.getElementById('crowdFill'),label=document.getElementById('crowdValue');const update=()=>{fill.style.width=value+'%';label.textContent=value+' / 100';root.setAttribute('aria-valuenow',String(value));};window.TTWCrowdMomentum={get value(){return value;},add(points){if(!Number.isFinite(points)||points<=0)return value;value=Math.min(100,value+points);update();return value;},spend(cost){if(!Number.isFinite(cost)||cost<=0||value<cost)return false;value-=cost;update();return true;},reset(){value=0;update();}};update();})();
 const wrestlerFirst=['Iron','Thunder','Mighty','Savage','Golden','Raging','Wild','Steel','Crimson','Turbo','Titan','Shadow','Blazing','Brutal','Atomic','Big','Mad','Razor','Storm','Diesel'];
 const wrestlerLast=['Crusher','Hammer','Viper','Bulldog','Warrior','Fury','Hurricane','Destroyer','Brawler','Titan','Outlaw','Gladiator','Rumble','Rhino','Striker','Knuckles','Avalanche','Dynamo','Maverick','Reaper'];
 const randomWrestlerName=()=>wrestlerFirst[Math.floor(Math.random()*wrestlerFirst.length)]+' '+wrestlerLast[Math.floor(Math.random()*wrestlerLast.length)];
@@ -49,6 +53,6 @@ viewToggle.addEventListener('click',()=>{
  viewToggle.setAttribute('aria-pressed',String(hidden));
 });
 </script>
-<script type="module" src="./level.js?v=apron-floor-091"></script>
+<script type="module" src="./level.js?v=crowd-meter-092"></script>
 </body>
 </html>
