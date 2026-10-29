@@ -722,28 +722,24 @@ function beginTraversal(kind){
  if(traversal||playerHP<=0)return;
  const x=player.position.x,z=player.position.z;
  if(kind==='ring'){
+  // Slide directly between floor and ring. Do not route via the apron.
   const side=Math.abs(x)>Math.abs(z)?'x':'z';
   const sign=Math.sign(player.position[side])||1;
   const distance=Math.abs(player.position[side]);
-  if(distance<2.6||distance>5.2)return showContextMessage('Stand beside the ring to enter or exit');
-  const onFloor=player.position.y<.65;
-  const onApron=distance>3.6&&!onFloor;
-  const outside=onApron;
-  const clip=onFloor?'ropes.apron-climb-up':onApron?'ropes.apron-drop-down':'ropes.exit-between-ropes';
-  if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Rope traversal animation unavailable');
+  if(distance<2.5||distance>5.2)return showContextMessage('Move beside the ring ropes to slide in or out');
+  const onFloor=player.position.y<.75;
+  const clip=onFloor?'ropes.enter-slide-under':'ropes.exit-slide-under';
+  if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Slide animation unavailable');
   const start=player.position.clone(),end=start.clone();
-  end[side]=sign*(onFloor?3.94:onApron?4.65:3.94);
-  end.y=onApron?0:1.2;
-  // Face into the ring on entry, outward on exit. The clip handles the duck/step pose.
-  const inward=new THREE.Vector3(side==='x'?-sign:0,0,side==='z'?-sign:0);
-  const travel=onFloor?inward:inward.clone().negate();
+  end[side]=sign*(onFloor?2.35:4.35);
+  end.y=onFloor?1.2:0.06;
+  const travel=new THREE.Vector3(side==='x'?(onFloor?-sign:sign):0,0,side==='z'?(onFloor?-sign:sign):0);
   player.rotation.y=Math.atan2(-travel.x,-travel.z);
-  traversal={kind,start,end,time:0,duration:onFloor?1.7:onApron?1.5:2,clip};
-  ropeRecoilTime=0;ropeRecoil.set(0,0,0);
-  ropeAnimationTime=0;
-  loadedWrestler.play(clip,{fade:.12,restart:true});
+  traversal={kind,start,end,time:0,duration:1.5,clip};
+  ropeRecoilTime=0;ropeRecoil.set(0,0,0);ropeAnimationTime=0;
+  loadedWrestler.play(clip,{fade:.08,restart:true});
   loadedWrestler._ttwState=clip;
-  showContextMessage(onFloor?'Climbing onto the apron':onApron?'Dropping to the floor':'Exiting between the ropes');
+  showContextMessage(onFloor?'Sliding into the ring':'Sliding out of the ring');
  }else if(kind==='climb'){
   if(Math.abs(x)<2.15||Math.abs(z)<2.15)return showContextMessage('Move into a ring corner to climb');
   const corner=new THREE.Vector3(Math.sign(x)*3.1,1.2,Math.sign(z)*3.1);
