@@ -53,6 +53,22 @@ export class TTWRoom extends DurableObject {
    this.broadcast({type:"drape-status",slot:p.slot,active:!!p.drape},ws);
    return;
   }
+  if(data.type==="middle-rope-toss"){
+   if(p.hp<=0||p.drape)return;
+   const targets=[...this.players].filter(([otherWs,b])=>otherWs!==ws&&b.hp>0&&!b.drape)
+    .map(([otherWs,b])=>({otherWs,b,d:Math.hypot(b.position.x-p.position.x,b.position.z-p.position.z)}))
+    .filter(t=>t.d>=.1&&t.d<=2.2).sort((a,b)=>a.d-b.d);
+   const target=targets[0];
+   if(!target){send(ws,{type:"notice",message:"No opponent close enough"});return;}
+   const b=target.b;
+   const edges=[{axis:"x",sign:1,d:3.3-b.position.x},{axis:"x",sign:-1,d:3.3+b.position.x},{axis:"z",sign:1,d:3.3-b.position.z},{axis:"z",sign:-1,d:3.3+b.position.z}].sort((a,b)=>Math.abs(a.d)-Math.abs(b.d));
+   const side=edges[0];
+   if(Math.abs(side.d)>1.7){send(ws,{type:"notice",message:"Move opponent closer to the ropes"});return;}
+   const now=Date.now()/1000;
+   this.locks.set(ws,now+1.5);this.locks.set(target.otherWs,now+1.5);
+   this.broadcast({type:"middle-rope-toss",attackerSlot:p.slot,defenderSlot:b.slot,axis:side.axis,sign:side.sign,duration:1.45});
+   return;
+  }
   if(data.type==="paired-pull-over"){
    if(p.hp<=0||p.drape)return;
    const targets=[...this.players].filter(([otherWs,b])=>otherWs!==ws&&b.drape&&b.hp>0)
