@@ -868,6 +868,7 @@ let contextMessageUntil=0;
 function showContextMessage(message){contextMessage.textContent=message;contextMessage.style.display='block';contextMessageUntil=performance.now()+2000;}
 let attackSequence=0;
 function performAttack(move){
+ if(performance.now()<whippedAttackLockUntil)return showContextMessage('Cannot attack on the first rope spring');
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0||!(remoteConnected||botMode)||document.getElementById('home').hidden===false)return;
  const selectedMove=combatRunning?'clothesline':move;
  const attack=attackMoves[selectedMove];if(!attack)return;
@@ -891,6 +892,7 @@ function climbOrExit(){
 }
 // Temporary offline Irish Whip test opponent; never joins the multiplayer room.
 let irishWhipTest=null;
+let whippedAttackLockUntil=0;
 function makeWhip(dir){return {dir:dir.normalize(),time:0,springs:0,done:false,fall:false};}
 function moveWhipped(v,w,dt,isPlayer){
  if(!w||w.done)return;
@@ -911,7 +913,7 @@ function moveWhipped(v,w,dt,isPlayer){
   const spring=ropeSprings[side];spring.contact=side==='east'||side==='west'?v.position.z:v.position.x;
   spring.bend=Math.max(.6,spring.bend);spring.velocity+=3;spring.impact=.45;
   w.dir.copy(inward);w.springs++;w.time=-.68;
-  if(isPlayer)registerRopeBounce(inward);
+  if(isPlayer){registerRopeBounce(inward);if(w.springs===1)whippedAttackLockUntil=performance.now()+1100;}
   if(w.springs>=4)w.done=true;
  }else v.position.copy(next);
  v.rotation.y=Math.atan2(-w.dir.x,-w.dir.z);
@@ -1151,7 +1153,7 @@ function updatePowerbomb(dt){
  const g=grappleMove;
  if(g.network){
   g.time+=dt;
-  if(g.kind==='irish-whip'&&g.role==='defender'&&g.whip){moveWhipped(player,g.whip,dt,true);if(g.whip.done)g.duration=g.time;}
+  if(g.kind==='irish-whip'&&g.role==='defender'&&g.whip){moveWhipped(player,g.whip,dt,true);if(g.whip.done){g.duration=g.time;if(g.whip.fall){hitReaction='fall';hitReactionTime=1.2;}}}
   if(g.time>=g.duration){
    if(g.landing){
     player.position.copy(g.landing);
