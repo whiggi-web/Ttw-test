@@ -700,7 +700,7 @@ function hitSparringBot(move){
  if(remoteHP<=0){botRecover=10;remoteAnim='fall';botKnockdownTime=0;}
 }
 function updateSparringBot(dt){
- if(!botMode||irishWhipTest||grappleMove||document.getElementById('home').hidden===false)return;
+ if(!botMode||irishNpcEnabled||irishWhipTest||grappleMove||document.getElementById('home').hidden===false)return;
  if(remoteHP<=0){
   botRecover-=dt;
   if(botRecover<=0){remoteHP=100;remoteAnim='idle';remoteReactionTime=0;botKnockdownTime=0;remote.position.set(1.8,1.2,-.6);refreshCombatHud();}
@@ -754,6 +754,7 @@ function combatTick(dt){
   }
  }
  irishTestButton.hidden=onlinePeers.size>0||!document.getElementById('home').hidden;
+ if(!onlinePeers.size&&!irishWhipTest&&document.getElementById('home').hidden&&!remote.visible)showIrishNpc();
  updateSparringBot(dt);
  for(let i=damagePopups.length-1;i>=0;i--){
   const p=damagePopups[i];p.life-=dt;p.sprite.position.y+=dt*1.1;p.mat.opacity=Math.max(0,p.life/.85);
@@ -891,6 +892,17 @@ function climbOrExit(){
 }
 // Temporary offline Irish Whip test opponent; never joins the multiplayer room.
 let irishWhipTest=null;
+let irishNpcEnabled=true;
+function showIrishNpc(){
+ if(!irishNpcEnabled||onlinePeers.size||irishWhipTest||!document.getElementById('home').hidden)return;
+ botMode=true;remote.visible=true;remoteHP=100;
+ const forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+ const spawn=player.position.clone().addScaledVector(forward,1.1);
+ spawn.x=THREE.MathUtils.clamp(spawn.x,-2.5,2.5);spawn.z=THREE.MathUtils.clamp(spawn.z,-2.5,2.5);spawn.y=1.2;
+ remote.position.copy(spawn);remote.rotation.y=player.rotation.y+Math.PI;
+ remoteAnim='idle';botMoveClock=99999;botStrikeClock=99999;
+}
+
 const irishTestButton=document.createElement('button');
 irishTestButton.textContent='TEST IRISH WHIP';
 irishTestButton.style.cssText='position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:24;background:#5b3518;color:#fff;border:1px solid #ffd082;border-radius:8px;padding:10px 14px;font:700 12px system-ui;cursor:pointer;touch-action:manipulation';
@@ -898,6 +910,7 @@ document.body.appendChild(irishTestButton);
 irishTestButton.addEventListener('click',()=>{
  if(irishWhipTest||grappleMove||traversal||playerHP<=0)return;
  if(onlinePeers.size)return showContextMessage('NPC test unavailable with other players connected');
+ if(!remote.visible)showIrishNpc();
  if(!loadedWrestler?.library?.defs?.['ropes.irish-whip']||!remoteWrestler?.library?.defs?.['ropes.whipped-into'])return showContextMessage('Irish whip animations unavailable');
  botMode=true;remote.visible=true;remoteHP=100;
  const forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
