@@ -2617,8 +2617,8 @@ renderer.setAnimationLoop(()=>{
  const movingInput=Math.abs(inputX)+Math.abs(inputZ)>.001;
  const wantsRun=runToggle||heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
  const sprint=wantsRun&&!staminaExhausted&&stamina>0&&movingInput&&playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0;
- if(sprint){stamina=Math.max(0,stamina-20*dt);if(stamina<=0){staminaExhausted=true;runToggle=false;showContextMessage('Out of stamina! Walking until recovered');}}
- else{stamina=Math.min(100,stamina+14*dt);if(staminaExhausted&&stamina>=35)staminaExhausted=false;}
+ if(sprint){stamina=Math.max(0,stamina-32*dt);if(stamina<=0){staminaExhausted=true;runToggle=false;showContextMessage('Out of stamina! Walking until recovered');}}
+ else{stamina=Math.min(100,stamina+5*dt);if(staminaExhausted&&stamina>=35)staminaExhausted=false;}
  const runningNow=sprint&&!staminaExhausted;
  if(combatRunning!==runningNow){combatRunning=runningNow;refreshCombatButtons();}
  const staminaFill=document.getElementById('ttwStaminaFill'),staminaValue=document.getElementById('ttwStaminaValue');
@@ -2634,7 +2634,7 @@ renderer.setAnimationLoop(()=>{
   if(move.lengthSq()>.0001){
    move.clampLength(0,1);
    isWalking=true;
-   const step=move.multiplyScalar((runningNow?8:5)*ropeSpeedMultiplier*dt);
+   const step=move.multiplyScalar((runningNow?5:3)*ropeSpeedMultiplier*dt);
    if(loadedArena){
     const tryAxis=(axis,amount)=>{
      const nx=player.position.x+(axis==='x'?amount:0);
