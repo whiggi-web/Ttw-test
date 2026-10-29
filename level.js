@@ -422,6 +422,7 @@ function registerRopeBounce(inward){
  ropeFacingTime=1;
  ropeBounceDelay=1;
  ropeMovementLock=1.10;
+ runToggle=true;refreshCombatButtons();
  if(usingBatchOne)ropeAnimationTime=ropeLeanDuration+ropeReboundDuration;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
 }
@@ -2782,6 +2783,7 @@ renderer.setAnimationLoop(()=>{
  const inputX=keyboardX||keyboardZ?keyboardX:movement.active?movement.x:0;
  const inputZ=keyboardX||keyboardZ?keyboardZ:movement.active?movement.y:0;
  const movingInput=Math.abs(inputX)+Math.abs(inputZ)>.001;
+ if(!movingInput&&ropeMovementLock<=0&&runToggle){runToggle=false;refreshCombatButtons();}
  const wantsRun=runToggle||heldKeys.has('ShiftLeft')||heldKeys.has('ShiftRight');
  const sprint=wantsRun&&!staminaExhausted&&stamina>0&&movingInput&&playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0;
  if(sprint){stamina=Math.max(0,stamina-32*dt);if(stamina<=0){staminaExhausted=true;runToggle=false;showContextMessage('Out of stamina! Walking until recovered');}}
@@ -2793,7 +2795,7 @@ renderer.setAnimationLoop(()=>{
  staminaValue.textContent=Math.floor(stamina)+' / 100';
  if(staminaExhausted)refreshCombatButtons();
  // Losing continuous movement resets all accumulated rope momentum.
- if(playerHP<=0||Math.abs(inputX)+Math.abs(inputZ)<=.001){ropeSpeedMultiplier=1;}
+ if(playerHP<=0||(!movingInput&&ropeMovementLock<=0)){ropeSpeedMultiplier=1;}
  if(playerHP>0&&!grappleMove&&!traversal&&ropeMovementLock<=0&&Math.abs(inputX)+Math.abs(inputZ)>.001){
   const forward=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw));
   const right=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));
