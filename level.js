@@ -488,7 +488,7 @@ const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=fa
 if(remoteWrestler){remote.add(remoteWrestler.object);playTTWAnimation(remoteWrestler,'idle');remoteWrestler._ttwState='idle';}
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
-let botMode=true,botRecover=0,botMoveClock=0,botStrikeClock=2.5;
+let botMode=true,botRecover=0,botMoveClock=0,botStrikeClock=2.5,botKnockdownTime=0;
 let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
 const remoteTarget=new THREE.Vector3();
 let remoteTargetRotation=0;
@@ -556,15 +556,16 @@ function hitSparringBot(move){
  remoteReactionTime=.8;
  showDamage(remote.position,'-'+damage,'#ffdf55');
  refreshCombatHud();
- if(remoteHP<=0){botRecover=10;remoteAnim='fall';}
+ if(remoteHP<=0){botRecover=10;remoteAnim='fall';botKnockdownTime=0;}
 }
 function updateSparringBot(dt){
  if(!botMode||grappleMove||document.getElementById('home').hidden===false)return;
  if(remoteHP<=0){
   botRecover-=dt;
-  if(botRecover<=0){remoteHP=100;remoteAnim='idle';remoteReactionTime=0;remote.position.set(1.8,1.2,-.6);refreshCombatHud();}
+  if(botRecover<=0){remoteHP=100;remoteAnim='idle';remoteReactionTime=0;botKnockdownTime=0;remote.position.set(1.8,1.2,-.6);refreshCombatHud();}
   return;
  }
+ if(botKnockdownTime>0){botKnockdownTime=Math.max(0,botKnockdownTime-dt);remoteAnim='fall';remoteReactionTime=0;return;}
  const dx=player.position.x-remote.position.x,dz=player.position.z-remote.position.z;
  const dist=Math.hypot(dx,dz);
  remote.rotation.y=Math.atan2(-dx,-dz);
@@ -792,15 +793,17 @@ function updatePowerbomb(dt){
  if(!g.impact&&g.time>=impact){
   g.impact=true;
   remoteHP=Math.max(0,remoteHP-30);
+  if(remoteHP>0)botKnockdownTime=4;
   showDamage(remote.position,'-30','#ffdf55');
   refreshCombatHud();
  }
  if(g.time>=duration){
   grappleMove=null;
-  remoteReaction=remoteHP<=0?'fall':'reactions.stunned';
-  remoteReactionTime=remoteHP<=0?0:1.5;
+  remoteReaction='fall';
+  remoteReactionTime=0;
+  remoteAnim='fall';
   botStrikeClock=3.2;
-  if(remoteHP<=0){botRecover=10;remoteAnim='fall';}
+  if(remoteHP<=0){botRecover=10;botKnockdownTime=0;remoteAnim='fall';}
   loadedWrestler._ttwState='';
   remoteWrestler._ttwState='';
  }
