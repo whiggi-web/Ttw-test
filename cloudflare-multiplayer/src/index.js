@@ -5,7 +5,7 @@ const ATTACKS = {
  hook:[13,.8,"reactions.hit-left"], uppercut:[16,.95,"reactions.knocked-back"],
  kick:[15,1,"reactions.hit-kick"], clothesline:[18,1.1,"reactions.hit-clothesline"]
 };
-const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top"]);
+const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top","ropes.drape-over-top","ropes.drape-recover","ropes.pulled-over-top","ropes.pull-over-top","movement.stumble-forward"]);
 const send=(ws,msg)=>{try{ws.send(JSON.stringify(msg));}catch{}};
 const forward=(angle)=>[-Math.sin(angle),-Math.cos(angle)];
 const dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
@@ -146,8 +146,10 @@ export class TTWRoom extends DurableObject {
    this.locks.set(defenderWs,Date.now()/1000+1.5);
    this.broadcast({type:"drape-pulled-over",slot:b.slot,axis:draped.axis,sign:draped.sign});
   }
-  const overTop=punchHit&&b.position.y>.75&&Math.abs(side.d)<.85&&Math.abs((side.axis==="x"?bz:bx))<2.7&&dot(facing,inward)>.6;
+  const rearLethal=punchHit&&b.hp>0&&b.hp<=damage&&dot(forward(b.rotation),[(bx-a.position.x)/Math.max(.01,Math.hypot(bx-a.position.x,bz-a.position.z)),(bz-a.position.z)/Math.max(.01,Math.hypot(bx-a.position.x,bz-a.position.z))])>.55;
+  const overTop=!rearLethal&&punchHit&&b.position.y>.75&&Math.abs(side.d)<.85&&Math.abs((side.axis==="x"?bz:bx))<2.7&&dot(facing,inward)>.6;
   b.hp=Math.max(0,b.hp-damage);attackerWs.serializeAttachment(a);defenderWs.serializeAttachment(b);
+  if(rearLethal){this.locks.set(defenderWs,Date.now()/1000+1.2);this.broadcast({type:"rear-ko-stumble",slot:b.slot,yaw:b.rotation,duration:.95});}
   if(overTop&&!behindDraped){
    const event={type:"over-top-rope",slot:b.slot,axis:side.axis,sign:side.sign,duration:1.4};
    this.locks.set(defenderWs,Date.now()/1000+1.5);
