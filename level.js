@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -532,6 +532,21 @@ function startMultiplayer(){
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
+  if(m.type==='grapple'&&['powerbomb','german-suplex'].includes(m.move)){
+   const role=m.role==='attacker'?'attacker':'defender';
+   const anim='throws.'+m.move+'-'+role;
+   const otherAnim='throws.'+m.move+'-'+(role==='attacker'?'defender':'attacker');
+   grappleMove={time:0,impact:true,network:true,role,move:m.move,kind:m.move,
+    duration:m.duration||2.3,origin:player.position.clone(),yaw:player.rotation.y};
+   punchRemaining=0;playerPunchImpact=-1;remoteReactionTime=0;hitReactionTime=0;
+   try{
+    loadedWrestler?.play(anim,{fade:0,restart:true});
+    remoteWrestler?.play(otherAnim,{fade:0,restart:true});
+    if(loadedWrestler)loadedWrestler._ttwState=anim;
+    if(remoteWrestler)remoteWrestler._ttwState=otherAnim;
+   }catch(error){console.warn('Network grapple animation failed',error);}
+   showContextMessage(m.move==='german-suplex'?'GERMAN SUPLEX!':'POWERBOMB!');
+  }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;refreshCombatHud();
    if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}
@@ -663,7 +678,7 @@ const controllerRoot=controllerSlot.firstElementChild?.shadowRoot;
 function setPadLabel(id,label){const el=controllerRoot?.querySelector('[data-id="'+id+'"] .txt');if(el)el.textContent=label;}
 function refreshCombatButtons(){
  setPadLabel('ultimate',staminaExhausted?'TIRED':runToggle?'RUN ON':'RUN OFF');
- setPadLabel('ability2',combatRunning?'CLOTHES':'POWERBOMB');
+ setPadLabel('ability2','SPECIAL');
  setPadLabel('ability3','CLIMB / EXIT');
  setPadLabel('ability4','ATTACK');
 }
@@ -674,7 +689,7 @@ window.addEventListener('controller:button',e=>{
  if(id==='ultimate')toggleRun();
  else if(id==='counter')activateCounter();
  else if(id==='ability1')tapAttack();
- else if(id==='ability2'){if(combatRunning)performAttack('clothesline');else beginPowerbomb();}
+ else if(id==='ability2')beginSpecial();
  else if(id==='ability3')climbOrExit();
  else if(id==='ability4')tapAttack();
 });
@@ -780,6 +795,17 @@ function updateTraversal(dt){
 // Shared-clock, offline two-person grapple. The player/remote groups remain authoritative.
 let grappleMove=null;
 const POWERBOMB_DURATION=2.3,POWERBOMB_IMPACT=1.55;
+function beginSpecial(){
+ if(grappleMove||traversal||punchRemaining>0||playerHP<=0||remoteHP<=0)return;
+ if(remoteConnected){
+  if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to use SPECIAL');
+  if(!crowdCanAfford(1,'Special'))return;
+  sendNetwork({type:'special'});
+  return;
+ }
+ if(botMode)return beginPowerbomb();
+ showContextMessage('SPECIAL requires another player');
+}
 function beginPowerbomb(){
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0||remoteHP<=0)return;
  if(!botMode)return showContextMessage('Powerbomb currently available against the offline bot');
@@ -813,6 +839,15 @@ function beginPowerbomb(){
 function updatePowerbomb(dt){
  if(!grappleMove)return;
  const g=grappleMove;
+ if(g.network){
+  g.time+=dt;
+  if(g.time>=g.duration){
+   grappleMove=null;
+   if(loadedWrestler)loadedWrestler._ttwState='';
+   if(remoteWrestler)remoteWrestler._ttwState='';
+  }
+  return;
+ }
  const duration=g.kind==='chokeslam'?1.9:g.kind==='body-slam'?1.85:POWERBOMB_DURATION;
  const impact=g.kind==='chokeslam'?1.18:g.kind==='body-slam'?1.15:POWERBOMB_IMPACT;
  g.time=Math.min(duration,g.time+dt);
@@ -900,7 +935,7 @@ const contextActions=[
  ['GRAPPLE','KeyG',()=>{
   if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
   if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
-  beginPowerbomb();
+  beginSpecial();
  }],
  // Chokeslam is retained for future wrestler loadouts.
  ['ROPES','KeyR',()=>{
@@ -914,7 +949,7 @@ const contextActions=[
  ['SPECIAL','KeyF',()=>{
   if(traversal?.kind==='perched')return swanDive();
   if(!(remoteConnected||botMode)||player.position.distanceTo(remote.position)>2.2)return showContextMessage('Get closer to use a special');
-  performAttack('uppercut');showContextMessage('Special test: uppercut');
+  beginSpecial();
  }]
 ];
 for(const [label,key,action] of contextActions){
@@ -2679,7 +2714,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?(runningNow?'run':'walk'):'idle';
+  const nextAnimation=grappleMove?.network?'throws.'+grappleMove.move+'-'+grappleMove.role:grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?(runningNow?'run':'walk'):'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
