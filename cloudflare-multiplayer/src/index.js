@@ -45,6 +45,13 @@ export class TTWRoom extends DurableObject {
    this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.animation},ws);
    return;
   }
+  if(data.type==="drape-status"){
+   if(data.active&&["x","z"].includes(data.axis)&&[1,-1].includes(data.sign)){
+    p.drape={axis:data.axis,sign:data.sign};
+   }else delete p.drape;
+   ws.serializeAttachment(p);
+   return;
+  }
   if(this.players.size<2)return;
   const candidates=[...this.players].filter(([w,v])=>w!==ws&&v.hp>0).map(([w,v])=>({ws:w,p:v,dx:v.position.x-p.position.x,dz:v.position.z-p.position.z})).filter(c=>{const d=Math.hypot(c.dx,c.dz);return d>=.1&&d<=2.2&&Math.abs(c.p.position.y-p.position.y)<=.65&&dot(forward(p.rotation),[c.dx/d,c.dz/d])>=.5;}).sort((a,b)=>Math.hypot(a.dx,a.dz)-Math.hypot(b.dx,b.dz));
   const chosen=candidates[0];if(!chosen)return;
@@ -97,9 +104,17 @@ export class TTWRoom extends DurableObject {
   const side=edges[0];
   const inward=side.axis==="x"?[-side.sign,0]:[0,-side.sign];
   const facing=forward(b.rotation);
+  const draped=b.drape;
+  const behindDraped=punchHit&&draped&&Math.hypot(a.position.x-bx,a.position.z-bz)<=2.2&&
+   (draped.axis==="x"?(a.position.x-bx)*draped.sign<-.15:(a.position.z-bz)*draped.sign<-.15);
+  if(behindDraped){
+   delete b.drape;
+   this.locks.set(defenderWs,Date.now()/1000+1.5);
+   this.broadcast({type:"drape-pulled-over",slot:b.slot,axis:draped.axis,sign:draped.sign});
+  }
   const overTop=punchHit&&b.position.y>.75&&Math.abs(side.d)<.85&&Math.abs((side.axis==="x"?bz:bx))<2.7&&dot(facing,inward)>.6;
   b.hp=Math.max(0,b.hp-damage);attackerWs.serializeAttachment(a);defenderWs.serializeAttachment(b);
-  if(overTop){
+  if(overTop&&!behindDraped){
    const event={type:"over-top-rope",slot:b.slot,axis:side.axis,sign:side.sign,duration:1.4};
    this.locks.set(defenderWs,Date.now()/1000+1.5);
    this.broadcast(event);
