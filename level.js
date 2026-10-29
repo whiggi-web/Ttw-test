@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -279,7 +279,7 @@ try{
 const attackMoves={punch:{anim:'striking.punch',reaction:'reactions.hit-front',duration:.8,impact:.3},jab:{anim:'striking.jab',reaction:'reactions.hit-front',duration:.65,impact:.23},hook:{anim:'striking.hook-right',reaction:'reactions.hit-left',duration:.85,impact:.35},uppercut:{anim:'striking.uppercut',reaction:'reactions.knocked-back',duration:1,impact:.42},kick:{anim:'striking.roundhouse',reaction:'reactions.hit-kick',duration:1.05,impact:.48},clothesline:{anim:'striking.clothesline',reaction:'reactions.hit-clothesline',duration:1.1,impact:.5}};
 const playTTWAnimation=(w,state,fade=.2)=>{
  if(!w)return;
- const name=usingBatchOne?({idle:'movement.idle',walk:'movement.walk',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||(state.startsWith('reactions.')?state:'movement.idle')):state;
+ const name=usingBatchOne?({idle:'movement.idle',walk:'movement.walk',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||((state.startsWith('reactions.')||state.startsWith('ropes.')||state.startsWith('movement.'))?state:'movement.idle')):state;
  const safeName=usingBatchOne&&w.library?.defs?.[name]?name:(usingBatchOne?'movement.idle':name);
  try{w.play(safeName,{fade,restart:true});}catch(error){console.warn('TTW animation unavailable:',name,error);if(safeName!=='movement.idle')try{w.play('movement.idle',{fade:0,restart:true});}catch{}}
 };
