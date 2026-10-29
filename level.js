@@ -1069,6 +1069,8 @@ function updateTraversal(dt){
  if(traversal.kind==='rope-test-drape'){
   traversal.time+=dt;
   player.position.copy(traversal.end);
+  // Raise only the drape phase by 10% of ring height; pull-over remains unchanged.
+  player.position.y=traversal.end.y*1.10;
   if(traversal.time>=3){
    const start=player.position.clone(),end=start.clone(),side=traversal.side;
    end[side.axis]=side.sign*4.65;end.y=.08;
