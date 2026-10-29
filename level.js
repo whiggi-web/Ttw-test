@@ -888,9 +888,17 @@ function updateTraversal(dt){
 let grappleMove=null;
 const POWERBOMB_DURATION=2.3,POWERBOMB_IMPACT=1.55;
 function beginSpecial(){
- if(grappleMove||traversal||punchRemaining>0||playerHP<=0||remoteHP<=0)return;
+ if(grappleMove||traversal||punchRemaining>0||playerHP<=0)return;
  if(remoteConnected){
-  if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to use SPECIAL');
+  // Server selects the closest eligible opponent in front, not a fixed player slot.
+  const forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+  const target=[...onlinePeers.values()].filter(peer=>{
+   if(peer.hp<=0)return false;
+   const delta=peer.group.position.clone().sub(player.position);
+   const distance=Math.hypot(delta.x,delta.z);
+   return distance>=.1&&distance<=2.2&&Math.abs(delta.y)<=.65&&forward.dot(new THREE.Vector3(delta.x/distance,0,delta.z/distance))>=.5;
+  }).sort((a,b)=>player.position.distanceToSquared(a.group.position)-player.position.distanceToSquared(b.group.position))[0];
+  if(!target)return showContextMessage('Face a nearby opponent to use SPECIAL');
   if(!crowdCanAfford(1,'Special'))return;
   sendNetwork({type:'special'});
   return;
@@ -1025,8 +1033,7 @@ const contextActions=[
  ['RUN','KeyV',()=>toggleRun()],
  ['TAUNT','KeyY',()=>crowdTaunt()],
  ['GRAPPLE','KeyG',()=>{
-  if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
-  if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
+  if(!(remoteConnected||botMode)||playerHP<=0)return showContextMessage('Grapple requires an active opponent');
   beginSpecial();
  }],
  // Chokeslam is retained for future wrestler loadouts.
@@ -1040,7 +1047,7 @@ const contextActions=[
  ['TURNBUCKLE','KeyT',()=>beginTraversal('climb')],
  ['SPECIAL','KeyF',()=>{
   if(traversal?.kind==='perched')return swanDive();
-  if(!(remoteConnected||botMode)||player.position.distanceTo(remote.position)>2.2)return showContextMessage('Get closer to use a special');
+  if(!(remoteConnected||botMode))return showContextMessage('SPECIAL requires another player');
   beginSpecial();
  }]
 ];
