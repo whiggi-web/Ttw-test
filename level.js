@@ -647,7 +647,7 @@ function startMultiplayer(){
   }
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;const damagedPeer=onlinePeers.get(m.targetSlot);if(damagedPeer)damagedPeer.hp=m.other;refreshCombatHud();
-   if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
+   if(m.hit==='self'){if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){traversal=null;showContextMessage('Climb interrupted by attack');}showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
    if(m.hit==='other'){crowdEarn(3);showDamage((damagedPeer?.group||remote).position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){if(damagedPeer){damagedPeer.reaction=m.reaction||'reactions.hit-front';damagedPeer.reactionTime=.72;}}}
   }
  };
@@ -708,6 +708,7 @@ function updateSparringBot(dt){
   }
   if(counterActive)showContextMessage('COUNTER FAILED!');
   hitReaction='reactions.hit-front';hitReactionTime=.65;
+  if(traversal&&['approach-corner','climb','turn','perched'].includes(traversal.kind)){traversal=null;showContextMessage('Climb interrupted by attack');}
   playerHP=Math.max(0,playerHP-2);
   showDamage(player.position,'-2','#ff6969');
   refreshCombatHud();
@@ -845,8 +846,7 @@ function activateCounter(){
 function climbOrExit(){
  if(traversal?.kind==='perched')return showContextMessage('Already on the turnbuckle; press SPECIAL to dive');
  const x=Math.abs(player.position.x),z=Math.abs(player.position.z);
- const atCorner=x>=2.65&&z>=2.65&&x<=3.55&&z<=3.55&&player.position.y>=.75;
- if(atCorner)return beginTraversal('climb');
+ if(player.position.y>=.75&&x<3.6&&z<3.6)return beginTraversal('climb');
  return beginTraversal('ring');
 }
 function tapAttack(){
@@ -880,14 +880,22 @@ function beginTraversal(kind){
   loadedWrestler._ttwState=clip;
   showContextMessage(onFloor?'Sliding into the ring':'Sliding out of the ring');
  }else if(kind==='climb'){
-  if(Math.abs(x)<2.15||Math.abs(z)<2.15)return showContextMessage('Move into a ring corner to climb');
   const clip='ropes.climb-to-middle';
   if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Climb animation unavailable');
-  const corner=new THREE.Vector3(Math.sign(x)*3.1,1.2,Math.sign(z)*3.1);
-  const outward=new THREE.Vector3(Math.sign(x),0,Math.sign(z)).normalize();
-  player.rotation.y=Math.atan2(-outward.x,-outward.z);
-  traversal={kind,start:player.position.clone(),end:corner,time:0,duration:1.3,clip};
-  showContextMessage('Climbing the turnbuckle');
+  const sx=x<.01?1:Math.sign(x),sz=Math.abs(z)<.01?1:Math.sign(z);
+  const corner=new THREE.Vector3(sx*3.1,1.2,sz*3.1);
+  const distance=Math.hypot(corner.x-x,corner.z-z);
+  if(distance>.28){
+   const direction=corner.clone().sub(player.position);direction.y=0;
+   player.rotation.y=Math.atan2(-direction.x,-direction.z);
+   traversal={kind:'approach-corner',start:player.position.clone(),end:corner,time:0,duration:Math.max(.15,distance/3),clip:'walk',corner};
+   showContextMessage('Moving to the nearest turnbuckle');
+  }else{
+   const outward=new THREE.Vector3(sx,0,sz).normalize();
+   player.rotation.y=Math.atan2(-outward.x,-outward.z);
+   traversal={kind:'climb',start:player.position.clone(),end:corner,time:0,duration:1.3,clip};
+   showContextMessage('Climbing the turnbuckle');
+  }
  }else if(kind==='dive'){
   if(!traversal||traversal.kind!=='perched')return;
  }
@@ -915,7 +923,13 @@ function updateTraversal(dt){
   if(loadedWrestler)loadedWrestler.object.rotation.x=-Math.sin(Math.PI*p)*1.2;
  }
  if(p>=1){
-  if(traversal.kind==='climb'){
+  if(traversal.kind==='approach-corner'){
+   const corner=traversal.corner;
+   const outward=new THREE.Vector3(Math.sign(corner.x),0,Math.sign(corner.z)).normalize();
+   player.rotation.y=Math.atan2(-outward.x,-outward.z);
+   traversal={kind:'climb',start:player.position.clone(),end:corner.clone(),time:0,duration:1.3,clip:'ropes.climb-to-middle'};
+   showContextMessage('Climbing the turnbuckle');
+  }else if(traversal.kind==='climb'){
    const clip='movement.turn-180';
    if(loadedWrestler?.library?.defs?.[clip]){
     traversal={kind:'turn',start:player.position.clone(),end:player.position.clone(),time:0,duration:.7,clip,startYaw:player.rotation.y};
