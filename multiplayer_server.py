@@ -12,6 +12,8 @@ players = {}
 last_hit = {}
 last_position = {}
 last_rotation = {}
+last_grapple = {}
+grapple_lock = {}
 knockout_tasks = {}
 
 async def recover_player(ws):
@@ -38,6 +40,23 @@ async def broadcast(payload, exclude=None):
                 await send(ws, payload)
             except Exception:
                 pass
+
+async def resolve_grapple(attacker_ws, defender_ws, move, delay):
+    await asyncio.sleep(delay)
+    if attacker_ws not in players or defender_ws not in players:
+        return
+    if players[attacker_ws]["hp"] <= 0 or players[defender_ws]["hp"] <= 0:
+        return
+    damage = 30
+    players[defender_ws]["hp"] = max(0, players[defender_ws]["hp"] - damage)
+    if players[defender_ws]["hp"] == 0 and defender_ws not in knockout_tasks:
+        knockout_tasks[defender_ws] = asyncio.create_task(recover_player(defender_ws))
+    await send(attacker_ws, {"type": "health", "self": players[attacker_ws]["hp"],
+               "other": players[defender_ws]["hp"], "hit": "other", "damage": damage,
+               "reaction": "reactions.knocked-back", "move": move})
+    await send(defender_ws, {"type": "health", "self": players[defender_ws]["hp"],
+               "other": players[attacker_ws]["hp"], "hit": "self", "damage": damage,
+               "reaction": "reactions.knocked-back", "move": move})
 
 async def handler(ws):
     slot = None
@@ -89,6 +108,34 @@ async def handler(ws):
                     animation = "idle"
                 await broadcast({"type": "state", "slot": slot, "position": last_position[ws],
                                  "rotation": rotation, "animation": animation}, exclude=ws)
+            elif kind == "special" and len(players) == 2:
+                now = time.monotonic()
+                if players[ws]["hp"] <= 0 or now < grapple_lock.get(ws, 0):
+                    continue
+                other_ws = next(w for w in players if w != ws)
+                if players[other_ws]["hp"] <= 0 or now < grapple_lock.get(other_ws, 0):
+                    continue
+                a, b = last_position[ws], last_position[other_ws]
+                dx, dz = b["x"] - a["x"], b["z"] - a["z"]
+                dist = math.hypot(dx, dz)
+                if not (0.1 < dist <= 2.2) or abs(a["y"] - b["y"]) > 0.65:
+                    continue
+                yaw = last_rotation.get(ws, 0.0)
+                if (-math.sin(yaw) * dx - math.cos(yaw) * dz) / dist < 0.5:
+                    continue
+                defender_yaw = last_rotation.get(other_ws, 0.0)
+                # Attacker is behind defender if defender faces away from attacker.
+                behind = (-math.sin(defender_yaw) * dx - math.cos(defender_yaw) * dz) / dist > 0.5
+                move = "german-suplex" if behind else "powerbomb"
+                duration = 2.3
+                impact_delay = 1.55
+                grapple_lock[ws] = now + duration + 0.25
+                grapple_lock[other_ws] = now + duration + 0.25
+                await send(ws, {"type": "grapple", "role": "attacker", "move": move,
+                                "duration": duration, "impact": impact_delay})
+                await send(other_ws, {"type": "grapple", "role": "defender", "move": move,
+                                      "duration": duration, "impact": impact_delay})
+                asyncio.create_task(resolve_grapple(ws, other_ws, move, impact_delay))
             elif kind == "punch" and len(players) == 2:
                 now = time.monotonic()
                 move = data.get("move", "punch")
@@ -96,12 +143,12 @@ async def handler(ws):
                 if move not in attacks:
                     continue
                 base_damage, cooldown, reaction = attacks[move]
-                if now - last_hit.get(ws, 0) < cooldown or players[ws]["hp"] <= 0:
+                if now - last_hit.get(ws, 0) < cooldown or players[ws]["hp"] <= 0 or now < grapple_lock.get(ws, 0):
                     continue
                 last_hit[ws] = now
                 other_ws = next(w for w in players if w != ws)
                 other = players[other_ws]
-                if other["hp"] <= 0:
+                if other["hp"] <= 0 or now < grapple_lock.get(other_ws, 0):
                     continue
                 a, b = last_position[ws], last_position[other_ws]
                 dx, dz = b["x"] - a["x"], b["z"] - a["z"]
@@ -137,6 +184,7 @@ async def handler(ws):
             last_hit.pop(ws, None)
             last_position.pop(ws, None)
             last_rotation.pop(ws, None)
+            grapple_lock.pop(ws, None)
             task = knockout_tasks.pop(ws, None)
             if task:
                 task.cancel()
