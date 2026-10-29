@@ -56,6 +56,14 @@ export class TTWRoom extends DurableObject {
   if(dist<.1||dist>2.2||Math.abs(other.position.y-p.position.y)>.65)return;
   const direction=[dx/dist,dz/dist];
   if(dot(forward(p.rotation),direction)<.5)return;
+  if(data.type==="irish-whip"){
+   const dir=forward(p.rotation);
+   const target={x:Math.max(-3.35,Math.min(3.35,other.position.x+dir[0]*2.58)),y:1.2,z:Math.max(-3.35,Math.min(3.35,other.position.z+dir[1]*2.58))};
+   this.locks.set(ws,now+1.5);this.locks.set(otherWs,now+1.5);
+   const msg={type:"irish-whip",attackerSlot:p.slot,defenderSlot:other.slot,duration:1.4,target};
+   this.broadcast(msg);send(ws,msg);
+   return;
+  }
   if(data.type==="special"){
    const behind=dot(forward(other.rotation),direction)>.5;
    const move=behind?"german-suplex":"powerbomb";
