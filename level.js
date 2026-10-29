@@ -279,7 +279,7 @@ try{
 const attackMoves={punch:{anim:'striking.punch',reaction:'reactions.hit-front',duration:.8,impact:.3},jab:{anim:'striking.jab',reaction:'reactions.hit-front',duration:.65,impact:.23},hook:{anim:'striking.hook-right',reaction:'reactions.hit-left',duration:.85,impact:.35},uppercut:{anim:'striking.uppercut',reaction:'reactions.knocked-back',duration:1,impact:.42},kick:{anim:'striking.roundhouse',reaction:'reactions.hit-kick',duration:1.05,impact:.48},clothesline:{anim:'striking.clothesline',reaction:'reactions.hit-clothesline',duration:1.1,impact:.5}};
 const playTTWAnimation=(w,state,fade=.2)=>{
  if(!w)return;
- const name=usingBatchOne?({idle:'movement.idle',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||(state.startsWith('reactions.')?state:'movement.idle')):state;
+ const name=usingBatchOne?({idle:'movement.idle',walk:'movement.walk',run:'movement.run',punch:'striking.punch',fall:'falls.fall-backward',ropeLean:'ropes.rope-lean',ropeRebound:'ropes.rope-rebound'}[state]||attackMoves[state]?.anim||(state.startsWith('reactions.')?state:'movement.idle')):state;
  const safeName=usingBatchOne&&w.library?.defs?.[name]?name:(usingBatchOne?'movement.idle':name);
  try{w.play(safeName,{fade,restart:true});}catch(error){console.warn('TTW animation unavailable:',name,error);if(safeName!=='movement.idle')try{w.play('movement.idle',{fade:0,restart:true});}catch{}}
 };
@@ -2674,7 +2674,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?'run':'idle';
+  const nextAnimation=grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?(runningNow?'run':'walk'):'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
