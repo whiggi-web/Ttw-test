@@ -488,6 +488,25 @@ const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=fa
 if(remoteWrestler){remote.add(remoteWrestler.object);playTTWAnimation(remoteWrestler,'idle');remoteWrestler._ttwState='idle';}
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
+// v1.09: each connected slot has its own wrestler, animation and health.
+const onlinePeers=new Map();
+function makeOnlinePeer(slot){
+ if(onlinePeers.has(slot))return onlinePeers.get(slot);
+ const group=new THREE.Group();group.name='TTW_PLAYER_'+slot;group.visible=true;
+ let wrestler=null;
+ try{wrestler=wrestlerPack?.createWrestler('wrestler-'+String(slot).padStart(2,'0'));}catch(e){console.warn('Wrestler model fallback',e);}
+ if(wrestler){lockGameplayWrestler(wrestler);group.add(wrestler.object);playTTWAnimation(wrestler,'idle');wrestler._ttwState='idle';}
+ else{const mesh=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:[0,0xee5533,0x55dd77,0xcc77ff,0xffcc44][slot]}));mesh.position.y=1;group.add(mesh);}
+ scene.add(group);
+ const peer={slot,group,wrestler,hp:100,target:new THREE.Vector3(),rotation:0,hasTarget:false,anim:'idle',reaction:null,reactionTime:0};
+ onlinePeers.set(slot,peer);return peer;
+}
+function removeOnlinePeer(slot){const p=onlinePeers.get(slot);if(!p)return;scene.remove(p.group);onlinePeers.delete(slot);}
+function closestOnlinePeer(){
+ let best=null,dist=Infinity;
+ for(const p of onlinePeers.values()){if(p.hp<=0)continue;const d=player.position.distanceTo(p.group.position);if(d<dist){best=p;dist=d;}}
+ return best;
+}
 let botMode=false,botRecover=0,botMoveClock=0,botStrikeClock=2.5,botKnockdownTime=0;
 let counterUntil=0,counterCooldownUntil=0;
 let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
@@ -499,7 +518,7 @@ document.body.appendChild(combatHud);
 const networkStatus=document.createElement('div');
 networkStatus.style.cssText='position:fixed;right:16px;top:46px;z-index:12;color:#bcd0e4;font:12px system-ui;text-shadow:0 1px 3px black;pointer-events:none';
 document.body.appendChild(networkStatus);
-function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP | '+(botMode?'SPARRING BOT '+remoteHP+' HP':remoteConnected?'OPPONENT '+remoteHP+' HP':'WAITING FOR PLAYER 2');}
+function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP | '+(onlinePeers.size?([...onlinePeers.values()].map(p=>'P'+p.slot+' '+p.hp+' HP').join(' | ')):'WAITING FOR PLAYERS');}
 refreshCombatHud();
 remote.visible=false;remote.position.set(1.8,1.2,-.6);
 const damagePopups=[];
@@ -522,17 +541,31 @@ function startMultiplayer(){
  network.onopen=()=>sendNetwork({type:'join',name:window.TTWPlayerName||'Wrestler'});
  network.onmessage=e=>{
   let m;try{m=JSON.parse(e.data);}catch{return;}
-  if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot===1?-1.4:1.4,1.2,0);playerHP=m.hp??100;refreshCombatHud();}
+  if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot%2?-1.4:1.4,1.2,m.slot<=2?-1.4:1.4);playerHP=m.hp??100;refreshCombatHud();}
+  if(m.type==='roster'){
+   playerSlot=m.slot;const active=new Set();
+   for(const entry of m.players){if(entry.slot===playerSlot){playerHP=entry.hp;continue;}active.add(entry.slot);const p=makeOnlinePeer(entry.slot);p.hp=entry.hp;p.target.set(entry.position.x,entry.position.y,entry.position.z);p.group.position.copy(p.target);p.rotation=entry.rotation;p.group.rotation.y=entry.rotation;p.hasTarget=true;}
+   for(const slot of [...onlinePeers.keys()])if(!active.has(slot))removeOnlinePeer(slot);
+   remoteConnected=onlinePeers.size>0;remote.visible=false;
+   networkStatus.textContent=(onlinePeers.size+1)+'/4 wrestlers connected';refreshCombatHud();
+  }
+  if(m.type==='left'){removeOnlinePeer(m.slot);remoteConnected=onlinePeers.size>0;networkStatus.textContent=(onlinePeers.size+1)+'/4 wrestlers connected';refreshCombatHud();}
+  if(m.type==='hp'){if(m.slot===playerSlot)playerHP=m.hp;else if(onlinePeers.has(m.slot))onlinePeers.get(m.slot).hp=m.hp;refreshCombatHud();}
   if(m.type==='waiting'||m.type==='peer_left'){botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);remoteHasTarget=false;remoteConnected=false;remoteHP=100;networkStatus.textContent='Waiting for another player (AI disabled)';refreshCombatHud();}
   if(m.type==='joined'){botMode=false;remoteHasTarget=false;remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
-  if(m.type==='full'){networkStatus.textContent='Ring full (2 players maximum)';}
+  if(m.type==='full'){networkStatus.textContent='Ring full (4 players maximum)';}
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
+   const peer=makeOnlinePeer(m.slot);const position=m.position||{};
+   if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
+   peer.anim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
+   /* Legacy primary remote hidden; onlinePeers renders all opponents. */
    const p=m.position||{};
    if([p.x,p.y,p.z,m.rotation].every(Number.isFinite)){remoteTarget.set(p.x,p.y,p.z);remoteTargetRotation=m.rotation;
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','fall',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
   if(m.type==='grapple'&&['powerbomb','german-suplex'].includes(m.move)){
+   const grapplePeer=onlinePeers.get(m.role==='attacker'?m.defenderSlot:m.attackerSlot);
    const role=m.role==='attacker'?'attacker':'defender';
    const anim='throws.'+m.move+'-'+role;
    const otherAnim='throws.'+m.move+'-'+(role==='attacker'?'defender':'attacker');
@@ -541,19 +574,19 @@ function startMultiplayer(){
    punchRemaining=0;playerPunchImpact=-1;remoteReactionTime=0;hitReactionTime=0;
    try{
     loadedWrestler?.play(anim,{fade:0,restart:true});
-    remoteWrestler?.play(otherAnim,{fade:0,restart:true});
+    grapplePeer?.wrestler?.play(otherAnim,{fade:0,restart:true});
     if(loadedWrestler)loadedWrestler._ttwState=anim;
-    if(remoteWrestler)remoteWrestler._ttwState=otherAnim;
+    if(grapplePeer?.wrestler)grapplePeer.wrestler._ttwState=otherAnim;
    }catch(error){console.warn('Network grapple animation failed',error);}
    showContextMessage(m.move==='german-suplex'?'GERMAN SUPLEX!':'POWERBOMB!');
   }
   if(m.type==='health'){
-   playerHP=m.self;remoteHP=m.other;refreshCombatHud();
+   playerHP=m.self;remoteHP=m.other;const damagedPeer=onlinePeers.get(m.targetSlot);if(damagedPeer)damagedPeer.hp=m.other;refreshCombatHud();
    if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');if(!['powerbomb','german-suplex'].includes(m.move)){hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}}
-   if(m.hit==='other'){crowdEarn(3);showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}}
+   if(m.hit==='other'){crowdEarn(3);showDamage((damagedPeer?.group||remote).position,'-'+(m.damage??11),'#ffdf55');if(!['powerbomb','german-suplex'].includes(m.move)){if(damagedPeer){damagedPeer.reaction=m.reaction||'reactions.hit-front';damagedPeer.reactionTime=.72;}}}
   }
  };
- network.onclose=()=>{botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;networkStatus.textContent='Disconnected. AI opponent disabled.';refreshCombatHud();};
+ network.onclose=()=>{for(const slot of [...onlinePeers.keys()])removeOnlinePeer(slot);botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;networkStatus.textContent='Disconnected. AI opponent disabled.';refreshCombatHud();};
  network.onerror=()=>{networkStatus.textContent='Cannot reach multiplayer server';};
 }
 window.addEventListener('ttw:player-name',startMultiplayer);
