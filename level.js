@@ -263,7 +263,7 @@ let wrestlerPack=null;
 try{
  const originalManifest=await (await fetch('./assets/ttw-wrestlers/manifest-batch2.json')).json();
  const coreIds=originalManifest.animations.filter(a=>a.status==='ready').map(a=>a.id);
- const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward']});
+ const pack=await loadPack('./assets/ttw-wrestlers/manifest-master.json',{animations:[...coreIds,'throws.powerbomb-attacker','throws.powerbomb-defender','throws.german-suplex-attacker','throws.german-suplex-defender','throws.chokeslam-attacker','throws.chokeslam-defender','throws.body-slam-attacker','throws.body-slam-defender','ropes.enter-between-ropes','ropes.exit-between-ropes','ropes.apron-drop-down','ropes.apron-climb-up','ropes.climb-to-middle','movement.turn-180','turnbuckle.jump-forward','ground.elbow-drop']});
  wrestlerPack=pack;
  loadedWrestler=pack.createWrestler('wrestler-01');
  remoteWrestler=pack.createWrestler('wrestler-02');
@@ -852,7 +852,7 @@ function climbOrExit(){
  return beginTraversal('ring');
 }
 function tapAttack(){
- if(traversal?.kind==='perched')return showContextMessage('Use CLIMB / EXIT to jump down');
+ if(traversal?.kind==='perched')return turnbuckleElbowDrop();
  const moves=['punch','jab','hook','kick'];
  performAttack(moves[attackSequence++%moves.length]);
 }
@@ -914,6 +914,18 @@ function swanDive(){
  traversal={kind:'dive',start:player.position.clone(),end,time:0,duration:1.35,clip};
  showContextMessage('JUMP EXIT! -10 Crowd Momentum');
 }
+function turnbuckleElbowDrop(){
+ if(traversal?.kind!=='perched'||playerHP<=0)return;
+ const clip='ground.elbow-drop';
+ if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Elbow drop animation unavailable');
+ const forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
+ const end=player.position.clone().addScaledVector(forward,2.18);
+ end.x=THREE.MathUtils.clamp(end.x,-2.65,2.65);
+ end.z=THREE.MathUtils.clamp(end.z,-2.65,2.65);
+ end.y=1.2;
+ traversal={kind:'aerial-elbow',start:player.position.clone(),end,time:0,duration:1.5,clip};
+ showContextMessage('AERIAL ELBOW DROP!');
+}
 function interruptTurnbuckleClimb(){
  if(!traversal||!['approach-corner','climb','turn','perched'].includes(traversal.kind))return;
  const elevated=player.position.y>1.4;
@@ -944,6 +956,8 @@ function updateTraversal(dt){
   player.rotation.y=traversal.startYaw+Math.PI*eased;
  }else if(traversal.kind==='knocked-off-corner'){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.15;
+ }else if(traversal.kind==='aerial-elbow'){
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.6;
  }else if(traversal.kind==='dive'){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*.35;
  }
