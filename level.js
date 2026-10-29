@@ -424,8 +424,8 @@ function registerRopeBounce(inward){
  ropeFacingTime=1;
  ropeBounceDelay=1;
  ropeMovementLock=1.10;
- forcedRopeRun=ropeSpringCount<3;
- if(!forcedRopeRun){ropeSpeedMultiplier=1;showContextMessage('3 rope springs! Run finished');}
+ forcedRopeRun=ropeSpringCount<4;
+ if(!forcedRopeRun){ropeSpeedMultiplier=1;showContextMessage('4 rope springs! Run finished');}
  ropeRunDirection.copy(inward).normalize();refreshCombatButtons();
  if(usingBatchOne)ropeAnimationTime=ropeLeanDuration+ropeReboundDuration;
  player.rotation.y=Math.atan2(-inward.x,-inward.z);
