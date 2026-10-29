@@ -881,8 +881,12 @@ function beginTraversal(kind){
   showContextMessage(onFloor?'Sliding into the ring':'Sliding out of the ring');
  }else if(kind==='climb'){
   if(Math.abs(x)<2.15||Math.abs(z)<2.15)return showContextMessage('Move into a ring corner to climb');
+  const clip='ropes.climb-to-middle';
+  if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Climb animation unavailable');
   const corner=new THREE.Vector3(Math.sign(x)*3.1,1.2,Math.sign(z)*3.1);
-  traversal={kind,start:player.position.clone(),end:corner,time:0,duration:1.8};
+  const outward=new THREE.Vector3(Math.sign(x),0,Math.sign(z)).normalize();
+  player.rotation.y=Math.atan2(-outward.x,-outward.z);
+  traversal={kind,start:player.position.clone(),end:corner,time:0,duration:1.3,clip};
   showContextMessage('Climbing the turnbuckle');
  }else if(kind==='dive'){
   if(!traversal||traversal.kind!=='perched')return;
@@ -903,14 +907,29 @@ function updateTraversal(dt){
  if(traversal.kind==='ring'){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,traversal.end.y,eased); // Apron-to-floor height transition.
  }else if(traversal.kind==='climb'){
-  player.position.y=THREE.MathUtils.lerp(traversal.start.y,2.55,eased);
+  player.position.y=THREE.MathUtils.lerp(traversal.start.y,2.078,eased);
+ }else if(traversal.kind==='turn'){
+  player.rotation.y=traversal.startYaw+Math.PI*eased;
  }else if(traversal.kind==='dive'){
   player.position.y=THREE.MathUtils.lerp(traversal.start.y,1.2,eased)+Math.sin(Math.PI*p)*1.4;
   if(loadedWrestler)loadedWrestler.object.rotation.x=-Math.sin(Math.PI*p)*1.2;
  }
  if(p>=1){
-  if(traversal.kind==='climb'){traversal={kind:'perched',end:player.position.clone()};showContextMessage('Press SPECIAL (F) to swan dive');}
-  else{traversal=null;if(loadedWrestler)loadedWrestler.object.rotation.x=0;}
+  if(traversal.kind==='climb'){
+   const clip='movement.turn-180';
+   if(loadedWrestler?.library?.defs?.[clip]){
+    traversal={kind:'turn',start:player.position.clone(),end:player.position.clone(),time:0,duration:.7,clip,startYaw:player.rotation.y};
+    showContextMessage('Turning to face the ring');
+   }else{
+    player.rotation.y+=Math.PI;
+    traversal={kind:'perched',end:player.position.clone(),clip:'idle'};
+    showContextMessage('Press SPECIAL (F) to swan dive');
+   }
+  }else if(traversal.kind==='turn'){
+   player.rotation.y=traversal.startYaw+Math.PI;
+   traversal={kind:'perched',end:player.position.clone(),clip:'idle'};
+   showContextMessage('Press SPECIAL (F) to swan dive');
+  }else{traversal=null;if(loadedWrestler)loadedWrestler.object.rotation.x=0;}
  }
  return true;
 }
