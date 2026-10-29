@@ -608,6 +608,19 @@ function startMultiplayer(){
     if(!remoteHasTarget){remote.position.copy(remoteTarget);remote.rotation.y=remoteTargetRotation;remoteHasTarget=true;}}
    remoteAnim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
   }
+  if(m.type==='drape-pulled-over'){
+   if(playerSlot===m.slot&&traversal?.kind==='rope-test-drape'){
+    const start=player.position.clone(),end=start.clone();
+    end[m.axis]=m.sign*4.65;end.y=.08;
+    traversal={kind:'rope-test-pull',start,end,time:0,duration:1.4,clip:'ropes.pulled-over-top',side:{axis:m.axis,sign:m.sign}};
+    ropeRecoverButton.style.display='none';
+    showContextMessage('PULLED OVER THE TOP ROPE!');
+   }else{
+    const peer=onlinePeers.get(m.slot);
+    if(peer){peer.grappleUntil=performance.now()+1400;peer.wrestler?.play('ropes.pulled-over-top',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='ropes.pulled-over-top';}
+   }
+   return;
+  }
   if(m.type==='over-top-rope'){
    if(playerSlot===m.slot){
     const start=player.position.clone(),end=start.clone();
@@ -877,7 +890,7 @@ const eliminationPreviewPlay=document.createElement('button');
 eliminationPreviewPlay.textContent='PLAY';
 eliminationPreviewPlay.style.cssText='margin-top:8px;padding:7px 12px;border-radius:6px;background:#376db7;color:white;border:0;font-weight:700;cursor:pointer';
 const ropeSequenceButton=document.createElement('button');
-ropeSequenceButton.textContent='TEST: DRAPE → PULL OVER';
+ropeSequenceButton.textContent='TEST: DRAPE OVER ROPE';
 ropeSequenceButton.style.cssText='width:100%;margin-top:9px;padding:9px 6px;border-radius:6px;background:#a35728;color:white;border:0;font:700 11px system-ui;cursor:pointer';
 eliminationPreviewPanel.appendChild(ropeSequenceButton);
 ropeSequenceButton.addEventListener('click',()=>{
@@ -894,6 +907,19 @@ ropeSequenceButton.addEventListener('click',()=>{
  const distance=player.position.distanceTo(end);
  traversal={kind:'rope-test-approach',start:player.position.clone(),end,time:0,duration:Math.max(.35,distance/2.6),clip:'walk',side};
  showContextMessage('Walking to nearest rope');
+});
+const ropeRecoverButton=document.createElement('button');
+ropeRecoverButton.textContent='RECOVER INTO RING';
+ropeRecoverButton.style.cssText='display:none;width:100%;margin-top:7px;padding:10px 6px;border-radius:6px;background:#23764e;color:white;border:0;font:700 12px system-ui;cursor:pointer';
+eliminationPreviewPanel.appendChild(ropeRecoverButton);
+ropeRecoverButton.addEventListener('click',()=>{
+ if(traversal?.kind!=='rope-test-drape')return;
+ const side=traversal.side,start=player.position.clone(),end=start.clone();
+ end[side.axis]=side.sign*2.65;end.y=1.2;
+ traversal={kind:'rope-test-recover',start,end,time:0,duration:1.1,clip:'ropes.drape-recover'};
+ ropeRecoverButton.style.display='none';
+ sendNetwork({type:'drape-status',active:false});
+ showContextMessage('Recovering into ring');
 });
 const eliminationPreviewStop=document.createElement('button');
 eliminationPreviewStop.textContent='STOP';
@@ -1090,12 +1116,18 @@ function updateTraversal(dt){
   player.position.copy(traversal.end);
   // Raise only the drape phase by 10% of ring height; pull-over remains unchanged.
   player.position.y=traversal.end.y*1.10;
-  if(traversal.time>=3){
-   const start=player.position.clone(),end=start.clone(),side=traversal.side;
-   end[side.axis]=side.sign*4.65;end.y=.08;
-   traversal={kind:'rope-test-pull',start,end,time:0,duration:1.4,clip:'ropes.pulled-over-top',side};
-   showContextMessage('Pulled over top rope!');
+  ropeRecoverButton.style.display='block';
+  if(!traversal.registered){
+   traversal.registered=true;
+   sendNetwork({type:'drape-status',active:true,axis:traversal.side.axis,sign:traversal.side.sign});
   }
+  return true;
+ }
+ if(traversal.kind==='rope-test-recover'){
+  traversal.time+=dt;
+  const p=Math.min(1,traversal.time/traversal.duration);
+  player.position.lerpVectors(traversal.start,traversal.end,p*p*(3-2*p));
+  if(p>=1){traversal=null;showContextMessage('Back in the ring');}
   return true;
  }
  if(traversal.kind==='rope-punch-over-top'){
@@ -1111,7 +1143,7 @@ function updateTraversal(dt){
   const p=Math.min(1,traversal.time/traversal.duration);
   const eased=p*p*(3-2*p);
   player.position.lerpVectors(traversal.start,traversal.end,eased);
-  if(p>=1){traversal=null;showContextMessage('Rope test complete');}
+  if(p>=1){traversal=null;ropeRecoverButton.style.display='none';showContextMessage('Rope test complete');}
   return true;
  } if(traversal.kind==='perched'){player.position.copy(traversal.end);return true;}
  traversal.time+=dt;
