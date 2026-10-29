@@ -546,6 +546,9 @@ function hitSparringBot(move){
  if(!botMode||remoteHP<=0)return;
  const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
  if(Math.hypot(dx,dz)>2.2)return;
+ // Forward-facing 120-degree attack cone; no damage to wrestlers behind or beside the attacker.
+ const distance=Math.hypot(dx,dz);
+ if(distance<.001||(-Math.sin(player.rotation.y)*dx-Math.cos(player.rotation.y)*dz)/distance<.5)return;
  const damage=Math.round(({punch:11,jab:7,hook:13,uppercut:16,kick:15,clothesline:18}[move]||11)*ropeSpeedMultiplier);
  remoteHP=Math.max(0,remoteHP-damage);
  crowdEarn(3);
