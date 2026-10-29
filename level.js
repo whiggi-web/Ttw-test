@@ -798,7 +798,7 @@ const controllerRoot=controllerSlot.firstElementChild?.shadowRoot;
 function setPadLabel(id,label){const el=controllerRoot?.querySelector('[data-id="'+id+'"] .txt');if(el)el.textContent=label;}
 function refreshCombatButtons(){
  setPadLabel('ultimate','ROPE RUN');
- setPadLabel('ability2','SPECIAL');
+ setPadLabel('ability2',forcedRopeRun?'NO SPECIAL':'SPECIAL');
  setPadLabel('ability3','CLIMB / EXIT');
  setPadLabel('ability4','ATTACK');
 }
@@ -918,6 +918,7 @@ function updateTraversal(dt){
 let grappleMove=null;
 const POWERBOMB_DURATION=2.3,POWERBOMB_IMPACT=1.55;
 function beginSpecial(){
+ if(forcedRopeRun)return showContextMessage('SPECIAL unavailable while running');
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0)return;
  if(remoteConnected){
   // Server selects the closest eligible opponent in front, not a fixed player slot.
