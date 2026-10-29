@@ -615,6 +615,28 @@ function startMultiplayer(){
    if(peer){peer.draped=!!m.active;if(peer.draped){peer.reactionTime=0;peer.anim='ropes.drape-over-top';}}
    return;
   }
+  if(m.type==='paired-pull-over'){
+   if(playerSlot===m.attackerSlot){
+    eliminationPreview=null;
+    traversal={kind:'rope-paired-attacker',start:player.position.clone(),end:player.position.clone(),time:0,duration:1.4,clip:'ropes.pull-over-top'};
+    showContextMessage('Pulling wrestler over the rope!');
+   }else{
+    const peer=onlinePeers.get(m.attackerSlot);
+    if(peer){peer.grappleUntil=performance.now()+1400;peer.wrestler?.play('ropes.pull-over-top',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='ropes.pull-over-top';}
+   }
+   // Defender uses the existing pull-over animation and floor transition.
+   if(playerSlot===m.defenderSlot&&traversal?.kind==='rope-test-drape'){
+    const start=player.position.clone(),end=start.clone();
+    end[m.axis]=m.sign*4.65;end.y=.08;
+    traversal={kind:'rope-test-pull',start,end,time:0,duration:1.4,clip:'ropes.pulled-over-top'};
+    ropeRecoverButton.style.display='none';
+    showContextMessage('Pulled over the top rope!');
+   }else{
+    const peer=onlinePeers.get(m.defenderSlot);
+    if(peer){peer.draped=false;peer.grappleUntil=performance.now()+1400;peer.wrestler?.play('ropes.pulled-over-top',{fade:0,restart:true});if(peer.wrestler)peer.wrestler._ttwState='ropes.pulled-over-top';}
+   }
+   return;
+  }
   if(m.type==='drape-pulled-over'){
    if(playerSlot===m.slot&&traversal?.kind==='rope-test-drape'){
     const start=player.position.clone(),end=start.clone();
@@ -915,6 +937,15 @@ ropeSequenceButton.addEventListener('click',()=>{
  traversal={kind:'rope-test-approach',start:player.position.clone(),end,time:0,duration:Math.max(.35,distance/2.6),clip:'walk',side};
  showContextMessage('Walking to nearest rope');
 });
+const pairedPullButton=document.createElement('button');
+pairedPullButton.textContent='TEST: PULL DRAPED WRESTLER';
+pairedPullButton.style.cssText='width:100%;margin-top:7px;padding:9px 6px;border-radius:6px;background:#8b3b5c;color:white;border:0;font:700 11px system-ui;cursor:pointer';
+eliminationPreviewPanel.appendChild(pairedPullButton);
+pairedPullButton.addEventListener('click',()=>{
+ if(!remoteConnected||traversal||grappleMove)return showContextMessage('Need a free wrestler and another player');
+ sendNetwork({type:'paired-pull-over'});
+ showContextMessage('Attempting paired pull-over (stand outside near draped wrestler)');
+});
 const ropeRecoverButton=document.createElement('button');
 ropeRecoverButton.textContent='RECOVER INTO RING';
 ropeRecoverButton.style.cssText='display:none;width:100%;margin-top:7px;padding:10px 6px;border-radius:6px;background:#23764e;color:white;border:0;font:700 12px system-ui;cursor:pointer';
@@ -1129,6 +1160,11 @@ function updateTraversal(dt){
    sendNetwork({type:'drape-status',active:true,axis:traversal.side.axis,sign:traversal.side.sign});
    console.info('TTW drape sync: announcing drape',traversal.side);
   }
+  return true;
+ }
+ if(traversal.kind==='rope-paired-attacker'){
+  traversal.time+=dt;
+  if(traversal.time>=traversal.duration)traversal=null;
   return true;
  }
  if(traversal.kind==='rope-test-recover'){
