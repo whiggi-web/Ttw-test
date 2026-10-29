@@ -846,13 +846,13 @@ function activateCounter(){
  showContextMessage('COUNTER READY! 50% chance for 1.2s');
 }
 function climbOrExit(){
- if(traversal?.kind==='perched')return showContextMessage('Already on the turnbuckle; press SPECIAL to dive');
+ if(traversal?.kind==='perched')return swanDive();
  const x=Math.abs(player.position.x),z=Math.abs(player.position.z);
  if(player.position.y>=.75&&x<3.6&&z<3.6)return beginTraversal('climb');
  return beginTraversal('ring');
 }
 function tapAttack(){
- if(traversal?.kind==='perched')return swanDive();
+ if(traversal?.kind==='perched')return showContextMessage('Use CLIMB / EXIT to jump down');
  const moves=['punch','jab','hook','kick'];
  performAttack(moves[attackSequence++%moves.length]);
 }
@@ -906,11 +906,13 @@ function beginTraversal(kind){
 function swanDive(){
  if(!traversal||traversal.kind!=='perched')return showContextMessage('Climb a turnbuckle first');
  const clip='turnbuckle.jump-forward';
- if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Jump attack animation unavailable');
+ if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Jump animation unavailable');
+ if(!crowdCanAfford(10,'Jump exit'))return;
+ if(!crowdSpend(10))return showContextMessage('Jump exit requires 10 Crowd Momentum');
  const forward=new THREE.Vector3(-Math.sin(player.rotation.y),0,-Math.cos(player.rotation.y));
  const end=player.position.clone().addScaledVector(forward,2.18);end.y=1.2;
  traversal={kind:'dive',start:player.position.clone(),end,time:0,duration:1.35,clip};
- showContextMessage('JUMP ATTACK!');
+ showContextMessage('JUMP EXIT! -10 Crowd Momentum');
 }
 function updateTraversal(dt){
  if(!traversal)return false;
@@ -943,12 +945,12 @@ function updateTraversal(dt){
    }else{
     player.rotation.y+=Math.PI;
     traversal={kind:'perched',end:player.position.clone(),clip:'idle'};
-    showContextMessage('Press ATTACK to jump');
+    crowdEarn(10);showContextMessage('Climb complete! +10 Crowd Momentum. CLIMB / EXIT to jump');
    }
   }else if(traversal.kind==='turn'){
    player.rotation.y=traversal.startYaw+Math.PI;
    traversal={kind:'perched',end:player.position.clone(),clip:'idle'};
-   showContextMessage('Press SPECIAL (F) to swan dive');
+   crowdEarn(10);showContextMessage('Climb complete! +10 Crowd Momentum. CLIMB / EXIT to jump');
   }else{traversal=null;if(loadedWrestler)loadedWrestler.object.rotation.x=0;}
  }
  return true;
