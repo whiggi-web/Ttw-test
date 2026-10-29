@@ -488,7 +488,7 @@ const remote=new THREE.Group();remote.name='TTW_REMOTE_PLAYER';remote.visible=fa
 if(remoteWrestler){remote.add(remoteWrestler.object);playTTWAnimation(remoteWrestler,'idle');remoteWrestler._ttwState='idle';}
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
-let botMode=true,botRecover=0,botMoveClock=0,botStrikeClock=2.5,botKnockdownTime=0;
+let botMode=false,botRecover=0,botMoveClock=0,botStrikeClock=2.5,botKnockdownTime=0;
 let counterUntil=0,counterCooldownUntil=0;
 let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
 const remoteTarget=new THREE.Vector3();
@@ -501,7 +501,7 @@ networkStatus.style.cssText='position:fixed;right:16px;top:46px;z-index:12;color
 document.body.appendChild(networkStatus);
 function refreshCombatHud(){combatHud.textContent='YOU '+playerHP+' HP | '+(botMode?'SPARRING BOT '+remoteHP+' HP':remoteConnected?'OPPONENT '+remoteHP+' HP':'WAITING FOR PLAYER 2');}
 refreshCombatHud();
-remote.visible=true;remote.position.set(1.8,1.2,-.6);
+remote.visible=false;remote.position.set(1.8,1.2,-.6);
 const damagePopups=[];
 function showDamage(position,value,color){
  const canvas=document.createElement('canvas');canvas.width=256;canvas.height=128;
@@ -516,14 +516,14 @@ const wsUrl=params.get('server')||(['localhost','127.0.0.1'].includes(location.h
 function sendNetwork(data){if(network?.readyState===WebSocket.OPEN)network.send(JSON.stringify(data));}
 function startMultiplayer(){
  if(network)return;
- if(!wsUrl){networkStatus.textContent='Offline sparring bot active';return;}
+ if(!wsUrl){networkStatus.textContent='Solo practice (AI opponent disabled)';return;}
  networkStatus.textContent='Connecting…';
  try{network=new WebSocket(wsUrl);}catch{networkStatus.textContent='Invalid server URL';return;}
  network.onopen=()=>sendNetwork({type:'join',name:window.TTWPlayerName||'Wrestler'});
  network.onmessage=e=>{
   let m;try{m=JSON.parse(e.data);}catch{return;}
   if(m.type==='welcome'){playerSlot=m.slot;player.position.set(m.slot===1?-1.4:1.4,1.2,0);playerHP=m.hp??100;refreshCombatHud();}
-  if(m.type==='waiting'||m.type==='peer_left'){botMode=true;remote.visible=true;remote.position.set(1.8,1.2,-.6);remoteHasTarget=false;remoteConnected=false;remote.visible=true;remoteHP=100;networkStatus.textContent='Sparring bot active';refreshCombatHud();}
+  if(m.type==='waiting'||m.type==='peer_left'){botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);remoteHasTarget=false;remoteConnected=false;remoteHP=100;networkStatus.textContent='Waiting for another player (AI disabled)';refreshCombatHud();}
   if(m.type==='joined'){botMode=false;remoteHasTarget=false;remoteConnected=true;remote.visible=true;remoteHP=m.hp??100;networkStatus.textContent='Two players connected';refreshCombatHud();}
   if(m.type==='full'){networkStatus.textContent='Ring full (2 players maximum)';}
   if(m.type==='state'&&m.slot!==playerSlot&&remoteConnected){
@@ -538,7 +538,7 @@ function startMultiplayer(){
    if(m.hit==='other'){crowdEarn(3);showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}
   }
  };
- network.onclose=()=>{botMode=true;remote.visible=true;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=true;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
+ network.onclose=()=>{botMode=false;remote.visible=false;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;networkStatus.textContent='Disconnected. AI opponent disabled.';refreshCombatHud();};
  network.onerror=()=>{networkStatus.textContent='Cannot reach multiplayer server';};
 }
 window.addEventListener('ttw:player-name',startMultiplayer);
@@ -708,7 +708,7 @@ function activateCounter(){
 function climbOrExit(){
  if(traversal?.kind==='perched')return showContextMessage('Already on the turnbuckle; press SPECIAL to dive');
  const x=Math.abs(player.position.x),z=Math.abs(player.position.z);
- const atCorner=x>=2.15&&z>=2.15&&x<=3.55&&z<=3.55&&player.position.y>=.75;
+ const atCorner=x>=2.65&&z>=2.65&&x<=3.55&&z<=3.55&&player.position.y>=.75;
  if(atCorner)return beginTraversal('climb');
  return beginTraversal('ring');
 }
@@ -726,12 +726,14 @@ function beginTraversal(kind){
   const side=Math.abs(x)>Math.abs(z)?'x':'z';
   const sign=Math.sign(player.position[side])||1;
   const distance=Math.abs(player.position[side]);
-  if(distance<2.5||distance>5.2)return showContextMessage('Move beside the ring ropes to slide in or out');
+  if(distance<2.15||distance>5.2)return showContextMessage('Move beside the ring ropes to slide in or out');
   const onFloor=player.position.y<.75;
+  // Exiting starts inside the ropes, so move outward across the rope boundary.
+  // The animation is visual; traversal controls the full ring-to-floor movement.
   const clip=onFloor?'ropes.enter-slide-under':'ropes.exit-slide-under';
   if(!loadedWrestler?.library?.defs?.[clip])return showContextMessage('Slide animation unavailable');
   const start=player.position.clone(),end=start.clone();
-  end[side]=sign*(onFloor?2.35:4.35);
+  end[side]=sign*(onFloor?2.15:4.65);
   end.y=onFloor?1.2:0.06;
   const travel=new THREE.Vector3(side==='x'?(onFloor?-sign:sign):0,0,side==='z'?(onFloor?-sign:sign):0);
   player.rotation.y=Math.atan2(-travel.x,-travel.z);
