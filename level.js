@@ -595,6 +595,9 @@ function startMultiplayer(){
     for(const [peer,role] of [[attacker,'attacker'],[defender,'defender']]){
      if(!peer)continue;
      peer.grappleUntil=until;
+     if(m.move==='german-suplex'&&role==='defender'){
+      peer.suplexLanding=peer.group.position.clone().add(new THREE.Vector3(0,0,2.07).applyAxisAngle(new THREE.Vector3(0,1,0),peer.group.rotation.y));
+     }
      // Keep the spectator's paired wrestlers at their grapple start locations.
      peer.target.copy(peer.group.position);
      peer.hasTarget=true;
@@ -607,12 +610,17 @@ function startMultiplayer(){
     return;
    }
    const grapplePeer=onlinePeers.get(m.role==='attacker'?m.defenderSlot:m.attackerSlot);
-   if(grapplePeer)grapplePeer.grappleUntil=performance.now()+(m.duration||2.3)*1000;
+   if(grapplePeer){
+    grapplePeer.grappleUntil=performance.now()+(m.duration||2.3)*1000;
+    if(m.move==='german-suplex'&&m.role==='attacker')
+     grapplePeer.suplexLanding=grapplePeer.group.position.clone().add(new THREE.Vector3(0,0,2.07).applyAxisAngle(new THREE.Vector3(0,1,0),grapplePeer.group.rotation.y));
+   }
    const role=m.role==='attacker'?'attacker':'defender';
    const anim='throws.'+m.move+'-'+role;
    const otherAnim='throws.'+m.move+'-'+(role==='attacker'?'defender':'attacker');
    grappleMove={time:0,impact:true,network:true,role,move:m.move,kind:m.move,
-    duration:m.duration||2.3,origin:player.position.clone(),yaw:player.rotation.y};
+    duration:m.duration||2.3,origin:player.position.clone(),yaw:player.rotation.y,
+    landing:m.move==='german-suplex'&&m.role==='defender'?player.position.clone().add(new THREE.Vector3(0,0,2.07).applyAxisAngle(new THREE.Vector3(0,1,0),player.rotation.y)):null};
    punchRemaining=0;playerPunchImpact=-1;remoteReactionTime=0;hitReactionTime=0;
    try{
     loadedWrestler?.play(anim,{fade:0,restart:true});
@@ -698,6 +706,11 @@ function combatTick(dt){
  }
  // Tick all remote wrestlers, including paired Special animations.
  for(const peer of onlinePeers.values()){
+  if(peer.suplexLanding&&peer.grappleUntil<=performance.now()){
+   peer.group.position.copy(peer.suplexLanding);
+   peer.target.copy(peer.suplexLanding);
+   peer.suplexLanding=null;
+  }
   if(peer.hasTarget&&peer.grappleUntil<=performance.now()){
    const blend=1-Math.exp(-dt*16);
    peer.group.position.lerp(peer.target,blend);
@@ -942,6 +955,10 @@ function updatePowerbomb(dt){
  if(g.network){
   g.time+=dt;
   if(g.time>=g.duration){
+   if(g.landing){
+    player.position.copy(g.landing);
+    // Next regular state packet publishes the actual landing position to everyone.
+   }
    grappleMove=null;
    if(loadedWrestler)loadedWrestler._ttwState='';
    if(remoteWrestler)remoteWrestler._ttwState='';
