@@ -412,7 +412,12 @@ let ropeRecoil=new THREE.Vector3(),ropeRecoilTime=0;
 let ropeSpeedMultiplier=1,ropeFacingTime=0;
 let ropeAnimationTime=0,ropeBounceDelay=0,ropeMovementLock=0;
 const ropeLeanDuration=.7,ropeReboundDuration=.8;
+let lastCrowdRopeReward=0;
+function crowdEarn(points){window.TTWCrowdMomentum?.add(points);}
+function crowdSpend(cost){return window.TTWCrowdMomentum?.spend(cost)===true;}
+function crowdCanAfford(cost,name){if((window.TTWCrowdMomentum?.value??0)<cost){showContextMessage(name+' requires '+cost+' Crowd Momentum');return false;}return true;}
 function registerRopeBounce(inward){
+ const now=performance.now();if(now-lastCrowdRopeReward>3500){crowdEarn(5);lastCrowdRopeReward=now;}
  ropeSpeedMultiplier=Math.min(1.30,Math.round((ropeSpeedMultiplier+.10)*100)/100);
  ropeFacingTime=1;
  ropeBounceDelay=1;
@@ -529,7 +534,7 @@ function startMultiplayer(){
   if(m.type==='health'){
    playerHP=m.self;remoteHP=m.other;refreshCombatHud();
    if(m.hit==='self'){showDamage(player.position,'-'+(m.damage??11),'#ff6969');hitReaction=m.reaction||'reactions.hit-front';hitReactionTime=.72;}
-   if(m.hit==='other'){showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}
+   if(m.hit==='other'){crowdEarn(3);showDamage(remote.position,'-'+(m.damage??11),'#ffdf55');remoteReaction=m.reaction||'reactions.hit-front';remoteReactionTime=.72;}
   }
  };
  network.onclose=()=>{botMode=true;remote.visible=true;remote.position.set(1.8,1.2,-.6);network=null;playerSlot=null;remoteHasTarget=false;remoteConnected=false;remote.visible=true;networkStatus.textContent='Disconnected. Refresh to reconnect.';refreshCombatHud();};
@@ -543,6 +548,7 @@ function hitSparringBot(move){
  if(Math.hypot(dx,dz)>2.2)return;
  const damage=Math.round(({punch:11,jab:7,hook:13,uppercut:16,kick:15,clothesline:18}[move]||11)*ropeSpeedMultiplier);
  remoteHP=Math.max(0,remoteHP-damage);
+ crowdEarn(3);
  remoteReaction=remoteHP<=0?'falls.fall-backward':(attackMoves[move]?.reaction||'reactions.hit-front');
  remoteReactionTime=.8;
  showDamage(remote.position,'-'+damage,'#ffdf55');
@@ -718,6 +724,7 @@ function beginPowerbomb(){
  if(!loadedWrestler?.library?.defs?.['throws.powerbomb-attacker']||!remoteWrestler?.library?.defs?.['throws.powerbomb-defender'])return showContextMessage('Powerbomb assets not loaded');
  const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
  if(Math.hypot(dx,dz)>2.2)return showContextMessage('Move closer to grapple');
+ if(!crowdCanAfford(65,'Powerbomb'))return;
  // Keep the pair in the ring, away from the ropes.
  const x=THREE.MathUtils.clamp(player.position.x,-2.3,2.3);
  const z=THREE.MathUtils.clamp(player.position.z,-2.3,2.3);
@@ -738,6 +745,7 @@ function beginPowerbomb(){
   loadedWrestler._ttwState='throws.powerbomb-attacker';
   remoteWrestler._ttwState='throws.powerbomb-defender';
  }catch(error){console.error('TTW powerbomb failed',error);grappleMove=null;showContextMessage('Powerbomb animation error');return;}
+ crowdSpend(65);
  showContextMessage('POWERBOMB!');
 }
 function updatePowerbomb(dt){
@@ -776,6 +784,7 @@ function beginChokeslam(){
  if(!loadedWrestler?.library?.defs?.['throws.chokeslam-attacker']||!remoteWrestler?.library?.defs?.['throws.chokeslam-defender'])return showContextMessage('Chokeslam assets not loaded');
  const dx=remote.position.x-player.position.x,dz=remote.position.z-player.position.z;
  if(Math.hypot(dx,dz)>2.2)return showContextMessage('Move closer to chokeslam');
+ if(!crowdCanAfford(50,'Chokeslam'))return;
  const x=THREE.MathUtils.clamp(player.position.x,-2.3,2.3);
  const z=THREE.MathUtils.clamp(player.position.z,-2.3,2.3);
  player.position.set(x,1.2,z);
@@ -793,9 +802,13 @@ function beginChokeslam(){
   loadedWrestler._ttwState='throws.chokeslam-attacker';
   remoteWrestler._ttwState='throws.chokeslam-defender';
  }catch(error){console.error('Chokeslam playback error',error);grappleMove=null;return showContextMessage('Chokeslam animation error');}
+ crowdSpend(50);
  showContextMessage('CHOKESLAM!');
 }
+let lastCrowdTaunt=0;
+function crowdTaunt(){if(playerHP<=0||grappleMove||traversal)return;const now=performance.now();if(now-lastCrowdTaunt<6000)return showContextMessage('Let the crowd react before taunting again');lastCrowdTaunt=now;crowdEarn(12);showContextMessage('CROWD LOVES IT! +12');}
 const contextActions=[
+ ['TAUNT','KeyY',()=>crowdTaunt()],
  ['GRAPPLE','KeyG',()=>{
   if(!(remoteConnected||botMode)||playerHP<=0||remoteHP<=0)return showContextMessage('Grapple requires an active opponent');
   if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
