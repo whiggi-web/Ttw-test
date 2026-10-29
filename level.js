@@ -489,6 +489,7 @@ if(remoteWrestler){remote.add(remoteWrestler.object);playTTWAnimation(remoteWres
 else{const m=new THREE.Mesh(new THREE.CapsuleGeometry(.4,1.1,6,12),new THREE.MeshStandardMaterial({color:0xee5533}));m.position.y=1;remote.add(m);}
 scene.add(remote);
 let botMode=true,botRecover=0,botMoveClock=0,botStrikeClock=2.5,botKnockdownTime=0;
+let counterUntil=0,counterCooldownUntil=0;
 let playerHP=100,remoteHP=100,playerPunchImpact=-1,remoteConnected=false,playerSlot=null,network=null,sendClock=0,remoteAnim='idle',remoteHasTarget=false;
 const remoteTarget=new THREE.Vector3();
 let remoteTargetRotation=0;
@@ -579,6 +580,20 @@ function updateSparringBot(dt){
  botStrikeClock-=dt;
  if(dist<2&&botStrikeClock<=0&&playerHP>0){
   botStrikeClock=3.2;
+  const counterActive=performance.now()<=counterUntil;
+  counterUntil=0;
+  if(counterActive&&Math.random()<.5){
+   botStrikeClock=2.3;
+   remoteReaction='reactions.knocked-back';remoteReactionTime=.65;
+   showContextMessage('COUNTER SUCCESS!');
+   if(loadedWrestler?.library?.defs?.['striking.shoulder-block']){
+    loadedWrestler.play('striking.shoulder-block',{fade:.1,restart:true});
+    loadedWrestler._ttwState='striking.shoulder-block';
+    punchRemaining=.65;
+   }
+   return;
+  }
+  if(counterActive)showContextMessage('COUNTER FAILED!');
   hitReaction='reactions.hit-front';hitReactionTime=.65;
   playerHP=Math.max(0,playerHP-2);
   showDamage(player.position,'-2','#ff6969');
@@ -657,6 +672,7 @@ window.addEventListener('controller:button',e=>{
  if(!e.detail.pressed)return;
  const id=e.detail.id;
  if(id==='ultimate')toggleRun();
+ else if(id==='counter')activateCounter();
  else if(id==='ability1')tapAttack();
  else if(id==='ability2'){if(combatRunning)performAttack('clothesline');else beginPowerbomb();}
  else if(id==='ability3'){if(combatRunning)performAttack('uppercut');else performAttack('hook');}
@@ -679,6 +695,15 @@ function performAttack(move){
  if(grappleMove||traversal||punchRemaining>0||playerHP<=0||!(remoteConnected||botMode)||document.getElementById('home').hidden===false)return;
  const attack=attackMoves[move];if(!attack)return;
  activeAttack=move;punchRemaining=attack.duration;playerPunchImpact=attack.impact;
+}
+function activateCounter(){
+ const now=performance.now();
+ if(now<counterCooldownUntil)return showContextMessage('Counter cooling down');
+ if(playerHP<=0||grappleMove||traversal)return;
+ if(!botMode)return showContextMessage('Counter testing currently works against the offline bot');
+ if(!crowdCanAfford(1,'Counter'))return;
+ crowdSpend(1);counterUntil=now+1200;counterCooldownUntil=now+3500;
+ showContextMessage('COUNTER READY! 50% chance for 1.2s');
 }
 function tapAttack(){
  const moves=['punch','jab','hook','kick'];
