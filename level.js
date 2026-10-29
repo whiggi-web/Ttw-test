@@ -622,7 +622,7 @@ function startMultiplayer(){
     const role=playerSlot===m.attackerSlot?'attacker':'defender';
     const clip=role==='attacker'?'ropes.irish-whip':'ropes.whipped-into';
     grappleMove={network:true,kind:'irish-whip',move:'irish-whip',role,time:0,duration:role==='defender'?12:(m.duration||1.4),
-     origin:player.position.clone(),landing:null,whip:role==='defender'?makeWhip(new THREE.Vector3(-Math.sin(m.directionYaw),0,-Math.cos(m.directionYaw))):null};
+     origin:player.position.clone(),landing:null,whip:role==='defender'?Object.assign(makeWhip(new THREE.Vector3(-Math.sin(m.directionYaw),0,-Math.cos(m.directionYaw))),{attackerPosition:new THREE.Vector3(m.attackerPosition.x,m.attackerPosition.y,m.attackerPosition.z),passedAttacker:false}):null};
     punchRemaining=0;playerPunchImpact=-1;
     loadedWrestler?.play(clip,{fade:0,restart:true});
     if(loadedWrestler)loadedWrestler._ttwState=clip;
@@ -904,7 +904,8 @@ function moveWhipped(v,w,dt,isPlayer){
   if(isPlayer){registerRopeBounce(inward);if(w.springs===1)whippedAttackLockUntil=performance.now()+1100;}
   if(w.springs>=4)w.done=true;
  }else v.position.copy(next);
- v.rotation.y=Math.atan2(-w.dir.x,-w.dir.z);
+ if(!w.passedAttacker&&w.attackerPosition){const passed=v.position.clone().sub(w.attackerPosition).dot(w.dir)>0.35;if(passed)w.passedAttacker=true;}
+ if(w.passedAttacker||!w.attackerPosition)v.rotation.y=Math.atan2(-w.dir.x,-w.dir.z);
 }
 
 function beginIrishWhip(){

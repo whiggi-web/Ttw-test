@@ -60,7 +60,7 @@ export class TTWRoom extends DurableObject {
    const dir=forward(p.rotation);
    const target={x:Math.max(-3.35,Math.min(3.35,other.position.x+dir[0]*2.58)),y:1.2,z:Math.max(-3.35,Math.min(3.35,other.position.z+dir[1]*2.58))};
    this.locks.set(ws,now+1.5);this.locks.set(otherWs,now+1.5);
-   const msg={type:"irish-whip",attackerSlot:p.slot,defenderSlot:other.slot,duration:1.4,target,directionYaw:p.rotation+Math.PI};
+   const msg={type:"irish-whip",attackerSlot:p.slot,defenderSlot:other.slot,duration:1.4,target,directionYaw:p.rotation+Math.PI,attackerPosition:{...p.position}};
    this.broadcast(msg);send(ws,msg);
    return;
   }
