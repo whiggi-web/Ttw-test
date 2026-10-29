@@ -5,7 +5,7 @@ const ATTACKS = {
  hook:[13,.8,"reactions.hit-left"], uppercut:[16,.95,"reactions.knocked-back"],
  kick:[15,1,"reactions.hit-kick"], clothesline:[18,1.1,"reactions.hit-clothesline"]
 };
-const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall"]);
+const allowedAnimations=new Set(["idle","run","punch","jab","hook","uppercut","kick","clothesline","fall","eliminations.thrown-over-top"]);
 const send=(ws,msg)=>{try{ws.send(JSON.stringify(msg));}catch{}};
 const forward=(angle)=>[-Math.sin(angle),-Math.cos(angle)];
 const dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
@@ -90,7 +90,20 @@ export class TTWRoom extends DurableObject {
  }
  damage(attackerWs,defenderWs,damage,reaction,move){
   const a=this.players.get(attackerWs),b=this.players.get(defenderWs);if(!a||!b)return;
+  // A punch to a wrestler facing into the ring with their back against a rope triggers the throw.
+  const punchHit=["punch","jab","hook"].includes(move);
+  const bx=b.position.x,bz=b.position.z;
+  const edges=[{axis:"x",sign:1,d:3.3-bx},{axis:"x",sign:-1,d:3.3+bx},{axis:"z",sign:1,d:3.3-bz},{axis:"z",sign:-1,d:3.3+bz}].sort((u,v)=>Math.abs(u.d)-Math.abs(v.d));
+  const side=edges[0];
+  const inward=side.axis==="x"?[-side.sign,0]:[0,-side.sign];
+  const facing=forward(b.rotation);
+  const overTop=punchHit&&b.position.y>.75&&Math.abs(side.d)<.85&&Math.abs((side.axis==="x"?bz:bx))<2.7&&dot(facing,inward)>.6;
   b.hp=Math.max(0,b.hp-damage);attackerWs.serializeAttachment(a);defenderWs.serializeAttachment(b);
+  if(overTop){
+   const event={type:"over-top-rope",slot:b.slot,axis:side.axis,sign:side.sign,duration:1.4};
+   this.locks.set(defenderWs,Date.now()/1000+1.5);
+   this.broadcast(event);
+  }
   send(attackerWs,{type:"health",self:a.hp,other:b.hp,hit:"other",damage,reaction,move,targetSlot:b.slot});
   send(defenderWs,{type:"health",self:b.hp,other:a.hp,hit:"self",damage,reaction,move,targetSlot:a.slot});
   this.broadcast({type:"hp",slot:b.slot,hp:b.hp});
