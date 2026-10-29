@@ -601,8 +601,11 @@ function combatTick(dt){
  if(remoteWrestler&&(remoteConnected||botMode)&&!grappleMove){
   remoteReactionTime=Math.max(0,remoteReactionTime-dt);
   const state=remoteHP<=0?'fall':remoteReactionTime>0?remoteReaction:remoteAnim;
-  if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
-  remoteWrestler.update(dt);
+  const holdingSlamPose=botMode&&(remoteHP<=0||botKnockdownTime>0)&&remoteWrestler._ttwState==='knockdown-hold';
+  if(!holdingSlamPose){
+   if(remoteWrestler._ttwState!==state){playTTWAnimation(remoteWrestler,state,.12);remoteWrestler._ttwState=state;}
+   remoteWrestler.update(dt);
+  }
   keepWrestlerAtHitbox(remoteWrestler);
  }
  sendClock+=dt;
@@ -646,8 +649,8 @@ function setPadLabel(id,label){const el=controllerRoot?.querySelector('[data-id=
 function refreshCombatButtons(){
  setPadLabel('ultimate',staminaExhausted?'TIRED':runToggle?'RUN ON':'RUN OFF');
  setPadLabel('ability2',combatRunning?'CLOTHES':'POWERBOMB');
- setPadLabel('ability3',combatRunning?'UPPER':'CHOKESLAM');
- setPadLabel('ability4',combatRunning?'RUN KICK':'BODY SLAM');
+ setPadLabel('ability3',combatRunning?'UPPER':'HOOK');
+ setPadLabel('ability4',combatRunning?'RUN KICK':'KICK');
 }
 function toggleRun(){if(staminaExhausted){showContextMessage('Recover stamina before running');return;}runToggle=!runToggle;refreshCombatButtons();}
 window.addEventListener('controller:button',e=>{
@@ -656,8 +659,8 @@ window.addEventListener('controller:button',e=>{
  if(id==='ultimate')toggleRun();
  else if(id==='ability1')tapAttack();
  else if(id==='ability2'){if(combatRunning)performAttack('clothesline');else beginPowerbomb();}
- else if(id==='ability3'){if(combatRunning)performAttack('uppercut');else beginChokeslam();}
- else if(id==='ability4'){if(combatRunning)performAttack('kick');else beginBodySlam();}
+ else if(id==='ability3'){if(combatRunning)performAttack('uppercut');else performAttack('hook');}
+ else if(id==='ability4')performAttack('kick');
 });
 refreshCombatButtons();
 const clock=new THREE.Clock();
@@ -799,13 +802,14 @@ function updatePowerbomb(dt){
  }
  if(g.time>=duration){
   grappleMove=null;
-  remoteReaction='fall';
+  // Keep the defender's final paired-slam pose. Starting a separate fall clip
+  // here made them stand upright before falling a second time.
   remoteReactionTime=0;
-  remoteAnim='fall';
+  remoteAnim='idle';
   botStrikeClock=3.2;
-  if(remoteHP<=0){botRecover=10;botKnockdownTime=0;remoteAnim='fall';}
+  if(remoteHP<=0){botRecover=10;botKnockdownTime=0;}
   loadedWrestler._ttwState='';
-  remoteWrestler._ttwState='';
+  remoteWrestler._ttwState='knockdown-hold';
  }
 }
 // One-at-a-time testing: powerbomb stays on G, chokeslam gets its own test key.
@@ -860,7 +864,7 @@ function beginBodySlam(){
  crowdSpend(1);showContextMessage('BODY SLAM!');
 }
 const contextActions=[
- ['BODY SLAM','KeyB',()=>beginBodySlam()],
+ // Body Slam is retained for future wrestler loadouts, but is not assigned to this wrestler.
  ['RUN','KeyV',()=>toggleRun()],
  ['TAUNT','KeyY',()=>crowdTaunt()],
  ['GRAPPLE','KeyG',()=>{
@@ -868,7 +872,7 @@ const contextActions=[
   if(player.position.distanceTo(remote.position)>2.2)return showContextMessage('Move closer to grapple');
   beginPowerbomb();
  }],
- ['CHOKESLAM','KeyC',()=>beginChokeslam()],
+ // Chokeslam is retained for future wrestler loadouts.
  ['ROPES','KeyR',()=>{
   const near=Math.min(Math.abs(Math.abs(player.position.x)-3.5),Math.abs(Math.abs(player.position.z)-3.5));
   if(near>.9)return showContextMessage('Move closer to the ropes');
