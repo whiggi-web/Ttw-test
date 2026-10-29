@@ -512,7 +512,7 @@ function showDamage(position,value,color){
  damagePopups.push({sprite,mat,tex,life:.85});
 }
 const params=new URLSearchParams(location.search);
-const wsUrl=params.get('server')||(['localhost','127.0.0.1'].includes(location.hostname)?'ws://'+location.hostname+':8765':'');
+const wsUrl=params.get('server')||(['localhost','127.0.0.1'].includes(location.hostname)?'ws://'+location.hostname+':8765':'wss://ttw-multiplayer.whiggi.workers.dev/ws');
 function sendNetwork(data){if(network?.readyState===WebSocket.OPEN)network.send(JSON.stringify(data));}
 function startMultiplayer(){
  if(network)return;
