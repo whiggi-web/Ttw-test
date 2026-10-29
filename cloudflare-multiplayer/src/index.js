@@ -27,12 +27,12 @@ export class TTWRoom extends DurableObject {
   let p=this.players.get(ws);
   if(!p){
    if(data.type!=="join")return;
-   if(this.players.size>=2){send(ws,{type:"full"});ws.close(1000,"Room full");return;}
-   const slot=[...this.players.values()].some(v=>v.slot===1)?2:1;
-   p={slot,hp:100,name:String(data.name||"Wrestler").slice(0,20),position:{x:slot===1?-1.4:1.4,y:1.2,z:0},rotation:0,animation:"idle"};
+   if(this.players.size>=4){send(ws,{type:"full"});ws.close(1000,"Room full");return;}
+   const used=new Set([...this.players.values()].map(v=>v.slot));const slot=[1,2,3,4].find(n=>!used.has(n));
+   p={slot,hp:100,name:String(data.name||"Wrestler").slice(0,20),position:{x:slot%2?-1.4:1.4,y:1.2,z:slot<=2?-1.4:1.4},rotation:0,animation:"idle"};
    this.players.set(ws,p);ws.serializeAttachment(p);send(ws,{type:"welcome",slot,hp:100});
-   if(this.players.size===2)for(const [peer,info] of this.players){const other=[...this.players.values()].find(v=>v!==info);send(peer,{type:"joined",hp:other.hp,name:other.name});}
-   else send(ws,{type:"waiting"});
+   const snapshot=[...this.players.values()].map(v=>({slot:v.slot,hp:v.hp,name:v.name,position:v.position,rotation:v.rotation,animation:v.animation}));
+   for(const [peer,info] of this.players)send(peer,{type:"roster",players:snapshot,slot:info.slot});
    return;
   }
   if(data.type==="state"){
@@ -45,8 +45,10 @@ export class TTWRoom extends DurableObject {
    this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.animation},ws);
    return;
   }
-  if(this.players.size!==2)return;
-  const otherWs=[...this.players.keys()].find(w=>w!==ws),other=this.players.get(otherWs);
+  if(this.players.size<2)return;
+  const candidates=[...this.players].filter(([w,v])=>w!==ws&&v.hp>0).map(([w,v])=>({ws:w,p:v,dx:v.position.x-p.position.x,dz:v.position.z-p.position.z})).filter(c=>{const d=Math.hypot(c.dx,c.dz);return d>=.1&&d<=2.2&&Math.abs(c.p.position.y-p.position.y)<=.65&&dot(forward(p.rotation),[c.dx/d,c.dz/d])>=.5;}).sort((a,b)=>Math.hypot(a.dx,a.dz)-Math.hypot(b.dx,b.dz));
+  const chosen=candidates[0];if(!chosen)return;
+  const otherWs=chosen.ws,other=chosen.p;
   const now=Date.now()/1000;
   if(p.hp<=0||other.hp<=0||now<(this.locks.get(ws)||0)||now<(this.locks.get(otherWs)||0))return;
   const dx=other.position.x-p.position.x,dz=other.position.z-p.position.z;
@@ -58,8 +60,8 @@ export class TTWRoom extends DurableObject {
    const behind=dot(forward(other.rotation),direction)>.5;
    const move=behind?"german-suplex":"powerbomb";
    this.locks.set(ws,now+2.55);this.locks.set(otherWs,now+2.55);
-   send(ws,{type:"grapple",role:"attacker",move,duration:2.3,impact:1.55});
-   send(otherWs,{type:"grapple",role:"defender",move,duration:2.3,impact:1.55});
+   send(ws,{type:"grapple",role:"attacker",move,duration:2.3,impact:1.55,attackerSlot:p.slot,defenderSlot:other.slot});
+   send(otherWs,{type:"grapple",role:"defender",move,duration:2.3,impact:1.55,attackerSlot:p.slot,defenderSlot:other.slot});
    const due=Date.now()+1550;
    await this.ctx.storage.put("pending-grapple",{attackerSlot:p.slot,defenderSlot:other.slot,move,due});
    await this.scheduleAlarm(due);
@@ -80,8 +82,9 @@ export class TTWRoom extends DurableObject {
  damage(attackerWs,defenderWs,damage,reaction,move){
   const a=this.players.get(attackerWs),b=this.players.get(defenderWs);if(!a||!b)return;
   b.hp=Math.max(0,b.hp-damage);attackerWs.serializeAttachment(a);defenderWs.serializeAttachment(b);
-  send(attackerWs,{type:"health",self:a.hp,other:b.hp,hit:"other",damage,reaction,move});
-  send(defenderWs,{type:"health",self:b.hp,other:a.hp,hit:"self",damage,reaction,move});
+  send(attackerWs,{type:"health",self:a.hp,other:b.hp,hit:"other",damage,reaction,move,targetSlot:b.slot});
+  send(defenderWs,{type:"health",self:b.hp,other:a.hp,hit:"self",damage,reaction,move,targetSlot:a.slot});
+  this.broadcast({type:"hp",slot:b.slot,hp:b.hp});
   if(b.hp===0){const due=Date.now()+10000;this.ctx.storage.put("ko-"+b.slot,due).then(()=>this.scheduleAlarm(due));}
  }
  async scheduleAlarm(due){const current=await this.ctx.storage.getAlarm();if(current===null||due<current)await this.ctx.storage.setAlarm(due);}
@@ -99,16 +102,14 @@ export class TTWRoom extends DurableObject {
    if(deadline&&Date.now()<deadline)nextDue=nextDue===null?deadline:Math.min(nextDue,deadline);
    if(deadline&&Date.now()>=deadline){
     p.hp=100;ws.serializeAttachment(p);await this.ctx.storage.delete("ko-"+p.slot);
-    const other=[...this.players.values()].find(v=>v!==p);
-    send(ws,{type:"health",self:p.hp,other:other?.hp??100,hit:null});
-    if(other){const peer=[...this.players.keys()].find(w=>w!==ws);send(peer,{type:"health",self:other.hp,other:p.hp,hit:null});}
+    this.broadcast({type:"hp",slot:p.slot,hp:p.hp});
    }
   }
   if(nextDue!==null)await this.scheduleAlarm(nextDue);
  }
  async webSocketClose(ws){this.leave(ws);}
  async webSocketError(ws){this.leave(ws);}
- leave(ws){if(!this.players.delete(ws))return;this.lastHits.delete(ws);this.locks.delete(ws);this.broadcast({type:"peer_left"});}
+ leave(ws){if(!this.players.delete(ws))return;this.lastHits.delete(ws);this.locks.delete(ws);this.broadcast({type:"left",slot:this.players.size>=0?ws.deserializeAttachment()?.slot:null});}
 }
 export default {
  async fetch(request,env){
