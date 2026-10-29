@@ -50,8 +50,8 @@
     { id: 'ultimate',        type: 'button',   label: 'RUN',      area: 'ult', role: 'ultimate' },
     { id: 'ability1',        type: 'button',   label: 'HIT',       area: 'a1',  role: 'ability' },
     { id: 'ability2',        type: 'button',   label: 'POWERBOMB', area: 'a2',  role: 'ability' },
-    { id: 'ability3',        type: 'button',   label: 'CHOKESLAM', area: 'a3',  role: 'ability' },
-    { id: 'ability4',        type: 'button',   label: 'BODY SLAM', area: 'a4',  role: 'ability' },
+    { id: 'ability3',        type: 'button',   label: 'HOOK',      area: 'a3',  role: 'ability' },
+    { id: 'ability4',        type: 'button',   label: 'KICK',      area: 'a4',  role: 'ability' },
     { id: 'controlMOVEMENT', type: 'joystick', label: 'MOVE',      area: 'mv',  role: 'move' },
     { id: 'targetJoystick',  type: 'joystick', label: 'TARGET',    area: 'tj',  role: 'aim' },
     { id: 'classJoystick',   type: 'joystick', label: 'CLASS',     area: 'cj',  role: 'aim' }
