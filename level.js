@@ -2606,6 +2606,9 @@ document.addEventListener('pointerdown',e=>{
  if(scenesMenu.style.display!=='none'&&!scenesMenu.contains(e.target)&&!scenesButton.contains(e.target))closeScenesMenu();
 });
 
+// TTW v1.07: Small joysticks control only the local camera.
+const cameraRotate=pad.state.joysticks.targetJoystick;
+const cameraZoom=pad.state.joysticks.classJoystick;
 let yaw=Math.PI/4,pitch=.06,distance=11;
 const target=new THREE.Vector3(0,1.7,0);
 const pointers=new Map();
@@ -2642,6 +2645,13 @@ window.addEventListener('resize',()=>{
 });
 renderer.setAnimationLoop(()=>{
  const dt=Math.min(clock.getDelta(),.05);
+ if(document.getElementById('home').hidden){
+  if(cameraRotate?.active){
+   yaw-=cameraRotate.x*1.9*dt;
+   pitch=THREE.MathUtils.clamp(pitch+cameraRotate.y*1.35*dt,.02,1.35);
+  }
+  if(cameraZoom?.active)distance=THREE.MathUtils.clamp(distance+cameraZoom.y*13*dt,5,90);
+ }
  updateJumbotron(dt);
  ropeFacingTime=Math.max(0,ropeFacingTime-dt);
  ropeBounceDelay=Math.max(0,ropeBounceDelay-dt);
