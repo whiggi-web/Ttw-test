@@ -573,7 +573,7 @@ function startMultiplayer(){
   if(m.type==='welcome'){playerSlot=m.slot;setLocalWrestlerForSlot(m.slot);player.position.set(m.slot%2?-1.4:1.4,1.2,m.slot<=2?-1.4:1.4);playerHP=m.hp??100;refreshCombatHud();}
   if(m.type==='roster'){
    playerSlot=m.slot;const active=new Set();
-   for(const entry of m.players){if(entry.slot===playerSlot){playerHP=entry.hp;continue;}active.add(entry.slot);const p=makeOnlinePeer(entry.slot);p.setPeerName(entry.name);p.hp=entry.hp;p.target.set(entry.position.x,entry.position.y,entry.position.z);p.group.position.copy(p.target);p.rotation=entry.rotation;p.group.rotation.y=entry.rotation;p.hasTarget=true;}
+   for(const entry of m.players){if(entry.slot===playerSlot){playerHP=entry.hp;continue;}active.add(entry.slot);const p=makeOnlinePeer(entry.slot);p.setPeerName(entry.name);p.hp=entry.hp;p.target.set(entry.position.x,entry.position.y,entry.position.z);p.group.position.copy(p.target);p.rotation=entry.rotation;p.group.rotation.y=entry.rotation;p.hasTarget=true;p.draped=!!entry.draped;p.anim=p.draped?'ropes.drape-over-top':entry.animation||'idle';}
    for(const slot of [...onlinePeers.keys()])if(!active.has(slot))removeOnlinePeer(slot);
    remoteConnected=onlinePeers.size>0;remote.visible=false;
    networkStatus.textContent=(onlinePeers.size+1)+'/4 wrestlers connected';refreshCombatHud();
@@ -588,6 +588,8 @@ function startMultiplayer(){
    if([position.x,position.y,position.z,m.rotation].every(Number.isFinite)&&peer.grappleUntil<=performance.now()){peer.target.set(position.x,position.y,position.z);peer.rotation=m.rotation;peer.hasTarget=true;}
    const previousPeerAnim=peer.anim;
    peer.anim=['idle','run','fall','ropeLean','ropeRebound','ropes.drape-over-top','ropes.drape-recover','ropes.pulled-over-top',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
+   if(peer.anim==='ropes.drape-over-top')peer.draped=true;
+   else if(peer.anim==='ropes.drape-recover'||peer.anim==='ropes.pulled-over-top')peer.draped=false;
    // The Worker relays rope animation states but not spring physics.
    // Reconstruct a rope impulse on every observer when a wrestler first leans in.
    if((peer.anim==='ropeLean'||peer.anim==='ropeRebound')&&previousPeerAnim!=='ropeLean'&&previousPeerAnim!=='ropeRebound'){
@@ -610,7 +612,7 @@ function startMultiplayer(){
   }
   if(m.type==='drape-status'&&m.slot!==playerSlot){
    const peer=onlinePeers.get(m.slot);
-   if(peer){peer.draped=!!m.active;if(peer.draped)peer.reactionTime=0;}
+   if(peer){peer.draped=!!m.active;if(peer.draped){peer.reactionTime=0;peer.anim='ropes.drape-over-top';}}
    return;
   }
   if(m.type==='drape-pulled-over'){
@@ -802,7 +804,7 @@ function combatTick(dt){
    peer.wrestler.update(dt);keepWrestlerAtHitbox(peer.wrestler);continue;
   }
   peer.reactionTime=Math.max(0,peer.reactionTime-dt);
-  const state=peer.hp<=0?'fall':peer.draped?'ropes.drape-over-top':peer.reactionTime>0?peer.reaction:peer.anim;
+  const state=peer.draped?'ropes.drape-over-top':peer.hp<=0?'fall':peer.reactionTime>0?peer.reaction:peer.anim;
   if(peer.wrestler._ttwState!==state){playTTWAnimation(peer.wrestler,state,.12);peer.wrestler._ttwState=state;}
   peer.wrestler.update(dt);keepWrestlerAtHitbox(peer.wrestler);
  }
@@ -1125,6 +1127,7 @@ function updateTraversal(dt){
   if(!traversal.registered){
    traversal.registered=true;
    sendNetwork({type:'drape-status',active:true,axis:traversal.side.axis,sign:traversal.side.sign});
+   console.info('TTW drape sync: announcing drape',traversal.side);
   }
   return true;
  }
