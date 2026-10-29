@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>TTW | Enter the Ring</title>
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#10131c;color:white;font:14px system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none;background:#10131c;color:white;font:14px system-ui,sans-serif}
 canvas{display:block;touch-action:none}
 #controllerSlot{position:fixed;inset:0;z-index:10;pointer-events:none} @media (orientation:portrait){#controllerSlot{top:auto;height:42vh;bottom:0;background:#15110e} #help{bottom:43vh!important}} #hud{position:fixed;top:16px;left:16px;pointer-events:none;text-shadow:0 2px 6px #000}
 #hud strong{display:block;font-size:21px;letter-spacing:.12em}
@@ -25,6 +25,7 @@ body.ttw-clean #hud,body.ttw-clean #help,body.ttw-clean #crowdMeter,body.ttw-cle
 <div id="crowdMeter" role="progressbar" aria-label="Crowd Momentum" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="meterHeading"><span>★ CROWD MOMENTUM</span><span id="crowdValue">0 / 100</span></div><div class="meterTrack"><div id="crowdFill"></div></div><div class="meterHint">Earn momentum • Spend it on big moves</div></div>
 <div id="help">WASD move · Shift sprint · Click punch · Drag to orbit · Scroll/pinch zoom</div>
 <div id="controllerSlot"></div>
+<button id="fullScreenMobile" type="button" hidden style="position:fixed;top:55px;right:12px;z-index:51;background:#1d2636;color:white;border:1px solid #ffe1a3;border-radius:9px;padding:10px">FULLSCREEN</button>
 <button id="viewToggle" type="button" hidden aria-pressed="false">👁 HIDE INTERFACE</button>
 <div id="home"><form id="homePanel"><h1>TTW</h1><p>Enter the ring</p><p>Two-player ring · Join from a second browser</p><label for="wrestlerName">Wrestler name</label><input id="wrestlerName" name="wrestlerName" maxlength="20" autocomplete="nickname" placeholder="Enter your wrestler name" required><button id="enterRing" type="submit">ENTER THE RING</button><p id="homeError" role="alert"></p></form></div>
 <script src="./assets/controllers/game-controller.js?v=103"></script>
@@ -46,7 +47,12 @@ nameForm.addEventListener('submit',e=>{
  home.hidden=true;
  if(matchMedia('(pointer:coarse)').matches) document.documentElement.requestFullscreen?.().catch(()=>{});
  document.getElementById('viewToggle').hidden=false;
+ refreshFullScreen();
 });
+const fullScreenMobile=document.getElementById('fullScreenMobile');
+const refreshFullScreen=()=>{fullScreenMobile.hidden=!matchMedia('(pointer:coarse)').matches||!home.hidden||!!document.fullscreenElement;};
+fullScreenMobile.addEventListener('click',()=>document.documentElement.requestFullscreen?.().catch(()=>{}));
+document.addEventListener('fullscreenchange',refreshFullScreen);
 const viewToggle=document.getElementById('viewToggle');
 viewToggle.addEventListener('click',()=>{
  const hidden=document.body.classList.toggle('ttw-clean');
