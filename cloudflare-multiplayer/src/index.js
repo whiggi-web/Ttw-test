@@ -31,7 +31,7 @@ export class TTWRoom extends DurableObject {
    const used=new Set([...this.players.values()].map(v=>v.slot));const slot=[1,2,3,4].find(n=>!used.has(n));
    p={slot,hp:100,name:String(data.name||"Wrestler").slice(0,20),position:{x:slot%2?-1.4:1.4,y:1.2,z:slot<=2?-1.4:1.4},rotation:0,animation:"idle"};
    this.players.set(ws,p);ws.serializeAttachment(p);send(ws,{type:"welcome",slot,hp:100});
-   const snapshot=[...this.players.values()].map(v=>({slot:v.slot,hp:v.hp,name:v.name,position:v.position,rotation:v.rotation,animation:v.animation}));
+   const snapshot=[...this.players.values()].map(v=>({slot:v.slot,hp:v.hp,name:v.name,position:v.position,rotation:v.rotation,animation:v.animation,draped:!!v.drape}));
    for(const [peer,info] of this.players)send(peer,{type:"roster",players:snapshot,slot:info.slot});
    return;
   }
@@ -42,7 +42,7 @@ export class TTWRoom extends DurableObject {
    p.position={x:pos.x,y:pos.y,z:pos.z};p.rotation=rotation;
    p.animation=allowedAnimations.has(data.animation)?data.animation:"idle";
    ws.serializeAttachment(p);
-   this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.animation},ws);
+   this.broadcast({type:"state",slot:p.slot,position:p.position,rotation,animation:p.drape?"ropes.drape-over-top":p.animation},ws);
    return;
   }
   if(data.type==="drape-status"){
