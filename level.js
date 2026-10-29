@@ -587,9 +587,11 @@ function startMultiplayer(){
    peer.anim=['idle','run','fall','ropeLean','ropeRebound',...Object.keys(attackMoves)].includes(m.animation)?m.animation:'idle';
    // The Worker relays rope animation states but not spring physics.
    // Reconstruct a rope impulse on every observer when a wrestler first leans in.
-   if(peer.anim==='ropeLean'&&previousPeerAnim!=='ropeLean'){
-    const side=ropeSideAt(position.x,position.z);
-    if(side){
+   if((peer.anim==='ropeLean'||peer.anim==='ropeRebound')&&previousPeerAnim!=='ropeLean'&&previousPeerAnim!=='ropeRebound'){
+    // A rebound can arrive after the lean phase; identify the nearest rope
+    // without requiring the network position to fall inside a narrow band.
+    const side=Math.abs(position.z)>Math.abs(position.x)?(position.z>0?'north':'south'):(position.x>0?'east':'west');
+    if(Math.max(Math.abs(position.x),Math.abs(position.z))>2.0&&Math.max(Math.abs(position.x),Math.abs(position.z))<4.6){
      const spring=ropeSprings[side];
      spring.contact=side==='east'||side==='west'?position.z:position.x;
      spring.bend=Math.max(spring.bend,.6);
@@ -762,7 +764,7 @@ function combatTick(dt){
  sendClock+=dt;
  if(sendClock>=.05&&playerSlot!==null){
   sendClock-=.05;
-  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':combatRunning?'run':'idle'});
+  sendNetwork({type:'state',position:{x:player.position.x,y:player.position.y,z:player.position.z},rotation:player.rotation.y,animation:playerHP<=0?'fall':punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':combatRunning?'run':ropeAnimationTime>0?'ropeRebound':'idle'});
  }
 }
 // Floating nameplate follows the test wrestler; text is drawn locally and never interpreted as HTML.
@@ -2890,7 +2892,7 @@ renderer.setAnimationLoop(()=>{
  if(loadedWrestler){
   if(punchRemaining>0)punchRemaining=Math.max(0,punchRemaining-dt);
   hitReactionTime=Math.max(0,hitReactionTime-dt);
-  const nextAnimation=grappleMove?.network?'throws.'+grappleMove.move+'-'+grappleMove.role:grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':ropeAnimationTime>0?'ropeRebound':isWalking?(runningNow?'run':'walk'):'idle';
+  const nextAnimation=grappleMove?.network?'throws.'+grappleMove.move+'-'+grappleMove.role:grappleMove?(grappleMove.kind==='chokeslam'?'throws.chokeslam-attacker':grappleMove.kind==='body-slam'?'throws.body-slam-attacker':'throws.powerbomb-attacker'):playerHP<=0?'fall':traversal?(traversal.clip||'idle'):hitReactionTime>0?hitReaction:punchRemaining>0?activeAttack:ropeAnimationTime>ropeReboundDuration?'ropeLean':runningNow?'run':ropeAnimationTime>0?'ropeRebound':isWalking?'walk':'idle';
   if(loadedWrestler._ttwState!==nextAnimation){
    playTTWAnimation(loadedWrestler,nextAnimation,.2);
    loadedWrestler._ttwState=nextAnimation;
